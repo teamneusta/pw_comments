@@ -1,7 +1,7 @@
 plugin.tx_pwcomments {
 	settings {
 		commentAnchorPrefix = comment
-		showCommentAnchor = writeComment
+		showCommentAnchor = comments
 		writeCommentAnchor = writeComment
 		successfulAnchor = thanksForYourComment
 
