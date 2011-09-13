@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'pw_comments'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_pwcomments_domain_model_comment">Comment</label>
+			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
+			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
+			<label index="tx_pwcomments_domain_model_comment.author_mail">Mail</label>
+			<label index="tx_pwcomments_domain_model_comment.message">Message</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_pwcomments_domain_model_comment">Kommentar</label>
+			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
+			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
+			<label index="tx_pwcomments_domain_model_comment.author_mail">E-Mail</label>
+			<label index="tx_pwcomments_domain_model_comment.message">Nachricht</label>
+		</languageKey>
+	</data>
+</T3locallang>

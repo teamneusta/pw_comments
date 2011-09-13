@@ -1,0 +1,41 @@
+{namespace c=Tx_PwComments_ViewHelpers}
+<f:layout name="default" />
+
+<f:section name="main">
+		<div id="{settings.showCommentAnchor}">
+			<h1><f:translate key="tx_pwcomments.comments" /> (<f:count>{comments}</f:count>)</h1>
+			<f:if condition="{f:count(subject:'{comments}')} > 0">
+				<f:then>
+					<ol class="comment_list list">
+						<f:for each="{comments}" as="comment">
+							<li class="comment" id="{settings.commentAnchorPrefix}{comment.uid}">
+
+								<f:if condition="{settings.showGravatarImage}">
+									<f:if condition="{comment.author}">
+										<f:then>
+											<img src="{c:Gravatar(email:'{comment.author.email}', size:'{settings.gravatarSize}', default:'{settings.gravatarDefault}')}" alt="{comment.author.name}{comment.authorName}" class="comment_author_image"/>
+										</f:then>
+										<f:else>
+											<img src="{comment.authorGravatar}?s={settings.gravatarSize}&amp;d={settings.gravatarDefault}" alt="{comment.author.name}{comment.authorName}" class="comment_author_image"/>
+										</f:else>
+									</f:if>
+								</f:if>
+
+								<div class="comment_header">
+									<span class="comment_author">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</span>
+									<span class="comment_date" title="{c:format.date(timestamp:'{comment.crdate}', format:'%d.%m.%Y %T')}"> <c:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" /></span>
+								</div>
+								<div class="comment_body">
+									<f:format.nl2br><c:format.raw>{comment.message}</c:format.raw></f:format.nl2br>
+								</div>
+								<div class="clear"></div>
+							</li>
+						</f:for>
+					</ol>
+				</f:then>
+				<f:else>
+					<em><f:translate key="tx_pwcomments.noComments" /></em>
+				</f:else>
+			</f:if>
+		</div>
+</f:section>

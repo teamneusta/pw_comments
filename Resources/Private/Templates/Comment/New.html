@@ -1,0 +1,45 @@
+{namespace c=Tx_PwComments_ViewHelpers}
+<f:layout name="default" />
+
+<f:section name="main">
+<div id="{settings.writeCommentAnchor}">
+	<h3><f:translate key="tx_pwcomments.writeNewComment" /></h3>
+	<f:form name="newComment" object="{newComment}" action="create" section="kommentar-schreiben">
+		<f:form.errors>
+			<f:for each="{error.errors}" as="errorDetail">
+				<div class="comment_error">{errorDetail.message}</div>
+			</f:for>
+		</f:form.errors>
+
+
+		<c:flashMessages id="{settings.successfulAnchor}" severity="0" />
+
+
+		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceUsernameWith')}">
+			<f:then>
+				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceUsernameWith" />
+			</f:then>
+			<f:else>
+				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textbox property="authorName" value="{unregistredUserName}" /></div>
+			</f:else>
+		</f:if>
+
+		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceMailWith')}">
+			<f:then>
+				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceMailWith" />
+			</f:then>
+			<f:else>
+				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textbox property="authorMail" value="{unregistredUserMail}" /></div>
+			</f:else>
+		</f:if>
+
+
+		<div class="{settings.hiddenFieldClass}"><label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label><f:form.textbox name="{settings.hiddenFieldName}" /></div>
+
+
+
+		<div><label><f:translate key="tx_pwcomments.newComment.comment" /></label><f:form.textarea property="message" rows="8" cols="40" /></div>
+		<f:form.submit value="{f:translate(key:'tx_pwcomments.newComment.submit')}" class="button" />
+	</f:form>
+</div>
+</f:section>

@@ -1,0 +1,247 @@
+plugin.tx_pwcomments {
+	settings {
+		commentAnchorPrefix = comment
+		showCommentAnchor = writeComment
+		writeCommentAnchor = writeComment
+		successfulAnchor = thanksForYourComment
+
+		showGravatarImage = 1
+		gravatarSize = 50
+		gravatarDefault = mm
+
+		moderateNewComments = 1
+		sendMailOnNewCommentsTo = mail@example.com
+		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
+		sendMailMimeType = text/plain
+		overwriteBackendDomain =
+
+		secondsBetweenTwoComments = 300
+		linkUrlsInComments = 1
+
+		useBadWordsList = 1
+		badWordsList = EXT:pw_comments/Resources/Private/Language/badwords.txt
+
+		hiddenFieldSpamProtection = 1
+		hiddenFieldName = authorWebsite
+		hiddenFieldClass = hide_initally
+
+		replaceUsernameWith >
+		replaceMailWith >
+
+		relativeDate.absoluteFormatFallback = %d.%m.%Y
+	}
+	persistence {
+		storagePid =
+	}
+}
+
+
+[loginUser = *]
+plugin.tx_pwcomments {
+	settings {
+		moderateNewComments = 0
+		secondsBetweenTwoComments = 60
+
+		replaceUsernameWith = COA_INT
+		replaceUsernameWith {
+			10 = TEXT
+			10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.newComment.loggedInAs
+
+			20 = TEXT
+			20.data = TSFE:fe_user|user|username
+			20.noTrimWrap = | <b>|</b>|
+
+			stdWrap.wrap = <div class="loggedInAs">|</div>
+		}
+
+		replaceMailWith = TEXT
+		replaceMailWith.stdWrap.char = 0
+	}
+}
+[global]
+
+
+# Lib for output of comments of current page
+lib.pwCommentsIndex = USER
+lib.pwCommentsIndex {
+    userFunc = tx_extbase_core_bootstrap->run
+	extensionName = PwComments
+	pluginName = Pi1
+
+	switchableControllerActions {
+		Comment {
+			1 = index
+		}
+	}
+
+	persistence =< plugin.tx_pwcomments.persistence
+	settings =< plugin.tx_pwcomments.settings
+}
+
+# Lib for form to post new comments
+lib.pwCommentsNew < lib.pwCommentsIndex
+lib.pwCommentsNew.switchableControllerActions.Comment.1 = new
+lib.pwCommentsNew.switchableControllerActions.Comment.2 = create
+
+# Number of comments of current/given page
+lib.pwCommentsGetCount = COA_INT
+lib.pwCommentsGetCount {
+	10 = CONTENT
+	10 {
+		table = tx_pwcomments_domain_model_comment
+		select.selectFields = count(*)
+		select.pidInList.data = field:uid
+		renderObj = COA
+		renderObj {
+			10 = TEXT
+			10 {
+				field = count(*)
+			}
+		}
+	}
+}
+
+# Number of comments of current/given page with singular or plural comment label
+lib.pwCommentsGetCountWithLabel < lib.pwCommentsGetCount
+lib.pwCommentsGetCountWithLabel {
+	20 = TEXT
+	20 {
+		data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.comments
+		override.if {
+			value.cObject =< .10
+			equals = 1
+		}
+		override.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.comment
+		noTrimWrap = | ||
+	}
+
+	20.override.if.value.cObject < lib.pwCommentsGetCountWithLabel.10
+}
+
+# Add default css
+plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
+	.tx-pwcomment-pi1 h1 {
+		margin-bottom: 8px;
+	}
+
+	.tx-pwcomment-pi1 ol {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tx-pwcomment-pi1 ol li {
+		background: #e4e4e4;
+		padding: 10px;
+		width: 590px;
+		margin-bottom: 15px;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+	}
+
+	.tx-pwcomment-pi1 ol li.highlighted {
+		background: #dddad0;
+	}
+
+	.tx-pwcomment-pi1 img.comment_author_image {
+		float: left;
+	}
+
+	.tx-pwcomment-pi1 .comment_header, .tx-pwcomment-pi1 .comment_body {
+		float: left;
+		padding-left: 15px;
+		width: 520px;
+	}
+
+	.tx-pwcomment-pi1 .comment_body a {
+		color: #333;
+	}
+
+
+	.tx-pwcomment-pi1 .comment_author {
+		font-size: 15px;
+	}
+
+	.tx-pwcomment-pi1 .comment_date, .tx-pwcomment-pi1 .guest {
+		color: #565656;
+		font-size: 11px;
+	}
+
+	.tx-pwcomment-pi1 .comment_header {
+		padding-top: 0px;
+		padding-bottom: 5px;
+	}
+	.tx-pwcomment-pi1 .comment_header a {
+		color: #111;
+		text-decoration: none;
+	}
+
+	.tx-pwcomment-pi1 .comment_body {
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+	#writeComment h3 {
+		padding: 20px 0 8px;
+	}
+
+	#writeComment div.hide_initally {
+		display: none;
+	}
+
+	#writeComment .comment_error {
+		background: #ffd4d4;
+		border: 1px solid #bf2222;
+		color: #bf2222;
+		font-weight: bold;
+		padding: 6px 10px;
+		margin-bottom: 15px;
+		width: 485px;
+	}
+
+	#writeComment label {
+		display: block;
+	}
+
+	#writeComment label span {
+		font-size: 10px;
+		color: #777;
+	}
+	#writeComment label span a {
+		text-decoration: none;
+		color: #777;
+	}
+
+	#writeComment input {
+		font-family: Verdana,Tahoma,Arial,sans-serif;
+		font-size: 15px;
+		width: 350px;
+		padding: 2px;
+		margin-bottom: 14px;
+	}
+
+	#writeComment textarea {
+		width: 520px;
+		line-height: 16px;
+		padding: 5px;
+		font-family: Verdana,Tahoma,Arial,sans-serif;
+		font-size: 11px;
+		margin-bottom: 10px;
+	}
+
+	#writeComment input.button {
+		width: 100px;
+		margin-bottom: 0;
+	}
+
+	#thanksForYourComment li {
+		background: #ccffcc;
+		border: 1px solid #009900;
+		color: #009900;
+		font-weight: bold;
+		padding: 6px 10px;
+		margin-bottom: 15px;
+		width: 485px;
+	}
+)

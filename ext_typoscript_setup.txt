@@ -1,0 +1,12 @@
+plugin.tx_pwcomments {
+	persistence {
+		classes {
+			Tx_PwComments_Domain_Model_FrontendUser {
+				mapping {
+					tableName = fe_users
+				}
+			}
+		}
+		storagePid =
+	}
+}
