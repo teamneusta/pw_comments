@@ -9,15 +9,15 @@
 			<label index="tx_pwcomments.comment">comment</label>
 			<label index="tx_pwcomments.comments">comments</label>
 
-			<label index="tx_pwcomments.validation_error.1299628038">Please login or fillout your name and mail.</label>
-			<label index="tx_pwcomments.validation_error.1299628371">The entered mail address is not valid..</label>
+			<label index="tx_pwcomments.validation_error.1299628038">Please log in or fill out your name and e-mail address.</label>
+			<label index="tx_pwcomments.validation_error.1299628371">The e-mail address you have entered is not valid.</label>
 			<label index="tx_pwcomments.validation_error.1299628099">The comment message may not be empty.</label>
-			<label index="tx_pwcomments.validation_error.1300280476">Between two comments you have to wait %s seconds.</label>
-			<label index="tx_pwcomments.validation_error.1315608355">The comment message contains at least one bad word, which is not allowed.</label>
+			<label index="tx_pwcomments.validation_error.1300280476">Please wait %s seconds between two comments.</label>
+			<label index="tx_pwcomments.validation_error.1315608355">Your comment message contains at least one bad word. These are not allowed.</label>
 
 			<label index="tx_pwcomments.newComment.loggedInAs">You are logged in as:</label>
 			<label index="tx_pwcomments.newComment.name">Your name:</label>
-			<label index="tx_pwcomments.newComment.mail">Your mail address:</label>
+			<label index="tx_pwcomments.newComment.mail">Your e-mail address:</label>
 			<label index="tx_pwcomments.newComment.hiddenField">Do not fill out!</label>
 			<label index="tx_pwcomments.newComment.comment">Comment:</label>
 			<label index="tx_pwcomments.newComment.submit">Submit</label>
@@ -25,7 +25,7 @@
 			<label index="tx_pwcomments.noComments">No comments found!</label>
 			<label index="tx_pwcomments.writeNewComment">Write new comment</label>
 			<label index="tx_pwcomments.thanks">Thanks for your comment!</label>
-			<label index="tx_pwcomments.moderationNotice">Thanks for your comment! We will check it, before publishing. Thanks for your patience.</label>
+			<label index="tx_pwcomments.moderationNotice">Your comment has to be checked before publishing. Thank you for your patience!</label>
 
 			<label index="tx_pwcomments.relativeDate.wrap">%s ago</label>
 			<label index="tx_pwcomments.relativeDate.fewSeconds">few seconds</label>
@@ -41,22 +41,22 @@
 			<label index="tx_pwcomments.notificationMail.subject">New comment on %s</label>
 
 			<label index="tx_pwcomments.notificationMail.salutation">Hello,</label>
-			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">a new comment has been submitted and waits for your approval.</label>
+			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">a new comment has been submitted and awaits your approval.</label>
 			<label index="tx_pwcomments.notificationMail.linkToArticle">Link to article:</label>
 			<label index="tx_pwcomments.notificationMail.linkToApproval">Link to approval:</label>
 			<label index="tx_pwcomments.notificationMail.name">Name: </label>
 			<label index="tx_pwcomments.notificationMail.registred">(registred)</label>
-			<label index="tx_pwcomments.notificationMail.mail">Mail: </label>
+			<label index="tx_pwcomments.notificationMail.mail">E-mail: </label>
 			<label index="tx_pwcomments.notificationMail.comment">Comment: </label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_pwcomments.comment">Kommentar</label>
 			<label index="tx_pwcomments.comments">Kommentare</label>
 
-			<label index="tx_pwcomments.validation_error.1299628038">Bitte melde Dich an, oder fülle Name und E-Mail aus.</label>
-			<label index="tx_pwcomments.validation_error.1299628371">Die E-Mail-Adresse ist nicht korrekt.</label>
+			<label index="tx_pwcomments.validation_error.1299628038">Bitte melde Dich an oder fülle Name und E-Mail-Adresse aus.</label>
+			<label index="tx_pwcomments.validation_error.1299628371">Die eingegebene E-Mail-Adresse ist nicht korrekt.</label>
 			<label index="tx_pwcomments.validation_error.1299628099">Der Kommentar darf nicht leer sein.</label>
-			<label index="tx_pwcomments.validation_error.1300280476">Zwischen zwei Kommentaren muss %s Sekunden gewartet werden.</label>
+			<label index="tx_pwcomments.validation_error.1300280476">Zwischen zwei Kommentaren müssen %s Sekunden vergehen.</label>
 			<label index="tx_pwcomments.validation_error.1315608355">Der Kommentar beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</label>
 
 			<label index="tx_pwcomments.newComment.loggedInAs">Angemeldet als:</label>
@@ -69,7 +69,7 @@
 			<label index="tx_pwcomments.noComments">Keine Kommentare gefunden!</label>
 			<label index="tx_pwcomments.writeNewComment">Neuen Kommentar schreiben</label>
 			<label index="tx_pwcomments.thanks">Vielen Dank für Deinen Kommentar!</label>
-			<label index="tx_pwcomments.moderationNotice">Vielen Dank für Deinen Kommentar! Wir werden ihn vor der Veröffentlichung prüfen. Danke für Deine Geduld.</label>
+			<label index="tx_pwcomments.moderationNotice">Vielen Dank für Deinen Kommentar! Wir werden ihn vor der Veröffentlichung prüfen. Danke für Deine Geduld!</label>
 
 			<label index="tx_pwcomments.relativeDate.wrap">vor %s</label>
 			<label index="tx_pwcomments.relativeDate.fewSeconds">wenigen Sekunden</label>
@@ -87,7 +87,7 @@
 			<label index="tx_pwcomments.notificationMail.salutation">Hallo,</label>
 			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">ein neuer Kommentar wurde eingesendet und wartet auf Freigabe.</label>
 			<label index="tx_pwcomments.notificationMail.linkToArticle">Link zum Artikel:</label>
-			<label index="tx_pwcomments.notificationMail.linkToApproval">Link zum Freigeben:</label>
+			<label index="tx_pwcomments.notificationMail.linkToApproval">Link zur Freigabe:</label>
 			<label index="tx_pwcomments.notificationMail.name">Name: </label>
 			<label index="tx_pwcomments.notificationMail.registred">(registriert)</label>
 			<label index="tx_pwcomments.notificationMail.mail">E-Mail: </label>
