@@ -184,6 +184,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 */
 	protected function messageHasNoBadWords(Tx_PwComments_Domain_Model_Comment $comment){
 		$badWordsListPath = t3lib_div::getFileAbsFileName($this->settings['badWordsList']);
+
 		if (!file_exists($badWordsListPath)) {
 			// Skip this validation, if bad word list is missing
 			return TRUE;
@@ -195,7 +196,8 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 		}
 		$badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
 
-		return (boolean)!preg_match($badWordsRegExp, $comment->getMessage());
+		$commentMessage = '-> ' . $comment->getMessage() . ' <-';
+		return (boolean)!preg_match($badWordsRegExp, $commentMessage);
 	}
 
 
