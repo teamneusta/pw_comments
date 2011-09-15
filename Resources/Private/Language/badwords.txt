@@ -1,9 +1,15 @@
+\Wkacke\W
+\Wneger\W
+\Wpisser\W
+\Wscheisse\W
+\Wwixxer\W
+\Wwichsen\W
+fuck
 \Wahole\W
 \Wanus\W
 \Wash0le\W
 \Wash0les\W
 \Washoles\W
-\Wass\W
 \WAss Monkey\W
 \WAssface\W
 \Wassh0le\W
@@ -70,7 +76,6 @@
 \Wfaig\W
 \Wfaigs\W
 \Wflipping the bird\W
-fuck
 \WFudge Packer\W
 \Wfuk\W
 \WFukah\W
@@ -115,17 +120,13 @@ fuck
 \Wmasterbaiter\W
 \Wmasterbate\W
 \Wmasterbates\W
-\WMotha Fucker\W
 \WMotha Fuker\W
 \WMotha Fukkah\W
 \WMotha Fukker\W
-\WMother Fucker\W
 \WMother Fukah\W
 \WMother Fuker\W
 \WMother Fukkah\W
 \WMother Fukker\W
-\Wmother\-fucker\W
-\WMutha Fucker\W
 \WMutha Fukah\W
 \WMutha Fuker\W
 \WMutha Fukkah\W
@@ -242,7 +243,6 @@ fuck
 \Wwichs0r\W
 \Whitler\W
 \Wkinderficker\W
-\Wfuck\W
 \Wshit\W
 \Wasshole\W
 \Wb!tch\W
@@ -275,7 +275,6 @@ fuck
 \Wmasturbate\W
 \Wmasterbat\W
 \Wmasterbat3\W
-\Wmotherfucker\W
 \Ws.o.b.\W
 \Wmofo\W
 \Wnazi\W
@@ -298,7 +297,6 @@ fuck
 \Wjackoff\W
 \Wwhore\W
 \Wdyke\W
-\Wfuck\W
 \Wamcik\W
 \Wandskota\W
 \Wassrammer\W
