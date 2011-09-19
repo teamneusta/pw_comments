@@ -9,8 +9,12 @@ plugin.tx_pwcomments {
 		gravatarSize = 50
 		gravatarDefault = mm
 
+		useEntryUid = 0
+		entryUid = TEXT
+		entryUid.data = GP:tx_extension|uid
+
 		moderateNewComments = 1
-		sendMailOnNewCommentsTo = mail@example.com
+		sendMailOnNewCommentsTo =
 		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
 		sendMailMimeType = text/plain
 		overwriteBackendDomain =

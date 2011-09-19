@@ -30,6 +30,12 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_AbstractEntity {
+
+	/**
+	 * @var integer uid of entry for what the comment is for
+	 */
+	protected $entryUid = 0;
+
 	/**
 	 * crdate as unix timestamp
 	 *
@@ -79,6 +85,26 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	public function __construct() {
 		$this->initializeObject();
 		$this->author = t3lib_div::makeInstance('Tx_Extbase_Domain_Model_FrontendUser');
+	}
+
+	/**
+	 * Getter for entryUid
+	 *
+	 * @return integer
+	 */
+	public function getEntryUid() {
+		return $this->entryUid;
+	}
+
+	/**
+	 * Setter for entryUid
+	 *
+	 * @param integer $entryUid
+	 *
+	 * @return void
+	 */
+	public function setEntryUid($entryUid) {
+		$this->entryUid = $entryUid;
 	}
 
 	/**

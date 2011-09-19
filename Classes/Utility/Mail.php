@@ -123,7 +123,8 @@ class Tx_PwComments_Utility_Mail {
 		$this->fluidTemplate->assign('settings', $this->settings);
 
 		$uriBuilder = $this->controllerContext->getUriBuilder();
-		$articleLink = 'http://' . t3lib_div::getHostname() . '/' . $uriBuilder->setTargetPageUid($comment->getPid())->build();
+		$articleLink = 'http://' . t3lib_div::getHostname() . '/' .
+					   $uriBuilder->setTargetPageUid($comment->getPid())->setAddQueryString(TRUE)->build();
 		$this->fluidTemplate->assign('articleLink', $articleLink);
 
 		if ($this->settings['overwriteBackendDomain']) {

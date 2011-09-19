@@ -7,6 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_pwcomments_domain_model_comment">Comment</label>
+			<label index="tx_pwcomments_domain_model_comment.entry_uid">Entry uid</label>
 			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">Mail</label>
@@ -14,6 +15,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_pwcomments_domain_model_comment">Kommentar</label>
+			<label index="tx_pwcomments_domain_model_comment.entry_uid">Eintrag UID</label>
 			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">E-Mail</label>

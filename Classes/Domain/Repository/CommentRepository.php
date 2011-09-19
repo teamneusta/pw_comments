@@ -45,10 +45,39 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 		$this->setDefaultQuerySettings($querySettings);
 	}
 
+	/**
+	 * Find comments by pid
+	 *
+	 * @param integer $pid pid to get comments for
+	 *
+	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 */
 	public function findByPid($pid) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->equals('pid', $pid)
+		);
+		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+		return $query->execute();
+	}
+
+	/**
+	 * Find comments by pid and entry uid
+	 *
+	 * @param integer $pid pid to get comments for
+	 * @param integer $entryUid entry id to get comments for
+	 *
+	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 */
+	public function findByPidAndEntryUid($pid, $entryUid) {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->logicalAnd(
+				array(
+					$query->equals('pid', $pid),
+					$query->equals('entryUid', $entryUid)
+				)
+			)
 		);
 		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
 		return $query->execute();

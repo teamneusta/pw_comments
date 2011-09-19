@@ -2,6 +2,8 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	entry_uid int(11) unsigned DEFAULT '0' NOT NULL,
+
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	author_name tinytext,
 	author_mail tinytext,

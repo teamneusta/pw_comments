@@ -75,6 +75,13 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 				'type'	=> 'check'
 			)
 		),
+		'entry_uid' => array(
+			'exclude'	=> 1,
+			'label'		=> 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.entry_uid',
+			'config'	=> array(
+				'type' => 'input'
+			)
+		),
 		'author' => array(
 			'exclude'	=> 0,
 			'label'		=> 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.author',

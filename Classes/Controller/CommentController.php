@@ -37,6 +37,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	protected $pageUid = 0;
 
 	/**
+	 * @var integer
+	 */
+	protected $entryUid = 0;
+
+	/**
 	 * @var array
 	 */
 	protected $currentUser = array();
@@ -114,14 +119,24 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		$this->settings = $this->settingsUtility->renderConfigurationArray($this->settings, TRUE);
 		$this->pageUid = $GLOBALS['TSFE']->id;
 		$this->currentUser = $GLOBALS['TSFE']->fe_user->user;
+
+		if ($this->settings['useEntryUid']) {
+			$this->entryUid = intval($this->settings['entryUid']);
+		}
 	}
 
 	/**
 	 * Displays all comments by pid
 	 */
 	public function indexAction() {
-		/* @var $comments Tx_Extbase_Persistence_QueryResult */
-		$comments = $this->commentRepository->findByPid($this->pageUid);
+		if ($this->entryUid > 0) {
+			/* @var $comments Tx_Extbase_Persistence_QueryResult */
+			$comments = $this->commentRepository->findByPidAndEntryUid($this->pageUid, $this->entryUid);
+		} else {
+			/* @var $comments Tx_Extbase_Persistence_QueryResult */
+			$comments = $this->commentRepository->findByPid($this->pageUid);
+		}
+
 		$this->view->assign('comments', $comments);
 	}
 
@@ -135,7 +150,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	public function createAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL) {
 		// Hidden field Spam-Protection
 		if ($this->settings['hiddenFieldSpamProtection'] && $this->request->hasArgument($this->settings['hiddenFieldName']) && $this->request->getArgument($this->settings['hiddenFieldName'])) {
-			$this->redirectToURI($this->buildUriByUid($this->pageUid) . '#kommentar-schreiben');
+			$this->redirectToURI($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
 			return;
 		}
 
@@ -144,6 +159,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			return FALSE;
 		}
 		$newComment->setPid($this->pageUid);
+		$newComment->setEntryUid($this->entryUid);
 
 		$author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
 		if ($author !== NULL) {
@@ -232,7 +248,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @return string The link
 	 */
 	private function buildUriByUid($uid) {
-		$uri = $this->uriBuilder->setTargetPageUid($uid)->build();
+		$uri = $this->uriBuilder
+				->setTargetPageUid($uid)
+				->setAddQueryString(TRUE)
+				->setArgumentsToBeExcludedFromQueryString(array('tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]'))
+				->build();
 		$uri = $this->addBaseUriIfNecessary($uri);
 		return $uri;
 	}
