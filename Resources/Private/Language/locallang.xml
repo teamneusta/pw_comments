@@ -41,7 +41,8 @@
 			<label index="tx_pwcomments.notificationMail.subject">New comment on %s</label>
 
 			<label index="tx_pwcomments.notificationMail.salutation">Hello,</label>
-			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">a new comment has been submitted and awaits your approval.</label>
+			<label index="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted">a new comment has been submitted and awaits your approval.</label>
+			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">a new comment has been submitted.</label>
 			<label index="tx_pwcomments.notificationMail.linkToArticle">Link to article:</label>
 			<label index="tx_pwcomments.notificationMail.linkToApproval">Link to approval:</label>
 			<label index="tx_pwcomments.notificationMail.name">Name: </label>
@@ -85,7 +86,8 @@
 			<label index="tx_pwcomments.notificationMail.subject">Neuer Kommentar auf %s</label>
 
 			<label index="tx_pwcomments.notificationMail.salutation">Hallo,</label>
-			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">ein neuer Kommentar wurde eingesendet und wartet auf Freigabe.</label>
+			<label index="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted">ein neuer Kommentar wurde eingesendet und wartet auf Freigabe.</label>
+			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">ein neuer Kommentar wurde eingesendet.</label>
 			<label index="tx_pwcomments.notificationMail.linkToArticle">Link zum Artikel:</label>
 			<label index="tx_pwcomments.notificationMail.linkToApproval">Link zur Freigabe:</label>
 			<label index="tx_pwcomments.notificationMail.name">Name: </label>
