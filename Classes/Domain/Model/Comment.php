@@ -230,7 +230,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 *
 	 * @param Tx_PwComments_Domain_Model_FrontendUser $author author
 	 */
-	public function setAuthor(Tx_PwComments_Domain_Model_FrontendUser $author) {
+	public function setAuthor($author) {
 			$this->author = $author;
 	}
 
