@@ -79,7 +79,7 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
-	 * Creates and sends mail with data from recommendation object
+	 * Creates and sends mail
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
 	 *
@@ -104,7 +104,7 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
-	 * Gets the message for a recommendation mail as fluid template
+	 * Gets the message for a notification mail as fluid template
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
 	 *
