@@ -6,8 +6,8 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tx_pwcomments.comment">comment</label>
-			<label index="tx_pwcomments.comments">comments</label>
+			<label index="tx_pwcomments.comment">Comment</label>
+			<label index="tx_pwcomments.comments">Comments</label>
 
 			<label index="tx_pwcomments.validation_error.1299628038">Please log in or fill out your name and e-mail address.</label>
 			<label index="tx_pwcomments.validation_error.1299628371">The e-mail address you have entered is not valid.</label>

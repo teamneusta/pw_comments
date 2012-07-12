@@ -110,7 +110,7 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 	 * @return string Returns the plural suffix, which makes a time measure to plural (i.e. Stunde -> Stunden)
 	 */
 	protected function plural($num, $suffix = '') {
-		if ($num != 1) {
+		if ($num > 1) {
 			return $this->getLabel('pluralSuffix' . ucfirst($suffix));
 		}
 	}

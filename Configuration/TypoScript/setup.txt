@@ -149,6 +149,13 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 		background: #dddad0;
 	}
 
+	.tx-pwcomment-pi1 ol li div.clear {
+		clear: left;
+		height: 0;
+		font-size: 0;
+		line-height: 0;
+	}
+
 	.tx-pwcomment-pi1 img.comment_author_image {
 		float: left;
 	}
