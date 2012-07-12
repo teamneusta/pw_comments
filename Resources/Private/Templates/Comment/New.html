@@ -20,7 +20,7 @@
 				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceUsernameWith" />
 			</f:then>
 			<f:else>
-				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textbox property="authorName" value="{unregistredUserName}" /></div>
+				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textfield property="authorName" value="{unregistredUserName}" /></div>
 			</f:else>
 		</f:if>
 
@@ -29,12 +29,12 @@
 				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceMailWith" />
 			</f:then>
 			<f:else>
-				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textbox property="authorMail" value="{unregistredUserMail}" /></div>
+				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textfield property="authorMail" value="{unregistredUserMail}" /></div>
 			</f:else>
 		</f:if>
 
 
-		<div class="{settings.hiddenFieldClass}"><label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label><f:form.textbox name="{settings.hiddenFieldName}" /></div>
+		<div class="{settings.hiddenFieldClass}"><label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label><f:form.textfield name="{settings.hiddenFieldName}" /></div>
 
 
 
