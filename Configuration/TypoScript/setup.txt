@@ -37,6 +37,7 @@ plugin.tx_pwcomments {
 	persistence {
 		storagePid =
 	}
+	mvc.callDefaultActionIfActionCantBeResolved = 1
 }
 
 
