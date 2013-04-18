@@ -53,7 +53,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * The author as model or NULL if comment author wasn't logged in
 	 *
-	 * @var Tx_Extbase_Domain_Model_FrontendUser
+	 * @var Tx_PwComments_Domain_Model_FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -84,7 +84,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 */
 	public function __construct() {
 		$this->initializeObject();
-		$this->author = t3lib_div::makeInstance('Tx_Extbase_Domain_Model_FrontendUser');
+		$this->author = t3lib_div::makeInstance('Tx_PwComments_Domain_Model_FrontendUser');
 	}
 
 	/**
