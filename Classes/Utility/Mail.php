@@ -59,11 +59,11 @@ class Tx_PwComments_Utility_Mail {
 	/**
 	 * Set the fluid template from controller
 	 *
-	 * @param Tx_Fluid_View_TemplateView $fluidTemplate the fluid template
+	 * @param Tx_Fluid_View_StandaloneView $fluidTemplate the fluid template
 	 *
 	 * @return void
 	 */
-	public function setFluidTemplate(Tx_Fluid_View_TemplateView $fluidTemplate) {
+	public function setFluidTemplate(Tx_Fluid_View_StandaloneView $fluidTemplate) {
 		$this->fluidTemplate = $fluidTemplate;
 	}
 

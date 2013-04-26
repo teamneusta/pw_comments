@@ -260,11 +260,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Makes and returns a fluid template object
 	 *
-	 * @return Tx_Fluid_View_TemplateView the fluid template object
+	 * @return Tx_Fluid_View_StandaloneView the fluid template object
 	 */
 	protected function makeFluidTemplateObject() {
-		/** @var Tx_Fluid_View_TemplateView $fluidTemplate  */
-		$fluidTemplate = t3lib_div::makeInstance('Tx_Fluid_View_TemplateView');
+		/** @var Tx_Fluid_View_StandaloneView $fluidTemplate  */
+		$fluidTemplate = t3lib_div::makeInstance('Tx_Fluid_View_StandaloneView');
 
 		// Set controller context
 		$controllerContext = $this->buildControllerContext();
