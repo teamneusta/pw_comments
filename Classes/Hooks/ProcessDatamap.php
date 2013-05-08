@@ -84,11 +84,14 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		$pwCommentsTypoScript = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.']['settings.'];
 
 		tslib_eidtools::connectDB();
-		tslib_eidtools::initLanguage('default');
+		tslib_eidtools::initLanguage('de');
 		tslib_eidtools::initTCA();
 		tslib_eidtools::initExtensionTCA('pw_comments');
 
-		$settings = array_merge($settings, unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']), $pwCommentsTypoScript);
+		if (unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])) {
+			$settings = array_merge($settings, unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']));
+		}
+		$settings = array_merge($settings, $pwCommentsTypoScript);
 
 		$bootstrap = new Tx_Extbase_Core_Bootstrap();
 		$bootstrap->cObj = t3lib_div::makeInstance('tslib_cObj');
