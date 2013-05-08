@@ -82,5 +82,20 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
 		return $query->execute();
 	}
+
+	/**
+	 * @param $uid
+	 * @return object
+	 */
+	public function findByCommentUid($uid) {
+		$query = $this->createQuery();
+		if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) >= 6000000) {
+			$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
+		} else {
+			$query->getQuerySettings()->setRespectEnableFields(FALSE);
+		}
+		$query->matching($query->equals('uid', $uid));
+		return $query->execute()->getFirst();
+	}
 }
 ?>

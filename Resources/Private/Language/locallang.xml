@@ -38,8 +38,8 @@
 
 			<label index="tx_pwcomments.notificationMail.from.mail">newComment@%s</label>
 			<label index="tx_pwcomments.notificationMail.from.name">pwComments</label>
-			<label index="tx_pwcomments.notificationMail.subject">New comment on %s</label>
 
+			<label index="tx_pwcomments.notificationMail.subject">New comment on %s</label>
 			<label index="tx_pwcomments.notificationMail.salutation">Hello,</label>
 			<label index="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted">a new comment has been submitted and awaits your approval.</label>
 			<label index="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted">a new comment has been submitted.</label>
@@ -49,6 +49,16 @@
 			<label index="tx_pwcomments.notificationMail.registred">(registred)</label>
 			<label index="tx_pwcomments.notificationMail.mail">E-mail: </label>
 			<label index="tx_pwcomments.notificationMail.comment">Comment: </label>
+
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.salutation">Hello,</label>
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted">you have posted a new comment which awaits our approval on this page: %s</label>
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted">you have posted a new comment on this page: %s</label>
+
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.subject">Your comment on %s has been published</label>
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.salutation">Hello,</label>
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished">your comment has been published, on this page: %s</label>
+
+			<label index="mailSentToAuthorAfterPublish">The author of this comment (%s) has been notified by mail.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_pwcomments.comment">Kommentar</label>
@@ -94,6 +104,16 @@
 			<label index="tx_pwcomments.notificationMail.registred">(registriert)</label>
 			<label index="tx_pwcomments.notificationMail.mail">E-Mail: </label>
 			<label index="tx_pwcomments.notificationMail.comment">Kommentar: </label>
+
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.salutation">Hallo,</label>
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted">Sie haben einen neuen Kommentar eingesendet, welcher durch uns freigeschaltet wird, auf der Seite: %s</label>
+			<label index="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted">Sie haben auf dieser Seite einen neuen Kommentar eingesendet: %s</label>
+
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.subject">Ihr Kommentar auf %s wurde veröffentlicht</label>
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.salutation">Hallo,</label>
+			<label index="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished">Ihr Kommentar wurde auf dieser Seite veröffentlicht: %s</label>
+
+			<label index="mailSentToAuthorAfterPublish">Der Autor dieses Kommentars (%s) wurde per E-Mail benachrichtigt.</label>
 		</languageKey>
 	</data>
 </T3locallang>

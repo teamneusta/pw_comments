@@ -18,6 +18,13 @@ plugin.tx_pwcomments {
 		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
 		sendMailMimeType = text/plain
 		overwriteBackendDomain =
+		subFolder =
+
+		sendMailToAuthorAfterSubmit = 0
+		sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
+
+		sendMailToAuthorAfterPublish = 0
+		sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
 
 		secondsBetweenTwoComments = 300
 		linkUrlsInComments = 1

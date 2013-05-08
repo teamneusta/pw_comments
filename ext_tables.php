@@ -3,6 +3,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+$_EXTKEY = 'pw_comments';
+
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'pwComments');
 
 $extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);

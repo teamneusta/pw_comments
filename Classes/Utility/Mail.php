@@ -46,6 +46,26 @@ class Tx_PwComments_Utility_Mail {
 	protected $controllerContext = NULL;
 
 	/**
+	 * @var string comma separated string of mail addresses
+	 */
+	protected $receivers = '';
+
+	/**
+	 * @var string
+	 */
+	protected $templatePath = '';
+
+	/**
+	 * @var string
+	 */
+	protected $subjectLocallangKey = 'tx_pwcomments.notificationMail.subject';
+
+	/**
+	 * @var boolean
+	 */
+	protected $addQueryStringToLinks = TRUE;
+
+	/**
 	 * Sets the settings of controller
 	 *
 	 * @param array $settings settings to set
@@ -82,7 +102,6 @@ class Tx_PwComments_Utility_Mail {
 	 * Creates and sends mail
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
-	 *
 	 * @return boolean Returns TRUE if the mail has been sent successfully, otherwise returns FALSE
 	 */
 	public function sendMail(Tx_PwComments_Domain_Model_Comment $comment) {
@@ -94,10 +113,11 @@ class Tx_PwComments_Utility_Mail {
             Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.name', 'pw_comments')
         );
 
-        $receivers = t3lib_div::trimExplode(',', $this->settings['sendMailOnNewCommentsTo'], TRUE);
+        $receivers = t3lib_div::trimExplode(',', $this->getReceivers(), TRUE);
         $mail->setTo($receivers);
 
-        $mail->setSubject(Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.subject', 'pw_comments', array(t3lib_div::getHostname())));
+
+        $mail->setSubject(Tx_Extbase_Utility_Localization::translate($this->getSubjectLocallangKey(), 'pw_comments', array(t3lib_div::getHostname())));
         $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
 
         return (boolean) $mail->send();
@@ -107,11 +127,10 @@ class Tx_PwComments_Utility_Mail {
 	 * Gets the message for a notification mail as fluid template
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
-	 *
 	 * @return string The rendered fluid template (HTML or plain text)
 	 */
 	protected function getMailMessage(Tx_PwComments_Domain_Model_Comment $comment) {
-		$mailTemplate = t3lib_div::getFileAbsFileName($this->settings['sendMailTemplate']);
+		$mailTemplate = t3lib_div::getFileAbsFileName($this->getTemplatePath());
 		if (!file_exists($mailTemplate)) {
 			throw new Exception('Mail template (' . $mailTemplate . ') not found. ');
 		}
@@ -123,19 +142,79 @@ class Tx_PwComments_Utility_Mail {
 		$this->fluidTemplate->assign('settings', $this->settings);
 
 		$uriBuilder = $this->controllerContext->getUriBuilder();
-		$articleLink = 'http://' . t3lib_div::getHostname() . '/' .
-					   $uriBuilder->setTargetPageUid($comment->getPid())->setAddQueryString(TRUE)->build();
+
+		$subFolder = ($this->settings['subFolder']) ? $this->settings['subFolder'] : '';
+
+		$articleLink = 'http://' . t3lib_div::getHostname() . $subFolder . '/' .
+					   $uriBuilder
+							->setTargetPageUid($comment->getPid())
+							->setAddQueryString($this->getAddQueryStringToLinks())
+							->setArgumentsToBeExcludedFromQueryString(array('id', 'cHash', 'tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]'))
+					   		->setUseCacheHash(FALSE)
+							->buildFrontendUri();
 		$this->fluidTemplate->assign('articleLink', $articleLink);
 
-		if ($this->settings['overwriteBackendDomain']) {
-			$backendDomain = $this->settings['overwriteBackendDomain'];
-		} else {
-			$backendDomain = t3lib_div::getHostname();
-		}
-		$backendLink = 'http://' . $backendDomain . '/typo3/alt_doc.php?M=web_list&id=' . $comment->getPid() . '&edit[tx_pwcomments_domain_model_comment][' . $comment->getUid() . ']=edit';
+		$backendDomain = ($this->settings['overwriteBackendDomain']) ? $this->settings['overwriteBackendDomain'] : t3lib_div::getHostname();
+		$backendLink = 'http://' . $backendDomain . $subFolder . '/typo3/alt_doc.php?M=web_list&id=' . $comment->getPid() . '&edit[tx_pwcomments_domain_model_comment][' . $comment->getUid() . ']=edit';
 		$this->fluidTemplate->assign('backendLink', $backendLink);
 
 		return $this->fluidTemplate->render();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getReceivers() {
+		return $this->receivers;
+	}
+
+	/**
+	 * @param string $receivers
+	 */
+	public function setReceivers($receivers) {
+		$this->receivers = $receivers;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTemplatePath() {
+		return $this->templatePath;
+	}
+
+	/**
+	 * @param string $templatePath
+	 */
+	public function setTemplatePath($templatePath) {
+		$this->templatePath = $templatePath;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSubjectLocallangKey() {
+		return $this->subjectLocallangKey;
+	}
+
+	/**
+	 * @param string $subjectLocallangKey
+	 */
+	public function setSubjectLocallangKey($subjectLocallangKey) {
+		$this->subjectLocallangKey = $subjectLocallangKey;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getAddQueryStringToLinks() {
+		return $this->addQueryStringToLinks;
+	}
+
+	/**
+	 * @param boolean $addQueryStringToLinks
+	 */
+	public function setAddQueryStringToLinks($addQueryStringToLinks) {
+		$this->addQueryStringToLinks = $addQueryStringToLinks;
 	}
 
 }

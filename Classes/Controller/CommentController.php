@@ -116,7 +116,10 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @return void
 	 */
 	public function  initializeAction() {
-		$this->settings = $this->settingsUtility->renderConfigurationArray($this->settings, TRUE);
+		$this->settings = $this->settingsUtility->renderConfigurationArray(
+			$this->settings,
+			($this->settings['_skipMakingSettingsRenderable']) ? FALSE : TRUE
+		);
 		$this->pageUid = $GLOBALS['TSFE']->id;
 		$this->currentUser = $GLOBALS['TSFE']->fe_user->user;
 
@@ -171,15 +174,21 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		}
 		$GLOBALS['TSFE']->fe_user->setKey('ses', 'tx_pwcomments_lastComment', time());
 
-		// Modify comment if moderation is active
+		$translateArguments = array(
+			'name' => $newComment->getAuthorName(),
+			'email' => $newComment->getAuthorMail(),
+			'message' => $newComment->getMessage(),
+		);
+
+			// Modify comment if moderation is active
 		if ($this->settings['moderateNewComments']) {
 			$newComment->setHidden(TRUE);
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.moderationNotice', 'pw_comments')
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.moderationNotice', 'pw_comments', $translateArguments)
 			);
 		} else {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.thanks', 'pw_comments')
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.thanks', 'pw_comments', $translateArguments)
 			);
 		}
 
@@ -193,6 +202,17 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->mailUtility->setSettings($this->settings);
 			$this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
 			$this->mailUtility->setControllerContext($this->controllerContext);
+			$this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
+			$this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
+			$this->mailUtility->sendMail($newComment);
+		}
+
+		if ($this->settings['sendMailToAuthorAfterSubmit']) {
+			$this->mailUtility->setSettings($this->settings);
+			$this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
+			$this->mailUtility->setControllerContext($this->controllerContext);
+			$this->mailUtility->setReceivers($newComment->getAuthorMail());
+			$this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
 			$this->mailUtility->sendMail($newComment);
 		}
 
@@ -221,14 +241,14 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		if ($this->currentUser) {
 			$this->view->assign('user', $this->currentUser);
 		} else {
-			// Get name of unregistred user
+				// Get name of unregistred user
 			if ($newComment !== NULL && $newComment->getAuthorName()) {
 				$unregistredUserName = $newComment->getAuthorName();
 			} else {
 				$unregistredUserName = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserName');
 			}
 
-			// Get mail of unregistred user
+				// Get mail of unregistred user
 			if ($newComment !== NULL && $newComment->getAuthorMail()) {
 				$unregistredUserMail = $newComment->getAuthorMail();
 			} else {
@@ -237,6 +257,26 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 
 			$this->view->assign('unregistredUserName', $unregistredUserName);
 			$this->view->assign('unregistredUserMail', $unregistredUserMail);
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function sendAuthorMailWhenCommentHasBeenApprovedAction() {
+		/** @var Tx_PwComments_Domain_Model_Comment $comment */
+		$comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
+
+		if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
+			$this->mailUtility->setSettings($this->settings);
+			$this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
+			$this->mailUtility->setControllerContext($this->controllerContext);
+			$this->mailUtility->setReceivers($comment->getAuthorMail());
+			$this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
+			$this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
+			$this->mailUtility->setAddQueryStringToLinks(FALSE);
+			$this->mailUtility->sendMail($comment);
+			$this->flashMessageContainer->add(Tx_Extbase_Utility_Localization::translate('mailSentToAuthorAfterPublish', 'pw_comments', array($comment->getAuthorMail())));
 		}
 	}
 
