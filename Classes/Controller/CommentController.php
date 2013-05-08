@@ -267,8 +267,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		/** @var Tx_PwComments_Domain_Model_Comment $comment */
 		$comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
-		t3lib_utility_Debug::debug($comment, $this->settings['_commentUid']);
-
 		if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
 			$this->mailUtility->setSettings($this->settings);
 			$this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
