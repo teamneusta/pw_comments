@@ -81,7 +81,9 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		$rootline = $GLOBALS['TSFE']->sys_page->getRootLine($pageUid);
 		$GLOBALS['TSFE']->tmpl->start($rootline);
 		$GLOBALS['TSFE']->getConfigArray();
-		$pwCommentsTypoScript = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.']['settings.'];
+
+		$pluginSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.'];
+		$pwCommentsTypoScript = $pluginSettings['settings.'];
 
 		tslib_eidtools::connectDB();
 		tslib_eidtools::initLanguage('de');
@@ -106,6 +108,7 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 			'mvc' => array('requestHandlers' => array('Tx_Extbase_MVC_Web_FrontendRequestHandler'=>'Tx_Extbase_MVC_Web_FrontendRequestHandler')),
 			'settings' => $settings,
 			'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
+			'_LOCAL_LANG' => Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.'])
 		);
 
 		return $bootstrap->run('', $configuration);
