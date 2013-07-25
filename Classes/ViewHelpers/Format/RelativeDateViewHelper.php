@@ -28,18 +28,25 @@
  */
 class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 
+	protected $dateIsAbsolute = FALSE;
+
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
 	 * @param integer|string|DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
 	 * @param string $wrap String to perform sprintf on it, to add text before or after relative date
+	 * @param string $wrapAbsolute String to perform sprintf on it, if date is absolute
 	 *
 	 * @return string Formatted date
 	 */
-	public function render($timestamp = NULL, $format = NULL, $wrap = '%s') {
+	public function render($timestamp = NULL, $format = NULL, $wrap = '%s', $wrapAbsolute = '%s') {
+		$this->dateIsAbsolute = FALSE;
 		$timestamp = $this->normalizeTimestamp($timestamp);
 		$relativeDate = $this->makeDateRelative($timestamp, $format);
+		if ($this->dateIsAbsolute === TRUE) {
+			return sprintf($wrapAbsolute, $relativeDate);
+		}
 		return sprintf($wrap, $relativeDate);
 	}
 
@@ -98,6 +105,7 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 			return $diff . ' ' . $this->getLabel('week') . $this->plural($diff);
 		}
 
+		$this->dateIsAbsolute = TRUE;
 		return strftime($format, $timestamp);
 	}
 
