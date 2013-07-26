@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'pwComments',
-	'description' => 'Simple and powerful extension for providing comments.',
+	'description' => 'Powerful extension for providing comments, including replies on comments.',
 	'category' => 'plugin',
 	'author' => 'Armin Ruediger Vieweg',
 	'author_email' => 'armin@v.ieweg.de',
@@ -32,7 +32,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'version' => '1.3.1',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '4.5.0-6.0.99',
+			'typo3' => '4.5.0-6.1.99',
 			'extbase' => '1.3.0-0.0.0',
 			'fluid' => '1.3.0-0.0.0',
 		),
