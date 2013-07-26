@@ -55,10 +55,18 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	public function findByPid($pid) {
 		$query = $this->createQuery();
 		$query->matching(
-			$query->equals('pid', $pid)
+			$query->logicalAnd(
+				$query->equals('pid', $pid),
+				$query->equals('parentComment', 0)
+			)
 		);
 		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
-		return $query->execute();
+		$comments = $query->execute();
+
+		foreach ($comments as $comment) {
+			$this->findAndAttachCommentReplies($comment);
+		};
+		return $comments;
 	}
 
 	/**
@@ -75,12 +83,18 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 			$query->logicalAnd(
 				array(
 					$query->equals('pid', $pid),
-					$query->equals('entryUid', $entryUid)
+					$query->equals('entryUid', $entryUid),
+					$query->equals('parentComment', 0)
 				)
 			)
 		);
 		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
-		return $query->execute();
+		$comments = $query->execute();
+
+		foreach ($comments as $comment) {
+			$this->findAndAttachCommentReplies($comment);
+		};
+		return $comments;
 	}
 
 	/**
@@ -95,7 +109,24 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 			$query->getQuerySettings()->setRespectEnableFields(FALSE);
 		}
 		$query->matching($query->equals('uid', $uid));
-		return $query->execute()->getFirst();
+		$comment = $query->execute()->getFirst();
+		$this->findAndAttachCommentReplies($comment);
+		return $comment;
+	}
+
+	/**
+	 * Find replies by given comment and attaches them to _replies attribute.
+	 *
+	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @return void
+	 */
+	protected function findAndAttachCommentReplies(Tx_PwComments_Domain_Model_Comment $comment) {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->equals('parentComment', $comment->getUid())
+		);
+		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+		$comment->setReplies($query->execute());
 	}
 }
 ?>

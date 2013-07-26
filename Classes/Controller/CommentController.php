@@ -70,7 +70,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Injects the settings utility
 	 *
 	 * @param Tx_PwComments_Utility_Settings $utility
-	 *
 	 * @return void
 	 */
 	public function injectSettingsUtility(Tx_PwComments_Utility_Settings $utility) {
@@ -81,7 +80,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Injects the mail utility
 	 *
 	 * @param Tx_PwComments_Utility_Mail $utility
-	 *
 	 * @return void
 	 */
 	public function injectMailUtility(Tx_PwComments_Utility_Mail $utility) {
@@ -92,7 +90,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Injects the comment repository
 	 *
 	 * @param Tx_PwComments_Domain_Repository_CommentRepository $repository the repository to inject
-	 *
 	 * @return void
 	 */
 	public function injectCommentRepository(Tx_PwComments_Domain_Repository_CommentRepository $repository) {
@@ -103,7 +100,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Injects the frontend user repository
 	 *
 	 * @param Tx_PwComments_Domain_Repository_FrontendUserRepository $repository the repository to inject
-	 *
 	 * @return void
 	 */
 	public function injectFrontendUserRepository(Tx_PwComments_Domain_Repository_FrontendUserRepository $repository) {
@@ -130,8 +126,13 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 
 	/**
 	 * Displays all comments by pid
+	 *
+	 * @param Tx_PwComments_Domain_Model_Comment $commentToReplyTo
+	 * @return void
+	 *
+	 * @dontvalidate $commentToReplyTo
 	 */
-	public function indexAction() {
+	public function indexAction(Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
 		if ($this->entryUid > 0) {
 			/* @var $comments Tx_Extbase_Persistence_QueryResult */
 			$comments = $this->commentRepository->findByPidAndEntryUid($this->pageUid, $this->entryUid);
@@ -141,14 +142,17 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		}
 
 		$this->view->assign('comments', $comments);
+		$this->view->assign('commentCount', $this->calculateCommentCount($comments));
+		$this->view->assign('commentToReplyTo', $commentToReplyTo);
 	}
 
 	/**
 	 * Create action
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $newComment New comment to persist
-	 *
 	 * @return void
+	 *
+	 * @dontverifyrequesthash
 	 */
 	public function createAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL) {
 		// Hidden field Spam-Protection
@@ -222,22 +226,26 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
 		}
 
-		$this->redirectToURI($this->buildUriByUid($this->pageUid) . $anchor);
+		$this->redirectToURI($this->buildUriByUid($this->pageUid, TRUE) . $anchor);
 	}
 
 	/**
 	 * New action
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $newComment New Comment
+	 * @param Tx_PwComments_Domain_Model_Comment $commentToReplyTo Comment to reply to
+	 * @return void
 	 *
 	 * @dontvalidate $newComment
-	 *
-	 * @return void
+	 * @dontvalidate $commentToReplyTo
+	 * @dontverifyrequesthash
 	 */
-	public function newAction($newComment = NULL) {
+	public function newAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL, Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
 		if ($newComment !== NULL) {
 			$this->view->assign('newComment', $newComment);
 		}
+		$this->view->assign('commentToReplyTo', $commentToReplyTo);
+
 		if ($this->currentUser) {
 			$this->view->assign('user', $this->currentUser);
 		} else {
@@ -284,14 +292,18 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Returns a built URI by pageUid
 	 *
 	 * @param integer $uid The uid to use for building link
-	 *
+	 * @param boolean $excludeCommentToReplyTo If TRUE the comment to reply to will be removed
 	 * @return string The link
 	 */
-	private function buildUriByUid($uid) {
+	private function buildUriByUid($uid, $excludeCommentToReplyTo = FALSE) {
+		$excludeFromQueryString = array('tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]');
+		if ($excludeCommentToReplyTo === TRUE) {
+			$excludeFromQueryString[] = 'tx_pwcomments_pi1[commentToReplyTo]';
+		}
 		$uri = $this->uriBuilder
 				->setTargetPageUid($uid)
 				->setAddQueryString(TRUE)
-				->setArgumentsToBeExcludedFromQueryString(array('tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]'))
+				->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
 				->build();
 		$uri = $this->addBaseUriIfNecessary($uri);
 		return $uri;
@@ -312,6 +324,23 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		$fluidTemplate->setControllerContext($controllerContext);
 
 		return $fluidTemplate;
+	}
+
+	/**
+	 * Returns count of comments and/or comments and replies.
+	 *
+	 * @param Tx_Extbase_Persistence_QueryResult $comments
+	 * @return integer
+	 */
+	protected function calculateCommentCount(Tx_Extbase_Persistence_QueryResult $comments) {
+		$replyAmount = 0;
+		if ($this->settings['countReplies']) {
+			/** @var $comment Tx_PwComments_Domain_Model_Comment */
+			foreach ($comments as $comment) {
+				$replyAmount += count($comment->getReplies());
+			}
+		}
+		return count($comments) + $replyAmount;
 	}
 }
 ?>

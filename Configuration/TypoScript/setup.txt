@@ -13,6 +13,10 @@ plugin.tx_pwcomments {
 		entryUid = TEXT
 		entryUid.data = GP:tx_extension|uid
 
+		enableRepliesToComments = 0
+		showRepliesToComments = 0
+		countReplies = 1
+
 		moderateNewComments = 1
 		sendMailOnNewCommentsTo =
 		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
@@ -152,6 +156,16 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 		-webkit-border-radius: 6px;
 	}
 
+	.tx-pwcomment-pi1 ol li.comment {
+		position: relative;
+	}
+
+	div.comment_reply {
+		position: absolute;
+		right: 15px;
+		top: 12px;
+	}
+
 	.tx-pwcomment-pi1 ol li.highlighted {
 		background: #dddad0;
 	}
@@ -163,14 +177,36 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 		line-height: 0;
 	}
 
+	.tx-pwcomment-pi1 ol li ol {
+		padding-left: 55px;
+		padding-top: 10px;
+	}
+
+	.tx-pwcomment-pi1 ol li ol li {
+		background: #d5d5d5;
+		width: 510px;
+	}
+
 	.tx-pwcomment-pi1 img.comment_author_image {
 		float: left;
 	}
 
-	.tx-pwcomment-pi1 .comment_header, .tx-pwcomment-pi1 .comment_body {
+	.tx-pwcomment-pi1 .comment_content_wrap {
 		float: left;
 		padding-left: 15px;
 		width: 520px;
+	}
+
+	.tx-pwcomment-pi1 ol li ol li .comment_content_wrap {
+		width: 445px;
+	}
+
+	.tx-pwcomment-pi1 .comment-reply {
+		margin-bottom: 8px;
+	}
+
+	.tx-pwcomment-pi1 .last-reply {
+		margin-bottom: 0;
 	}
 
 	.tx-pwcomment-pi1 .comment_body a {

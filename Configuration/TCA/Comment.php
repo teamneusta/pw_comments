@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_pwcomments_domain_model_comment'] = array(
 	'ctrl' => $TCA['tx_pwcomments_domain_model_comment']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList'	=> 'hidden,author,author_name,author_mail,author_website,message'
+		'showRecordFieldList'	=> 'hidden,author,author_name,author_mail,author_website,message,parent_comment'
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'hidden,author,author_name,author_mail,author_website,message')
+		'1' => array('showitem'	=> 'hidden,author,author_name,author_mail,author_website,message,parent_comment')
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> '')
@@ -80,6 +80,19 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 			'label'		=> 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.entry_uid',
 			'config'	=> array(
 				'type' => 'input'
+			)
+		),
+		'parent_comment' => array(
+			'exclude'	=> 1,
+			'label'		=> 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.parent_comment',
+			'config'	=> array(
+				'type' => 'group',
+				'internal_type' => 'db',
+				'allowed' => 'tx_pwcomments_domain_model_comment',
+				'show_thumbs' => 1,
+				'size' => 1,
+				'minitems' => 0,
+				'maxitems' => 1,
 			)
 		),
 		'author' => array(

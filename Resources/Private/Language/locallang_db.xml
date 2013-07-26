@@ -12,6 +12,7 @@
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">Mail</label>
 			<label index="tx_pwcomments_domain_model_comment.message">Message</label>
+			<label index="tx_pwcomments_domain_model_comment.parent_comment">Related comment (parent)</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_pwcomments_domain_model_comment">Kommentar</label>
@@ -20,6 +21,7 @@
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">E-Mail</label>
 			<label index="tx_pwcomments_domain_model_comment.message">Nachricht</label>
+			<label index="tx_pwcomments_domain_model_comment.parent_comment">Bezogener Kommentar (Eltern)</label>
 		</languageKey>
 	</data>
 </T3locallang>

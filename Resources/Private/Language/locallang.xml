@@ -22,12 +22,17 @@
 			<label index="tx_pwcomments.newComment.comment">Comment:</label>
 			<label index="tx_pwcomments.newComment.submit">Submit</label>
 
+			<label index="tx_pwcomments.reply">Reply</label>
+
 			<label index="tx_pwcomments.noComments">No comments found!</label>
 			<label index="tx_pwcomments.writeNewComment">Write new comment</label>
+			<label index="tx_pwcomments.writeNewCommentReply">Write new comment reply</label>
+
 			<label index="tx_pwcomments.thanks">Thanks for your comment!</label>
 			<label index="tx_pwcomments.moderationNotice">Your comment has to be checked before publishing. Thank you for your patience!</label>
 
 			<label index="tx_pwcomments.relativeDate.wrap">%s ago</label>
+			<label index="tx_pwcomments.relativeDate.wrapAbsolute">at %s</label>
 			<label index="tx_pwcomments.relativeDate.fewSeconds">few seconds</label>
 			<label index="tx_pwcomments.relativeDate.minute">minute</label>
 			<label index="tx_pwcomments.relativeDate.hour">hour</label>
@@ -77,12 +82,17 @@
 			<label index="tx_pwcomments.newComment.comment">Kommentar:</label>
 			<label index="tx_pwcomments.newComment.submit">Absenden</label>
 
+			<label index="tx_pwcomments.reply">Antworten</label>
+
 			<label index="tx_pwcomments.noComments">Keine Kommentare gefunden!</label>
 			<label index="tx_pwcomments.writeNewComment">Neuen Kommentar schreiben</label>
+			<label index="tx_pwcomments.writeNewCommentReply">Neue Antwort auf Kommentar schreiben</label>
+
 			<label index="tx_pwcomments.thanks">Vielen Dank für Deinen Kommentar!</label>
 			<label index="tx_pwcomments.moderationNotice">Vielen Dank für Deinen Kommentar! Wir werden ihn vor der Veröffentlichung prüfen. Danke für Deine Geduld!</label>
 
 			<label index="tx_pwcomments.relativeDate.wrap">vor %s</label>
+			<label index="tx_pwcomments.relativeDate.wrapAbsolute">am %s</label>
 			<label index="tx_pwcomments.relativeDate.fewSeconds">wenigen Sekunden</label>
 			<label index="tx_pwcomments.relativeDate.minute">Minute</label>
 			<label index="tx_pwcomments.relativeDate.hour">Stunde</label>

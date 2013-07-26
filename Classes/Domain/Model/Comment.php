@@ -78,6 +78,21 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 */
 	protected $message;
 
+	/**
+	 * Parent comment (if set this comment is an answer). One comment can just have
+	 * child comments or parent comment - not unlimited nested!
+	 *
+	 * @var Tx_PwComments_Domain_Model_Comment
+	 */
+	protected $parentComment = NULL;
+
+	/**
+	 * Replies (child comments). One comment can just have child comments
+	 * or parent comment - not unlimited nested!
+	 *
+	 * @var Tx_Extbase_Persistence_QueryResult
+	 */
+	protected $_replies = NULL;
 
 	/**
 	 * The constructor.
@@ -255,6 +270,34 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 			Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
 		return $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
+	}
+
+	/**
+	 * @return Tx_PwComments_Domain_Model_Comment
+	 */
+	public function getParentComment() {
+		return $this->parentComment;
+	}
+
+	/**
+	 * @param Tx_PwComments_Domain_Model_Comment $parentComment
+	 */
+	public function setParentComment($parentComment) {
+		$this->parentComment = $parentComment;
+	}
+
+	/**
+	 * @return Tx_Extbase_Persistence_QueryResult
+	 */
+	public function getReplies() {
+		return $this->_replies;
+	}
+
+	/**
+	 * @param Tx_Extbase_Persistence_QueryResult $replies
+	 */
+	public function setReplies(Tx_Extbase_Persistence_QueryResult $replies) {
+		$this->_replies = $replies;
 	}
 }
 ?>
