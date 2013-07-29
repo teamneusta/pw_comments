@@ -99,6 +99,11 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		$bootstrap->cObj = t3lib_div::makeInstance('tslib_cObj');
 
 		$extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
+
+		$localLangArray = array();
+		if (is_array($pluginSettings['_LOCAL_LANG.'])) {
+			$localLangArray = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
+		}
 		$configuration = array(
 			'pluginName' => $pluginName,
 			'extensionName' => $extensionName,
@@ -108,7 +113,7 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 			'mvc' => array('requestHandlers' => array('Tx_Extbase_MVC_Web_FrontendRequestHandler'=>'Tx_Extbase_MVC_Web_FrontendRequestHandler')),
 			'settings' => $settings,
 			'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
-			'_LOCAL_LANG' => Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.'])
+			'_LOCAL_LANG' => $localLangArray
 		);
 
 		return $bootstrap->run('', $configuration);
