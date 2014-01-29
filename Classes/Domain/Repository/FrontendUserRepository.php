@@ -29,6 +29,6 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Persistence_Repository {
+class Tx_PwComments_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Domain_Repository_FrontendUserRepository {
 }
 ?>

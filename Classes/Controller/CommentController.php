@@ -168,7 +168,10 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		$newComment->setPid($this->pageUid);
 		$newComment->setEntryUid($this->entryUid);
 
-		$author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
+		$author = NULL;
+		if ($this->currentUser['uid']) {
+			$author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
+		}
 		if ($author !== NULL) {
 			$newComment->setAuthor($author);
 		} else {
