@@ -102,7 +102,12 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 
 		$localLangArray = array();
 		if (is_array($pluginSettings['_LOCAL_LANG.'])) {
-			$localLangArray = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
+			if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) < 6000000) {
+				$localLangArray = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
+			} else {
+				$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
+				$localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
+			}
 		}
 		$configuration = array(
 			'pluginName' => $pluginName,
