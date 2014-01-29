@@ -131,6 +131,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @return void
 	 *
 	 * @dontvalidate $commentToReplyTo
+	 * @ignorevalidation $commentToReplyTo
 	 */
 	public function indexAction(Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
 		if ($this->entryUid > 0) {
@@ -241,6 +242,9 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 *
 	 * @dontvalidate $newComment
 	 * @dontvalidate $commentToReplyTo
+	 * @ignorevalidation $newComment
+	 * @ignorevalidation $commentToReplyTo
+
 	 * @dontverifyrequesthash
 	 */
 	public function newAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL, Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
