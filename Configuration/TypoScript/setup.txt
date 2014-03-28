@@ -4,6 +4,7 @@ plugin.tx_pwcomments {
 		showCommentAnchor = comments
 		writeCommentAnchor = writeComment
 		successfulAnchor = thanksForYourComment
+		customMessagesAnchor = customMessages
 
 		showGravatarImage = 1
 		gravatarSize = 50
@@ -23,6 +24,12 @@ plugin.tx_pwcomments {
 		sendMailMimeType = text/plain
 		overwriteBackendDomain =
 		subFolder =
+
+		enableCommentVotes = 1
+		enableReplyVotes = 1
+		enableVoting = 1
+		hideVoteButtons = 0
+		ignoreVotingForOwnComments = 1
 
 		sendMailToAuthorAfterSubmit = 0
 		sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
@@ -87,6 +94,8 @@ lib.pwCommentsIndex {
 	switchableControllerActions {
 		Comment {
 			1 = index
+			2 = upvote
+			3 = downvote
 		}
 	}
 
@@ -98,6 +107,7 @@ lib.pwCommentsIndex {
 lib.pwCommentsNew < lib.pwCommentsIndex
 lib.pwCommentsNew.switchableControllerActions.Comment.1 = new
 lib.pwCommentsNew.switchableControllerActions.Comment.2 = create
+lib.pwCommentsNew.switchableControllerActions.Comment.3 >
 
 # Number of comments of current/given page
 lib.pwCommentsGetCount = COA_INT
@@ -149,7 +159,6 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	.tx-pwcomment-pi1 ol li {
 		background: #e4e4e4;
 		padding: 10px;
-		width: 590px;
 		margin-bottom: 15px;
 		border-radius: 6px;
 		-moz-border-radius: 6px;
@@ -160,10 +169,33 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 		position: relative;
 	}
 
-	div.comment_reply {
+	.tx-pwcomment-pi1 div.actions {
 		position: absolute;
 		right: 15px;
 		top: 12px;
+	}
+
+	.tx-pwcomment-pi1 div.actions .comment_voting, div.actions .comment_reply {
+		float: left;
+	}
+	.tx-pwcomment-pi1 div.actions .comment_voting {
+		margin-right: 10px;
+	}
+
+	.tx-pwcomment-pi1 .comment-reply div.actions .comment_voting {
+		margin-right: 0;
+	}
+
+	.tx-pwcomment-pi1 div.actions .voting .already_voted {
+		color: #ff8700;
+	}
+
+	.tx-pwcomment-pi1 .votedPositive {
+		color: #009900;
+	}
+
+	.tx-pwcomment-pi1 .votedNegative {
+		color: #990000;
 	}
 
 	.tx-pwcomment-pi1 ol li.highlighted {
@@ -178,13 +210,12 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	}
 
 	.tx-pwcomment-pi1 ol li ol {
-		padding-left: 55px;
+		padding-left: 12%;
 		padding-top: 10px;
 	}
 
 	.tx-pwcomment-pi1 ol li ol li {
 		background: #d5d5d5;
-		width: 510px;
 	}
 
 	.tx-pwcomment-pi1 img.comment_author_image {
@@ -194,15 +225,15 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	.tx-pwcomment-pi1 .comment_content_wrap {
 		float: left;
 		padding-left: 15px;
-		width: 520px;
 	}
 
 	.tx-pwcomment-pi1 ol li ol li .comment_content_wrap {
-		width: 445px;
 	}
 
 	.tx-pwcomment-pi1 .comment-reply {
+		position: relative;
 		margin-bottom: 8px;
+		width: auto;
 	}
 
 	.tx-pwcomment-pi1 .last-reply {
@@ -252,7 +283,6 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 		font-weight: bold;
 		padding: 6px 10px;
 		margin-bottom: 15px;
-		width: 485px;
 	}
 
 	#writeComment label {
@@ -271,13 +301,13 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	#writeComment input {
 		font-family: Verdana,Tahoma,Arial,sans-serif;
 		font-size: 15px;
-		width: 350px;
+		width: 66%;
 		padding: 2px;
 		margin-bottom: 14px;
 	}
 
 	#writeComment textarea {
-		width: 520px;
+		width: 100%;
 		line-height: 16px;
 		padding: 5px;
 		font-family: Verdana,Tahoma,Arial,sans-serif;
@@ -286,17 +316,29 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	}
 
 	#writeComment input.button {
-		width: 100px;
+		padding: 2px 10px;
 		margin-bottom: 0;
+		width: auto;
 	}
 
-	#thanksForYourComment li {
+	#thanksForYourComment, #customMessages {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	#thanksForYourComment li, #customMessages li {
 		background: #ccffcc;
 		border: 1px solid #009900;
 		color: #009900;
 		font-weight: bold;
 		padding: 6px 10px;
 		margin-bottom: 15px;
-		width: 485px;
+	}
+
+	#customMessages li {
+		background: #ffcccc;
+		border-color: #990000;
+		color: #990000;
 	}
 )

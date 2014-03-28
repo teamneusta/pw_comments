@@ -4,13 +4,16 @@
 <f:section name="main">
 		<div id="{settings.showCommentAnchor}">
 			<h1><f:translate key="tx_pwcomments.comments" /> ({commentCount})</h1>
+			<f:if condition="{hasCustomMessages}">
+				<c:flashMessages id="{settings.customMessagesAnchor}" severity="0" />
+			</f:if>
 			<f:if condition="{f:count(subject:'{comments}')} > 0">
 				<f:then>
 					<ol class="comment_list list">
 						<f:for each="{comments}" as="comment" iteration="commentIterator">
 							<li class="comment{f:if(condition:'{commentToReplyTo.uid} == {comment.uid}', then:' replyingToThisComment')}{f:if(condition:'{commentIterator.isFirst}', then:' first-comment')}{f:if(condition:'{commentIterator.isLast}', then:' last-comment')}" id="{settings.commentAnchorPrefix}{comment.uid}">
 								<div class="comment-inner">
-									<f:render partial="Comment" arguments="{comment:comment, commentToReplyTo:commentToReplyTo}" />
+									<f:render partial="Comment" arguments="{comment:comment, commentToReplyTo:commentToReplyTo, upvotedCommentUids:upvotedCommentUids, downvotedCommentUids:downvotedCommentUids}" />
 								</div>
 								<f:if condition="{settings.showRepliesToComments} == 1">
 									<f:if condition="{comment.replies -> f:count()} > 0">
@@ -18,7 +21,7 @@
 											<f:for each="{comment.replies}" as="reply" iteration="replyIterator">
 												<li class="comment-reply{f:if(condition:'{replyIterator.isFirst}', then:' first-reply')}{f:if(condition:'{replyIterator.isLast}', then:' last-reply')}" id="{settings.commentAnchorPrefix}{reply.uid}">
 													<div class="reply-inner">
-														<f:render partial="Comment" arguments="{comment:reply}" />
+														<f:render partial="Comment" arguments="{comment:reply, upvotedCommentUids:upvotedCommentUids, downvotedCommentUids:downvotedCommentUids}" />
 													</div>
 												</li>
 											</f:for>

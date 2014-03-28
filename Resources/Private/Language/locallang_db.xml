@@ -6,22 +6,58 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="general.pid">PID</label>
+			<label index="general.crdate">Creation date</label>
+			<label index="general.hidden">Hide</label>
+			<label index="general.language">Language</label>
+			<label index="general.l18n_parent">Translated item</label>
+			<label index="general.versionLabel">Version</label>
+
 			<label index="tx_pwcomments_domain_model_comment">Comment</label>
 			<label index="tx_pwcomments_domain_model_comment.entry_uid">Entry uid</label>
 			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">Mail</label>
+			<label index="tx_pwcomments_domain_model_comment.author_ident">Author ident</label>
 			<label index="tx_pwcomments_domain_model_comment.message">Message</label>
 			<label index="tx_pwcomments_domain_model_comment.parent_comment">Related comment (parent)</label>
+			<label index="tx_pwcomments_domain_model_comment.votes">Votes</label>
+
+			<label index="tx_pwcomments_domain_model_vote">Vote</label>
+			<label index="tx_pwcomments_domain_model_vote.crdate">Creation date</label>
+			<label index="tx_pwcomments_domain_model_vote.type">Type</label>
+			<label index="tx_pwcomments_domain_model_vote.type.0">Downvote</label>
+			<label index="tx_pwcomments_domain_model_vote.type.1">Upvote</label>
+			<label index="tx_pwcomments_domain_model_vote.author">Author</label>
+			<label index="tx_pwcomments_domain_model_vote.author_ident">Author ident</label>
+			<label index="tx_pwcomments_domain_model_vote.comment">Comment</label>
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="general.pid">PID</label>
+			<label index="general.crdate">Erstellungsdatum</label>
+			<label index="general.hidden">Verstecken</label>
+			<label index="general.language">Sprache</label>
+			<label index="general.l18n_parent">Übersetzes Element</label>
+			<label index="general.versionLabel">Version</label>
+
 			<label index="tx_pwcomments_domain_model_comment">Kommentar</label>
 			<label index="tx_pwcomments_domain_model_comment.entry_uid">Eintrag UID</label>
-			<label index="tx_pwcomments_domain_model_comment.author">Author</label>
+			<label index="tx_pwcomments_domain_model_comment.author">Autor</label>
 			<label index="tx_pwcomments_domain_model_comment.author_name">Name</label>
 			<label index="tx_pwcomments_domain_model_comment.author_mail">E-Mail</label>
+			<label index="tx_pwcomments_domain_model_comment.author_ident">Autor Identifizierung</label>
 			<label index="tx_pwcomments_domain_model_comment.message">Nachricht</label>
 			<label index="tx_pwcomments_domain_model_comment.parent_comment">Bezogener Kommentar (Eltern)</label>
+			<label index="tx_pwcomments_domain_model_comment.votes">Bewertungen</label>
+
+			<label index="tx_pwcomments_domain_model_vote">Bewertung</label>
+			<label index="tx_pwcomments_domain_model_vote.crdate">Erstelungsdatum</label>
+			<label index="tx_pwcomments_domain_model_vote.type">Typ</label>
+			<label index="tx_pwcomments_domain_model_vote.type.0">Schlechte Bewertung</label>
+			<label index="tx_pwcomments_domain_model_vote.type.1">Gute Bewertung</label>
+			<label index="tx_pwcomments_domain_model_vote.author">Autor</label>
+			<label index="tx_pwcomments_domain_model_vote.author_ident">Autor Identifizierung</label>
+			<label index="tx_pwcomments_domain_model_vote.comment">Kommentar</label>
 		</languageKey>
 	</data>
 </T3locallang>

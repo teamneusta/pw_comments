@@ -64,6 +64,14 @@
 			<label index="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished">your comment has been published, on this page: %s</label>
 
 			<label index="mailSentToAuthorAfterPublish">The author of this comment (%s) has been notified by mail.</label>
+
+			<label index="tx_pwcomments.votes.upvote">Upvote</label>
+			<label index="tx_pwcomments.votes.downvote">Downvote</label>
+			<label index="tx_pwcomments.votes.selfVotingError">You may not vote your own comments</label>
+			<label index="tx_pwcomments.votes.summary">%s vote(s) (%s up, %s down)</label>
+
+			<label index="tx_pwcomments.custom.doNotVoteForYourself">You can't vote for your own comment.</label>
+			<label index="tx_pwcomments.custom.votingDisabled">To vote for comments, please login.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_pwcomments.comment">Kommentar</label>
@@ -124,6 +132,14 @@
 			<label index="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished">Ihr Kommentar wurde auf dieser Seite veröffentlicht: %s</label>
 
 			<label index="mailSentToAuthorAfterPublish">Der Autor dieses Kommentars (%s) wurde per E-Mail benachrichtigt.</label>
+
+			<label index="tx_pwcomments.votes.upvote">Gut</label>
+			<label index="tx_pwcomments.votes.downvote">Schlecht</label>
+			<label index="tx_pwcomments.votes.selfVotingError">Der eigene Kommentar darf nicht bewertet werden</label>
+			<label index="tx_pwcomments.votes.summary">%s Bewertung(en) (%s positiv, %s negativ)</label>
+
+			<label index="tx_pwcomments.custom.doNotVoteForYourself">Für den eigenen Kommentar darf nicht abgestimmt werden.</label>
+			<label index="tx_pwcomments.custom.votingDisabled">Um Kommentare zu bewerten, bitte anmelden.</label>
 		</languageKey>
 	</data>
 </T3locallang>

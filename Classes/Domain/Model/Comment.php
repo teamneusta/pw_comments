@@ -72,6 +72,11 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	protected $authorMail = '';
 
 	/**
+	 * @var string
+	 */
+	protected $authorIdent;
+
+	/**
 	 * the comment's message
 	 *
 	 * @var string
@@ -95,11 +100,32 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	protected $_replies = NULL;
 
 	/**
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_PwComments_Domain_Model_Vote>
+	 */
+	protected $votes;
+
+	/**
+	 * @var integer
+	 */
+	protected $_upvoteAmount = 0;
+
+	/**
+	 * @var integer
+	 */
+	protected $_downvoteAmount = 0;
+
+	/**
+	 * @var boolean
+	 */
+	protected $_votesCounted = FALSE;
+
+	/**
 	 * The constructor.
 	 */
 	public function __construct() {
 		$this->initializeObject();
 		$this->author = t3lib_div::makeInstance('Tx_PwComments_Domain_Model_FrontendUser');
+		$this->votes = new Tx_Extbase_Persistence_ObjectStorage();
 	}
 
 	/**
@@ -190,6 +216,24 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 */
 	public function getAuthorMail() {
 		return $this->authorMail;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommentAuthorMailAddress() {
+		if ($this->getAuthor() !== NULL) {
+			return $this->getAuthor()->getEmail();
+		}
+		return $this->getAuthorMail();
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasCommentAuthorMailAddress() {
+		$mailAddress = $this->getCommentAuthorMailAddress();
+		return !empty($mailAddress);
 	}
 
 	/**
@@ -299,5 +343,102 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	public function setReplies(Tx_Extbase_Persistence_QueryResult $replies) {
 		$this->_replies = $replies;
 	}
+
+	/**
+	 * @return \Tx_Extbase_Persistence_ObjectStorage
+	 */
+	public function getVotes() {
+		return $this->votes;
+	}
+
+	/**
+	 * @param \Tx_Extbase_Persistence_ObjectStorage $votes
+	 * @return void
+	 */
+	public function setVotes(Tx_Extbase_Persistence_ObjectStorage $votes) {
+		$this->votes = $votes;
+	}
+
+	/**
+	 * @param Tx_PwComments_Domain_Model_Vote $vote
+	 * @return void
+	 */
+	public function addVote(Tx_PwComments_Domain_Model_Vote $vote) {
+		$this->votes->attach($vote);
+	}
+
+	/**
+	 * @param Tx_PwComments_Domain_Model_Vote $vote
+	 * @return void
+	 */
+	public function removeVote(Tx_PwComments_Domain_Model_Vote $vote) {
+		$this->votes->detach($vote);
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getUpvoteAmount() {
+		if ($this->_votesCounted === FALSE) {
+			$this->countVotes();
+		}
+		return $this->_upvoteAmount;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getDownvoteAmount() {
+		if ($this->_votesCounted === FALSE) {
+			$this->countVotes();
+		}
+		return $this->_downvoteAmount;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getVoteSum() {
+		return $this->getUpvoteAmount() - $this->getDownvoteAmount();
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getVoteCount() {
+		return $this->getVotes()->count();
+	}
+
+	/**
+	 * Count up- and downvotes
+	 *
+	 * @return void
+	 */
+	protected function countVotes() {
+		/** @var $vote Tx_PwComments_Domain_Model_Vote */
+		foreach ($this->getVotes() as $vote) {
+			if ($vote->isDownvote()) {
+				$this->_downvoteAmount = $this->_downvoteAmount + 1;
+			} else {
+				$this->_upvoteAmount = $this->_upvoteAmount + 1;
+			}
+		}
+		$this->_votesCounted = TRUE;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthorIdent() {
+		return $this->authorIdent;
+	}
+
+	/**
+	 * @param string $authorIdent
+	 */
+	public function setAuthorIdent($authorIdent) {
+		$this->authorIdent = $authorIdent;
+	}
+
 }
 ?>

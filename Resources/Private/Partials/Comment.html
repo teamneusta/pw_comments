@@ -18,20 +18,40 @@
 		<div class="message">
 			<f:format.nl2br><c:format.raw>{comment.message}</c:format.raw></f:format.nl2br>
 		</div>
-		<f:if condition="{settings.enableRepliesToComments} == 1">
-			<f:if condition="{comment.parentComment}">
-				<f:then></f:then>
-				<f:else>
-					<f:if condition="{commentToReplyTo.uid} != {comment.uid}">
-						<div class="comment_reply">
-							<f:link.action action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" noCacheHash="1">
-								<f:translate key="tx_pwcomments.reply" />
-							</f:link.action>
+		<div class="actions">
+			<f:if condition="{settings.enableCommentVotes}">
+				<f:if condition="{comment.parentComment}">
+					<f:then></f:then>
+					<f:else>
+						<div class="voting comment_voting">
+							<f:render partial="Comment/Voting" arguments="{comment:comment, upvotedCommentUids:upvotedCommentUids, downvotedCommentUids:downvotedCommentUids}"></f:render>
 						</div>
-					</f:if>
-				</f:else>
+					</f:else>
+				</f:if>
 			</f:if>
-		</f:if>
+			<f:if condition="{settings.enableReplyVotes}">
+				<f:if condition="{comment.parentComment}">
+					<div class="voting reply_voting">
+						<f:render partial="Comment/Voting" arguments="{comment:comment, upvotedCommentUids:upvotedCommentUids, downvotedCommentUids:downvotedCommentUids}"></f:render>
+					</div>
+				</f:if>
+			</f:if>
+
+			<f:if condition="{settings.enableRepliesToComments} == 1">
+				<f:if condition="{comment.parentComment}">
+					<f:then></f:then>
+					<f:else>
+						<f:if condition="{commentToReplyTo.uid} != {comment.uid}">
+							<div class="comment_reply">
+								<f:link.action action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" noCacheHash="1">
+									<f:translate key="tx_pwcomments.reply" />
+								</f:link.action>
+							</div>
+						</f:if>
+					</f:else>
+				</f:if>
+			</f:if>
+		</div>
 	</div>
 </div>
 <div class="clear"></div>

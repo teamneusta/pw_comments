@@ -13,11 +13,24 @@
 	</f:if></h3>
 
 	<f:form name="newComment" object="{newComment}" action="create" section="{settings.writeCommentAnchor}" addQueryString="1" noCacheHash="1">
-		<f:form.errors>
-			<f:for each="{error.errors}" as="errorDetail">
-				<div class="comment_error">{errorDetail.message}</div>
-			</f:for>
-		</f:form.errors>
+		<f:if condition="{c:is62()}">
+			<f:then>
+				<f:form.validationResults>
+					<f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyName">
+						<f:for each="{errors -> c:arrayUnique()}" as="error">
+							<div class="comment_error">{error.message}</div>
+						</f:for>
+					</f:for>
+				</f:form.validationResults>
+			</f:then>
+			<f:else>
+				<f:form.errors>
+					<f:for each="{error.errors}" as="errorDetail">
+						<div class="comment_error">{errorDetail.message}</div>
+					</f:for>
+				</f:form.errors>
+			</f:else>
+		</f:if>
 
 		<c:flashMessages id="{settings.successfulAnchor}" severity="0" />
 

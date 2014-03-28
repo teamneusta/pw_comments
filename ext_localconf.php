@@ -9,10 +9,10 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Pi1',
 	array(
-		'Comment' => 'index,new,create',
+		'Comment' => 'index,new,create,upvote,downvote',
 	),
 	array(
-		'Comment' => 'index,new,create',
+		'Comment' => 'index,new,create,upvote,downvote',
 	)
 );
 

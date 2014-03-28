@@ -47,6 +47,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	protected $currentUser = array();
 
 	/**
+	 * @var string
+	 */
+	protected $currentAuthorIdent;
+
+	/**
 	 * @var Tx_PwComments_Utility_Settings
 	 */
 	protected $settingsUtility = NULL;
@@ -57,6 +62,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	protected $mailUtility = NULL;
 
 	/**
+	 * @var Tx_PwComments_Utility_Cookie
+	 */
+	protected $cookieUtility = NULL;
+
+	/**
 	 * @var Tx_PwComments_Domain_Repository_CommentRepository
 	 */
 	protected $commentRepository;
@@ -65,6 +75,21 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @var Tx_PwComments_Domain_Repository_FrontendUserRepository
 	 */
 	protected $frontendUserRepository;
+
+	/**
+	 * @var Tx_PwComments_Domain_Repository_VoteRepository
+	 */
+	protected $voteRepository;
+
+	/**
+	 * Injects the voteRepository
+	 *
+	 * @param Tx_PwComments_Domain_Repository_VoteRepository $repository
+	 * @return void
+	 */
+	public function injectVoteRepository(Tx_PwComments_Domain_Repository_VoteRepository $repository) {
+		$this->voteRepository = $repository;
+	}
 
 	/**
 	 * Injects the settings utility
@@ -84,6 +109,16 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 */
 	public function injectMailUtility(Tx_PwComments_Utility_Mail $utility) {
 		$this->mailUtility = $utility;
+	}
+
+	/**
+	 * Injects the cookie utility
+	 *
+	 * @param Tx_PwComments_Utility_Cookie $utility
+	 * @return void
+	 */
+	public function injectCookieUtility(Tx_PwComments_Utility_Cookie $utility) {
+		$this->cookieUtility = $utility;
 	}
 
 	/**
@@ -118,6 +153,10 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		);
 		$this->pageUid = $GLOBALS['TSFE']->id;
 		$this->currentUser = $GLOBALS['TSFE']->fe_user->user;
+		$this->currentAuthorIdent = ($this->currentUser['uid']) ? $this->currentUser['uid'] : $this->cookieUtility->get('ahash');
+		if (is_numeric($this->currentAuthorIdent) && !$this->currentUser['uid']) {
+			$this->currentAuthorIdent = NULL;
+		}
 
 		if ($this->settings['useEntryUid']) {
 			$this->entryUid = intval($this->settings['entryUid']);
@@ -141,6 +180,24 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			/* @var $comments Tx_Extbase_Persistence_QueryResult */
 			$comments = $this->commentRepository->findByPid($this->pageUid);
 		}
+
+		$this->handleCustomMessages();
+
+		$upvotedCommentUids = array();
+		$downvotedCommentUids = array();
+		if ($this->currentAuthorIdent !== NULL) {
+			$votes = $this->voteRepository->findByPidAndAuthorIdent($this->pageUid, $this->currentAuthorIdent);
+			/** @var $vote Tx_PwComments_Domain_Model_Vote */
+			foreach ($votes as $vote) {
+				if ($vote->isDownvote()) {
+					$downvotedCommentUids[] = $vote->getComment()->getUid();
+				} else {
+					$upvotedCommentUids[] = $vote->getComment()->getUid();
+				}
+			}
+		}
+		$this->view->assign('upvotedCommentUids', $upvotedCommentUids);
+		$this->view->assign('downvotedCommentUids', $downvotedCommentUids);
 
 		$this->view->assign('comments', $comments);
 		$this->view->assign('commentCount', $this->calculateCommentCount($comments));
@@ -166,8 +223,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->redirectToURI($this->buildUriByUid($this->pageUid));
 			return FALSE;
 		}
+		$this->createAuthorIdent();
+
 		$newComment->setPid($this->pageUid);
 		$newComment->setEntryUid($this->entryUid);
+		$newComment->setAuthorIdent($this->currentAuthorIdent);
 
 		$author = NULL;
 		if ($this->currentUser['uid']) {
@@ -215,11 +275,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->mailUtility->sendMail($newComment);
 		}
 
-		if ($this->settings['sendMailToAuthorAfterSubmit']) {
+		if ($this->settings['sendMailToAuthorAfterSubmit'] && $newComment->hasCommentAuthorMailAddress()) {
 			$this->mailUtility->setSettings($this->settings);
 			$this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
 			$this->mailUtility->setControllerContext($this->controllerContext);
-			$this->mailUtility->setReceivers($newComment->getAuthorMail());
+			$this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
 			$this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
 			$this->mailUtility->sendMail($newComment);
 		}
@@ -229,7 +289,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		} else {
 			$anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
 		}
-
 		$this->redirectToURI($this->buildUriByUid($this->pageUid, TRUE) . $anchor);
 	}
 
@@ -276,6 +335,113 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	}
 
 	/**
+	 * Upvote action
+	 *
+	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @return void
+	 * @dontvalidate $comment
+	 * @ignorevalidation $comment
+	 */
+	public function upvoteAction(Tx_PwComments_Domain_Model_Comment $comment) {
+		$this->performVoting($comment, Tx_PwComments_Domain_Model_Vote::TYPE_UPVOTE);
+		return;
+	}
+
+	/**
+	 * Downvote action
+	 *
+	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @return void
+	 * @dontvalidate $comment
+	 * @ignorevalidation $comment
+	 */
+	public function downvoteAction(Tx_PwComments_Domain_Model_Comment $comment) {
+		$this->performVoting($comment, Tx_PwComments_Domain_Model_Vote::TYPE_DOWNVOTE);
+		return;
+	}
+
+	/**
+	 * Perform database operations for voting
+	 *
+	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param integer $type Check out Tx_PwComments_Domain_Model_Vote constants
+	 * @return void
+	 */
+	protected function performVoting(Tx_PwComments_Domain_Model_Comment $comment, $type) {
+		$commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
+		if (!$this->settings['enableVoting']) {
+			$this->redirectToURI($this->buildUriToPage($this->pageUid, array('votingDisabled' => 1)) . $commentAnchor);
+			return;
+		}
+
+		$this->createAuthorIdent();
+
+		$vote = NULL;
+		if ($this->currentAuthorIdent !== NULL) {
+			if ($this->settings['ignoreVotingForOwnComments'] && $this->currentAuthorIdent == $comment->getAuthorIdent()) {
+				$this->redirectToURI($this->buildUriToPage($this->pageUid, array('doNotVoteForYourself' => 1)) . $commentAnchor);
+				return;
+			}
+			$vote = $this->voteRepository->findOneByCommentAndAuthorIdent($comment, $this->currentAuthorIdent);
+		}
+
+		if ($vote === NULL) {
+			$comment->addVote($this->createNewVote($type, $comment));
+			$this->commentRepository->update($comment);
+		} else {
+			$comment->removeVote($vote);
+			$this->commentRepository->update($comment);
+			$this->voteRepository->remove($vote);
+			if ($type !== $vote->getType()) {
+				/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
+				$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+				$persistenceManager->persistAll();
+				$this->performVoting($comment, $type);
+			}
+		}
+
+		/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
+		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+		$persistenceManager->persistAll();
+
+		$this->redirectToURI($this->buildUriToPage($this->pageUid) . $commentAnchor);
+	}
+
+
+	/**
+	 * Creates new vote instance
+	 *
+	 * @param integer $type See Tx_PwComments_Domain_Model_Vote constants
+	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @return Tx_PwComments_Domain_Model_Vote
+	 */
+	protected function createNewVote($type, Tx_PwComments_Domain_Model_Comment $comment) {
+		/** @var Tx_PwComments_Domain_Model_Vote $newVote */
+		$newVote = t3lib_div::makeInstance('Tx_PwComments_Domain_Model_Vote');
+		$newVote->setComment($comment);
+		$newVote->setPid($this->pageUid);
+		$newVote->setAuthorIdent($this->currentAuthorIdent);
+		if ($this->currentUser['uid']) {
+			$author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
+			$newVote->setAuthor($author);
+		}
+		$newVote->setType($type);
+		return $newVote;
+	}
+
+	/**
+	 * Creates a unique string for author identification
+	 *
+	 * @return void
+	 */
+	protected function createAuthorIdent() {
+		if ($this->currentAuthorIdent === NULL) {
+			$this->currentAuthorIdent = uniqid() . uniqid();
+			$this->cookieUtility->set('ahash', $this->currentAuthorIdent);
+		}
+	}
+
+	/**
 	 * @return void
 	 */
 	public function sendAuthorMailWhenCommentHasBeenApprovedAction() {
@@ -317,6 +483,19 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	}
 
 	/**
+	 * @param integer $uid
+	 * @param array $arguments
+	 * @return string
+	 */
+	protected function buildUriToPage($uid, array $arguments = array()) {
+		$uri = $this->uriBuilder
+				->setTargetPageUid($uid)
+				->setArguments($arguments)
+				->build();
+		return $this->addBaseUriIfNecessary($uri);
+	}
+
+	/**
 	 * Makes and returns a fluid template object
 	 *
 	 * @return Tx_Fluid_View_StandaloneView the fluid template object
@@ -348,6 +527,25 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			}
 		}
 		return count($comments) + $replyAmount;
+	}
+
+	/**
+	 * Adds flash messages based on predefined get parameters
+	 *
+	 * @return void
+	 */
+	protected function handleCustomMessages() {
+		if ($this->settings['ignoreVotingForOwnComments'] && t3lib_div::_GP('doNotVoteForYourself') == 1) {
+			$this->flashMessageContainer->add(
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.doNotVoteForYourself', 'pw_comments')
+			);
+			$this->view->assign('hasCustomMessages', TRUE);
+		} elseif (!$this->settings['enableVoting'] && t3lib_div::_GP('votingDisabled') == 1) {
+			$this->flashMessageContainer->add(
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.votingDisabled', 'pw_comments')
+			);
+			$this->view->assign('hasCustomMessages', TRUE);
+		}
 	}
 }
 ?>
