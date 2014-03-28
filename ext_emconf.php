@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'pwComments',
-	'description' => 'Powerful extension for providing comments, including replies on and ratings off comments.',
+	'description' => 'Powerful extension for providing comments, including replies on comments and voting.',
 	'category' => 'plugin',
 	'author' => 'Armin Ruediger Vieweg',
 	'author_email' => 'armin@v.ieweg.de',

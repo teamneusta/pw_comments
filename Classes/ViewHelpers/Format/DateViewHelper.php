@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Armin Ruediger Vieweg <info@professorweb.de>
+*  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
 *
 *  All rights reserved
 *
@@ -83,7 +83,7 @@
  * @see http://www.php.net/manual/en/datetime.formats.relative.php
  *
  * @author Christian Zenker <christian.zenker@599media.de>
- * @author Armin Rüdiger Vieweg <info@professorweb.de>
+ * @author Armin Rüdiger Vieweg <armin@v.ieweg.de>
  */
 class Tx_PwComments_ViewHelpers_Format_DateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 
@@ -102,7 +102,7 @@ class Tx_PwComments_ViewHelpers_Format_DateViewHelper extends Tx_Fluid_Core_View
 			$timestamp = $this->modifyDate($timestamp, $get);
 		}
 
-		// Added by Armin Rüdiger Vieweg <info@professorweb.de>
+		// Added by Armin Rüdiger Vieweg <armin@v.ieweg.de>
 		$format = preg_replace('/([a-zA-Z])/is', '%$1', $format);
 		$format = str_replace('%%', '%', $format);
 

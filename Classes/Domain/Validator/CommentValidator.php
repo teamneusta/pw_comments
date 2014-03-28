@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Armin Ruediger Vieweg <info@professorweb.de>
+*  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
 *
 *  All rights reserved
 *
@@ -30,8 +30,6 @@
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @version $Id$
  */
 class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validation_Validator_AbstractValidator  {
 	/**
