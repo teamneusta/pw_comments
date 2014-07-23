@@ -44,5 +44,3 @@ class Tx_PwComments_ViewHelpers_ArrayUniqueViewHelper extends Tx_Fluid_Core_View
 		return array_unique($subject);
 	}
 }
-
-?>

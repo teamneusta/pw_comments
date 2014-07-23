@@ -31,4 +31,3 @@
  */
 class Tx_PwComments_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Domain_Repository_FrontendUserRepository {
 }
-?>

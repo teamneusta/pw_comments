@@ -61,6 +61,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	protected $comment;
 
 	/**
+	 * Get type
+	 *
 	 * @return integer
 	 */
 	public function getType() {
@@ -68,6 +70,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Set type
+	 *
 	 * @param integer $type
 	 * @return void
 	 */
@@ -76,6 +80,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Get creation date
+	 *
 	 * @return integer
 	 */
 	public function getCrdate() {
@@ -83,6 +89,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Set creation date
+	 *
 	 * @param integer $crdate
 	 * @return void
 	 */
@@ -91,6 +99,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Get author (fe_user)
+	 *
 	 * @return \Tx_PwComments_Domain_Model_FrontendUser
 	 */
 	public function getAuthor() {
@@ -98,6 +108,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Set author (fe_user)
+	 *
 	 * @param \Tx_PwComments_Domain_Model_FrontendUser $author
 	 * @return void
 	 */
@@ -106,6 +118,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Get author ident
+	 *
 	 * @return string
 	 */
 	public function getAuthorIdent() {
@@ -113,6 +127,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Set author ident
+	 *
 	 * @param string $authorIpAddress
 	 * @return void
 	 */
@@ -121,6 +137,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Is upvote?
+	 *
 	 * @return boolean
 	 */
 	public function isUpvote() {
@@ -128,6 +146,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Is downvote?
+	 *
 	 * @return boolean
 	 */
 	public function isDownvote() {
@@ -135,6 +155,8 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Get related comment
+	 *
 	 * @return \Tx_PwComments_Domain_Model_Comment
 	 */
 	public function getComment() {
@@ -142,11 +164,13 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	}
 
 	/**
+	 * Set related comment
+	 *
 	 * @param \Tx_PwComments_Domain_Model_Comment $comment
+	 * @return void
 	 */
 	public function setComment(Tx_PwComments_Domain_Model_Comment $comment) {
 		$this->comment = $comment;
 	}
 
 }
-?>

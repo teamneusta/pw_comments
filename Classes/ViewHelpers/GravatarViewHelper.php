@@ -54,5 +54,3 @@ class Tx_PwComments_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_ViewHel
 		return 'http://' . $domainHash . $link . $hash . $sizeParam . $defaultParam;
 	}
 }
-
-?>

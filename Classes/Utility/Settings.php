@@ -44,7 +44,6 @@ class Tx_PwComments_Utility_Settings {
 	 * Injects the configurationManager
 	 *
 	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
-	 *
 	 * @return void
 	 */
 	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
@@ -66,7 +65,6 @@ class Tx_PwComments_Utility_Settings {
 	 *
 	 * @param array $settings the typoscript configuration array
 	 * @param boolean $makeSettingsRenderable if true the settings will be prepared to getting rendered
-	 *
 	 * @return array the configuration array with the rendered typoscript
 	 */
 	public function renderConfigurationArray(array $settings, $makeSettingsRenderable = FALSE) {
@@ -105,7 +103,6 @@ class Tx_PwComments_Utility_Settings {
 	 *		   $array['level1'] = 'TEXT'
 	 *
 	 * @param array $configuration settings array to make renderable
-	 *
 	 * @return array the renderable settings
 	 */
 	protected function makeConfigurationArrayRenderable(array $configuration) {
@@ -123,4 +120,3 @@ class Tx_PwComments_Utility_Settings {
 		return $dottedConfiguration;
 	}
 }
-?>

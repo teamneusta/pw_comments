@@ -40,5 +40,3 @@ class Tx_PwComments_ViewHelpers_Is62ViewHelper extends Tx_Fluid_Core_ViewHelper_
 		return t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) >= 6002000;
 	}
 }
-
-?>

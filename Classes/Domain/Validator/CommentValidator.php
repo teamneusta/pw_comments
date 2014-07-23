@@ -51,7 +51,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Injects the configurationManager
 	 *
 	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
-	 *
 	 * @return void
 	 */
 	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
@@ -62,7 +61,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Injects the settings utility
 	 *
 	 * @param Tx_PwComments_Utility_Settings $utility
-	 *
 	 * @return void
 	 */
 	public function injectSettingsUtility(Tx_PwComments_Utility_Settings $utility) {
@@ -73,7 +71,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Initial function to validate
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
-	 *
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	public function isValid($comment) {
@@ -102,7 +99,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 			);
 			$this->addError($errorMessage, $errorNumber);
 		}
-
 		return ($errorNumber === NULL);
 	}
 
@@ -110,7 +106,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Validator to check that any property has been set in comment
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
-	 *
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	protected function anyPropertyIsSet(Tx_PwComments_Domain_Model_Comment $comment) {
@@ -121,7 +116,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Validator to check that mail is valid
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
-	 *
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	protected function mailIsValid(Tx_PwComments_Domain_Model_Comment $comment) {
@@ -148,7 +142,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Validator to check that message has been set
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
-	 *
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	protected function messageIsSet(Tx_PwComments_Domain_Model_Comment $comment) {
@@ -177,7 +170,6 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 * Check for badwords in comment message
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment the comment to check for
-	 *
 	 * @return boolean returns TRUE if message has no badwords
 	 */
 	protected function messageHasNoBadWords(Tx_PwComments_Domain_Model_Comment $comment){
@@ -211,6 +203,4 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 		$extensionTyposcript = $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
 		return $this->settingsUtility->renderConfigurationArray($extensionTyposcript);
 	}
-
 }
-?>

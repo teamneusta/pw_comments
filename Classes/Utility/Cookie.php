@@ -94,4 +94,3 @@ class Tx_PwComments_Utility_Cookie {
 		return $result;
 	}
 }
-?>

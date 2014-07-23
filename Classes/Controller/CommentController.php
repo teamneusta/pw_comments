@@ -309,7 +309,6 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @dontvalidate $commentToReplyTo
 	 * @ignorevalidation $newComment
 	 * @ignorevalidation $commentToReplyTo
-
 	 * @dontverifyrequesthash
 	 */
 	public function newAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL, Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
@@ -345,6 +344,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment
 	 * @return void
+	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
@@ -358,6 +358,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment
 	 * @return void
+	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
@@ -448,6 +449,8 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	}
 
 	/**
+	 * Sends mail to comment author whe comment has been approved (and published)
+	 *
 	 * @return void
 	 */
 	public function sendAuthorMailWhenCommentHasBeenApprovedAction() {
@@ -489,6 +492,8 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	}
 
 	/**
+	 * Builds uri by uid and arguments
+	 *
 	 * @param integer $uid
 	 * @param array $arguments
 	 * @return string
@@ -554,4 +559,3 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		}
 	}
 }
-?>

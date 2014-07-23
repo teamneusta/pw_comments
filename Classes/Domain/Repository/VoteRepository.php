@@ -30,12 +30,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persistence_Repository {
-
 	/**
 	 * Initializes the repository.
 	 *
 	 * @return void
-	 *
 	 * @see Tx_Extbase_Persistence_Repository::initializeObject()
 	 */
 	public function initializeObject() {
@@ -49,7 +47,6 @@ class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persiste
 	 *
 	 * @param integer $pid pid to get comments for
 	 * @param string $authorIdent
-	 *
 	 * @return Tx_Extbase_Persistence_QueryResult found votes
 	 */
 	public function findByPidAndAuthorIdent($pid, $authorIdent) {
@@ -64,6 +61,8 @@ class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persiste
 	}
 
 	/**
+	 * Find vote by given comment and authorIdent
+	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment
 	 * @param string $authorIdent
 	 * @return Tx_PwComments_Domain_Model_Vote
@@ -79,4 +78,3 @@ class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persiste
 		return $query->execute()->getFirst();
 	}
 }
-?>

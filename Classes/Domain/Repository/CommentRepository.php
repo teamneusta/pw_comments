@@ -44,7 +44,6 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Initializes the repository.
 	 *
 	 * @return void
-	 *
 	 * @see Tx_Extbase_Persistence_Repository::initializeObject()
 	 */
 	public function initializeObject() {
@@ -57,7 +56,6 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Find comments by pid
 	 *
 	 * @param integer $pid pid to get comments for
-	 *
 	 * @return Tx_Extbase_Persistence_QueryResult found comments
 	 */
 	public function findByPid($pid) {
@@ -82,7 +80,6 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 *
 	 * @param integer $pid pid to get comments for
 	 * @param integer $entryUid entry id to get comments for
-	 *
 	 * @return Tx_Extbase_Persistence_QueryResult found comments
 	 */
 	public function findByPidAndEntryUid($pid, $entryUid) {
@@ -106,8 +103,10 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
-	 * @param $uid
-	 * @return object
+	 * Find comment by uid
+	 *
+	 * @param integer $uid
+	 * @return Tx_PwComments_Domain_Model_Comment
 	 */
 	public function findByCommentUid($uid) {
 		$query = $this->createQuery();
@@ -138,6 +137,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Returns order direction for comments
+	 *
 	 * @return string
 	 */
 	public function getCommentSortingDirection() {
@@ -148,6 +149,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Gets invert comment sorting flag
+	 *
 	 * @return boolean
 	 */
 	public function getInvertCommentSorting() {
@@ -155,6 +158,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Sets invert comment sorting flag
+	 *
 	 * @param boolean $invertCommentSorting
 	 * @return void
 	 */
@@ -163,6 +168,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Returns order direction for replies
+	 *
 	 * @return string
 	 */
 	public function getReplySortingDirection() {
@@ -173,6 +180,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Gets invert reply sorting flag
+	 *
 	 * @return boolean
 	 */
 	public function getInvertReplySorting() {
@@ -180,6 +189,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	}
 
 	/**
+	 * Sets invert reply sorting flag
+	 *
 	 * @param boolean $invertReplySorting
 	 * @return void
 	 */
@@ -187,4 +198,3 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 		$this->invertReplySorting = $invertReplySorting;
 	}
 }
-?>

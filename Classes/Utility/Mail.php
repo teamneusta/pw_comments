@@ -69,7 +69,6 @@ class Tx_PwComments_Utility_Mail {
 	 * Sets the settings of controller
 	 *
 	 * @param array $settings settings to set
-	 *
 	 * @return void
 	 */
 	public function setSettings(array $settings) {
@@ -80,7 +79,6 @@ class Tx_PwComments_Utility_Mail {
 	 * Set the fluid template from controller
 	 *
 	 * @param Tx_Fluid_View_StandaloneView $fluidTemplate the fluid template
-	 *
 	 * @return void
 	 */
 	public function setFluidTemplate(Tx_Fluid_View_StandaloneView $fluidTemplate) {
@@ -91,7 +89,6 @@ class Tx_PwComments_Utility_Mail {
 	 * Set the controller context from controller
 	 *
 	 * @param Tx_Extbase_MVC_Controller_ControllerContext $controllerContext the controller context
-	 *
 	 * @return void
 	 */
 	public function setControllerContext(Tx_Extbase_MVC_Controller_ControllerContext $controllerContext) {
@@ -115,11 +112,8 @@ class Tx_PwComments_Utility_Mail {
 
         $receivers = t3lib_div::trimExplode(',', $this->getReceivers(), TRUE);
         $mail->setTo($receivers);
-
-
         $mail->setSubject(Tx_Extbase_Utility_Localization::translate($this->getSubjectLocallangKey(), 'PwComments', array(t3lib_div::getHostname())));
         $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
-
         return (boolean) $mail->send();
 	}
 
@@ -128,6 +122,7 @@ class Tx_PwComments_Utility_Mail {
 	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
 	 * @return string The rendered fluid template (HTML or plain text)
+	 * @throws Exception
 	 */
 	protected function getMailMessage(Tx_PwComments_Domain_Model_Comment $comment) {
 		$mailTemplate = t3lib_div::getFileAbsFileName($this->getTemplatePath());
@@ -162,6 +157,8 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
+	 * Get receivers
+	 *
 	 * @return string
 	 */
 	public function getReceivers() {
@@ -169,13 +166,18 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
+	 * Set receivers
+	 *
 	 * @param string $receivers
+	 * @return void
 	 */
 	public function setReceivers($receivers) {
 		$this->receivers = $receivers;
 	}
 
 	/**
+	 * Get template path
+	 *
 	 * @return string
 	 */
 	public function getTemplatePath() {
@@ -183,13 +185,18 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
+	 * Set template path
+	 *
 	 * @param string $templatePath
+	 * @return void
 	 */
 	public function setTemplatePath($templatePath) {
 		$this->templatePath = $templatePath;
 	}
 
 	/**
+	 * Get subject locallang key
+	 *
 	 * @return string
 	 */
 	public function getSubjectLocallangKey() {
@@ -197,13 +204,18 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
+	 * Set subject locallang key
+	 *
 	 * @param string $subjectLocallangKey
+	 * @return void
 	 */
 	public function setSubjectLocallangKey($subjectLocallangKey) {
 		$this->subjectLocallangKey = $subjectLocallangKey;
 	}
 
 	/**
+	 * Get add query string to links
+	 *
 	 * @return boolean
 	 */
 	public function getAddQueryStringToLinks() {
@@ -211,11 +223,12 @@ class Tx_PwComments_Utility_Mail {
 	}
 
 	/**
+	 * Set add query string to links
+	 *
 	 * @param boolean $addQueryStringToLinks
+	 * @return void
 	 */
 	public function setAddQueryStringToLinks($addQueryStringToLinks) {
 		$this->addQueryStringToLinks = $addQueryStringToLinks;
 	}
-
 }
-?>

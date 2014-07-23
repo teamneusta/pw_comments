@@ -80,4 +80,3 @@ $TCA['tx_pwcomments_domain_model_vote'] = array(
 		),
 	),
 );
-?>

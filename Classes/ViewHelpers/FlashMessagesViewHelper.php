@@ -36,8 +36,8 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 	 *
 	 * @param string $renderMode one of the RENDER_MODE_* constants
 	 * @param integer $severity limit show of flash messages to given severity. If NULL all flashmessages are shown.
-	 *
 	 * @return string rendered Flash Messages, if there are any.
+	 * @throws Tx_Fluid_Core_ViewHelper_Exception
 	 * @author Sebastian Kurfürst <sebastian@typo3.org>
 	 * @author Armin Rüdiger Vieweg <armin.vieweg@diemedialen.de>
 	 * @api
@@ -71,5 +71,3 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 		}
 	}
 }
-
-?>

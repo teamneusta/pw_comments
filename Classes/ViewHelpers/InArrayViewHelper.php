@@ -45,5 +45,3 @@ class Tx_PwComments_ViewHelpers_InArrayViewHelper extends Tx_Fluid_Core_ViewHelp
 		return in_array($needle, $subject);
 	}
 }
-
-?>

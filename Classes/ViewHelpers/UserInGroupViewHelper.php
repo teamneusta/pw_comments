@@ -36,7 +36,6 @@ class Tx_PwComments_ViewHelpers_UserInGroupViewHelper extends Tx_Fluid_Core_View
 	 *
 	 * @param Tx_Extbase_Domain_Model_FrontendUser $user User to check for
 	 * @param integer $inGroup Uid of group
-	 *
 	 * @return boolean TRUE if user is in group, otherwise FALSE
 	 */
 	public function render($user = NULL, $inGroup = NULL) {
@@ -55,5 +54,3 @@ class Tx_PwComments_ViewHelpers_UserInGroupViewHelper extends Tx_Fluid_Core_View
 		return FALSE;
 	}
 }
-
-?>

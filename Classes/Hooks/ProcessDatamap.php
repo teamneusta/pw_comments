@@ -59,8 +59,6 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		}
 	}
 
-
-
 	/**
 	 * Initializes and runs an extbase controller
 	 *
@@ -70,7 +68,6 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 	 * @param string $pluginName Optional name of plugin. Default is 'Pi1'.
 	 * @param array $settings Optional array of settings to use in controller and fluid template. Default is array().
 	 * @param integer $pageUid Uid of current page
-	 *
 	 * @return string output of controller's action
 	 */
 	protected function runExtbaseController($extensionName, $controller, $action = 'index', $pluginName = 'Pi1', $settings = array(), $pageUid = 0) {
@@ -138,6 +135,4 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
 		return $typoScriptService->convertTypoScriptArrayToPlainArray($TSparser->setup);
 	}
-
 }
-?>

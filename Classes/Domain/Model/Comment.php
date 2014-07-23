@@ -141,7 +141,6 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for entryUid
 	 *
 	 * @param integer $entryUid
-	 *
 	 * @return void
 	 */
 	public function setEntryUid($entryUid) {
@@ -152,6 +151,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for crdate
 	 *
 	 * @param integer $crdate crdate
+	 * @return void
 	 */
 	public function setCrdate($crdate) {
 		$this->crdate = $crdate;
@@ -168,7 +168,9 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 
 	/**
 	 * Setter for hidden state
+	 *
 	 * @param boolean $hidden
+	 * @return void
 	 */
 	public function setHidden($hidden) {
 		$this->hidden = $hidden;
@@ -176,6 +178,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 
 	/**
 	 * Getter for hidden state
+	 *
 	 * @return boolean
 	 */
 	public function getHidden() {
@@ -186,6 +189,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for authorName
 	 *
 	 * @param string $authorName authorName
+	 * @return void
 	 */
 	public function setAuthorName($authorName) {
 		$this->authorName = trim($authorName);
@@ -204,6 +208,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for authorMail
 	 *
 	 * @param string $authorMail authorMail
+	 * @return void
 	 */
 	public function setAuthorMail($authorMail) {
 		$this->authorMail = trim($authorMail);
@@ -219,6 +224,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get email address of comment author (respecting fe_users or anonymous users)
+	 *
 	 * @return string
 	 */
 	public function getCommentAuthorMailAddress() {
@@ -229,6 +236,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Checks if comment author has got an email address
+	 *
 	 * @return boolean
 	 */
 	public function hasCommentAuthorMailAddress() {
@@ -252,6 +261,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for message
 	 *
 	 * @param string $message message
+	 * @return void
 	 */
 	public function setMessage($message) {
 		$message = trim($message);
@@ -288,9 +298,10 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Setter for author
 	 *
 	 * @param Tx_PwComments_Domain_Model_FrontendUser $author author
+	 * @return void
 	 */
 	public function setAuthor($author) {
-			$this->author = $author;
+		$this->author = $author;
 	}
 
 	/**
@@ -317,6 +328,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get parent comment
+	 *
 	 * @return Tx_PwComments_Domain_Model_Comment
 	 */
 	public function getParentComment() {
@@ -324,13 +337,18 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Set parent comment
+	 *
 	 * @param Tx_PwComments_Domain_Model_Comment $parentComment
+	 * @return void
 	 */
 	public function setParentComment($parentComment) {
 		$this->parentComment = $parentComment;
 	}
 
 	/**
+	 * Get comment replies
+	 *
 	 * @return Tx_Extbase_Persistence_QueryResult
 	 */
 	public function getReplies() {
@@ -338,13 +356,18 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Set comment replies
+	 *
 	 * @param Tx_Extbase_Persistence_QueryResult $replies
+	 * @return void
 	 */
 	public function setReplies(Tx_Extbase_Persistence_QueryResult $replies) {
 		$this->_replies = $replies;
 	}
 
 	/**
+	 * Get votes
+	 *
 	 * @return \Tx_Extbase_Persistence_ObjectStorage
 	 */
 	public function getVotes() {
@@ -352,6 +375,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Set votes
+	 *
 	 * @param \Tx_Extbase_Persistence_ObjectStorage $votes
 	 * @return void
 	 */
@@ -360,6 +385,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Add single vote
+	 *
 	 * @param Tx_PwComments_Domain_Model_Vote $vote
 	 * @return void
 	 */
@@ -368,6 +395,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Remove single vote
+	 *
 	 * @param Tx_PwComments_Domain_Model_Vote $vote
 	 * @return void
 	 */
@@ -376,6 +405,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get amount of upvotes
+	 *
 	 * @return integer
 	 */
 	public function getUpvoteAmount() {
@@ -386,6 +417,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get amout of downvotes
+	 *
 	 * @return integer
 	 */
 	public function getDownvoteAmount() {
@@ -396,6 +429,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get sum of up- and downvotes
+	 *
 	 * @return integer
 	 */
 	public function getVoteSum() {
@@ -403,6 +438,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get count of votes
+	 *
 	 * @return integer
 	 */
 	public function getVoteCount() {
@@ -427,6 +464,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Get author ident
+	 *
 	 * @return string
 	 */
 	public function getAuthorIdent() {
@@ -434,11 +473,13 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	}
 
 	/**
+	 * Set author ident
+	 *
 	 * @param string $authorIdent
+	 * @return void
 	 */
 	public function setAuthorIdent($authorIdent) {
 		$this->authorIdent = $authorIdent;
 	}
 
 }
-?>
