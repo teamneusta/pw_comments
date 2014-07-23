@@ -251,11 +251,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		if ($this->settings['moderateNewComments']) {
 			$newComment->setHidden(TRUE);
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.moderationNotice', 'pw_comments', $translateArguments)
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
 			);
 		} else {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.thanks', 'pw_comments', $translateArguments)
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
 			);
 		}
 
@@ -456,7 +456,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
 			$this->mailUtility->setAddQueryStringToLinks(FALSE);
 			$this->mailUtility->sendMail($comment);
-			$this->flashMessageContainer->add(Tx_Extbase_Utility_Localization::translate('mailSentToAuthorAfterPublish', 'pw_comments', array($comment->getAuthorMail())));
+			$this->flashMessageContainer->add(Tx_Extbase_Utility_Localization::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
 		}
 	}
 
@@ -536,12 +536,12 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	protected function handleCustomMessages() {
 		if ($this->settings['ignoreVotingForOwnComments'] && t3lib_div::_GP('doNotVoteForYourself') == 1) {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.doNotVoteForYourself', 'pw_comments')
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		} elseif (!$this->settings['enableVoting'] && t3lib_div::_GP('votingDisabled') == 1) {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.votingDisabled', 'pw_comments')
+				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		}

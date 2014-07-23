@@ -109,15 +109,15 @@ class Tx_PwComments_Utility_Mail {
         $mail = t3lib_div::makeInstance('t3lib_mail_Message');
 
         $mail->setFrom(
-            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.mail', 'pw_comments', array(t3lib_div::getHostname())),
-            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.name', 'pw_comments')
+            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.mail', 'PwComments', array(t3lib_div::getHostname())),
+            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.name', 'PwComments')
         );
 
         $receivers = t3lib_div::trimExplode(',', $this->getReceivers(), TRUE);
         $mail->setTo($receivers);
 
 
-        $mail->setSubject(Tx_Extbase_Utility_Localization::translate($this->getSubjectLocallangKey(), 'pw_comments', array(t3lib_div::getHostname())));
+        $mail->setSubject(Tx_Extbase_Utility_Localization::translate($this->getSubjectLocallangKey(), 'PwComments', array(t3lib_div::getHostname())));
         $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
 
         return (boolean) $mail->send();

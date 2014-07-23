@@ -131,7 +131,7 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 	 * @return string string which matches the key, containing in locallang.xml
 	 */
 	protected function getLabel($key) {
-		return Tx_Extbase_Utility_Localization::translate('tx_pwcomments.relativeDate.' . $key , 'pw_comments');
+		return Tx_Extbase_Utility_Localization::translate('tx_pwcomments.relativeDate.' . $key , 'PwComments');
 	}
 
 }
