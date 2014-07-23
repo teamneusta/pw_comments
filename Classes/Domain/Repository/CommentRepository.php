@@ -30,6 +30,15 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persistence_Repository {
+	/**
+	 * @var boolean
+	 */
+	protected $invertCommentSorting = FALSE;
+
+	/**
+	 * @var boolean
+	 */
+	protected $invertReplySorting = FALSE;
 
 	/**
 	 * Initializes the repository.
@@ -59,7 +68,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 				$query->equals('parentComment', 0)
 			)
 		);
-		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+		$query->setOrderings(array('crdate' => $this->getCommentSortingDirection()));
 		$comments = $query->execute();
 
 		foreach ($comments as $comment) {
@@ -87,7 +96,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 				)
 			)
 		);
-		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+		$query->setOrderings(array('crdate' => $this->getCommentSortingDirection()));
 		$comments = $query->execute();
 
 		foreach ($comments as $comment) {
@@ -124,8 +133,58 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 		$query->matching(
 			$query->equals('parentComment', $comment->getUid())
 		);
-		$query->setOrderings(array('crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING));
+		$query->setOrderings(array('crdate' => $this->getReplySortingDirection()));
 		$comment->setReplies($query->execute());
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommentSortingDirection() {
+		if ($this->getInvertCommentSorting() === TRUE) {
+			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+		}
+		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getInvertCommentSorting() {
+		return $this->invertCommentSorting;
+	}
+
+	/**
+	 * @param boolean $invertCommentSorting
+	 * @return void
+	 */
+	public function setInvertCommentSorting($invertCommentSorting) {
+		$this->invertCommentSorting = $invertCommentSorting;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getReplySortingDirection() {
+		if ($this->getInvertReplySorting() === TRUE) {
+			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+		}
+		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getInvertReplySorting() {
+		return $this->invertReplySorting;
+	}
+
+	/**
+	 * @param boolean $invertReplySorting
+	 * @return void
+	 */
+	public function setInvertReplySorting($invertReplySorting) {
+		$this->invertReplySorting = $invertReplySorting;
 	}
 }
 ?>

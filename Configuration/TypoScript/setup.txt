@@ -18,6 +18,9 @@ plugin.tx_pwcomments {
 		showRepliesToComments = 0
 		countReplies = 1
 
+		invertCommentSorting = 0
+		invertReplySorting = 0
+
 		moderateNewComments = 1
 		sendMailOnNewCommentsTo =
 		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html

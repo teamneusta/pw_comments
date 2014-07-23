@@ -172,6 +172,13 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @ignorevalidation $commentToReplyTo
 	 */
 	public function indexAction(Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
+		if ($this->settings['invertCommentSorting']) {
+			$this->commentRepository->setInvertCommentSorting(TRUE);
+		}
+		if ($this->settings['invertReplySorting']) {
+			$this->commentRepository->setInvertReplySorting(TRUE);
+		}
+
 		if ($this->entryUid > 0) {
 			/* @var $comments Tx_Extbase_Persistence_QueryResult */
 			$comments = $this->commentRepository->findByPidAndEntryUid($this->pageUid, $this->entryUid);
