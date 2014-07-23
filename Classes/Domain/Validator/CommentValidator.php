@@ -98,7 +98,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 
 		if ($errorNumber !== NULL) {
 			$errorMessage = Tx_Extbase_Utility_Localization::translate(
-				'tx_pwcomments.validation_error.' . $errorNumber, 'pw_comments', $errorArguments
+				'tx_pwcomments.validation_error.' . $errorNumber, 'PwComments', $errorArguments
 			);
 			$this->addError($errorMessage, $errorNumber);
 		}
