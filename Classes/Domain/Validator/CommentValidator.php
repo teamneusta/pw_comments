@@ -86,8 +86,12 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 		} elseif (!$this->messageIsSet($comment)) {
 			$errorNumber = 1299628099;
 			$errorArguments = array($this->settings['secondsBetweenTwoComments']);
-		} elseif ($this->settings['useBadWordsList'] && !$this->messageHasNoBadWords($comment)) {
+		} elseif ($this->settings['useBadWordsList'] && !$this->checkTextForBadWords($comment->getMessage())) {
 			$errorNumber = 1315608355;
+		} elseif ($this->settings['useBadWordsListOnUsername'] && !$this->checkTextForBadWords($comment->getAuthorName())) {
+			$errorNumber = 1406644911;
+		} elseif ($this->settings['useBadWordsListOnMailAddress'] && !$this->checkTextForBadWords($comment->getAuthorMail())) {
+			$errorNumber = 1406644912;
 		} elseif (!$this->lastCommentRespectsTimer($comment)) {
 			$errorNumber = 1300280476;
 			$errorArguments = array($this->settings['secondsBetweenTwoComments']);
@@ -169,10 +173,14 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	/**
 	 * Check for badwords in comment message
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment the comment to check for
-	 * @return boolean returns TRUE if message has no badwords
+	 * @param string $textToCheck text to check for
+	 * @return boolean Returns TRUE if message has no badwords. Otherwise returns FALSE.
 	 */
-	protected function messageHasNoBadWords(Tx_PwComments_Domain_Model_Comment $comment){
+	protected function checkTextForBadWords($textToCheck){
+		if (empty($textToCheck)) {
+			return TRUE;
+		}
+
 		$badWordsListPath = t3lib_div::getFileAbsFileName($this->settings['badWordsList']);
 
 		if (!file_exists($badWordsListPath)) {
@@ -186,7 +194,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 		}
 		$badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
 
-		$commentMessage = '-> ' . $comment->getMessage() . ' <-';
+		$commentMessage = '-> ' . $textToCheck . ' <-';
 		return (boolean)!preg_match($badWordsRegExp, $commentMessage);
 	}
 

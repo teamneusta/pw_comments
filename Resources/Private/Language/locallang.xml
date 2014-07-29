@@ -14,6 +14,8 @@
 			<label index="tx_pwcomments.validation_error.1299628099">The comment message may not be empty.</label>
 			<label index="tx_pwcomments.validation_error.1300280476">Please wait %s seconds between two comments.</label>
 			<label index="tx_pwcomments.validation_error.1315608355">Your comment message contains at least one bad word. These are not allowed.</label>
+			<label index="tx_pwcomments.validation_error.1406644911">Your name contains at least one bad word. These are not allowed.</label>
+			<label index="tx_pwcomments.validation_error.1406644912">Your mail address contains at least one bad word. These are not allowed.</label>
 
 			<label index="tx_pwcomments.newComment.loggedInAs">You are logged in as:</label>
 			<label index="tx_pwcomments.newComment.name">Your name:</label>
@@ -82,6 +84,8 @@
 			<label index="tx_pwcomments.validation_error.1299628099">Der Kommentar darf nicht leer sein.</label>
 			<label index="tx_pwcomments.validation_error.1300280476">Zwischen zwei Kommentaren müssen %s Sekunden vergehen.</label>
 			<label index="tx_pwcomments.validation_error.1315608355">Der Kommentar beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</label>
+			<label index="tx_pwcomments.validation_error.1406644911">Der angegebene Name beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</label>
+			<label index="tx_pwcomments.validation_error.1406644912">Die angegebene E-Mail Adresse beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</label>
 
 			<label index="tx_pwcomments.newComment.loggedInAs">Angemeldet als:</label>
 			<label index="tx_pwcomments.newComment.name">Name:</label>

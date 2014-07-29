@@ -44,6 +44,8 @@ plugin.tx_pwcomments {
 		linkUrlsInComments = 1
 
 		useBadWordsList = 1
+		useBadWordsListOnUsername = 1
+		useBadWordsListOnMailAddress = 0
 		badWordsList = EXT:pw_comments/Resources/Private/Language/badwords.txt
 
 		hiddenFieldSpamProtection = 1
