@@ -268,9 +268,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 
 		$this->commentRepository->add($newComment);
 
-		/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
-		$persistenceManager->persistAll();
+		$this->getPersistenceManager()->persistAll();
 
 		if ($this->settings['sendMailOnNewCommentsTo']) {
 			$this->mailUtility->setSettings($this->settings);
@@ -400,16 +398,12 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->commentRepository->update($comment);
 			$this->voteRepository->remove($vote);
 			if ($type !== $vote->getType()) {
-				/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-				$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
-				$persistenceManager->persistAll();
+				$this->getPersistenceManager()->persistAll();
 				$this->performVoting($comment, $type);
 			}
 		}
 
-		/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
-		$persistenceManager->persistAll();
+		$this->getPersistenceManager()->persistAll();
 
 		$this->redirectToURI($this->buildUriToPage($this->pageUid) . $commentAnchor);
 	}
@@ -557,5 +551,16 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		}
+	}
+
+	/**
+	 * Get PersistenceManager
+	 *
+	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+	 */
+	protected function getPersistenceManager() {
+		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		return $objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 	}
 }

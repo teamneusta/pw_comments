@@ -319,12 +319,15 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * @return array rendered typoscript settings
 	 */
 	protected function getExtensionSettings() {
-		$configurationManager = t3lib_div::makeInstance('Tx_Extbase_Configuration_ConfigurationManager');
+		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 
+		/** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager */
+		$configurationManager = $objectManager->get('TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface');
 		$fullTyposcript = $configurationManager->getConfiguration(
-			Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
-		return $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
+		return $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
 	}
 
 	/**
