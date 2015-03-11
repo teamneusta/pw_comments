@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_ViewHelpers_Is62ViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class Is62ViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Checks if current TYPO3 version is 6.2 or greater
@@ -37,6 +39,6 @@ class Tx_PwComments_ViewHelpers_Is62ViewHelper extends Tx_Fluid_Core_ViewHelper_
 	 * @return boolean
 	 */
 	public function render() {
-		return t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) >= 6002000;
+		return \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 6002000;
 	}
 }

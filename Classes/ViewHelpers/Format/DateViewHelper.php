@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers\Format;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -85,12 +87,12 @@
  * @author Christian Zenker <christian.zenker@599media.de>
  * @author Armin Rüdiger Vieweg <armin@v.ieweg.de>
  */
-class Tx_PwComments_ViewHelpers_Format_DateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
-	 * @param integer|string|DateTime $timestamp unix timestamp
+	 * @param integer|string|\DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
 	 * @param string $get get some related date (see class doc)
 	 * @return string Formatted date
@@ -122,10 +124,10 @@ class Tx_PwComments_ViewHelpers_Format_DateViewHelper extends Tx_Fluid_Core_View
 			$timestamp = intval($timestamp);
 		} elseif(is_string($timestamp)) {
 			$timestamp = strtotime($timestamp);
-		} elseif($timestamp instanceof DateTime) {
+		} elseif($timestamp instanceof \DateTime) {
 			$timestamp = $timestamp->format('U');
 		} else {
-			throw new InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
+			throw new \InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
 		}
 		return $timestamp;
 	}
@@ -138,7 +140,7 @@ class Tx_PwComments_ViewHelpers_Format_DateViewHelper extends Tx_Fluid_Core_View
 	 * @return string
 	 */
 	protected function modifyDate($timestamp, $get) {
-		return Tx_ViewhelperIncubator_ViewHelpers_Format_StrToTime::strtotime($get, $timestamp);
+		return strtotime($get, $timestamp);
 	}
 }
 ?>

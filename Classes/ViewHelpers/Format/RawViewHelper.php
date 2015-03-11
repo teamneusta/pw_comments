@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers\Format;
+
 /*
  * This script belongs to the FLOW3 package "Fluid".                      *
  *                                                                        *
@@ -44,7 +46,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  * @api
  */
-class Tx_PwComments_ViewHelpers_Format_RawViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class RawViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
     /**
      * Disable Fluid interceptors for this ViewHelper
@@ -65,4 +67,3 @@ class Tx_PwComments_ViewHelpers_Format_RawViewHelper extends Tx_Fluid_Core_ViewH
     }
 
 }
-?>

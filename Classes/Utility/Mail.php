@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Utility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -29,19 +31,19 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Utility_Mail {
+class Mail {
 	/**
 	 * @var array settings of controller
 	 */
 	protected $settings = array();
 
 	/**
-	 * @var Tx_Fluid_View_TemplateView
+	 * @var \TYPO3\CMS\Fluid\View\TemplateView
 	 */
 	protected $fluidTemplate = NULL;
 
 	/**
-	 * @var Tx_Extbase_MVC_Controller_ControllerContext
+	 * @var \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext
 	 */
 	protected $controllerContext = NULL;
 
@@ -78,54 +80,54 @@ class Tx_PwComments_Utility_Mail {
 	/**
 	 * Set the fluid template from controller
 	 *
-	 * @param Tx_Fluid_View_StandaloneView $fluidTemplate the fluid template
+	 * @param \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate the fluid template
 	 * @return void
 	 */
-	public function setFluidTemplate(Tx_Fluid_View_StandaloneView $fluidTemplate) {
+	public function setFluidTemplate(\TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate) {
 		$this->fluidTemplate = $fluidTemplate;
 	}
 
 	/**
 	 * Set the controller context from controller
 	 *
-	 * @param Tx_Extbase_MVC_Controller_ControllerContext $controllerContext the controller context
+	 * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext the controller context
 	 * @return void
 	 */
-	public function setControllerContext(Tx_Extbase_MVC_Controller_ControllerContext $controllerContext) {
+	public function setControllerContext(\TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext) {
 		$this->controllerContext = $controllerContext;
 	}
 
 	/**
 	 * Creates and sends mail
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
 	 * @return boolean Returns TRUE if the mail has been sent successfully, otherwise returns FALSE
 	 */
-	public function sendMail(Tx_PwComments_Domain_Model_Comment $comment) {
-		/** @var t3lib_mail_Message $mail */
-        $mail = t3lib_div::makeInstance('t3lib_mail_Message');
+	public function sendMail(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+		/** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
+		$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
 
-        $mail->setFrom(
-            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.mail', 'PwComments', array(t3lib_div::getHostname())),
-            Tx_Extbase_Utility_Localization::translate('tx_pwcomments.notificationMail.from.name', 'PwComments')
-        );
+		$mail->setFrom(
+			\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.notificationMail.from.mail', 'PwComments', array(\TYPO3\CMS\Core\Utility\GeneralUtility::getHostname())),
+			\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.notificationMail.from.name', 'PwComments')
+		);
 
-        $receivers = t3lib_div::trimExplode(',', $this->getReceivers(), TRUE);
-        $mail->setTo($receivers);
-        $mail->setSubject(Tx_Extbase_Utility_Localization::translate($this->getSubjectLocallangKey(), 'PwComments', array(t3lib_div::getHostname())));
-        $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
-        return (boolean) $mail->send();
+		$receivers = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->getReceivers(), TRUE);
+		$mail->setTo($receivers);
+		$mail->setSubject(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->getSubjectLocallangKey(), 'PwComments', array(\TYPO3\CMS\Core\Utility\GeneralUtility::getHostname())));
+		$mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
+		return (boolean) $mail->send();
 	}
 
 	/**
 	 * Gets the message for a notification mail as fluid template
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment comment which triggers the mail send method
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
 	 * @return string The rendered fluid template (HTML or plain text)
 	 * @throws Exception
 	 */
-	protected function getMailMessage(Tx_PwComments_Domain_Model_Comment $comment) {
-		$mailTemplate = t3lib_div::getFileAbsFileName($this->getTemplatePath());
+	protected function getMailMessage(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+		$mailTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->getTemplatePath());
 		if (!file_exists($mailTemplate)) {
 			throw new Exception('Mail template (' . $mailTemplate . ') not found. ');
 		}
@@ -140,7 +142,7 @@ class Tx_PwComments_Utility_Mail {
 
 		$subFolder = ($this->settings['subFolder']) ? $this->settings['subFolder'] : '';
 
-		$articleLink = 'http://' . t3lib_div::getHostname() . $subFolder . '/' .
+		$articleLink = 'http://' . \TYPO3\CMS\Core\Utility\GeneralUtility::getHostname() . $subFolder . '/' .
 					   $uriBuilder
 							->setTargetPageUid($comment->getPid())
 							->setAddQueryString($this->getAddQueryStringToLinks())
@@ -149,7 +151,7 @@ class Tx_PwComments_Utility_Mail {
 							->buildFrontendUri();
 		$this->fluidTemplate->assign('articleLink', $articleLink);
 
-		$backendDomain = ($this->settings['overwriteBackendDomain']) ? $this->settings['overwriteBackendDomain'] : t3lib_div::getHostname();
+		$backendDomain = ($this->settings['overwriteBackendDomain']) ? $this->settings['overwriteBackendDomain'] : \TYPO3\CMS\Core\Utility\GeneralUtility::getHostname();
 		$backendLink = 'http://' . $backendDomain . $subFolder . '/typo3/alt_doc.php?M=web_list&id=' . $comment->getPid() . '&edit[tx_pwcomments_domain_model_comment][' . $comment->getUid() . ']=edit';
 		$this->fluidTemplate->assign('backendLink', $backendLink);
 

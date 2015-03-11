@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Domain\Repository;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -24,12 +26,12 @@
 ***************************************************************/
 
 /**
- * Repository for Tx_PwComments_Domain_Model_Comment
+ * Repository for \PwTeaserTeam\PwComments\Domain\Model\Comment
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persistence_Repository {
+class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * @var boolean
 	 */
@@ -44,10 +46,11 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Initializes the repository.
 	 *
 	 * @return void
-	 * @see Tx_Extbase_Persistence_Repository::initializeObject()
+	 * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
 	 */
 	public function initializeObject() {
-		$querySettings = $this->objectManager->create('Tx_Extbase_Persistence_Typo3QuerySettings');
+		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+		$querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$this->setDefaultQuerySettings($querySettings);
 	}
@@ -56,7 +59,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Find comments by pid
 	 *
 	 * @param integer $pid pid to get comments for
-	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
 	 */
 	public function findByPid($pid) {
 		$query = $this->createQuery();
@@ -80,7 +83,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 *
 	 * @param integer $pid pid to get comments for
 	 * @param integer $entryUid entry id to get comments for
-	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
 	 */
 	public function findByPidAndEntryUid($pid, $entryUid) {
 		$query = $this->createQuery();
@@ -106,11 +109,11 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Find comment by uid
 	 *
 	 * @param integer $uid
-	 * @return Tx_PwComments_Domain_Model_Comment
+	 * @return \PwTeaserTeam\PwComments\Domain\Model\Comment
 	 */
 	public function findByCommentUid($uid) {
 		$query = $this->createQuery();
-		if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) >= 6000000) {
+		if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 6000000) {
 			$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
 		} else {
 			$query->getQuerySettings()->setRespectEnableFields(FALSE);
@@ -124,10 +127,10 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Find replies by given comment and attaches them to _replies attribute.
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	protected function findAndAttachCommentReplies(Tx_PwComments_Domain_Model_Comment $comment) {
+	protected function findAndAttachCommentReplies(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->equals('parentComment', $comment->getUid())
@@ -143,9 +146,9 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 */
 	public function getCommentSortingDirection() {
 		if ($this->getInvertCommentSorting() === TRUE) {
-			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+			return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING;
 		}
-		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+		return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**
@@ -174,9 +177,9 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 */
 	public function getReplySortingDirection() {
 		if ($this->getInvertReplySorting() === TRUE) {
-			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+			return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING;
 		}
-		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+		return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**

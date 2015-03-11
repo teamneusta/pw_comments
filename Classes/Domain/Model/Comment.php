@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Domain\Model;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_AbstractEntity {
+class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
 	 * @var integer uid of entry for what the comment is for
@@ -53,7 +55,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * The author as model or NULL if comment author wasn't logged in
 	 *
-	 * @var Tx_PwComments_Domain_Model_FrontendUser
+	 * @var \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -87,7 +89,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Parent comment (if set this comment is an answer). One comment can just have
 	 * child comments or parent comment - not unlimited nested!
 	 *
-	 * @var Tx_PwComments_Domain_Model_Comment
+	 * @var \PwTeaserTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $parentComment = NULL;
 
@@ -95,12 +97,12 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * Replies (child comments). One comment can just have child comments
 	 * or parent comment - not unlimited nested!
 	 *
-	 * @var Tx_Extbase_Persistence_QueryResult
+	 * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
 	 */
 	protected $_replies = NULL;
 
 	/**
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_PwComments_Domain_Model_Vote>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwTeaserTeam\PwComments\Domain\Model\Vote>
 	 */
 	protected $votes;
 
@@ -124,8 +126,8 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 */
 	public function __construct() {
 		$this->initializeObject();
-		$this->author = t3lib_div::makeInstance('Tx_PwComments_Domain_Model_FrontendUser');
-		$this->votes = new Tx_Extbase_Persistence_ObjectStorage();
+		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwTeaserTeam\\PwComments\\Domain\\Model\\FrontendUser');
+		$this->votes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 	}
 
 	/**
@@ -297,7 +299,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for author
 	 *
-	 * @param Tx_PwComments_Domain_Model_FrontendUser $author author
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author author
 	 * @return void
 	 */
 	public function setAuthor($author) {
@@ -307,7 +309,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Getter for author
 	 *
-	 * @return Tx_PwComments_Domain_Model_FrontendUser The author
+	 * @return \PwTeaserTeam\PwComments\Domain\Model\FrontendUser The author
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -319,10 +321,11 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * @return array rendered typoscript settings
 	 */
 	protected function getExtensionSettings() {
-		$configurationManager = t3lib_div::makeInstance('Tx_Extbase_Configuration_ConfigurationManager');
+		/** @var $configurationManager \TYPO3\CMS\Extbase\Configuration\ConfigurationManager */
+		$configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
 
 		$fullTyposcript = $configurationManager->getConfiguration(
-			Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
 		return $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
 	}
@@ -330,7 +333,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Get parent comment
 	 *
-	 * @return Tx_PwComments_Domain_Model_Comment
+	 * @return \PwTeaserTeam\PwComments\Domain\Model\Comment
 	 */
 	public function getParentComment() {
 		return $this->parentComment;
@@ -339,7 +342,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Set parent comment
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $parentComment
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $parentComment
 	 * @return void
 	 */
 	public function setParentComment($parentComment) {
@@ -349,7 +352,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Get comment replies
 	 *
-	 * @return Tx_Extbase_Persistence_QueryResult
+	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
 	 */
 	public function getReplies() {
 		return $this->_replies;
@@ -358,17 +361,17 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Set comment replies
 	 *
-	 * @param Tx_Extbase_Persistence_QueryResult $replies
+	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $replies
 	 * @return void
 	 */
-	public function setReplies(Tx_Extbase_Persistence_QueryResult $replies) {
+	public function setReplies(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $replies) {
 		$this->_replies = $replies;
 	}
 
 	/**
 	 * Get votes
 	 *
-	 * @return \Tx_Extbase_Persistence_ObjectStorage
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
 	 */
 	public function getVotes() {
 		return $this->votes;
@@ -377,30 +380,30 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Set votes
 	 *
-	 * @param \Tx_Extbase_Persistence_ObjectStorage $votes
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $votes
 	 * @return void
 	 */
-	public function setVotes(Tx_Extbase_Persistence_ObjectStorage $votes) {
+	public function setVotes(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $votes) {
 		$this->votes = $votes;
 	}
 
 	/**
 	 * Add single vote
 	 *
-	 * @param Tx_PwComments_Domain_Model_Vote $vote
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Vote $vote
 	 * @return void
 	 */
-	public function addVote(Tx_PwComments_Domain_Model_Vote $vote) {
+	public function addVote(\PwTeaserTeam\PwComments\Domain\Model\Vote $vote) {
 		$this->votes->attach($vote);
 	}
 
 	/**
 	 * Remove single vote
 	 *
-	 * @param Tx_PwComments_Domain_Model_Vote $vote
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Vote $vote
 	 * @return void
 	 */
-	public function removeVote(Tx_PwComments_Domain_Model_Vote $vote) {
+	public function removeVote(\PwTeaserTeam\PwComments\Domain\Model\Vote $vote) {
 		$this->votes->detach($vote);
 	}
 
@@ -452,7 +455,7 @@ class Tx_PwComments_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abstrac
 	 * @return void
 	 */
 	protected function countVotes() {
-		/** @var $vote Tx_PwComments_Domain_Model_Vote */
+		/** @var $vote \PwTeaserTeam\PwComments\Domain\Model\Vote */
 		foreach ($this->getVotes() as $vote) {
 			if ($vote->isDownvote()) {
 				$this->_downvoteAmount = $this->_downvoteAmount + 1;

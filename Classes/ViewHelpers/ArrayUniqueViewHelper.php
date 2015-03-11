@@ -1,5 +1,7 @@
 <?php
-/***************************************************************
+namespace PwTeaserTeam\PwComments\ViewHelpers;
+
+	/***************************************************************
 *  Copyright notice
 *
 *  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_ViewHelpers_ArrayUniqueViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class ArrayUniqueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Removes duplicated entries in array

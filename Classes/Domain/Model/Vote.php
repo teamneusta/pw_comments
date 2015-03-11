@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Domain\Model;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEntity {
+class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/** Constant for upvote */
 	const TYPE_UPVOTE = 1;
 	/** Constant for downvote */
@@ -46,7 +48,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	protected $crdate;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_FrontendUser
+	 * @var \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -56,7 +58,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	protected $authorIdent;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_Comment
+	 * @var \PwTeaserTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $comment;
 
@@ -101,7 +103,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get author (fe_user)
 	 *
-	 * @return \Tx_PwComments_Domain_Model_FrontendUser
+	 * @return \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -110,10 +112,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set author (fe_user)
 	 *
-	 * @param \Tx_PwComments_Domain_Model_FrontendUser $author
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author
 	 * @return void
 	 */
-	public function setAuthor(Tx_PwComments_Domain_Model_FrontendUser $author) {
+	public function setAuthor(\PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author) {
 		$this->author = $author;
 	}
 
@@ -166,10 +168,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set related comment
 	 *
-	 * @param \Tx_PwComments_Domain_Model_Comment $comment
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	public function setComment(Tx_PwComments_Domain_Model_Comment $comment) {
+	public function setComment(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
 		$this->comment = $comment;
 	}
 

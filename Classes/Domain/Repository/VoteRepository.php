@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Domain\Repository;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -24,20 +26,21 @@
 ***************************************************************/
 
 /**
- * Repository for Tx_PwComments_Domain_Model_Vote
+ * Repository for \PwTeaserTeam\PwComments\Domain\Model\Vote
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persistence_Repository {
+class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Initializes the repository.
 	 *
 	 * @return void
-	 * @see Tx_Extbase_Persistence_Repository::initializeObject()
+	 * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
 	 */
 	public function initializeObject() {
-		$querySettings = $this->objectManager->create('Tx_Extbase_Persistence_Typo3QuerySettings');
+		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+		$querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$this->setDefaultQuerySettings($querySettings);
 	}
@@ -47,7 +50,7 @@ class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persiste
 	 *
 	 * @param integer $pid pid to get comments for
 	 * @param string $authorIdent
-	 * @return Tx_Extbase_Persistence_QueryResult found votes
+	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult found votes
 	 */
 	public function findByPidAndAuthorIdent($pid, $authorIdent) {
 		$query = $this->createQuery();
@@ -63,11 +66,11 @@ class Tx_PwComments_Domain_Repository_VoteRepository extends Tx_Extbase_Persiste
 	/**
 	 * Find vote by given comment and authorIdent
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
 	 * @param string $authorIdent
-	 * @return Tx_PwComments_Domain_Model_Vote
+	 * @return \PwTeaserTeam\PwComments\Domain\Model\Vote
 	 */
-	public function findOneByCommentAndAuthorIdent(Tx_PwComments_Domain_Model_Comment $comment, $authorIdent) {
+	public function findOneByCommentAndAuthorIdent(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment, $authorIdent) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(

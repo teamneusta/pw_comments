@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Domain\Validator;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -31,14 +33,14 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validation_Validator_AbstractValidator  {
+class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator  {
 	/**
-	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
 	 */
 	protected $configurationManager = NULL;
 
 	/**
-	 * @var Tx_PwComments_Utility_Settings
+	 * @var \PwTeaserTeam\PwComments\Utility\Settings
 	 */
 	protected $settingsUtility = NULL;
 
@@ -50,27 +52,27 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	/**
 	 * Injects the configurationManager
 	 *
-	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	 * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
 	 * @return void
 	 */
-	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+	public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
 		$this->configurationManager = $configurationManager;
 	}
 
 	/**
 	 * Injects the settings utility
 	 *
-	 * @param Tx_PwComments_Utility_Settings $utility
+	 * @param \PwTeaserTeam\PwComments\Utility\Settings $utility
 	 * @return void
 	 */
-	public function injectSettingsUtility(Tx_PwComments_Utility_Settings $utility) {
+	public function injectSettingsUtility(\PwTeaserTeam\PwComments\Utility\Settings $utility) {
 		$this->settingsUtility = $utility;
 	}
 
 	/**
 	 * Initial function to validate
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	public function isValid($comment) {
@@ -98,7 +100,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 		}
 
 		if ($errorNumber !== NULL) {
-			$errorMessage = Tx_Extbase_Utility_Localization::translate(
+			$errorMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
 				'tx_pwcomments.validation_error.' . $errorNumber, 'PwComments', $errorArguments
 			);
 			$this->addError($errorMessage, $errorNumber);
@@ -109,20 +111,20 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	/**
 	 * Validator to check that any property has been set in comment
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function anyPropertyIsSet(Tx_PwComments_Domain_Model_Comment $comment) {
+	protected function anyPropertyIsSet(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
 		return ($GLOBALS['TSFE']->fe_user->user['uid'])	|| ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
 	}
 
 	/**
 	 * Validator to check that mail is valid
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function mailIsValid(Tx_PwComments_Domain_Model_Comment $comment) {
+	protected function mailIsValid(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			return TRUE;
 		}
@@ -145,10 +147,10 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	/**
 	 * Validator to check that message has been set
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment Comment model to validate
+	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function messageIsSet(Tx_PwComments_Domain_Model_Comment $comment) {
+	protected function messageIsSet(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
 		return (trim($comment->getMessage()));
 	}
 
@@ -181,7 +183,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 			return TRUE;
 		}
 
-		$badWordsListPath = t3lib_div::getFileAbsFileName($this->settings['badWordsList']);
+		$badWordsListPath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->settings['badWordsList']);
 
 		if (!file_exists($badWordsListPath)) {
 			// Skip this validation, if bad word list is missing
@@ -206,7 +208,7 @@ class Tx_PwComments_Domain_Validator_CommentValidator extends Tx_Extbase_Validat
 	 */
 	protected function getExtensionSettings() {
 		$fullTyposcript = $this->configurationManager->getConfiguration(
-			Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
 		$extensionTyposcript = $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
 		return $this->settingsUtility->renderConfigurationArray($extensionTyposcript);

@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Controller;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -23,13 +25,16 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use PwTeaserTeam\PwComments\Domain\Model\Comment;
+use PwTeaserTeam\PwComments\Domain\Model\Vote;
+
 /**
  * The comment controller
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controller_ActionController {
+class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	/**
 	 * @var integer
 	 */
@@ -51,92 +56,92 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	protected $currentAuthorIdent;
 
 	/**
-	 * @var Tx_PwComments_Utility_Settings
+	 * @var \PwTeaserTeam\PwComments\Utility\Settings
 	 */
 	protected $settingsUtility = NULL;
 
 	/**
-	 * @var Tx_PwComments_Utility_Mail
+	 * @var \PwTeaserTeam\PwComments\Utility\Mail
 	 */
 	protected $mailUtility = NULL;
 
 	/**
-	 * @var Tx_PwComments_Utility_Cookie
+	 * @var \PwTeaserTeam\PwComments\Utility\Cookie
 	 */
 	protected $cookieUtility = NULL;
 
 	/**
-	 * @var Tx_PwComments_Domain_Repository_CommentRepository
+	 * @var \PwTeaserTeam\PwComments\Domain\Repository\CommentRepository
 	 */
 	protected $commentRepository;
 
 	/**
-	 * @var Tx_PwComments_Domain_Repository_FrontendUserRepository
+	 * @var \PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository
 	 */
 	protected $frontendUserRepository;
 
 	/**
-	 * @var Tx_PwComments_Domain_Repository_VoteRepository
+	 * @var \PwTeaserTeam\PwComments\Domain\Repository\VoteRepository
 	 */
 	protected $voteRepository;
 
 	/**
 	 * Injects the voteRepository
 	 *
-	 * @param Tx_PwComments_Domain_Repository_VoteRepository $repository
+	 * @param \PwTeaserTeam\PwComments\Domain\Repository\VoteRepository $repository
 	 * @return void
 	 */
-	public function injectVoteRepository(Tx_PwComments_Domain_Repository_VoteRepository $repository) {
+	public function injectVoteRepository(\PwTeaserTeam\PwComments\Domain\Repository\VoteRepository $repository) {
 		$this->voteRepository = $repository;
 	}
 
 	/**
 	 * Injects the settings utility
 	 *
-	 * @param Tx_PwComments_Utility_Settings $utility
+	 * @param \PwTeaserTeam\PwComments\Utility\Settings $utility
 	 * @return void
 	 */
-	public function injectSettingsUtility(Tx_PwComments_Utility_Settings $utility) {
+	public function injectSettingsUtility(\PwTeaserTeam\PwComments\Utility\Settings $utility) {
 		$this->settingsUtility = $utility;
 	}
 
 	/**
 	 * Injects the mail utility
 	 *
-	 * @param Tx_PwComments_Utility_Mail $utility
+	 * @param \PwTeaserTeam\PwComments\Utility\Mail $utility
 	 * @return void
 	 */
-	public function injectMailUtility(Tx_PwComments_Utility_Mail $utility) {
+	public function injectMailUtility(\PwTeaserTeam\PwComments\Utility\Mail $utility) {
 		$this->mailUtility = $utility;
 	}
 
 	/**
 	 * Injects the cookie utility
 	 *
-	 * @param Tx_PwComments_Utility_Cookie $utility
+	 * @param \PwTeaserTeam\PwComments\Utility\Cookie $utility
 	 * @return void
 	 */
-	public function injectCookieUtility(Tx_PwComments_Utility_Cookie $utility) {
+	public function injectCookieUtility(\PwTeaserTeam\PwComments\Utility\Cookie $utility) {
 		$this->cookieUtility = $utility;
 	}
 
 	/**
 	 * Injects the comment repository
 	 *
-	 * @param Tx_PwComments_Domain_Repository_CommentRepository $repository the repository to inject
+	 * @param \PwTeaserTeam\PwComments\Domain\Repository\CommentRepository $repository the repository to inject
 	 * @return void
 	 */
-	public function injectCommentRepository(Tx_PwComments_Domain_Repository_CommentRepository $repository) {
+	public function injectCommentRepository(\PwTeaserTeam\PwComments\Domain\Repository\CommentRepository $repository) {
 		$this->commentRepository = $repository;
 	}
 
 	/**
 	 * Injects the frontend user repository
 	 *
-	 * @param Tx_PwComments_Domain_Repository_FrontendUserRepository $repository the repository to inject
+	 * @param \PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository $repository the repository to inject
 	 * @return void
 	 */
-	public function injectFrontendUserRepository(Tx_PwComments_Domain_Repository_FrontendUserRepository $repository) {
+	public function injectFrontendUserRepository(\PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository $repository) {
 		$this->frontendUserRepository = $repository;
 	}
 
@@ -165,13 +170,13 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Displays all comments by pid
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $commentToReplyTo
+	 * @param Comment $commentToReplyTo
 	 * @return void
 	 *
 	 * @dontvalidate $commentToReplyTo
 	 * @ignorevalidation $commentToReplyTo
 	 */
-	public function indexAction(Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
+	public function indexAction(Comment $commentToReplyTo = NULL) {
 		if ($this->settings['invertCommentSorting']) {
 			$this->commentRepository->setInvertCommentSorting(TRUE);
 		}
@@ -180,10 +185,10 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		}
 
 		if ($this->entryUid > 0) {
-			/* @var $comments Tx_Extbase_Persistence_QueryResult */
+			/* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
 			$comments = $this->commentRepository->findByPidAndEntryUid($this->pageUid, $this->entryUid);
 		} else {
-			/* @var $comments Tx_Extbase_Persistence_QueryResult */
+			/* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
 			$comments = $this->commentRepository->findByPid($this->pageUid);
 		}
 
@@ -193,7 +198,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		$downvotedCommentUids = array();
 		if ($this->currentAuthorIdent !== NULL) {
 			$votes = $this->voteRepository->findByPidAndAuthorIdent($this->pageUid, $this->currentAuthorIdent);
-			/** @var $vote Tx_PwComments_Domain_Model_Vote */
+			/** @var $vote Vote */
 			foreach ($votes as $vote) {
 				if ($vote->isDownvote()) {
 					$downvotedCommentUids[] = $vote->getComment()->getUid();
@@ -213,12 +218,12 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Create action
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $newComment New comment to persist
+	 * @param Comment $newComment
 	 * @return void
 	 *
 	 * @dontverifyrequesthash
 	 */
-	public function createAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL) {
+	public function createAction(Comment $newComment = NULL) {
 		// Hidden field Spam-Protection
 		if ($this->settings['hiddenFieldSpamProtection'] && $this->request->hasArgument($this->settings['hiddenFieldName']) && $this->request->getArgument($this->settings['hiddenFieldName'])) {
 			$this->redirectToURI($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
@@ -258,18 +263,18 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 		if ($this->settings['moderateNewComments']) {
 			$newComment->setHidden(TRUE);
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
+				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
 			);
 		} else {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
+				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
 			);
 		}
 
 		$this->commentRepository->add($newComment);
 
-		/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
+		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 		$persistenceManager->persistAll();
 
 		if ($this->settings['sendMailOnNewCommentsTo']) {
@@ -301,8 +306,8 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * New action
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $newComment New Comment
-	 * @param Tx_PwComments_Domain_Model_Comment $commentToReplyTo Comment to reply to
+	 * @param Comment $newComment New Comment
+	 * @param Comment $commentToReplyTo Comment to reply to
 	 * @return void
 	 *
 	 * @dontvalidate $newComment
@@ -311,7 +316,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @ignorevalidation $commentToReplyTo
 	 * @dontverifyrequesthash
 	 */
-	public function newAction(Tx_PwComments_Domain_Model_Comment $newComment = NULL, Tx_PwComments_Domain_Model_Comment $commentToReplyTo = NULL) {
+	public function newAction(Comment $newComment = NULL, Comment $commentToReplyTo = NULL) {
 		if ($newComment !== NULL) {
 			$this->view->assign('newComment', $newComment);
 		}
@@ -342,39 +347,39 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Upvote action
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param Comment $comment
 	 * @return void
 	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
-	public function upvoteAction(Tx_PwComments_Domain_Model_Comment $comment) {
-		$this->performVoting($comment, Tx_PwComments_Domain_Model_Vote::TYPE_UPVOTE);
+	public function upvoteAction(Comment $comment) {
+		$this->performVoting($comment, Vote::TYPE_UPVOTE);
 		return;
 	}
 
 	/**
 	 * Downvote action
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param Comment $comment
 	 * @return void
 	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
-	public function downvoteAction(Tx_PwComments_Domain_Model_Comment $comment) {
-		$this->performVoting($comment, Tx_PwComments_Domain_Model_Vote::TYPE_DOWNVOTE);
+	public function downvoteAction(Comment $comment) {
+		$this->performVoting($comment, Vote::TYPE_DOWNVOTE);
 		return;
 	}
 
 	/**
 	 * Perform database operations for voting
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param Comment $comment
 	 * @param integer $type Check out Tx_PwComments_Domain_Model_Vote constants
 	 * @return void
 	 */
-	protected function performVoting(Tx_PwComments_Domain_Model_Comment $comment, $type) {
+	protected function performVoting(Comment $comment, $type) {
 		$commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
 		if (!$this->settings['enableVoting']) {
 			$this->redirectToURI($this->buildUriToPage($this->pageUid, array('votingDisabled' => 1)) . $commentAnchor);
@@ -400,15 +405,15 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->commentRepository->update($comment);
 			$this->voteRepository->remove($vote);
 			if ($type !== $vote->getType()) {
-				/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-				$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+				/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
+				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
 				$this->performVoting($comment, $type);
 			}
 		}
 
-		/* @var $persistenceManager Tx_Extbase_Persistence_Manager */
-		$persistenceManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_Manager');
+		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
+		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 		$persistenceManager->persistAll();
 
 		$this->redirectToURI($this->buildUriToPage($this->pageUid) . $commentAnchor);
@@ -419,12 +424,12 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * Creates new vote instance
 	 *
 	 * @param integer $type See Tx_PwComments_Domain_Model_Vote constants
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
-	 * @return Tx_PwComments_Domain_Model_Vote
+	 * @param Comment $comment
+	 * @return Vote
 	 */
-	protected function createNewVote($type, Tx_PwComments_Domain_Model_Comment $comment) {
-		/** @var Tx_PwComments_Domain_Model_Vote $newVote */
-		$newVote = t3lib_div::makeInstance('Tx_PwComments_Domain_Model_Vote');
+	protected function createNewVote($type, Comment $comment) {
+		/** @var Vote $newVote */
+		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwTeaserTeam\\PwComments\\Domain\\Model\\Vote');
 		$newVote->setComment($comment);
 		$newVote->setPid($this->pageUid);
 		$newVote->setAuthorIdent($this->currentAuthorIdent);
@@ -454,7 +459,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @return void
 	 */
 	public function sendAuthorMailWhenCommentHasBeenApprovedAction() {
-		/** @var Tx_PwComments_Domain_Model_Comment $comment */
+		/** @var Comment $comment */
 		$comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
 		if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
@@ -466,7 +471,7 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 			$this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
 			$this->mailUtility->setAddQueryStringToLinks(FALSE);
 			$this->mailUtility->sendMail($comment);
-			$this->flashMessageContainer->add(Tx_Extbase_Utility_Localization::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
+			$this->flashMessageContainer->add(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
 		}
 	}
 
@@ -509,11 +514,11 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Makes and returns a fluid template object
 	 *
-	 * @return Tx_Fluid_View_StandaloneView the fluid template object
+	 * @return \TYPO3\CMS\Fluid\View\StandaloneView the fluid template object
 	 */
 	protected function makeFluidTemplateObject() {
-		/** @var Tx_Fluid_View_StandaloneView $fluidTemplate  */
-		$fluidTemplate = t3lib_div::makeInstance('Tx_Fluid_View_StandaloneView');
+		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate  */
+		$fluidTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 
 		// Set controller context
 		$controllerContext = $this->buildControllerContext();
@@ -526,13 +531,13 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	/**
 	 * Returns count of comments and/or comments and replies.
 	 *
-	 * @param Tx_Extbase_Persistence_QueryResult $comments
+	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments
 	 * @return integer
 	 */
-	protected function calculateCommentCount(Tx_Extbase_Persistence_QueryResult $comments) {
+	protected function calculateCommentCount(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments) {
 		$replyAmount = 0;
 		if ($this->settings['countReplies']) {
-			/** @var $comment Tx_PwComments_Domain_Model_Comment */
+			/** @var $comment Comment */
 			foreach ($comments as $comment) {
 				$replyAmount += count($comment->getReplies());
 			}
@@ -546,14 +551,14 @@ class Tx_PwComments_Controller_CommentController extends Tx_Extbase_MVC_Controll
 	 * @return void
 	 */
 	protected function handleCustomMessages() {
-		if ($this->settings['ignoreVotingForOwnComments'] && t3lib_div::_GP('doNotVoteForYourself') == 1) {
+		if ($this->settings['ignoreVotingForOwnComments'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('doNotVoteForYourself') == 1) {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
+				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
-		} elseif (!$this->settings['enableVoting'] && t3lib_div::_GP('votingDisabled') == 1) {
+		} elseif (!$this->settings['enableVoting'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('votingDisabled') == 1) {
 			$this->flashMessageContainer->add(
-				Tx_Extbase_Utility_Localization::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
+				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		}

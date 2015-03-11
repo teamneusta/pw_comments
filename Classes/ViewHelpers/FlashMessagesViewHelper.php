@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHelpers_FlashMessagesViewHelper {
+class FlashMessagesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\FlashMessagesViewHelper {
 
 	/**
 	 * Overwritten render method.
@@ -37,7 +39,7 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 	 * @param string $renderMode one of the RENDER_MODE_* constants
 	 * @param integer $severity limit show of flash messages to given severity. If NULL all flashmessages are shown.
 	 * @return string rendered Flash Messages, if there are any.
-	 * @throws Tx_Fluid_Core_ViewHelper_Exception
+	 * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
 	 * @author Sebastian Kurfürst <sebastian@typo3.org>
 	 * @author Armin Rüdiger Vieweg <armin.vieweg@diemedialen.de>
 	 * @api
@@ -47,7 +49,7 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 		$flashMessages = array();
 
 		if ($severity !== NULL) {
-			/** @var $flashMessage t3lib_FlashMessage */
+			/** @var $flashMessage \TYPO3\CMS\Core\Messaging\FlashMessage */
 			foreach ($allFlashMessages as $flashMessage) {
 				if ($flashMessage->getSeverity() == $severity) {
 					$flashMessages[] = $flashMessage;
@@ -56,7 +58,6 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 		} else {
 			$flashMessages = $allFlashMessages;
 		}
-
 
 		if ($flashMessages === NULL || count($flashMessages) === 0) {
 			return '';
@@ -67,7 +68,7 @@ class Tx_PwComments_ViewHelpers_FlashMessagesViewHelper extends Tx_Fluid_ViewHel
 			case self::RENDER_MODE_DIV:
 				return $this->renderDiv($flashMessages);
 			default:
-				throw new Tx_Fluid_Core_ViewHelper_Exception('Invalid render mode "' . $renderMode . '" passed to FlashMessageViewhelper', 1290697924);
+				throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception ('Invalid render mode "' . $renderMode . '" passed to FlashMessageViewhelper', 1290697924);
 		}
 	}
 }

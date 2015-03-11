@@ -54,7 +54,7 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 
 				$_POST['tx_pwcomments_pi2']['action'] = 'sendAuthorMailWhenCommentHasBeenApproved';
 				$_POST['tx_pw_comments_pi2']['action'] = 'sendAuthorMailWhenCommentHasBeenApproved';
-				$this->runExtbaseController('PwComments', 'Comment', 'sendAuthorMailWhenCommentHasBeenApproved', 'Pi2', array('_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => TRUE), $row['pid']);
+				$this->runExtbaseController('PwComments', 'Comment', 'sendAuthorMailWhenCommentHasBeenApproved', 'Pi2', array('_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => TRUE), intval($row['pid']));
 			}
 		}
 	}
@@ -68,9 +68,10 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 	 * @param string $pluginName Optional name of plugin. Default is 'Pi1'.
 	 * @param array $settings Optional array of settings to use in controller and fluid template. Default is array().
 	 * @param integer $pageUid Uid of current page
+	 * @param string $vendorName VendorName
 	 * @return string output of controller's action
 	 */
-	protected function runExtbaseController($extensionName, $controller, $action = 'index', $pluginName = 'Pi1', $settings = array(), $pageUid = 0) {
+	protected function runExtbaseController($extensionName, $controller, $action = 'index', $pluginName = 'Pi1', $settings = array(), $pageUid = 0, $vendorName = 'PwTeaserTeam') {
 		$GLOBALS['TT'] = t3lib_div::makeInstance('t3lib_timeTrack');
 		$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $pageUid, 0);
 		$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
@@ -99,17 +100,14 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 
 		$localLangArray = array();
 		if (is_array($pluginSettings['_LOCAL_LANG.'])) {
-			if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) < 6000000) {
-				$localLangArray = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
-			} else {
-				$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
-				$localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
-			}
+			$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+			$localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
 		}
 		$configuration = array(
 			'pluginName' => $pluginName,
 			'extensionName' => $extensionName,
 			'controller' => $controller,
+			'vendorName' => $vendorName,
 			'controllerConfiguration' => array($controller),
 			'action' => $action,
 			'mvc' => array('requestHandlers' => array('Tx_Extbase_MVC_Web_FrontendRequestHandler'=>'Tx_Extbase_MVC_Web_FrontendRequestHandler')),

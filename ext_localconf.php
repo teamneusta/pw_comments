@@ -5,8 +5,8 @@ if (!defined ('TYPO3_MODE')) {
 
 $_EXTKEY = 'pw_comments';
 
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'PwTeaserTeam.' . $_EXTKEY,
 	'Pi1',
 	array(
 		'Comment' => 'index,new,create,upvote,downvote',
@@ -16,8 +16,8 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'PwTeaserTeam.' . $_EXTKEY,
 	'Pi2',
 	array(
 		'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',

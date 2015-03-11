@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\Utility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Utility_Cookie {
+class Cookie {
 	/** Cookie Prefix */
 	const COOKIE_PREFIX = 'tx_pwcomments_';
 	/** Lifetime of cookie in days */
@@ -83,7 +85,7 @@ class Tx_PwComments_Utility_Cookie {
 		if ($cookieDomain) {
 			if ($cookieDomain[0] == '/') {
 				$match = array();
-				$matchCnt = @preg_match($cookieDomain, t3lib_div::getIndpEnv('TYPO3_HOST_ONLY'), $match);
+				$matchCnt = @preg_match($cookieDomain, \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'), $match);
 				if ($matchCnt !== FALSE) {
 					$result = $match[0];
 				}

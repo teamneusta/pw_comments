@@ -5,13 +5,13 @@ if (!defined ('TYPO3_MODE')) {
 
 $_EXTKEY = 'pw_comments';
 
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'pwComments');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'pwComments');
 
-$extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
+$extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($_EXTKEY);
 $pluginSignature = strtolower($extensionName) . '_pi1';
 
-t3lib_extMgm::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
-t3lib_extMgm::addToInsertRecords('tx_pwcomments_domain_model_comment');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
 $TCA['tx_pwcomments_domain_model_comment'] = array(
 	'ctrl' => array(
 		'title' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment',
@@ -28,12 +28,12 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden'
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.gif'
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.gif'
 	)
 );
 
-t3lib_extMgm::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
 $TCA['tx_pwcomments_domain_model_vote'] = array(
 	'ctrl' => array(
 		'title' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_vote',
@@ -43,11 +43,11 @@ $TCA['tx_pwcomments_domain_model_vote'] = array(
 		'crdate' => 'crdate',
 		'origUid' => 't3_origuid',
 		'readOnly' => TRUE,
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Vote.php',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Vote.php',
 		'typeicon_column' => 'type',
 		'typeicons' => array(
-			'0' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.gif',
-			'1' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.gif',
+			'0' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.gif',
+			'1' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.gif',
 		),
 	)
 );

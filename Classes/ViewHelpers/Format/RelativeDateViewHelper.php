@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers\Format;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -26,14 +28,14 @@
 /**
  * Formats a unix timestamp to a human-readable, relative string
  */
-class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	protected $dateIsAbsolute = FALSE;
 
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
-	 * @param integer|string|DateTime $timestamp unix timestamp
+	 * @param integer|string|\DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
 	 * @param string $wrap String to perform sprintf on it, to add text before or after relative date
 	 * @param string $wrapAbsolute String to perform sprintf on it, if date is absolute
@@ -131,7 +133,7 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 	 * @return string string which matches the key, containing in locallang.xml
 	 */
 	protected function getLabel($key) {
-		return Tx_Extbase_Utility_Localization::translate('tx_pwcomments.relativeDate.' . $key , 'PwComments');
+		return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.relativeDate.' . $key, 'PwComments');
 	}
 
 }

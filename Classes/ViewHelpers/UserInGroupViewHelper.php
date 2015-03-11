@@ -1,4 +1,6 @@
 <?php
+namespace PwTeaserTeam\PwComments\ViewHelpers;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,12 +31,12 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_ViewHelpers_UserInGroupViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class UserInGroupViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Checks if the given user is member of a given group
 	 *
-	 * @param Tx_Extbase_Domain_Model_FrontendUser $user User to check for
+	 * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user User to check for
 	 * @param integer $inGroup Uid of group
 	 * @return boolean TRUE if user is in group, otherwise FALSE
 	 */

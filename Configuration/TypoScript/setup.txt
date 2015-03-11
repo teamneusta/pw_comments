@@ -92,8 +92,9 @@ plugin.tx_pwcomments {
 # Lib for output of comments of current page
 lib.pwCommentsIndex = USER
 lib.pwCommentsIndex {
-    userFunc = tx_extbase_core_bootstrap->run
+	userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
 	extensionName = PwComments
+	vendorName = PwTeaserTeam
 	pluginName = Pi1
 
 	switchableControllerActions {
