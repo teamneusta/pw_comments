@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Model;
+namespace PwCommentsTeam\PwComments\Domain\Model;
 
 /***************************************************************
 *  Copyright notice
@@ -55,7 +55,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * The author as model or NULL if comment author wasn't logged in
 	 *
-	 * @var \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -89,7 +89,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * Parent comment (if set this comment is an answer). One comment can just have
 	 * child comments or parent comment - not unlimited nested!
 	 *
-	 * @var \PwTeaserTeam\PwComments\Domain\Model\Comment
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $parentComment = NULL;
 
@@ -102,7 +102,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $_replies = NULL;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwTeaserTeam\PwComments\Domain\Model\Vote>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
 	 */
 	protected $votes;
 
@@ -126,7 +126,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function __construct() {
 		$this->initializeObject();
-		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwTeaserTeam\\PwComments\\Domain\\Model\\FrontendUser');
+		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\\PwComments\\Domain\\Model\\FrontendUser');
 		$this->votes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 	}
 
@@ -299,7 +299,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Setter for author
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author author
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author author
 	 * @return void
 	 */
 	public function setAuthor($author) {
@@ -309,7 +309,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter for author
 	 *
-	 * @return \PwTeaserTeam\PwComments\Domain\Model\FrontendUser The author
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser The author
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -333,7 +333,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get parent comment
 	 *
-	 * @return \PwTeaserTeam\PwComments\Domain\Model\Comment
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function getParentComment() {
 		return $this->parentComment;
@@ -342,7 +342,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set parent comment
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $parentComment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $parentComment
 	 * @return void
 	 */
 	public function setParentComment($parentComment) {
@@ -390,20 +390,20 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Add single vote
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Vote $vote
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
 	 * @return void
 	 */
-	public function addVote(\PwTeaserTeam\PwComments\Domain\Model\Vote $vote) {
+	public function addVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote) {
 		$this->votes->attach($vote);
 	}
 
 	/**
 	 * Remove single vote
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Vote $vote
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
 	 * @return void
 	 */
-	public function removeVote(\PwTeaserTeam\PwComments\Domain\Model\Vote $vote) {
+	public function removeVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote) {
 		$this->votes->detach($vote);
 	}
 
@@ -455,7 +455,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return void
 	 */
 	protected function countVotes() {
-		/** @var $vote \PwTeaserTeam\PwComments\Domain\Model\Vote */
+		/** @var $vote \PwCommentsTeam\PwComments\Domain\Model\Vote */
 		foreach ($this->getVotes() as $vote) {
 			if ($vote->isDownvote()) {
 				$this->_downvoteAmount = $this->_downvoteAmount + 1;

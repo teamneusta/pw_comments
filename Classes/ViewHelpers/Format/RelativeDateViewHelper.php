@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\ViewHelpers\Format;
+namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
 
 /***************************************************************
 *  Copyright notice

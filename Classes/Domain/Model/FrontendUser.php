@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Model;
+namespace PwCommentsTeam\PwComments\Domain\Model;
 
 /***************************************************************
 *  Copyright notice

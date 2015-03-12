@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Validator;
+namespace PwCommentsTeam\PwComments\Domain\Validator;
 
 /***************************************************************
 *  Copyright notice
@@ -40,7 +40,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	protected $configurationManager = NULL;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Utility\Settings
+	 * @var \PwCommentsTeam\PwComments\Utility\Settings
 	 */
 	protected $settingsUtility = NULL;
 
@@ -62,17 +62,17 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	/**
 	 * Injects the settings utility
 	 *
-	 * @param \PwTeaserTeam\PwComments\Utility\Settings $utility
+	 * @param \PwCommentsTeam\PwComments\Utility\Settings $utility
 	 * @return void
 	 */
-	public function injectSettingsUtility(\PwTeaserTeam\PwComments\Utility\Settings $utility) {
+	public function injectSettingsUtility(\PwCommentsTeam\PwComments\Utility\Settings $utility) {
 		$this->settingsUtility = $utility;
 	}
 
 	/**
 	 * Initial function to validate
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	public function isValid($comment) {
@@ -111,20 +111,20 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	/**
 	 * Validator to check that any property has been set in comment
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function anyPropertyIsSet(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function anyPropertyIsSet(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		return ($GLOBALS['TSFE']->fe_user->user['uid'])	|| ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
 	}
 
 	/**
 	 * Validator to check that mail is valid
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function mailIsValid(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function mailIsValid(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			return TRUE;
 		}
@@ -147,10 +147,10 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	/**
 	 * Validator to check that message has been set
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
 	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function messageIsSet(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function messageIsSet(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		return (trim($comment->getMessage()));
 	}
 

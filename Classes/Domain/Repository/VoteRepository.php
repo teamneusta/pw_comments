@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Repository;
+namespace PwCommentsTeam\PwComments\Domain\Repository;
 
 /***************************************************************
 *  Copyright notice
@@ -26,7 +26,7 @@ namespace PwTeaserTeam\PwComments\Domain\Repository;
 ***************************************************************/
 
 /**
- * Repository for \PwTeaserTeam\PwComments\Domain\Model\Vote
+ * Repository for \PwCommentsTeam\PwComments\Domain\Model\Vote
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -66,11 +66,11 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find vote by given comment and authorIdent
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @param string $authorIdent
-	 * @return \PwTeaserTeam\PwComments\Domain\Model\Vote
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Vote
 	 */
-	public function findOneByCommentAndAuthorIdent(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment, $authorIdent) {
+	public function findOneByCommentAndAuthorIdent(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment, $authorIdent) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(

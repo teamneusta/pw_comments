@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\ViewHelpers\Format;
+namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
 
 /*
  * This script belongs to the FLOW3 package "Fluid".                      *

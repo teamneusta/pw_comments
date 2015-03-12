@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Hooks;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -29,7 +31,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_PwComments_Hooks_ProcessDatamap {
+class ProcessDatamap {
 	/** @var array */
 	protected $enabledTables = array('tx_pwcomments_domain_model_comment');
 
@@ -71,10 +73,10 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 	 * @param string $vendorName VendorName
 	 * @return string output of controller's action
 	 */
-	protected function runExtbaseController($extensionName, $controller, $action = 'index', $pluginName = 'Pi1', $settings = array(), $pageUid = 0, $vendorName = 'PwTeaserTeam') {
-		$GLOBALS['TT'] = t3lib_div::makeInstance('t3lib_timeTrack');
-		$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $pageUid, 0);
-		$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+	protected function runExtbaseController($extensionName, $controller, $action = 'index', $pluginName = 'Pi1', $settings = array(), $pageUid = 0, $vendorName = 'PwCommentsTeam') {
+		$GLOBALS['TT'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker');
+		$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController', $GLOBALS['TYPO3_CONF_VARS'], $pageUid, 0);
+		$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 		$GLOBALS['TSFE']->initTemplate();
 		$rootline = $GLOBALS['TSFE']->sys_page->getRootLine($pageUid);
 		$GLOBALS['TSFE']->tmpl->start($rootline);
@@ -83,18 +85,18 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 		$pluginSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.'];
 		$pwCommentsTypoScript = $pluginSettings['settings.'];
 
-		tslib_eidtools::connectDB();
-		tslib_eidtools::initLanguage('de');
-		tslib_eidtools::initTCA();
-		tslib_eidtools::initExtensionTCA('pw_comments');
+		\TYPO3\CMS\Frontend\Utility\EidUtility::connectDB();
+		\TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage('de');
+		\TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
+		\TYPO3\CMS\Frontend\Utility\EidUtility::initExtensionTCA('pw_comments');
 
 		if (unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])) {
 			$settings = array_merge($settings, unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']));
 		}
 		$settings = array_merge($settings, $pwCommentsTypoScript);
 
-		$bootstrap = new Tx_Extbase_Core_Bootstrap();
-		$bootstrap->cObj = t3lib_div::makeInstance('tslib_cObj');
+		$bootstrap = new \TYPO3\CMS\Extbase\Core\Bootstrap();
+		$bootstrap->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 
 		$extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
 
@@ -124,13 +126,10 @@ class Tx_PwComments_Hooks_ProcessDatamap {
 	 * @return array
 	 */
 	protected function getExtensionTyposcriptSetup() {
-		/** @var $TSparser t3lib_TSparser */
-		$TSparser = t3lib_div::makeInstance('t3lib_TSparser');
-		$TSparser->parse(file_get_contents(t3lib_extMgm::extPath('pw_comments') . 'ext_typoscript_setup.txt'));
-		if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) < 6000000) {
-			return Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($TSparser->setup);
-		}
-		$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
+		/** @var $TSparser \TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser */
+		$TSparser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\Parser\\TypoScriptParser');
+		$TSparser->parse(file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'));
+		$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
 		return $typoScriptService->convertTypoScriptArrayToPlainArray($TSparser->setup);
 	}
 }

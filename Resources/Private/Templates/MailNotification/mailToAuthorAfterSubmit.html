@@ -1,4 +1,4 @@
-{namespace c=PwTeaserTeam\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.salutation" />
+{namespace c=PwCommentsTeam\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.salutation" />
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted" arguments="{0:'{articleLink -> c:format.raw()}'}" /></f:then><f:else><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted" arguments="{0:'{articleLink -> c:format.raw()}'}" /></f:else></f:if>
 
 ---------------------------------------------------

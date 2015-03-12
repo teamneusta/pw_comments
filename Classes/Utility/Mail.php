@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Utility;
+namespace PwCommentsTeam\PwComments\Utility;
 
 /***************************************************************
  *  Copyright notice
@@ -100,10 +100,10 @@ class Mail {
 	/**
 	 * Creates and sends mail
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
 	 * @return boolean Returns TRUE if the mail has been sent successfully, otherwise returns FALSE
 	 */
-	public function sendMail(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	public function sendMail(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		/** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
 		$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
 
@@ -122,11 +122,11 @@ class Mail {
 	/**
 	 * Gets the message for a notification mail as fluid template
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
 	 * @return string The rendered fluid template (HTML or plain text)
 	 * @throws Exception
 	 */
-	protected function getMailMessage(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function getMailMessage(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$mailTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->getTemplatePath());
 		if (!file_exists($mailTemplate)) {
 			throw new Exception('Mail template (' . $mailTemplate . ') not found. ');

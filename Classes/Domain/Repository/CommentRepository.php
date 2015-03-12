@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Repository;
+namespace PwCommentsTeam\PwComments\Domain\Repository;
 
 /***************************************************************
 *  Copyright notice
@@ -26,7 +26,7 @@ namespace PwTeaserTeam\PwComments\Domain\Repository;
 ***************************************************************/
 
 /**
- * Repository for \PwTeaserTeam\PwComments\Domain\Model\Comment
+ * Repository for \PwCommentsTeam\PwComments\Domain\Model\Comment
  *
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -109,7 +109,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * Find comment by uid
 	 *
 	 * @param integer $uid
-	 * @return \PwTeaserTeam\PwComments\Domain\Model\Comment
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function findByCommentUid($uid) {
 		$query = $this->createQuery();
@@ -127,10 +127,10 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find replies by given comment and attaches them to _replies attribute.
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	protected function findAndAttachCommentReplies(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function findAndAttachCommentReplies(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->equals('parentComment', $comment->getUid())

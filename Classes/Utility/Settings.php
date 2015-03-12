@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Utility;
+namespace PwCommentsTeam\PwComments\Utility;
 
 /***************************************************************
  *  Copyright notice

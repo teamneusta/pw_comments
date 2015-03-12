@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Controller;
+namespace PwCommentsTeam\PwComments\Controller;
 
 /***************************************************************
 *  Copyright notice
@@ -25,8 +25,8 @@ namespace PwTeaserTeam\PwComments\Controller;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-use PwTeaserTeam\PwComments\Domain\Model\Comment;
-use PwTeaserTeam\PwComments\Domain\Model\Vote;
+use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use PwCommentsTeam\PwComments\Domain\Model\Vote;
 
 /**
  * The comment controller
@@ -56,92 +56,92 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	protected $currentAuthorIdent;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Utility\Settings
+	 * @var \PwCommentsTeam\PwComments\Utility\Settings
 	 */
 	protected $settingsUtility = NULL;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Utility\Mail
+	 * @var \PwCommentsTeam\PwComments\Utility\Mail
 	 */
 	protected $mailUtility = NULL;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Utility\Cookie
+	 * @var \PwCommentsTeam\PwComments\Utility\Cookie
 	 */
 	protected $cookieUtility = NULL;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Domain\Repository\CommentRepository
+	 * @var \PwCommentsTeam\PwComments\Domain\Repository\CommentRepository
 	 */
 	protected $commentRepository;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository
+	 * @var \PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository
 	 */
 	protected $frontendUserRepository;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Domain\Repository\VoteRepository
+	 * @var \PwCommentsTeam\PwComments\Domain\Repository\VoteRepository
 	 */
 	protected $voteRepository;
 
 	/**
 	 * Injects the voteRepository
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Repository\VoteRepository $repository
+	 * @param \PwCommentsTeam\PwComments\Domain\Repository\VoteRepository $repository
 	 * @return void
 	 */
-	public function injectVoteRepository(\PwTeaserTeam\PwComments\Domain\Repository\VoteRepository $repository) {
+	public function injectVoteRepository(\PwCommentsTeam\PwComments\Domain\Repository\VoteRepository $repository) {
 		$this->voteRepository = $repository;
 	}
 
 	/**
 	 * Injects the settings utility
 	 *
-	 * @param \PwTeaserTeam\PwComments\Utility\Settings $utility
+	 * @param \PwCommentsTeam\PwComments\Utility\Settings $utility
 	 * @return void
 	 */
-	public function injectSettingsUtility(\PwTeaserTeam\PwComments\Utility\Settings $utility) {
+	public function injectSettingsUtility(\PwCommentsTeam\PwComments\Utility\Settings $utility) {
 		$this->settingsUtility = $utility;
 	}
 
 	/**
 	 * Injects the mail utility
 	 *
-	 * @param \PwTeaserTeam\PwComments\Utility\Mail $utility
+	 * @param \PwCommentsTeam\PwComments\Utility\Mail $utility
 	 * @return void
 	 */
-	public function injectMailUtility(\PwTeaserTeam\PwComments\Utility\Mail $utility) {
+	public function injectMailUtility(\PwCommentsTeam\PwComments\Utility\Mail $utility) {
 		$this->mailUtility = $utility;
 	}
 
 	/**
 	 * Injects the cookie utility
 	 *
-	 * @param \PwTeaserTeam\PwComments\Utility\Cookie $utility
+	 * @param \PwCommentsTeam\PwComments\Utility\Cookie $utility
 	 * @return void
 	 */
-	public function injectCookieUtility(\PwTeaserTeam\PwComments\Utility\Cookie $utility) {
+	public function injectCookieUtility(\PwCommentsTeam\PwComments\Utility\Cookie $utility) {
 		$this->cookieUtility = $utility;
 	}
 
 	/**
 	 * Injects the comment repository
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Repository\CommentRepository $repository the repository to inject
+	 * @param \PwCommentsTeam\PwComments\Domain\Repository\CommentRepository $repository the repository to inject
 	 * @return void
 	 */
-	public function injectCommentRepository(\PwTeaserTeam\PwComments\Domain\Repository\CommentRepository $repository) {
+	public function injectCommentRepository(\PwCommentsTeam\PwComments\Domain\Repository\CommentRepository $repository) {
 		$this->commentRepository = $repository;
 	}
 
 	/**
 	 * Injects the frontend user repository
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository $repository the repository to inject
+	 * @param \PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository $repository the repository to inject
 	 * @return void
 	 */
-	public function injectFrontendUserRepository(\PwTeaserTeam\PwComments\Domain\Repository\FrontendUserRepository $repository) {
+	public function injectFrontendUserRepository(\PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository $repository) {
 		$this->frontendUserRepository = $repository;
 	}
 
@@ -429,7 +429,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function createNewVote($type, Comment $comment) {
 		/** @var Vote $newVote */
-		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwTeaserTeam\\PwComments\\Domain\\Model\\Vote');
+		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\\PwComments\\Domain\\Model\\Vote');
 		$newVote->setComment($comment);
 		$newVote->setPid($this->pageUid);
 		$newVote->setAuthorIdent($this->currentAuthorIdent);

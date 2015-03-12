@@ -1,5 +1,5 @@
 <?php
-namespace PwTeaserTeam\PwComments\Domain\Model;
+namespace PwCommentsTeam\PwComments\Domain\Model;
 
 /***************************************************************
 *  Copyright notice
@@ -48,7 +48,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $crdate;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -58,7 +58,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $authorIdent;
 
 	/**
-	 * @var \PwTeaserTeam\PwComments\Domain\Model\Comment
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $comment;
 
@@ -103,7 +103,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get author (fe_user)
 	 *
-	 * @return \PwTeaserTeam\PwComments\Domain\Model\FrontendUser
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -112,10 +112,10 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set author (fe_user)
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author
 	 * @return void
 	 */
-	public function setAuthor(\PwTeaserTeam\PwComments\Domain\Model\FrontendUser $author) {
+	public function setAuthor(\PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author) {
 		$this->author = $author;
 	}
 
@@ -168,10 +168,10 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set related comment
 	 *
-	 * @param \PwTeaserTeam\PwComments\Domain\Model\Comment $comment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	public function setComment(\PwTeaserTeam\PwComments\Domain\Model\Comment $comment) {
+	public function setComment(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$this->comment = $comment;
 	}
 
