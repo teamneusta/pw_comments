@@ -85,7 +85,6 @@ class ProcessDatamap {
 		$pluginSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.'];
 		$pwCommentsTypoScript = $pluginSettings['settings.'];
 
-		\TYPO3\CMS\Frontend\Utility\EidUtility::connectDB();
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage('de');
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
 		\TYPO3\CMS\Frontend\Utility\EidUtility::initExtensionTCA('pw_comments');
