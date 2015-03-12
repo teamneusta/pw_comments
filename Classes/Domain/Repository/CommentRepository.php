@@ -125,7 +125,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	}
 
 	/**
-	 * Find replies by given comment and attaches them to _replies attribute.
+	 * Find replies by given comment and attaches them to replies attribute.
 	 *
 	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void

@@ -219,15 +219,14 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * Create action
 	 *
 	 * @param Comment $newComment
-	 * @return void
-	 *
+	 * @return bool
 	 * @dontverifyrequesthash
 	 */
 	public function createAction(Comment $newComment = NULL) {
 		// Hidden field Spam-Protection
 		if ($this->settings['hiddenFieldSpamProtection'] && $this->request->hasArgument($this->settings['hiddenFieldName']) && $this->request->getArgument($this->settings['hiddenFieldName'])) {
 			$this->redirectToURI($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
-			return;
+			return FALSE;
 		}
 
 		if ($newComment === NULL) {
@@ -301,6 +300,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
 		}
 		$this->redirectToURI($this->buildUriByUid($this->pageUid, TRUE) . $anchor);
+		return FALSE;
 	}
 
 	/**

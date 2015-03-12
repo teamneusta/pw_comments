@@ -59,16 +59,16 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	 * @return integer
 	 */
 	protected function normalizeTimestamp($timestamp) {
-		if(is_null($timestamp)) {
+		if (is_null($timestamp)) {
 			$timestamp = time();
-		} elseif(is_numeric($timestamp)) {
+		} elseif (is_numeric($timestamp)) {
 			$timestamp = intval($timestamp);
-		} elseif(is_string($timestamp)) {
+		} elseif (is_string($timestamp)) {
 			$timestamp = strtotime($timestamp);
-		} elseif($timestamp instanceof DateTime) {
+		} elseif ($timestamp instanceof \DateTime) {
 			$timestamp = $timestamp->format('U');
 		} else {
-			throw new InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
+			throw new \InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
 		}
 		return $timestamp;
 	}
@@ -117,7 +117,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	 * @param integer $num Integer which defines if it is plural or not
 	 * @param string $suffix Suffix to add to key of plural suffix. Default is '' (empty).
 	 *
-	 * @return string Returns the plural suffix, which makes a time measure to plural (i.e. Stunde -> Stunden)
+	 * @return string Returns the plural suffix, which makes a time measure to plural (i.e. Stunde -> Stunden)|void
 	 */
 	protected function plural($num, $suffix = '') {
 		if ($num > 1) {
@@ -137,4 +137,3 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	}
 
 }
-?>

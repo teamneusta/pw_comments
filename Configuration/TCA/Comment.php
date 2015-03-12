@@ -42,15 +42,15 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 			)
 		),
 		'l18n_diffsource' => array(
-			'config' =>array(
-				'type' =>'passthrough'
+			'config' => array(
+				'type' => 'passthrough'
 			)
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
 			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.versionLabel',
 			'config' => array(
-				'type' =>'none',
+				'type' => 'none',
 				'cols' => 27
 			)
 		),

@@ -101,8 +101,9 @@ class Settings {
 	 *
 	 * Example:
 	 * Before: $array['level1']['level2']['finalLevel'] = 'hello kitty'
-	 * After:  $array['level1.']['level2.']['finalLevel'] = 'hello kitty'
-	 *		   $array['level1'] = 'TEXT'
+	 * After:
+	 * $array['level1.']['level2.']['finalLevel'] = 'hello kitty'
+	 * $array['level1'] = 'TEXT'
 	 *
 	 * @param array $configuration settings array to make renderable
 	 * @return array the renderable settings

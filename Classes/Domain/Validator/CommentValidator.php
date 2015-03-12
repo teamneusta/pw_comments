@@ -49,6 +49,18 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 */
 	protected $settings = array();
 
+	protected $validMailPattern = '
+				/
+					^[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*
+					@
+					(?:
+						(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2}|aero|asia|biz|cat|com|edu|coop|gov|info|int|invalid|jobs|localdomain|mil|mobi|museum|name|net|org|pro|tel|travel)|
+						localhost|
+						(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5])\.){3}(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5]))
+					)
+					\b
+				/ix';
+
 	/**
 	 * Injects the configurationManager
 	 *
@@ -129,19 +141,11 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 			return TRUE;
 		}
 
-		if(is_string($comment->getAuthorMail()) && preg_match('
-				/
-					^[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*
-					@
-					(?:
-						(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2}|aero|asia|biz|cat|com|edu|coop|gov|info|int|invalid|jobs|localdomain|mil|mobi|museum|name|net|org|pro|tel|travel)|
-						localhost|
-						(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5])\.){3}(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5]))
-					)
-					\b
-				/ix', $comment->getAuthorMail())) return TRUE;
+		if (is_string($comment->getAuthorMail()) && preg_match($this->validMailPattern, $comment->getAuthorMail())) {
+			return TRUE;
+		}
 
- 		return FALSE;
+		return FALSE;
 	}
 
 	/**
@@ -178,7 +182,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * @param string $textToCheck text to check for
 	 * @return boolean Returns TRUE if message has no badwords. Otherwise returns FALSE.
 	 */
-	protected function checkTextForBadWords($textToCheck){
+	protected function checkTextForBadWords($textToCheck) {
 		if (empty($textToCheck)) {
 			return TRUE;
 		}
@@ -191,7 +195,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 		}
 
 		$badWordsRegExp = '';
-		foreach(file($badWordsListPath) as $badWord) {
+		foreach (file($badWordsListPath) as $badWord) {
 			$badWordsRegExp .= trim($badWord) . '|';
 		}
 		$badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
@@ -210,7 +214,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 		$fullTyposcript = $this->configurationManager->getConfiguration(
 			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
-		$extensionTyposcript = $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
+		$extensionTyposcript = $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
 		return $this->settingsUtility->renderConfigurationArray($extensionTyposcript);
 	}
 }

@@ -99,7 +99,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
 	 */
-	protected $_replies = NULL;
+	protected $replies = NULL;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
@@ -109,17 +109,17 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * @var integer
 	 */
-	protected $_upvoteAmount = 0;
+	protected $upvoteAmount = 0;
 
 	/**
 	 * @var integer
 	 */
-	protected $_downvoteAmount = 0;
+	protected $downvoteAmount = 0;
 
 	/**
 	 * @var boolean
 	 */
-	protected $_votesCounted = FALSE;
+	protected $votesCounted = FALSE;
 
 	/**
 	 * The constructor.
@@ -272,8 +272,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$twoNewLines = "\r\n\r\n";
 		do {
 			$message = str_replace($threeNewLines, $twoNewLines, $message);
-		}
-		while (strstr($message, $threeNewLines));
+		} while (strstr($message, $threeNewLines));
 
 		// Decode html tags
 		$message = htmlspecialchars($message);
@@ -327,7 +326,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$fullTyposcript = $configurationManager->getConfiguration(
 			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
-		return $fullTyposcript['plugin.']['tx_pwcomments' . '.']['settings.'];
+		return $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
 	}
 
 	/**
@@ -355,7 +354,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
 	 */
 	public function getReplies() {
-		return $this->_replies;
+		return $this->replies;
 	}
 
 	/**
@@ -365,7 +364,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return void
 	 */
 	public function setReplies(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $replies) {
-		$this->_replies = $replies;
+		$this->replies = $replies;
 	}
 
 	/**
@@ -413,10 +412,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return integer
 	 */
 	public function getUpvoteAmount() {
-		if ($this->_votesCounted === FALSE) {
+		if ($this->votesCounted === FALSE) {
 			$this->countVotes();
 		}
-		return $this->_upvoteAmount;
+		return $this->upvoteAmount;
 	}
 
 	/**
@@ -425,10 +424,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return integer
 	 */
 	public function getDownvoteAmount() {
-		if ($this->_votesCounted === FALSE) {
+		if ($this->votesCounted === FALSE) {
 			$this->countVotes();
 		}
-		return $this->_downvoteAmount;
+		return $this->downvoteAmount;
 	}
 
 	/**
@@ -458,12 +457,12 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		/** @var $vote \PwCommentsTeam\PwComments\Domain\Model\Vote */
 		foreach ($this->getVotes() as $vote) {
 			if ($vote->isDownvote()) {
-				$this->_downvoteAmount = $this->_downvoteAmount + 1;
+				$this->downvoteAmount = $this->downvoteAmount + 1;
 			} else {
-				$this->_upvoteAmount = $this->_upvoteAmount + 1;
+				$this->upvoteAmount = $this->upvoteAmount + 1;
 			}
 		}
-		$this->_votesCounted = TRUE;
+		$this->votesCounted = TRUE;
 	}
 
 	/**

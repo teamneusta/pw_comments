@@ -41,12 +41,11 @@ class ProcessDatamap {
 	/**
 	 * After Save hook
 	 *
-	 * @param $status
-	 * @param $table
-	 * @param $id
+	 * @param string $status
+	 * @param  string $table
+	 * @param  int $id
 	 * @param array $fieldArray
-	 * @param t3lib_TCEmain $pObj
-	 *
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
 	 * @return void
 	 */
 	public function processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $pObj) {
@@ -54,9 +53,14 @@ class ProcessDatamap {
 			if (isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
 				$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', 'tx_pwcomments_domain_model_comment', 'uid=' . $id);
 
-				$_POST['tx_pwcomments_pi2']['action'] = 'sendAuthorMailWhenCommentHasBeenApproved';
-				$_POST['tx_pw_comments_pi2']['action'] = 'sendAuthorMailWhenCommentHasBeenApproved';
-				$this->runExtbaseController('PwComments', 'Comment', 'sendAuthorMailWhenCommentHasBeenApproved', 'Pi2', array('_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => TRUE), intval($row['pid']));
+				$this->runExtbaseController(
+						'PwComments',
+						'Comment',
+						'sendAuthorMailWhenCommentHasBeenApproved',
+						'Pi2',
+						array('_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => TRUE),
+						intval($row['pid'])
+				);
 			}
 		}
 	}
@@ -111,7 +115,11 @@ class ProcessDatamap {
 			'vendorName' => $vendorName,
 			'controllerConfiguration' => array($controller),
 			'action' => $action,
-			'mvc' => array('requestHandlers' => array('Tx_Extbase_MVC_Web_FrontendRequestHandler'=>'Tx_Extbase_MVC_Web_FrontendRequestHandler')),
+			'mvc' => array(
+					'requestHandlers' => array(
+							'TYPO3\\CMS\\Extbase\\Mvc\\Web\\FrontendRequestHandler' => 'TYPO3\\CMS\\Extbase\\Mvc\\Web\\FrontendRequestHandler'
+					)
+			),
 			'settings' => $settings,
 			'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
 			'_LOCAL_LANG' => $localLangArray
@@ -125,10 +133,10 @@ class ProcessDatamap {
 	 * @return array
 	 */
 	protected function getExtensionTyposcriptSetup() {
-		/** @var $TSparser \TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser */
-		$TSparser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\Parser\\TypoScriptParser');
-		$TSparser->parse(file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'));
+		/** @var $tsParser \TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser */
+		$tsParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\Parser\\TypoScriptParser');
+		$tsParser->parse(file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'));
 		$typoScriptService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
-		return $typoScriptService->convertTypoScriptArrayToPlainArray($TSparser->setup);
+		return $typoScriptService->convertTypoScriptArrayToPlainArray($tsParser->setup);
 	}
 }

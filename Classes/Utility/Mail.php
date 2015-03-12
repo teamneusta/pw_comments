@@ -133,7 +133,6 @@ class Mail {
 		}
 		$this->fluidTemplate->setTemplatePathAndFilename($mailTemplate);
 
-
 		// Assign variables
 		$this->fluidTemplate->assign('comment', $comment);
 		$this->fluidTemplate->assign('settings', $this->settings);
@@ -143,11 +142,11 @@ class Mail {
 		$subFolder = ($this->settings['subFolder']) ? $this->settings['subFolder'] : '';
 
 		$articleLink = 'http://' . \TYPO3\CMS\Core\Utility\GeneralUtility::getHostname() . $subFolder . '/' .
-					   $uriBuilder
+						$uriBuilder
 							->setTargetPageUid($comment->getPid())
 							->setAddQueryString($this->getAddQueryStringToLinks())
 							->setArgumentsToBeExcludedFromQueryString(array('id', 'cHash', 'tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]'))
-					   		->setUseCacheHash(FALSE)
+							->setUseCacheHash(FALSE)
 							->buildFrontendUri();
 		$this->fluidTemplate->assign('articleLink', $articleLink);
 
