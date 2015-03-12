@@ -262,11 +262,11 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			// Modify comment if moderation is active
 		if ($this->settings['moderateNewComments']) {
 			$newComment->setHidden(TRUE);
-			$this->flashMessageContainer->add(
+			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
 			);
 		} else {
-			$this->flashMessageContainer->add(
+			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
 			);
 		}
@@ -471,7 +471,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
 			$this->mailUtility->setAddQueryStringToLinks(FALSE);
 			$this->mailUtility->sendMail($comment);
-			$this->flashMessageContainer->add(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
+			$this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
 		}
 	}
 
@@ -552,15 +552,24 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function handleCustomMessages() {
 		if ($this->settings['ignoreVotingForOwnComments'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('doNotVoteForYourself') == 1) {
-			$this->flashMessageContainer->add(
+			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		} elseif (!$this->settings['enableVoting'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('votingDisabled') == 1) {
-			$this->flashMessageContainer->add(
+			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		}
+	}
+
+	/**
+	 * Don't show Error Message because of own genereated error Messages
+	 *
+	 * @return string The flash message or FALSE if no flash message should be set
+	 */
+	protected function getErrorFlashMessage() {
+		return FALSE;
 	}
 }

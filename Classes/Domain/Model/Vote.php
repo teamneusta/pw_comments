@@ -159,7 +159,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get related comment
 	 *
-	 * @return \Tx_PwComments_Domain_Model_Comment
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function getComment() {
 		return $this->comment;
