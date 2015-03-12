@@ -123,6 +123,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 		if ($num > 1) {
 			return $this->getLabel('pluralSuffix' . ucfirst($suffix));
 		}
+		return '';
 	}
 
 	/**

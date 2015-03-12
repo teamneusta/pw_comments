@@ -100,7 +100,7 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 	public function render($timestamp = NULL, $format = '%Y-%m-%d', $get = '') {
 
 		$timestamp = $this->normalizeTimestamp($timestamp);
-		if($get) {
+		if ($get) {
 			$timestamp = $this->modifyDate($timestamp, $get);
 		}
 
@@ -118,13 +118,13 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 	 * @return integer
 	 */
 	protected function normalizeTimestamp($timestamp) {
-		if(is_null($timestamp)) {
+		if (is_null($timestamp)) {
 			$timestamp = time();
-		} elseif(is_numeric($timestamp)) {
+		} elseif (is_numeric($timestamp)) {
 			$timestamp = intval($timestamp);
-		} elseif(is_string($timestamp)) {
+		} elseif (is_string($timestamp)) {
 			$timestamp = strtotime($timestamp);
-		} elseif($timestamp instanceof \DateTime) {
+		} elseif ($timestamp instanceof \DateTime) {
 			$timestamp = $timestamp->format('U');
 		} else {
 			throw new \InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
@@ -143,4 +143,3 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 		return strtotime($get, $timestamp);
 	}
 }
-?>
