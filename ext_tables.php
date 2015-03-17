@@ -3,8 +3,6 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$_EXTKEY = 'pw_comments';
-
 $boot = function($extensionKey) {
 	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($extensionKey, 'Configuration/TypoScript', 'pwComments');
 

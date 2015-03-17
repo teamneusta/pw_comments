@@ -3,8 +3,6 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$_EXTKEY = 'pw_comments';
-
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'PwCommentsTeam.' . $_EXTKEY,
 	'Pi1',
