@@ -3,8 +3,23 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-$TCA['tx_pwcomments_domain_model_vote'] = array(
-	'ctrl' => $TCA['tx_pwcomments_domain_model_vote']['ctrl'],
+$_EXTKEY = 'pw_comments';
+
+return array(
+	'ctrl' => array(
+		'title' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_vote',
+		'label' => 'crdate',
+		'hideTable' => TRUE,
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'origUid' => 't3_origuid',
+		'readOnly' => TRUE,
+		'typeicon_column' => 'type',
+		'typeicons' => array(
+			'0' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.gif',
+			'1' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.gif',
+		),
+	),
 	'interface' => array(
 		'showRecordFieldList'	=> 'type,crdate,author,author_ident'
 	),
