@@ -27,6 +27,7 @@ namespace PwCommentsTeam\PwComments\Controller;
 
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
 use PwCommentsTeam\PwComments\Domain\Model\Vote;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The comment controller
@@ -36,12 +37,12 @@ use PwCommentsTeam\PwComments\Domain\Model\Vote;
  */
 class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $pageUid = 0;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $entryUid = 0;
 
@@ -57,93 +58,39 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Utility\Settings
+	 * @inject
 	 */
-	protected $settingsUtility = NULL;
+	protected $settingsUtility;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Utility\Mail
+	 * @inject
 	 */
-	protected $mailUtility = NULL;
+	protected $mailUtility;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Utility\Cookie
+	 * @inject
 	 */
-	protected $cookieUtility = NULL;
+	protected $cookieUtility;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Domain\Repository\CommentRepository
+	 * @inject
 	 */
 	protected $commentRepository;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository
+	 * @inject
 	 */
 	protected $frontendUserRepository;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Domain\Repository\VoteRepository
+	 * @inject
 	 */
 	protected $voteRepository;
-
-	/**
-	 * Injects the voteRepository
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Repository\VoteRepository $repository
-	 * @return void
-	 */
-	public function injectVoteRepository(\PwCommentsTeam\PwComments\Domain\Repository\VoteRepository $repository) {
-		$this->voteRepository = $repository;
-	}
-
-	/**
-	 * Injects the settings utility
-	 *
-	 * @param \PwCommentsTeam\PwComments\Utility\Settings $utility
-	 * @return void
-	 */
-	public function injectSettingsUtility(\PwCommentsTeam\PwComments\Utility\Settings $utility) {
-		$this->settingsUtility = $utility;
-	}
-
-	/**
-	 * Injects the mail utility
-	 *
-	 * @param \PwCommentsTeam\PwComments\Utility\Mail $utility
-	 * @return void
-	 */
-	public function injectMailUtility(\PwCommentsTeam\PwComments\Utility\Mail $utility) {
-		$this->mailUtility = $utility;
-	}
-
-	/**
-	 * Injects the cookie utility
-	 *
-	 * @param \PwCommentsTeam\PwComments\Utility\Cookie $utility
-	 * @return void
-	 */
-	public function injectCookieUtility(\PwCommentsTeam\PwComments\Utility\Cookie $utility) {
-		$this->cookieUtility = $utility;
-	}
-
-	/**
-	 * Injects the comment repository
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Repository\CommentRepository $repository the repository to inject
-	 * @return void
-	 */
-	public function injectCommentRepository(\PwCommentsTeam\PwComments\Domain\Repository\CommentRepository $repository) {
-		$this->commentRepository = $repository;
-	}
-
-	/**
-	 * Injects the frontend user repository
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository $repository the repository to inject
-	 * @return void
-	 */
-	public function injectFrontendUserRepository(\PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository $repository) {
-		$this->frontendUserRepository = $repository;
-	}
 
 	/**
 	 * Initialize action, which will be executed before every other action in this controller
@@ -374,7 +321,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * Perform database operations for voting
 	 *
 	 * @param Comment $comment
-	 * @param integer $type Check out Tx_PwComments_Domain_Model_Vote constants
+	 * @param int $type Check out Tx_PwComments_Domain_Model_Vote constants
 	 * @return void
 	 */
 	protected function performVoting(Comment $comment, $type) {
@@ -417,13 +364,13 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	/**
 	 * Creates new vote instance
 	 *
-	 * @param integer $type See Tx_PwComments_Domain_Model_Vote constants
+	 * @param int $type See Tx_PwComments_Domain_Model_Vote constants
 	 * @param Comment $comment
 	 * @return Vote
 	 */
 	protected function createNewVote($type, Comment $comment) {
 		/** @var Vote $newVote */
-		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
+		$newVote = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
 		$newVote->setComment($comment);
 		$newVote->setPid($this->pageUid);
 		$newVote->setAuthorIdent($this->currentAuthorIdent);
@@ -472,8 +419,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	/**
 	 * Returns a built URI by pageUid
 	 *
-	 * @param integer $uid The uid to use for building link
-	 * @param boolean $excludeCommentToReplyTo If TRUE the comment to reply to will be removed
+	 * @param int $uid The uid to use for building link
+	 * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be removed
 	 * @return string The link
 	 */
 	private function buildUriByUid($uid, $excludeCommentToReplyTo = FALSE) {
@@ -493,7 +440,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	/**
 	 * Builds uri by uid and arguments
 	 *
-	 * @param integer $uid
+	 * @param int $uid
 	 * @param array $arguments
 	 * @return string
 	 */
@@ -512,7 +459,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function makeFluidTemplateObject() {
 		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate  */
-		$fluidTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
+		$fluidTemplate = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
 
 		// Set controller context
 		$controllerContext = $this->buildControllerContext();
@@ -526,7 +473,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * Returns count of comments and/or comments and replies.
 	 *
 	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments
-	 * @return integer
+	 * @return int
 	 */
 	protected function calculateCommentCount(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments) {
 		$replyAmount = 0;
@@ -545,12 +492,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * @return void
 	 */
 	protected function handleCustomMessages() {
-		if ($this->settings['ignoreVotingForOwnComments'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('doNotVoteForYourself') == 1) {
+		if ($this->settings['ignoreVotingForOwnComments'] && GeneralUtility::_GP('doNotVoteForYourself') == 1) {
 			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
-		} elseif (!$this->settings['enableVoting'] && \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('votingDisabled') == 1) {
+		} elseif (!$this->settings['enableVoting'] && GeneralUtility::_GP('votingDisabled') == 1) {
 			$this->addFlashMessage(
 				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
 			);
@@ -574,7 +521,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function getPersistenceManager() {
 		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		$objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 		return $objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 	}
 }

@@ -38,7 +38,7 @@ class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHel
 	 *
 	 * @param array $subject
 	 * @param string $needle
-	 * @return boolean TRUE if given needle is in array
+	 * @return bool TRUE if given needle is in array
 	 */
 	public function render(array $subject = NULL, $needle) {
 		if ($subject === NULL) {

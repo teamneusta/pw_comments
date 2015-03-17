@@ -34,21 +34,21 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
-	 * @var integer uid of entry for what the comment is for
+	 * @var int uid of entry for what the comment is for
 	 */
 	protected $entryUid = 0;
 
 	/**
 	 * crdate as unix timestamp
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	protected $crdate;
 
 	/**
 	 * hidden state
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $hidden;
 
@@ -107,17 +107,17 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $votes;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $upvoteAmount = 0;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $downvoteAmount = 0;
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $votesCounted = FALSE;
 
@@ -133,7 +133,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter for entryUid
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEntryUid() {
 		return $this->entryUid;
@@ -142,7 +142,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Setter for entryUid
 	 *
-	 * @param integer $entryUid
+	 * @param int $entryUid
 	 * @return void
 	 */
 	public function setEntryUid($entryUid) {
@@ -152,7 +152,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Setter for crdate
 	 *
-	 * @param integer $crdate crdate
+	 * @param int $crdate crdate
 	 * @return void
 	 */
 	public function setCrdate($crdate) {
@@ -162,7 +162,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter for crdate
 	 *
-	 * @return integer crdate
+	 * @return int crdate
 	 */
 	public function getCrdate() {
 		return $this->crdate;
@@ -171,7 +171,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Setter for hidden state
 	 *
-	 * @param boolean $hidden
+	 * @param bool $hidden
 	 * @return void
 	 */
 	public function setHidden($hidden) {
@@ -181,7 +181,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter for hidden state
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getHidden() {
 		return $this->hidden;
@@ -240,7 +240,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Checks if comment author has got an email address
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasCommentAuthorMailAddress() {
 		$mailAddress = $this->getCommentAuthorMailAddress();
@@ -411,7 +411,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get amount of upvotes
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getUpvoteAmount() {
 		if ($this->votesCounted === FALSE) {
@@ -423,7 +423,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get amout of downvotes
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getDownvoteAmount() {
 		if ($this->votesCounted === FALSE) {
@@ -435,7 +435,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get sum of up- and downvotes
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getVoteSum() {
 		return $this->getUpvoteAmount() - $this->getDownvoteAmount();
@@ -444,7 +444,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get count of votes
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getVoteCount() {
 		return $this->getVotes()->count();

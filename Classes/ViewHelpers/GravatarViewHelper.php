@@ -37,9 +37,8 @@ class GravatarViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
 	 * Generates a gravatar link
 	 *
 	 * @param string $email The mail to create gravatar link for
-	 * @param integer $size The size of avatar in pixel
+	 * @param int $size The size of avatar in pixel
 	 * @param string $default The image to take if user has no gravatar
-	 *
 	 * @return string Link to gravatar
 	 */
 	public function render($email = NULL, $size = 100, $default = 'mm') {

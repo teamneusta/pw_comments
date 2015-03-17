@@ -66,7 +66,7 @@ class Settings {
 	 * calculated values.
 	 *
 	 * @param array $settings the typoscript configuration array
-	 * @param boolean $makeSettingsRenderable if true the settings will be prepared to getting rendered
+	 * @param bool $makeSettingsRenderable if true the settings will be prepared to getting rendered
 	 * @return array the configuration array with the rendered typoscript
 	 */
 	public function renderConfigurationArray(array $settings, $makeSettingsRenderable = FALSE) {

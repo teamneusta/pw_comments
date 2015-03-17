@@ -48,7 +48,7 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find votes by pid
 	 *
-	 * @param integer $pid pid to get comments for
+	 * @param int $pid pid to get comments for
 	 * @param string $authorIdent
 	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult found votes
 	 */

@@ -92,54 +92,51 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
-	 * @param integer|string|\DateTime $timestamp unix timestamp
+	 * @param int|string|\DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
 	 * @param string $get get some related date (see class doc)
 	 * @return string Formatted date
 	 */
 	public function render($timestamp = NULL, $format = '%Y-%m-%d', $get = '') {
-
 		$timestamp = $this->normalizeTimestamp($timestamp);
 		if ($get) {
 			$timestamp = $this->modifyDate($timestamp, $get);
 		}
-
-		// Added by Armin Rüdiger Vieweg <armin@v.ieweg.de>
 		$format = preg_replace('/([a-zA-Z])/is', '%$1', $format);
 		$format = str_replace('%%', '%', $format);
-
 		return strftime($format, $timestamp);
 	}
 
 	/**
-	 * handle all the different input formats and return a real timestamp
+	 * Handle all the different input formats and return a real timestamp
 	 *
-	 * @param $timestamp
-	 * @return integer
+	 * @param int $timestamp
+	 * @return int
+	 * @throws \InvalidArgumentException
 	 */
 	protected function normalizeTimestamp($timestamp) {
 		if (is_null($timestamp)) {
 			$timestamp = time();
 		} elseif (is_numeric($timestamp)) {
-			$timestamp = intval($timestamp);
+			$timestamp = (int) $timestamp;
 		} elseif (is_string($timestamp)) {
 			$timestamp = strtotime($timestamp);
 		} elseif ($timestamp instanceof \DateTime) {
-			$timestamp = $timestamp->format('U');
+			$timestamp = (int) $timestamp->format('U');
 		} else {
-			throw new \InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
+			throw new \InvalidArgumentException(sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'));
 		}
 		return $timestamp;
 	}
 
 	/**
-	 * do the modification do a relative date
+	 * Do the modification do a relative date
 	 *
-	 * @param $timestamp
-	 * @param $get
+	 * @param int $timestamp
+	 * @param string $timeString
 	 * @return string
 	 */
-	protected function modifyDate($timestamp, $get) {
-		return strtotime($get, $timestamp);
+	protected function modifyDate($timestamp, $timeString) {
+		return strtotime($timeString, $timestamp);
 	}
 }

@@ -63,7 +63,7 @@ class Mail {
 	protected $subjectLocallangKey = 'tx_pwcomments.notificationMail.subject';
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $addQueryStringToLinks = TRUE;
 
@@ -101,7 +101,7 @@ class Mail {
 	 * Creates and sends mail
 	 *
 	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment comment which triggers the mail send method
-	 * @return boolean Returns TRUE if the mail has been sent successfully, otherwise returns FALSE
+	 * @return bool Returns TRUE if the mail has been sent successfully, otherwise returns FALSE
 	 */
 	public function sendMail(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		/** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
@@ -116,7 +116,7 @@ class Mail {
 		$mail->setTo($receivers);
 		$mail->setSubject(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->getSubjectLocallangKey(), 'PwComments', array(\TYPO3\CMS\Core\Utility\GeneralUtility::getHostname())));
 		$mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
-		return (boolean) $mail->send();
+		return (bool) $mail->send();
 	}
 
 	/**
@@ -217,7 +217,7 @@ class Mail {
 	/**
 	 * Get add query string to links
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getAddQueryStringToLinks() {
 		return $this->addQueryStringToLinks;
@@ -226,7 +226,7 @@ class Mail {
 	/**
 	 * Set add query string to links
 	 *
-	 * @param boolean $addQueryStringToLinks
+	 * @param bool $addQueryStringToLinks
 	 * @return void
 	 */
 	public function setAddQueryStringToLinks($addQueryStringToLinks) {

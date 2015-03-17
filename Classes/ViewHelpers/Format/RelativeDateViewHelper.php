@@ -35,7 +35,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
-	 * @param integer|string|\DateTime $timestamp unix timestamp
+	 * @param int|string|\DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
 	 * @param string $wrap String to perform sprintf on it, to add text before or after relative date
 	 * @param string $wrapAbsolute String to perform sprintf on it, if date is absolute
@@ -56,7 +56,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	 * handle all the different input formats and return a real timestamp
 	 *
 	 * @param $timestamp
-	 * @return integer
+	 * @return int
 	 */
 	protected function normalizeTimestamp($timestamp) {
 		if (is_null($timestamp)) {
@@ -76,7 +76,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	/**
 	 * Makes a given unixtimestamp relative and returns the string.
 	 *
-	 * @param integer $timestamp unixtimestamp to make relative
+	 * @param int $timestamp unixtimestamp to make relative
 	 * @param string $format Format to use, if relative time is longer ago than 4 weeks
 	 *
 	 * @return string relative time or formated time
@@ -114,7 +114,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 	/**
 	 * Returns plural suffix, if given integer is greater than one
 	 *
-	 * @param integer $num Integer which defines if it is plural or not
+	 * @param int $num Integer which defines if it is plural or not
 	 * @param string $suffix Suffix to add to key of plural suffix. Default is '' (empty).
 	 *
 	 * @return string Returns the plural suffix, which makes a time measure to plural (i.e. Stunde -> Stunden)|void

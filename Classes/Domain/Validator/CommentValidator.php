@@ -24,6 +24,8 @@ namespace PwCommentsTeam\PwComments\Domain\Validator;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class is a domain validator of comment model for attribute
@@ -33,59 +35,29 @@ namespace PwCommentsTeam\PwComments\Domain\Validator;
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator  {
+class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator {
 	/**
 	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+	 * @inject
 	 */
-	protected $configurationManager = NULL;
+	protected $configurationManager;
 
 	/**
 	 * @var \PwCommentsTeam\PwComments\Utility\Settings
+	 * @inject
 	 */
-	protected $settingsUtility = NULL;
+	protected $settingsUtility;
 
 	/**
 	 * @var array Settings defined in typoscript of pw_comments
 	 */
 	protected $settings = array();
 
-	protected $validMailPattern = '
-				/
-					^[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*
-					@
-					(?:
-						(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2}|aero|asia|biz|cat|com|edu|coop|gov|info|int|invalid|jobs|localdomain|mil|mobi|museum|name|net|org|pro|tel|travel)|
-						localhost|
-						(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5])\.){3}(?:(?:\d{1,2}|1\d{1,2}|2[0-5][0-5]))
-					)
-					\b
-				/ix';
-
-	/**
-	 * Injects the configurationManager
-	 *
-	 * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-	 * @return void
-	 */
-	public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
-		$this->configurationManager = $configurationManager;
-	}
-
-	/**
-	 * Injects the settings utility
-	 *
-	 * @param \PwCommentsTeam\PwComments\Utility\Settings $utility
-	 * @return void
-	 */
-	public function injectSettingsUtility(\PwCommentsTeam\PwComments\Utility\Settings $utility) {
-		$this->settingsUtility = $utility;
-	}
-
 	/**
 	 * Initial function to validate
 	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
-	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
+	 * @param Comment $comment Comment model to validate
+	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	public function isValid($comment) {
 		$this->settings = $this->getExtensionSettings();
@@ -117,31 +89,31 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 			);
 			$this->addError($errorMessage, $errorNumber);
 		}
-		return ($errorNumber === NULL);
+		return $errorNumber === NULL;
 	}
 
 	/**
 	 * Validator to check that any property has been set in comment
 	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
-	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
+	 * @param Comment $comment Comment model to validate
+	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function anyPropertyIsSet(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function anyPropertyIsSet(Comment $comment) {
 		return ($GLOBALS['TSFE']->fe_user->user['uid'])	|| ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
 	}
 
 	/**
 	 * Validator to check that mail is valid
 	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
-	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
+	 * @param Comment $comment Comment model to validate
+	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function mailIsValid(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function mailIsValid(Comment $comment) {
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			return TRUE;
 		}
 
-		if (is_string($comment->getAuthorMail()) && preg_match($this->validMailPattern, $comment->getAuthorMail())) {
+		if (is_string($comment->getAuthorMail()) && GeneralUtility::validEmail($comment->getAuthorMail())) {
 			return TRUE;
 		}
 
@@ -151,17 +123,17 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	/**
 	 * Validator to check that message has been set
 	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment Comment model to validate
-	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
+	 * @param Comment $comment Comment model to validate
+	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
 	 */
-	protected function messageIsSet(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function messageIsSet(Comment $comment) {
 		return (trim($comment->getMessage()));
 	}
 
 	/**
 	 * Check the time between last two comments of current user (using its session)
 	 *
-	 * @return boolean returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
 	 */
 	protected function lastCommentRespectsTimer() {
 		if (!$GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment')) {
@@ -180,14 +152,14 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * Check for badwords in comment message
 	 *
 	 * @param string $textToCheck text to check for
-	 * @return boolean Returns TRUE if message has no badwords. Otherwise returns FALSE.
+	 * @return bool Returns TRUE if message has no badwords. Otherwise returns FALSE.
 	 */
 	protected function checkTextForBadWords($textToCheck) {
 		if (empty($textToCheck)) {
 			return TRUE;
 		}
 
-		$badWordsListPath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->settings['badWordsList']);
+		$badWordsListPath = GeneralUtility::getFileAbsFileName($this->settings['badWordsList']);
 
 		if (!file_exists($badWordsListPath)) {
 			// Skip this validation, if bad word list is missing
@@ -201,7 +173,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 		$badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
 
 		$commentMessage = '-> ' . $textToCheck . ' <-';
-		return (boolean)!preg_match($badWordsRegExp, $commentMessage);
+		return (bool)!preg_match($badWordsRegExp, $commentMessage);
 	}
 
 

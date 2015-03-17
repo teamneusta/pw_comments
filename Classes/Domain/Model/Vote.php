@@ -38,12 +38,12 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	const TYPE_DOWNVOTE = 0;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $type;
 
 	/**
-	 * @var integer unix timestamp
+	 * @var int unix timestamp
 	 */
 	protected $crdate;
 
@@ -65,7 +65,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get type
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getType() {
 		return $this->type;
@@ -74,7 +74,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set type
 	 *
-	 * @param integer $type
+	 * @param int $type
 	 * @return void
 	 */
 	public function setType($type) {
@@ -84,7 +84,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Get creation date
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getCrdate() {
 		return $this->crdate;
@@ -93,7 +93,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set creation date
 	 *
-	 * @param integer $crdate
+	 * @param int $crdate
 	 * @return void
 	 */
 	public function setCrdate($crdate) {
@@ -141,7 +141,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Is upvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUpvote() {
 		return $this->getType() === self::TYPE_UPVOTE;
@@ -150,7 +150,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Is downvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDownvote() {
 		return $this->getType() === self::TYPE_DOWNVOTE;

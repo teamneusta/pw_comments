@@ -33,12 +33,12 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
  */
 class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $invertCommentSorting = FALSE;
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $invertReplySorting = FALSE;
 
@@ -58,7 +58,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find comments by pid
 	 *
-	 * @param integer $pid pid to get comments for
+	 * @param int $pid pid to get comments for
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
 	 */
 	public function findByPid($pid) {
@@ -81,8 +81,8 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find comments by pid and entry uid
 	 *
-	 * @param integer $pid pid to get comments for
-	 * @param integer $entryUid entry id to get comments for
+	 * @param int $pid pid to get comments for
+	 * @param int $entryUid entry id to get comments for
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
 	 */
 	public function findByPidAndEntryUid($pid, $entryUid) {
@@ -108,7 +108,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find comment by uid
 	 *
-	 * @param integer $uid
+	 * @param int $uid
 	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function findByCommentUid($uid) {
@@ -154,7 +154,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Gets invert comment sorting flag
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getInvertCommentSorting() {
 		return $this->invertCommentSorting;
@@ -163,7 +163,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Sets invert comment sorting flag
 	 *
-	 * @param boolean $invertCommentSorting
+	 * @param bool $invertCommentSorting
 	 * @return void
 	 */
 	public function setInvertCommentSorting($invertCommentSorting) {
@@ -185,7 +185,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Gets invert reply sorting flag
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getInvertReplySorting() {
 		return $this->invertReplySorting;
@@ -194,7 +194,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Sets invert reply sorting flag
 	 *
-	 * @param boolean $invertReplySorting
+	 * @param bool $invertReplySorting
 	 * @return void
 	 */
 	public function setInvertReplySorting($invertReplySorting) {

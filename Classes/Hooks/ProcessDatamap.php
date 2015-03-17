@@ -73,7 +73,7 @@ class ProcessDatamap {
 	 * @param string $action Optional name of action, in lowerCamelCase (without 'Action' suffix). Default is 'index'.
 	 * @param string $pluginName Optional name of plugin. Default is 'Pi1'.
 	 * @param array $settings Optional array of settings to use in controller and fluid template. Default is array().
-	 * @param integer $pageUid Uid of current page
+	 * @param int $pageUid Uid of current page
 	 * @param string $vendorName VendorName
 	 * @return string output of controller's action
 	 */
