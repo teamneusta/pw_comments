@@ -43,7 +43,7 @@
 					<f:else>
 						<f:if condition="{commentToReplyTo.uid} != {comment.uid}">
 							<div class="comment_reply">
-								<f:link.action action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" noCacheHash="1">
+								<f:link.action action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" noCacheHash="1" noCache="1" argumentsToBeExcludedFromQueryString="{0: 'cHash'}">
 									<f:translate key="tx_pwcomments.reply" />
 								</f:link.action>
 							</div>

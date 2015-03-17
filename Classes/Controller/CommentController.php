@@ -272,9 +272,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
 		$this->commentRepository->add($newComment);
 
-		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
-		$persistenceManager->persistAll();
+		$this->getPersistenceManager()->persistAll();
 
 		if ($this->settings['sendMailOnNewCommentsTo']) {
 			$this->mailUtility->setSettings($this->settings);
@@ -405,16 +403,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$this->commentRepository->update($comment);
 			$this->voteRepository->remove($vote);
 			if ($type !== $vote->getType()) {
-				/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
-				$persistenceManager->persistAll();
+				$this->getPersistenceManager()->persistAll();
 				$this->performVoting($comment, $type);
 			}
 		}
 
-		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
-		$persistenceManager->persistAll();
+		$this->getPersistenceManager()->persistAll();
 
 		$this->redirectToURI($this->buildUriToPage($this->pageUid) . $commentAnchor);
 	}
@@ -571,5 +565,16 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function getErrorFlashMessage() {
 		return FALSE;
+	}
+
+	/**
+	 * Get PersistenceManager
+	 *
+	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+	 */
+	protected function getPersistenceManager() {
+		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		return $objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 	}
 }
