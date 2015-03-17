@@ -126,7 +126,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function __construct() {
 		$this->initializeObject();
-		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\\PwComments\\Domain\\Model\\FrontendUser');
+		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\FrontendUser');
 		$this->votes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 	}
 
@@ -321,7 +321,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	protected function getExtensionSettings() {
 		/** @var $configurationManager \TYPO3\CMS\Extbase\Configuration\ConfigurationManager */
-		$configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+		$configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManager');
 
 		$fullTyposcript = $configurationManager->getConfiguration(
 			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT

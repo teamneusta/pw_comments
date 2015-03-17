@@ -273,7 +273,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		$this->commentRepository->add($newComment);
 
 		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 		$persistenceManager->persistAll();
 
 		if ($this->settings['sendMailOnNewCommentsTo']) {
@@ -406,14 +406,14 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$this->voteRepository->remove($vote);
 			if ($type !== $vote->getType()) {
 				/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 				$persistenceManager->persistAll();
 				$this->performVoting($comment, $type);
 			}
 		}
 
 		/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
-		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 		$persistenceManager->persistAll();
 
 		$this->redirectToURI($this->buildUriToPage($this->pageUid) . $commentAnchor);
@@ -429,7 +429,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function createNewVote($type, Comment $comment) {
 		/** @var Vote $newVote */
-		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\\PwComments\\Domain\\Model\\Vote');
+		$newVote = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
 		$newVote->setComment($comment);
 		$newVote->setPid($this->pageUid);
 		$newVote->setAuthorIdent($this->currentAuthorIdent);
@@ -518,7 +518,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected function makeFluidTemplateObject() {
 		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate  */
-		$fluidTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+		$fluidTemplate = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
 
 		// Set controller context
 		$controllerContext = $this->buildControllerContext();

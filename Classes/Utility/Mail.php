@@ -105,7 +105,7 @@ class Mail {
 	 */
 	public function sendMail(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		/** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
-		$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+		$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Core\Mail\MailMessage');
 
 		$mail->setFrom(
 			\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.notificationMail.from.mail', 'PwComments', array(\TYPO3\CMS\Core\Utility\GeneralUtility::getHostname())),
