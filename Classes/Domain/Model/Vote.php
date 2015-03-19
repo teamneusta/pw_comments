@@ -28,8 +28,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 /**
  * Vote model (for comments)
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/** Constant for upvote */

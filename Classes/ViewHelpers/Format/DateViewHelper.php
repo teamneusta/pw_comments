@@ -79,13 +79,11 @@ namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
  * Output:
  * 2009-02-01
  *
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  * @see http://www.php.net/manual/en/function.strftime.php
  * @see http://www.php.net/manual/en/function.strtotime.php
  * @see http://www.php.net/manual/en/datetime.formats.relative.php
  *
- * @author Christian Zenker <christian.zenker@599media.de>
- * @author Armin Rüdiger Vieweg <armin@v.ieweg.de>
+ * @package PwCommentsTeam\PwComments
  */
 class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 

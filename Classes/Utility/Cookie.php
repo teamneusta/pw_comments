@@ -28,8 +28,7 @@ namespace PwCommentsTeam\PwComments\Utility;
 /**
  * Cookie Utility
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class Cookie {
 	/** Cookie Prefix */

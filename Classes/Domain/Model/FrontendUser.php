@@ -28,8 +28,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 /**
  * The frontend user model
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
 }

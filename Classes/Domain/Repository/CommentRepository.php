@@ -28,8 +28,7 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
 /**
  * Repository for \PwCommentsTeam\PwComments\Domain\Model\Comment
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**

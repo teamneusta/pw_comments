@@ -26,10 +26,9 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
 ***************************************************************/
 
 /**
- * Repository for \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+ * Repository for frontend users (using fe_users)
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository {
 

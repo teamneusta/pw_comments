@@ -32,8 +32,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * comprehensive validation. It checks that at least one of the required fields
  * has been filled.
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator {
 	/**

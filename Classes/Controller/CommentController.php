@@ -32,8 +32,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * The comment controller
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
 class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	/**
