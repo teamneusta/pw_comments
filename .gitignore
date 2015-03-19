@@ -6,6 +6,8 @@
 ### Tools
 /_vagrant
 /.vagrant
+/Vagrantfile
+/puphpet
 /composer.lock
 /composer.phar
 /vendor
