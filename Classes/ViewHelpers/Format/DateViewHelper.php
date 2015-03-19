@@ -110,6 +110,7 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 	 *
 	 * @param int $timestamp
 	 * @return int
+	 *
 	 * @throws \InvalidArgumentException
 	 */
 	protected function normalizeTimestamp($timestamp) {

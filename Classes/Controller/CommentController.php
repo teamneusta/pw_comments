@@ -24,10 +24,10 @@ namespace PwCommentsTeam\PwComments\Controller;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
 use PwCommentsTeam\PwComments\Domain\Model\Vote;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * The comment controller
@@ -92,7 +92,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	protected $voteRepository;
 
 	/**
-	 * Initialize action, which will be executed before every other action in this controller
+	 * Initialize action, which will be executed before every
+	 * other action in this controller
 	 *
 	 * @return void
 	 */
@@ -170,11 +171,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	public function createAction(Comment $newComment = NULL) {
 		// Hidden field Spam-Protection
-		if ($this->settings['hiddenFieldSpamProtection'] && $this->request->hasArgument($this->settings['hiddenFieldName']) && $this->request->getArgument($this->settings['hiddenFieldName'])) {
+		if ($this->settings['hiddenFieldSpamProtection'] && $this->request->hasArgument($this->settings['hiddenFieldName'])
+			&& $this->request->getArgument($this->settings['hiddenFieldName'])) {
+
 			$this->redirectToURI($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
 			return FALSE;
 		}
-
 		if ($newComment === NULL) {
 			$this->redirectToURI($this->buildUriByUid($this->pageUid));
 			return FALSE;
@@ -208,11 +210,11 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		if ($this->settings['moderateNewComments']) {
 			$newComment->setHidden(TRUE);
 			$this->addFlashMessage(
-				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
+				LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
 			);
 		} else {
 			$this->addFlashMessage(
-				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
+				LocalizationUtility::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
 			);
 		}
 
@@ -292,28 +294,28 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * Upvote action
 	 *
 	 * @param Comment $comment
-	 * @return void
+	 * @return string Empty string. This action will perform a redirect
 	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
 	public function upvoteAction(Comment $comment) {
 		$this->performVoting($comment, Vote::TYPE_UPVOTE);
-		return;
+		return '';
 	}
 
 	/**
 	 * Downvote action
 	 *
 	 * @param Comment $comment
-	 * @return void
+	 * @return string Empty string. This action will perform a redirect
 	 *
 	 * @dontvalidate $comment
 	 * @ignorevalidation $comment
 	 */
 	public function downvoteAction(Comment $comment) {
 		$this->performVoting($comment, Vote::TYPE_DOWNVOTE);
-		return;
+		return '';
 	}
 
 	/**
@@ -374,6 +376,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		$newVote->setPid($this->pageUid);
 		$newVote->setAuthorIdent($this->currentAuthorIdent);
 		if ($this->currentUser['uid']) {
+			/** @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author */
 			$author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
 			$newVote->setAuthor($author);
 		}
@@ -411,7 +414,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
 			$this->mailUtility->setAddQueryStringToLinks(FALSE);
 			$this->mailUtility->sendMail($comment);
-			$this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail())));
+			$this->addFlashMessage(
+				LocalizationUtility::translate('mailSentToAuthorAfterPublish', 'PwComments', array($comment->getAuthorMail()))
+			);
 		}
 	}
 
@@ -419,7 +424,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * Returns a built URI by pageUid
 	 *
 	 * @param int $uid The uid to use for building link
-	 * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be removed
+	 * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be
+	 * 			   removed from query string
 	 * @return string The link
 	 */
 	private function buildUriByUid($uid, $excludeCommentToReplyTo = FALSE) {
@@ -493,12 +499,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	protected function handleCustomMessages() {
 		if ($this->settings['ignoreVotingForOwnComments'] && GeneralUtility::_GP('doNotVoteForYourself') == 1) {
 			$this->addFlashMessage(
-				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
+				LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		} elseif (!$this->settings['enableVoting'] && GeneralUtility::_GP('votingDisabled') == 1) {
 			$this->addFlashMessage(
-				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
+				LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
 			);
 			$this->view->assign('hasCustomMessages', TRUE);
 		}

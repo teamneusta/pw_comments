@@ -2,28 +2,28 @@
 namespace PwCommentsTeam\PwComments\ViewHelpers;
 
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Gravatar Viewhelper
@@ -33,12 +33,12 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
 class GravatarViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * Generates a gravatar link
+	 * Generates a Gravatar link
 	 *
-	 * @param string $email The mail to create gravatar link for
+	 * @param string $email The mail to create Gravatar link for
 	 * @param int $size The size of avatar in pixel
-	 * @param string $default The image to take if user has no gravatar
-	 * @return string Link to gravatar
+	 * @param string $default The image to take if user has no Gravatar
+	 * @return string Link to Gravatar
 	 */
 	public function render($email = NULL, $size = 100, $default = 'mm') {
 		if ($email === NULL) {
@@ -50,7 +50,6 @@ class GravatarViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
 		$domainHash = hexdec($hash[0]) % 3;
 		$sizeParam = '?s=' . $size;
 		$defaultParam = '&d=' . $default;
-
 		return 'http://' . $domainHash . $link . $hash . $sizeParam . $defaultParam;
 	}
 }

@@ -173,5 +173,4 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	public function setComment(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$this->comment = $comment;
 	}
-
 }

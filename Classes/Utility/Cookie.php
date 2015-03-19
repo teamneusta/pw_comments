@@ -70,8 +70,8 @@ class Cookie {
 	}
 
 	/**
-	 * Gets the domain to be used on setting cookies.
-	 * The information is taken from the value in $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'].
+	 * Gets the domain to be used on setting cookies. The information is
+	 * taken from the value in $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain']
 	 *
 	 * @return string The domain to be used on setting cookies
 	 */

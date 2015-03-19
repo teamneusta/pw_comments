@@ -56,7 +56,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * Initial function to validate
 	 *
 	 * @param Comment $comment Comment model to validate
-	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool
 	 */
 	public function isValid($comment) {
 		$this->settings = $this->getExtensionSettings();
@@ -95,7 +95,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * Validator to check that any property has been set in comment
 	 *
 	 * @param Comment $comment Comment model to validate
-	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool
 	 */
 	protected function anyPropertyIsSet(Comment $comment) {
 		return ($GLOBALS['TSFE']->fe_user->user['uid'])	|| ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
@@ -105,46 +105,34 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * Validator to check that mail is valid
 	 *
 	 * @param Comment $comment Comment model to validate
-	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool
 	 */
 	protected function mailIsValid(Comment $comment) {
-		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
-			return TRUE;
-		}
-
-		if (is_string($comment->getAuthorMail()) && GeneralUtility::validEmail($comment->getAuthorMail())) {
-			return TRUE;
-		}
-
-		return FALSE;
+		return $GLOBALS['TSFE']->fe_user->user['uid']
+			|| (is_string($comment->getAuthorMail()) && GeneralUtility::validEmail($comment->getAuthorMail()));
 	}
 
 	/**
 	 * Validator to check that message has been set
 	 *
 	 * @param Comment $comment Comment model to validate
-	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool
 	 */
 	protected function messageIsSet(Comment $comment) {
-		return (trim($comment->getMessage()));
+		return trim($comment->getMessage());
 	}
 
 	/**
 	 * Check the time between last two comments of current user (using its session)
 	 *
-	 * @return bool returns TRUE if conform to requirements, FALSE otherwise
+	 * @return bool
 	 */
 	protected function lastCommentRespectsTimer() {
 		if (!$GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment')) {
 			return TRUE;
 		}
-
 		$difference = intval(time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment'));
-
-		if ($difference > $this->settings['secondsBetweenTwoComments']) {
-			return TRUE;
-		}
-		return FALSE;
+		return $difference > $this->settings['secondsBetweenTwoComments'];
 	}
 
 	/**
@@ -154,14 +142,9 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 	 * @return bool Returns TRUE if message has no badwords. Otherwise returns FALSE.
 	 */
 	protected function checkTextForBadWords($textToCheck) {
-		if (empty($textToCheck)) {
-			return TRUE;
-		}
-
 		$badWordsListPath = GeneralUtility::getFileAbsFileName($this->settings['badWordsList']);
-
-		if (!file_exists($badWordsListPath)) {
-			// Skip this validation, if bad word list is missing
+		if (empty($textToCheck) || !file_exists($badWordsListPath)) {
+			// Skip this validation, if bad word list is missing or textToCheck is empty
 			return TRUE;
 		}
 
@@ -170,11 +153,9 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
 			$badWordsRegExp .= trim($badWord) . '|';
 		}
 		$badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
-
 		$commentMessage = '-> ' . $textToCheck . ' <-';
-		return (bool)!preg_match($badWordsRegExp, $commentMessage);
+		return (bool) !preg_match($badWordsRegExp, $commentMessage);
 	}
-
 
 	/**
 	 * Returns the rendered settings of this extension

@@ -24,6 +24,10 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * The comment model
@@ -101,7 +105,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $replies = NULL;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
+	 * @var ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
 	 */
 	protected $votes;
 
@@ -125,8 +129,8 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function __construct() {
 		$this->initializeObject();
-		$this->author = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\FrontendUser');
-		$this->votes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+		$this->author = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\FrontendUser');
+		$this->votes = new ObjectStorage();
 	}
 
 	/**
@@ -247,15 +251,15 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	}
 
 	/**
-	 * Getter for gravatar link by author's mail
+	 * Getter for Gravatar link by author's mail
 	 *
-	 * @return string gravatar link
+	 * @return string Gravatar link
 	 */
 	public function getAuthorGravatar() {
 		$link = '.gravatar.com/avatar/';
 		$hash = md5(strtolower($this->getAuthorMail()));
 		$domainHash = hexdec($hash[0]) % 3;
-		return 'http://' . $domainHash . $link . $hash;
+		return 'https://' . $domainHash . $link . $hash;
 	}
 
 	/**
@@ -320,12 +324,12 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	protected function getExtensionSettings() {
 		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+		$objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 
-		/** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager */
+		/** @var ConfigurationManagerInterface $configurationManager */
 		$configurationManager = $objectManager->get('TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface');
 		$fullTyposcript = $configurationManager->getConfiguration(
-			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+			ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
 		);
 		return $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
 	}
@@ -361,17 +365,17 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set comment replies
 	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $replies
+	 * @param QueryResultInterface $replies Containing comments
 	 * @return void
 	 */
-	public function setReplies(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $replies) {
+	public function setReplies(QueryResultInterface $replies) {
 		$this->replies = $replies;
 	}
 
 	/**
 	 * Get votes
 	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 * @return ObjectStorage
 	 */
 	public function getVotes() {
 		return $this->votes;
@@ -380,10 +384,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Set votes
 	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $votes
+	 * @param ObjectStorage $votes
 	 * @return void
 	 */
-	public function setVotes(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $votes) {
+	public function setVotes(ObjectStorage $votes) {
 		$this->votes = $votes;
 	}
 
@@ -420,7 +424,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	}
 
 	/**
-	 * Get amout of downvotes
+	 * Get amount of downvotes
 	 *
 	 * @return int
 	 */
@@ -484,5 +488,4 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	public function setAuthorIdent($authorIdent) {
 		$this->authorIdent = $authorIdent;
 	}
-
 }

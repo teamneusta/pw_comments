@@ -24,6 +24,10 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * Repository for \PwCommentsTeam\PwComments\Domain\Model\Comment
@@ -48,7 +52,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
 	 */
 	public function initializeObject() {
-		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+		/** @var $querySettings Typo3QuerySettings */
 		$querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$this->setDefaultQuerySettings($querySettings);
@@ -58,7 +62,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * Find comments by pid
 	 *
 	 * @param int $pid pid to get comments for
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
+	 * @return QueryResult<Comment> found comments
 	 */
 	public function findByPid($pid) {
 		$query = $this->createQuery();
@@ -82,7 +86,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 *
 	 * @param int $pid pid to get comments for
 	 * @param int $entryUid entry id to get comments for
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResult found comments
+	 * @return QueryResult<Comment> found comments
 	 */
 	public function findByPidAndEntryUid($pid, $entryUid) {
 		$query = $this->createQuery();
@@ -108,16 +112,14 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * Find comment by uid
 	 *
 	 * @param int $uid
-	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
+	 * @return Comment
 	 */
 	public function findByCommentUid($uid) {
 		$query = $this->createQuery();
-		if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 6000000) {
-			$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
-		} else {
-			$query->getQuerySettings()->setRespectEnableFields(FALSE);
-		}
+		$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
 		$query->matching($query->equals('uid', $uid));
+
+		/** @var Comment $comment */
 		$comment = $query->execute()->getFirst();
 		$this->findAndAttachCommentReplies($comment);
 		return $comment;
@@ -126,10 +128,10 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
 	 * Find replies by given comment and attaches them to replies attribute.
 	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
+	 * @param Comment $comment
 	 * @return void
 	 */
-	protected function findAndAttachCommentReplies(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
+	protected function findAndAttachCommentReplies(Comment $comment) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->equals('parentComment', $comment->getUid())
@@ -145,9 +147,9 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 */
 	public function getCommentSortingDirection() {
 		if ($this->getInvertCommentSorting() === TRUE) {
-			return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING;
+			return QueryInterface::ORDER_DESCENDING;
 		}
-		return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING;
+		return QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**
@@ -176,9 +178,9 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 */
 	public function getReplySortingDirection() {
 		if ($this->getInvertReplySorting() === TRUE) {
-			return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING;
+			return QueryInterface::ORDER_DESCENDING;
 		}
-		return \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING;
+		return QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**

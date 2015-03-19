@@ -26,7 +26,8 @@ namespace PwCommentsTeam\PwComments\Utility;
  ***************************************************************/
 
 /**
- * This class provides some methods to prepare and render given extension settings
+ * This class provides some methods to prepare and render given
+ * extension settings
  *
  * @package PwCommentsTeam\PwComments
  */
@@ -38,18 +39,10 @@ class Settings {
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+	 * @inject
 	 */
 	protected $configurationManager = NULL;
 
-	/**
-	 * Injects the configurationManager
-	 *
-	 * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-	 * @return void
-	 */
-	public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
-		$this->configurationManager = $configurationManager;
-	}
 
 	/**
 	 * Initialize this settings utility
@@ -65,7 +58,7 @@ class Settings {
 	 * calculated values.
 	 *
 	 * @param array $settings the typoscript configuration array
-	 * @param bool $makeSettingsRenderable if true the settings will be prepared to getting rendered
+	 * @param bool $makeSettingsRenderable If TRUE settings are renderable
 	 * @return array the configuration array with the rendered typoscript
 	 */
 	public function renderConfigurationArray(array $settings, $makeSettingsRenderable = FALSE) {
