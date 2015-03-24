@@ -105,7 +105,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $replies = NULL;
 
 	/**
-	 * @var ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
 	 */
 	protected $votes;
 
