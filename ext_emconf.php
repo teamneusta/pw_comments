@@ -1,12 +1,11 @@
 <?php
 
-/***************************************************************
- * Extension Manager/Repository config file for ext "pw_comments".
- *
- * Manual updates:
- * Only the data in the array - everything else is removed by next
- * writing. "version" and "dependencies" must not be touched!
- ***************************************************************/
+/*  | This extension is part of the TYPO3 project. The TYPO3 project is
+ *  | free software and is licensed under GNU General Public License.
+ *  |
+ *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
+ */
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'pwComments',
