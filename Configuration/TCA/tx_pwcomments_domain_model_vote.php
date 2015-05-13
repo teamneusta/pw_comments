@@ -26,8 +26,8 @@ return array(
 		'readOnly' => TRUE,
 		'typeicon_column' => 'type',
 		'typeicons' => array(
-			'0' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.gif',
-			'1' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.gif'
+			'0' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png',
+			'1' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png'
 		)
 	),
 	'interface' => array(

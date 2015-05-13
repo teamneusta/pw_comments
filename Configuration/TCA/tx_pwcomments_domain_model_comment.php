@@ -31,7 +31,7 @@ return array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden'
 		),
-		'iconfile' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.gif'
+		'iconfile' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.png'
 	),
 	'interface' => array(
 		'showRecordFieldList' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,parent_comment,votes'
