@@ -1,52 +1,36 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+namespace PwCommentsTeam\PwComments\Domain\Model;
+
+/*  | This extension is part of the TYPO3 project. The TYPO3 project is
+ *  | free software and is licensed under GNU General Public License.
+ *  |
+ *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
+ */
 
 /**
  * Vote model (for comments)
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEntity {
+class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/** Constant for upvote */
 	const TYPE_UPVOTE = 1;
 	/** Constant for downvote */
 	const TYPE_DOWNVOTE = 0;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $type;
 
 	/**
-	 * @var integer unix timestamp
+	 * @var int unix timestamp
 	 */
 	protected $crdate;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_FrontendUser
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -56,14 +40,14 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	protected $authorIdent;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_Comment
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $comment;
 
 	/**
 	 * Get type
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getType() {
 		return $this->type;
@@ -72,7 +56,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set type
 	 *
-	 * @param integer $type
+	 * @param int $type
 	 * @return void
 	 */
 	public function setType($type) {
@@ -82,7 +66,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get creation date
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getCrdate() {
 		return $this->crdate;
@@ -91,7 +75,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set creation date
 	 *
-	 * @param integer $crdate
+	 * @param int $crdate
 	 * @return void
 	 */
 	public function setCrdate($crdate) {
@@ -101,7 +85,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get author (fe_user)
 	 *
-	 * @return \Tx_PwComments_Domain_Model_FrontendUser
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -110,10 +94,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set author (fe_user)
 	 *
-	 * @param \Tx_PwComments_Domain_Model_FrontendUser $author
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author
 	 * @return void
 	 */
-	public function setAuthor(Tx_PwComments_Domain_Model_FrontendUser $author) {
+	public function setAuthor(\PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author) {
 		$this->author = $author;
 	}
 
@@ -139,7 +123,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Is upvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUpvote() {
 		return $this->getType() === self::TYPE_UPVOTE;
@@ -148,7 +132,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Is downvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDownvote() {
 		return $this->getType() === self::TYPE_DOWNVOTE;
@@ -157,7 +141,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get related comment
 	 *
-	 * @return \Tx_PwComments_Domain_Model_Comment
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function getComment() {
 		return $this->comment;
@@ -166,11 +150,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set related comment
 	 *
-	 * @param \Tx_PwComments_Domain_Model_Comment $comment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	public function setComment(Tx_PwComments_Domain_Model_Comment $comment) {
+	public function setComment(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$this->comment = $comment;
 	}
-
 }

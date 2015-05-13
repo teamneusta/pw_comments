@@ -1,11 +1,11 @@
-{namespace c=Tx_PwComments_ViewHelpers}
+{namespace c=PwCommentsTeam\PwComments\ViewHelpers}
 <f:layout name="Default" />
 
 <f:section name="main">
 		<div id="{settings.showCommentAnchor}">
 			<h1><f:translate key="tx_pwcomments.comments" /> ({commentCount})</h1>
 			<f:if condition="{hasCustomMessages}">
-				<c:flashMessages id="{settings.customMessagesAnchor}" severity="0" />
+				<f:flashMessages id="{settings.customMessagesAnchor}" />
 			</f:if>
 			<f:if condition="{f:count(subject:'{comments}')} > 0">
 				<f:then>

@@ -1,4 +1,4 @@
-{namespace c=Tx_PwComments_ViewHelpers}
+{namespace c=PwCommentsTeam\PwComments\ViewHelpers}
 <f:layout name="Default" />
 
 <f:section name="main">
@@ -12,17 +12,11 @@
 		</f:else>
 	</f:if></h3>
 
-	<f:form name="newComment" object="{newComment}" action="create" section="{settings.writeCommentAnchor}" addQueryString="1" noCacheHash="1">
-		<f:if condition="{c:is62()}">
-			<f:then>
-				<f:render partial="Comment/FormErrors/ValidationResults" />
-			</f:then>
-			<f:else>
-				<f:render partial="Comment/FormErrors/Errors" />
-			</f:else>
-		</f:if>
-
-		<c:flashMessages id="{settings.successfulAnchor}" severity="0" />
+	<f:form name="newComment" object="{newComment}" action="create" section="{settings.writeCommentAnchor}" addQueryString="1" noCacheHash="1" noCache="1" argumentsToBeExcludedFromQueryString="{0: 'cHash'}">
+		<div class="typo3-messages">
+			<f:flashMessages id="{settings.successfulAnchor}" />
+			<f:render partial="Comment/FormErrors/ValidationResults" />
+		</div>
 
 		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceUsernameWith')}">
 			<f:then>

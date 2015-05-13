@@ -1,42 +1,30 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011-2014 Armin Ruediger Vieweg <armin@v.ieweg.de>
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
+
+/*  | This extension is part of the TYPO3 project. The TYPO3 project is
+ *  | free software and is licensed under GNU General Public License.
+ *  |
+ *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
+ */
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Formats a unix timestamp to a human-readable, relative string
+ *
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	protected $dateIsAbsolute = FALSE;
 
 	/**
 	 * Render the supplied unix timestamp in a localized human-readable string.
 	 *
-	 * @param integer|string|DateTime $timestamp unix timestamp
+	 * @param int|string|\DateTime $timestamp unix timestamp
 	 * @param string $format Format String to be parsed by strftime
-	 * @param string $wrap String to perform sprintf on it, to add text before or after relative date
-	 * @param string $wrapAbsolute String to perform sprintf on it, if date is absolute
+	 * @param string $wrap Uses sprintf to wrap relative date (use %s for date)
+	 * @param string $wrapAbsolute Same like $wrap, but used if date is absolute
 	 *
 	 * @return string Formatted date
 	 */
@@ -53,31 +41,31 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 	/**
 	 * handle all the different input formats and return a real timestamp
 	 *
-	 * @param $timestamp
-	 * @return integer
+	 * @param int|string|\DateTime|null $timestamp
+	 * @return int
 	 */
 	protected function normalizeTimestamp($timestamp) {
-		if(is_null($timestamp)) {
+		if (is_null($timestamp)) {
 			$timestamp = time();
-		} elseif(is_numeric($timestamp)) {
+		} elseif (is_numeric($timestamp)) {
 			$timestamp = intval($timestamp);
-		} elseif(is_string($timestamp)) {
+		} elseif (is_string($timestamp)) {
 			$timestamp = strtotime($timestamp);
-		} elseif($timestamp instanceof DateTime) {
+		} elseif ($timestamp instanceof \DateTime) {
 			$timestamp = $timestamp->format('U');
 		} else {
-			throw new InvalidArgumentException(sprintf('timestamp might be an integer, a string or a DateTimeObject only.'));
+			throw new \InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.');
 		}
 		return $timestamp;
 	}
 
 	/**
-	 * Makes a given unixtimestamp relative and returns the string.
+	 * Makes a given unix timestamp relative and returns the string.
 	 *
-	 * @param integer $timestamp unixtimestamp to make relative
-	 * @param string $format Format to use, if relative time is longer ago than 4 weeks
+	 * @param int $timestamp Unix timestamp to make relative
+	 * @param string $format Format to use, if relative time is older than 4 weeks
 	 *
-	 * @return string relative time or formated time
+	 * @return string Relative time or formatted time
 	 */
 	protected function makeDateRelative($timestamp, $format = NULL) {
 		$diff = time() - $timestamp;
@@ -112,27 +100,21 @@ class Tx_PwComments_ViewHelpers_Format_RelativeDateViewHelper extends Tx_Fluid_C
 	/**
 	 * Returns plural suffix, if given integer is greater than one
 	 *
-	 * @param integer $num Integer which defines if it is plural or not
-	 * @param string $suffix Suffix to add to key of plural suffix. Default is '' (empty).
-	 *
-	 * @return string Returns the plural suffix, which makes a time measure to plural (i.e. Stunde -> Stunden)
+	 * @param int $num Integer which defines if it is plural or not
+	 * @param string $suffix Suffix to add to key of plural suffix
+	 * @return string Returns the plural suffix (may be empty)
 	 */
 	protected function plural($num, $suffix = '') {
-		if ($num > 1) {
-			return $this->getLabel('pluralSuffix' . ucfirst($suffix));
-		}
+		return ($num > 1) ? $this->getLabel('pluralSuffix' . ucfirst($suffix)) : '';
 	}
 
 	/**
 	 * Shortcut for translate method
 	 *
 	 * @param string $key the key as string
-	 *
 	 * @return string string which matches the key, containing in locallang.xml
 	 */
 	protected function getLabel($key) {
-		return Tx_Extbase_Utility_Localization::translate('tx_pwcomments.relativeDate.' . $key , 'PwComments');
+		return LocalizationUtility::translate('tx_pwcomments.relativeDate.' . $key, 'PwComments');
 	}
-
 }
-?>
