@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Utility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -26,10 +28,9 @@
 /**
  * Cookie Utility
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Utility_Cookie {
+class Cookie {
 	/** Cookie Prefix */
 	const COOKIE_PREFIX = 'tx_pwcomments_';
 	/** Lifetime of cookie in days */
@@ -69,8 +70,8 @@ class Tx_PwComments_Utility_Cookie {
 	}
 
 	/**
-	 * Gets the domain to be used on setting cookies.
-	 * The information is taken from the value in $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'].
+	 * Gets the domain to be used on setting cookies. The information is
+	 * taken from the value in $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain']
 	 *
 	 * @return string The domain to be used on setting cookies
 	 */
@@ -83,7 +84,7 @@ class Tx_PwComments_Utility_Cookie {
 		if ($cookieDomain) {
 			if ($cookieDomain[0] == '/') {
 				$match = array();
-				$matchCnt = @preg_match($cookieDomain, t3lib_div::getIndpEnv('TYPO3_HOST_ONLY'), $match);
+				$matchCnt = @preg_match($cookieDomain, \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'), $match);
 				if ($matchCnt !== FALSE) {
 					$result = $match[0];
 				}

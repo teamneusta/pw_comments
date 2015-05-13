@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\ViewHelpers;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -26,17 +28,16 @@
 /**
  * InArray ViewHelper
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_ViewHelpers_InArrayViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Checks if the given subject is an array
 	 *
 	 * @param array $subject
 	 * @param string $needle
-	 * @return boolean TRUE if given needle is in array
+	 * @return bool TRUE if given needle is in array
 	 */
 	public function render(array $subject = NULL, $needle) {
 		if ($subject === NULL) {

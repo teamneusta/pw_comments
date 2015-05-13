@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Domain\Repository;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -24,10 +26,10 @@
 ***************************************************************/
 
 /**
- * Repository for Tx_Extbase_Domain_Model_FrontendUser
+ * Repository for frontend users (using fe_users)
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Domain_Repository_FrontendUserRepository extends Tx_Extbase_Domain_Repository_FrontendUserRepository {
+class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository {
+
 }

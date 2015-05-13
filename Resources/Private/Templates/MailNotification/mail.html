@@ -1,11 +1,11 @@
-{namespace c=Tx_PwComments_ViewHelpers}<f:translate key="tx_pwcomments.notificationMail.salutation" />
+{namespace c=PwCommentsTeam\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.notificationMail.salutation" />
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" /></f:then><f:else><f:translate key="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" /></f:else></f:if>
 
 <f:translate key="tx_pwcomments.notificationMail.linkToArticle" />
-<c:format.raw>{articleLink}</c:format.raw>
+<f:format.raw>{articleLink}</f:format.raw>
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
-<c:format.raw>{backendLink}</c:format.raw>
+<f:format.raw>{backendLink}</f:format.raw>
 </f:if>
 ---------------------------------------------------
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}

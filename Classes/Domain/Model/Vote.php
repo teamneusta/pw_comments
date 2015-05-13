@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Domain\Model;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -26,27 +28,26 @@
 /**
  * Vote model (for comments)
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEntity {
+class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/** Constant for upvote */
 	const TYPE_UPVOTE = 1;
 	/** Constant for downvote */
 	const TYPE_DOWNVOTE = 0;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected $type;
 
 	/**
-	 * @var integer unix timestamp
+	 * @var int unix timestamp
 	 */
 	protected $crdate;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_FrontendUser
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	protected $author = NULL;
 
@@ -56,14 +57,14 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	protected $authorIdent;
 
 	/**
-	 * @var Tx_PwComments_Domain_Model_Comment
+	 * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	protected $comment;
 
 	/**
 	 * Get type
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getType() {
 		return $this->type;
@@ -72,7 +73,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set type
 	 *
-	 * @param integer $type
+	 * @param int $type
 	 * @return void
 	 */
 	public function setType($type) {
@@ -82,7 +83,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get creation date
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getCrdate() {
 		return $this->crdate;
@@ -91,7 +92,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set creation date
 	 *
-	 * @param integer $crdate
+	 * @param int $crdate
 	 * @return void
 	 */
 	public function setCrdate($crdate) {
@@ -101,7 +102,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get author (fe_user)
 	 *
-	 * @return \Tx_PwComments_Domain_Model_FrontendUser
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -110,10 +111,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set author (fe_user)
 	 *
-	 * @param \Tx_PwComments_Domain_Model_FrontendUser $author
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author
 	 * @return void
 	 */
-	public function setAuthor(Tx_PwComments_Domain_Model_FrontendUser $author) {
+	public function setAuthor(\PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author) {
 		$this->author = $author;
 	}
 
@@ -139,7 +140,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Is upvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUpvote() {
 		return $this->getType() === self::TYPE_UPVOTE;
@@ -148,7 +149,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Is downvote?
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDownvote() {
 		return $this->getType() === self::TYPE_DOWNVOTE;
@@ -157,7 +158,7 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Get related comment
 	 *
-	 * @return \Tx_PwComments_Domain_Model_Comment
+	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
 	 */
 	public function getComment() {
 		return $this->comment;
@@ -166,11 +167,10 @@ class Tx_PwComments_Domain_Model_Vote extends Tx_Extbase_DomainObject_AbstractEn
 	/**
 	 * Set related comment
 	 *
-	 * @param \Tx_PwComments_Domain_Model_Comment $comment
+	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
 	 * @return void
 	 */
-	public function setComment(Tx_PwComments_Domain_Model_Comment $comment) {
+	public function setComment(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment) {
 		$this->comment = $comment;
 	}
-
 }

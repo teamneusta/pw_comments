@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Domain\Repository;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,21 +24,24 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
- * Repository for Tx_PwComments_Domain_Model_Comment
+ * Repository for \PwCommentsTeam\PwComments\Domain\Model\Comment
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persistence_Repository {
+class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $invertCommentSorting = FALSE;
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $invertReplySorting = FALSE;
 
@@ -44,10 +49,11 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 * Initializes the repository.
 	 *
 	 * @return void
-	 * @see Tx_Extbase_Persistence_Repository::initializeObject()
+	 * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
 	 */
 	public function initializeObject() {
-		$querySettings = $this->objectManager->create('Tx_Extbase_Persistence_Typo3QuerySettings');
+		/** @var $querySettings Typo3QuerySettings */
+		$querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$this->setDefaultQuerySettings($querySettings);
 	}
@@ -55,8 +61,8 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Find comments by pid
 	 *
-	 * @param integer $pid pid to get comments for
-	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 * @param int $pid pid to get comments for
+	 * @return QueryResult<Comment> found comments
 	 */
 	public function findByPid($pid) {
 		$query = $this->createQuery();
@@ -78,9 +84,9 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Find comments by pid and entry uid
 	 *
-	 * @param integer $pid pid to get comments for
-	 * @param integer $entryUid entry id to get comments for
-	 * @return Tx_Extbase_Persistence_QueryResult found comments
+	 * @param int $pid pid to get comments for
+	 * @param int $entryUid entry id to get comments for
+	 * @return QueryResult<Comment> found comments
 	 */
 	public function findByPidAndEntryUid($pid, $entryUid) {
 		$query = $this->createQuery();
@@ -105,29 +111,27 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Find comment by uid
 	 *
-	 * @param integer $uid
-	 * @return Tx_PwComments_Domain_Model_Comment
+	 * @param int $uid
+	 * @return Comment
 	 */
 	public function findByCommentUid($uid) {
 		$query = $this->createQuery();
-		if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) >= 6000000) {
-			$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
-		} else {
-			$query->getQuerySettings()->setRespectEnableFields(FALSE);
-		}
+		$query->getQuerySettings()->setIgnoreEnableFields(TRUE);
 		$query->matching($query->equals('uid', $uid));
+
+		/** @var Comment $comment */
 		$comment = $query->execute()->getFirst();
 		$this->findAndAttachCommentReplies($comment);
 		return $comment;
 	}
 
 	/**
-	 * Find replies by given comment and attaches them to _replies attribute.
+	 * Find replies by given comment and attaches them to replies attribute.
 	 *
-	 * @param Tx_PwComments_Domain_Model_Comment $comment
+	 * @param Comment $comment
 	 * @return void
 	 */
-	protected function findAndAttachCommentReplies(Tx_PwComments_Domain_Model_Comment $comment) {
+	protected function findAndAttachCommentReplies(Comment $comment) {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->equals('parentComment', $comment->getUid())
@@ -143,15 +147,15 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 */
 	public function getCommentSortingDirection() {
 		if ($this->getInvertCommentSorting() === TRUE) {
-			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+			return QueryInterface::ORDER_DESCENDING;
 		}
-		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+		return QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**
 	 * Gets invert comment sorting flag
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getInvertCommentSorting() {
 		return $this->invertCommentSorting;
@@ -160,7 +164,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Sets invert comment sorting flag
 	 *
-	 * @param boolean $invertCommentSorting
+	 * @param bool $invertCommentSorting
 	 * @return void
 	 */
 	public function setInvertCommentSorting($invertCommentSorting) {
@@ -174,15 +178,15 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	 */
 	public function getReplySortingDirection() {
 		if ($this->getInvertReplySorting() === TRUE) {
-			return Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
+			return QueryInterface::ORDER_DESCENDING;
 		}
-		return Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING;
+		return QueryInterface::ORDER_ASCENDING;
 	}
 
 	/**
 	 * Gets invert reply sorting flag
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getInvertReplySorting() {
 		return $this->invertReplySorting;
@@ -191,7 +195,7 @@ class Tx_PwComments_Domain_Repository_CommentRepository extends Tx_Extbase_Persi
 	/**
 	 * Sets invert reply sorting flag
 	 *
-	 * @param boolean $invertReplySorting
+	 * @param bool $invertReplySorting
 	 * @return void
 	 */
 	public function setInvertReplySorting($invertReplySorting) {

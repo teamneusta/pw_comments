@@ -1,4 +1,6 @@
 <?php
+namespace PwCommentsTeam\PwComments\Utility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -24,31 +26,23 @@
  ***************************************************************/
 
 /**
- * This class provides some methods to prepare and render given extension settings
+ * This class provides some methods to prepare and render given
+ * extension settings
  *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package PwCommentsTeam\PwComments
  */
-class Tx_PwComments_Utility_Settings {
+class Settings {
 	/**
-	 * @var tslib_cObj
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
 	 */
 	protected $contentObject;
 
 	/**
-	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+	 * @inject
 	 */
 	protected $configurationManager = NULL;
 
-	/**
-	 * Injects the configurationManager
-	 *
-	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
-	 * @return void
-	 */
-	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
-		$this->configurationManager = $configurationManager;
-	}
 
 	/**
 	 * Initialize this settings utility
@@ -64,7 +58,7 @@ class Tx_PwComments_Utility_Settings {
 	 * calculated values.
 	 *
 	 * @param array $settings the typoscript configuration array
-	 * @param boolean $makeSettingsRenderable if true the settings will be prepared to getting rendered
+	 * @param bool $makeSettingsRenderable If TRUE settings are renderable
 	 * @return array the configuration array with the rendered typoscript
 	 */
 	public function renderConfigurationArray(array $settings, $makeSettingsRenderable = FALSE) {
@@ -99,8 +93,9 @@ class Tx_PwComments_Utility_Settings {
 	 *
 	 * Example:
 	 * Before: $array['level1']['level2']['finalLevel'] = 'hello kitty'
-	 * After:  $array['level1.']['level2.']['finalLevel'] = 'hello kitty'
-	 *		   $array['level1'] = 'TEXT'
+	 * After:
+	 * $array['level1.']['level2.']['finalLevel'] = 'hello kitty'
+	 * $array['level1'] = 'TEXT'
 	 *
 	 * @param array $configuration settings array to make renderable
 	 * @return array the renderable settings

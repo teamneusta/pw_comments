@@ -3,8 +3,28 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-$TCA['tx_pwcomments_domain_model_comment'] = array(
-	'ctrl' => $TCA['tx_pwcomments_domain_model_comment']['ctrl'],
+$_EXTKEY = 'pw_comments';
+$ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:';
+$extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
+
+return array(
+	'ctrl' => array(
+		'title' => $ll . 'tx_pwcomments_domain_model_comment',
+		'label' => 'author_name',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => TRUE,
+		'origUid' => 't3_origuid',
+		'languageField' => 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden'
+		),
+		'iconfile' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.gif'
+	),
 	'interface' => array(
 		'showRecordFieldList' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,parent_comment,votes'
 	),
@@ -17,7 +37,7 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 	'columns' => array(
 		'sys_language_uid' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.language',
+			'label' => $ll . 'general.language',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'sys_language',
@@ -31,60 +51,61 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.l18n_parent',
+			'label' => $ll . 'general.l18n_parent',
 			'config' => array(
 				'type' => 'select',
 				'items' => array(
-					array('', 0),
+					array('', 0)
 				),
 				'foreign_table' => 'tx_pwcomments_domain_model_comment',
-				'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent### AND tx_pwcomments_domain_model_comment.sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent###' .
+					' AND tx_pwcomments_domain_model_comment.sys_language_uid IN (-1,0)'
 			)
 		),
 		'l18n_diffsource' => array(
-			'config' =>array(
-				'type' =>'passthrough'
+			'config' => array(
+				'type' => 'passthrough'
 			)
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.versionLabel',
+			'label' => $ll . 'general.versionLabel',
 			'config' => array(
-				'type' =>'none',
+				'type' => 'none',
 				'cols' => 27
 			)
 		),
 		'pid' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.pid',
+			'label' => $ll . 'general.pid',
 			'config' => array(
 				'type' => 'input'
 			)
 		),
 		'crdate' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.crdate',
+			'label' => $ll . 'general.crdate',
 			'config' => array(
 				'type' => 'input'
 			)
 		),
 		'hidden' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:general.hidden',
+			'label' => $ll . 'general.hidden',
 			'config' => array(
 				'type' => 'check'
 			)
 		),
 		'entry_uid' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.entry_uid',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.entry_uid',
 			'config' => array(
 				'type' => 'input'
 			)
 		),
 		'parent_comment' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.parent_comment',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.parent_comment',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -92,22 +113,22 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 				'show_thumbs' => 1,
 				'size' => 1,
 				'minitems' => 0,
-				'maxitems' => 1,
+				'maxitems' => 1
 			)
 		),
 		'author' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.author',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.author',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'fe_users',
 				'maxitems' => 1,
-				'items' => array(''),
+				'items' => array('')
 			)
 		),
 		'author_name' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.author_name',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.author_name',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -116,7 +137,7 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 		),
 		'author_mail' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.author_mail',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.author_mail',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -124,17 +145,17 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 			)
 		),
 		'author_ident' => array(
-			'exclude'	=> 0,
-			'label'		=> 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.author_ident',
-			'config'	=> array(
+			'exclude' => 0,
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.author_ident',
+			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim',
+				'eval' => 'trim'
 			)
 		),
 		'message' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.message',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.message',
 			'config' => array(
 				'type' => 'text',
 				'cols' => 30,
@@ -143,7 +164,7 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 		),
 		'votes' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:tx_pwcomments_domain_model_comment.votes',
+			'label' => $ll . 'tx_pwcomments_domain_model_comment.votes',
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => 'tx_pwcomments_domain_model_vote',
@@ -164,10 +185,10 @@ $TCA['tx_pwcomments_domain_model_comment'] = array(
 						'dragdrop' => FALSE,
 						'sort' => FALSE,
 						'hide' => FALSE,
-						'delete' => FALSE,
+						'delete' => FALSE
 					)
 				)
-			),
-		),
-	),
+			)
+		)
+	)
 );

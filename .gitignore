@@ -1,0 +1,13 @@
+### IDE/editor
+/.idea
+/nbproject
+/*.sublime-*
+
+### Tools
+/_vagrant
+/.vagrant
+/Vagrantfile
+/puphpet
+/composer.lock
+/composer.phar
+/vendor

@@ -1,7 +1,7 @@
 plugin.tx_pwcomments {
 	persistence {
 		classes {
-			Tx_PwComments_Domain_Model_FrontendUser {
+			PwCommentsTeam\PwComments\Domain\Model\FrontendUser {
 				mapping {
 					tableName = fe_users
 				}
