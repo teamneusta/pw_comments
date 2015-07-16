@@ -19,7 +19,7 @@ $boot = function($extensionKey) {
 			'Comment' => 'index,new,create,upvote,downvote',
 		),
 		array(
-			'Comment' => 'index,new,create,upvote,downvote',
+			'Comment' => '',
 		)
 	);
 
