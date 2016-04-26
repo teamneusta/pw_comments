@@ -13,5 +13,6 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
  *
  * @package PwCommentsTeam\PwComments
  */
-class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
+class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+{
 }

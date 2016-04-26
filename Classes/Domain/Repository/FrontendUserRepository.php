@@ -13,6 +13,6 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
  *
  * @package PwCommentsTeam\PwComments
  */
-class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository {
-
+class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+{
 }

@@ -13,18 +13,20 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
  *
  * @package PwCommentsTeam\PwComments
  */
-class ArrayUniqueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class ArrayUniqueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+{
 
-	/**
-	 * Removes duplicated entries in array
-	 *
-	 * @param array $subject
-	 * @return array The filtered array
-	 */
-	public function render(array $subject = NULL) {
-		if ($subject === NULL) {
-			$subject = $this->renderChildren();
-		}
-		return array_unique($subject);
-	}
+    /**
+     * Removes duplicated entries in array
+     *
+     * @param array $subject
+     * @return array The filtered array
+     */
+    public function render(array $subject = null)
+    {
+        if ($subject === null) {
+            $subject = $this->renderChildren();
+        }
+        return array_unique($subject);
+    }
 }

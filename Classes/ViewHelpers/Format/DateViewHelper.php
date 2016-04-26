@@ -68,57 +68,63 @@ namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
  *
  * @package PwCommentsTeam\PwComments
  */
-class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+{
 
-	/**
-	 * Render the supplied unix timestamp in a localized human-readable string.
-	 *
-	 * @param int|string|\DateTime $timestamp unix timestamp
-	 * @param string $format Format String to be parsed by strftime
-	 * @param string $get get some related date (see class doc)
-	 * @return string Formatted date
-	 */
-	public function render($timestamp = NULL, $format = '%Y-%m-%d', $get = '') {
-		$timestamp = $this->normalizeTimestamp($timestamp);
-		if ($get) {
-			$timestamp = $this->modifyDate($timestamp, $get);
-		}
-		$format = preg_replace('/([a-zA-Z])/is', '%$1', $format);
-		$format = str_replace('%%', '%', $format);
-		return strftime($format, $timestamp);
-	}
+    /**
+     * Render the supplied unix timestamp in a localized human-readable string.
+     *
+     * @param int|string|\DateTime $timestamp unix timestamp
+     * @param string $format Format String to be parsed by strftime
+     * @param string $get get some related date (see class doc)
+     * @return string Formatted date
+     */
+    public function render($timestamp = null, $format = '%Y-%m-%d', $get = '')
+    {
+        $timestamp = $this->normalizeTimestamp($timestamp);
+        if ($get) {
+            $timestamp = $this->modifyDate($timestamp, $get);
+        }
+        $format = preg_replace('/([a-zA-Z])/is', '%$1', $format);
+        $format = str_replace('%%', '%', $format);
+        return strftime($format, $timestamp);
+    }
 
-	/**
-	 * Handle all the different input formats and return a real timestamp
-	 *
-	 * @param int $timestamp
-	 * @return int
-	 *
-	 * @throws \InvalidArgumentException
-	 */
-	protected function normalizeTimestamp($timestamp) {
-		if (is_null($timestamp)) {
-			$timestamp = time();
-		} elseif (is_numeric($timestamp)) {
-			$timestamp = (int) $timestamp;
-		} elseif (is_string($timestamp)) {
-			$timestamp = strtotime($timestamp);
-		} elseif ($timestamp instanceof \DateTime) {
-			$timestamp = (int) $timestamp->format('U');
-		} else {
-			throw new \InvalidArgumentException(sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'));
-		}
-		return $timestamp;
-	}
+    /**
+     * Handle all the different input formats and return a real timestamp
+     *
+     * @param int $timestamp
+     * @return int
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function normalizeTimestamp($timestamp)
+    {
+        if (is_null($timestamp)) {
+            $timestamp = time();
+        } elseif (is_numeric($timestamp)) {
+            $timestamp = (int) $timestamp;
+        } elseif (is_string($timestamp)) {
+            $timestamp = strtotime($timestamp);
+        } elseif ($timestamp instanceof \DateTime) {
+            $timestamp = (int) $timestamp->format('U');
+        } else {
+            throw new \InvalidArgumentException(
+                sprintf('Timestamp might be an integer, a string or a DateTimeObject only.')
+            );
+        }
+        return $timestamp;
+    }
 
-	/**
-	 * Do the modification do a relative date
-	 *
-	 * @param int $timestamp
-	 * @param string $timeString
-	 * @return string
-	 */
-	protected function modifyDate($timestamp, $timeString) {
-		return strtotime($timeString, $timestamp);
-	}
+    /**
+     * Do the modification do a relative date
+     *
+     * @param int $timestamp
+     * @param string $timeString
+     * @return string
+     */
+    protected function modifyDate($timestamp, $timeString)
+    {
+        return strtotime($timeString, $timestamp);
+    }
 }

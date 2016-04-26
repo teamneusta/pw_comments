@@ -13,19 +13,21 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
  *
  * @package PwCommentsTeam\PwComments
  */
-class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+{
 
-	/**
-	 * Checks if the given subject is an array
-	 *
-	 * @param array $subject
-	 * @param string $needle
-	 * @return bool TRUE if given needle is in array
-	 */
-	public function render(array $subject = NULL, $needle) {
-		if ($subject === NULL) {
-			$subject = $this->renderChildren();
-		}
-		return in_array($needle, $subject);
-	}
+    /**
+     * Checks if the given subject is an array
+     *
+     * @param array $subject
+     * @param string $needle
+     * @return bool TRUE if given needle is in array
+     */
+    public function render(array $subject = null, $needle)
+    {
+        if ($subject === null) {
+            $subject = $this->renderChildren();
+        }
+        return in_array($needle, $subject);
+    }
 }
