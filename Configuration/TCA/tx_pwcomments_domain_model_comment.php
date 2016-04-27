@@ -15,8 +15,8 @@ $_EXTKEY = 'pw_comments';
 $ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:';
 $extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
 
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => $ll . 'tx_pwcomments_domain_model_comment',
         'label' => 'author_name',
         'tstamp' => 'tstamp',
@@ -28,95 +28,95 @@ return array(
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'delete' => 'deleted',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden'
-        ),
+        ],
         'iconfile' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.png'
-    ),
-    'interface' => array(
+    ],
+    'interface' => [
         'showRecordFieldList' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
                                 . 'parent_comment,votes'
-    ),
-    'types' => array(
-        '1' => array('showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
-                                . 'parent_comment,votes')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => '')
-    ),
-    'columns' => array(
-        'sys_language_uid' => array(
+    ],
+    'types' => [
+        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
+                                . 'parent_comment,votes']
+    ],
+    'palettes' => [
+        '1' => ['showitem' => '']
+    ],
+    'columns' => [
+        'sys_language_uid' => [
             'exclude' => 0,
             'label' => $ll . 'general.language',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'foreign_table' => 'sys_language',
                 'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => array(
-                    array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
-                )
-            )
-        ),
-        'l18n_parent' => array(
+                'items' => [
+                    ['LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1],
+                    ['LLL:EXT:lang/locallang_general.php:LGL.default_value', 0]
+                ]
+            ]
+        ],
+        'l18n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'exclude' => 0,
             'label' => $ll . 'general.l18n_parent',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
-                'items' => array(
-                    array('', 0)
-                ),
+                'items' => [
+                    ['', 0]
+                ],
                 'foreign_table' => 'tx_pwcomments_domain_model_comment',
                 'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent###' .
                     ' AND tx_pwcomments_domain_model_comment.sys_language_uid IN (-1,0)'
-            )
-        ),
-        'l18n_diffsource' => array(
-            'config' => array(
+            ]
+        ],
+        'l18n_diffsource' => [
+            'config' => [
                 'type' => 'passthrough'
-            )
-        ),
-        't3ver_label' => array(
+            ]
+        ],
+        't3ver_label' => [
             'displayCond' => 'FIELD:t3ver_label:REQ:true',
             'label' => $ll . 'general.versionLabel',
-            'config' => array(
+            'config' => [
                 'type' => 'none',
                 'cols' => 27
-            )
-        ),
-        'pid' => array(
+            ]
+        ],
+        'pid' => [
             'exclude' => 0,
             'label' => $ll . 'general.pid',
-            'config' => array(
+            'config' => [
                 'type' => 'input'
-            )
-        ),
-        'crdate' => array(
+            ]
+        ],
+        'crdate' => [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
-            'config' => array(
+            'config' => [
                 'type' => 'input'
-            )
-        ),
-        'hidden' => array(
+            ]
+        ],
+        'hidden' => [
             'exclude' => 0,
             'label' => $ll . 'general.hidden',
-            'config' => array(
+            'config' => [
                 'type' => 'check'
-            )
-        ),
-        'entry_uid' => array(
+            ]
+        ],
+        'entry_uid' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.entry_uid',
-            'config' => array(
+            'config' => [
                 'type' => 'input'
-            )
-        ),
-        'parent_comment' => array(
+            ]
+        ],
+        'parent_comment' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.parent_comment',
-            'config' => array(
+            'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'tx_pwcomments_domain_model_comment',
@@ -124,81 +124,81 @@ return array(
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1
-            )
-        ),
-        'author' => array(
+            ]
+        ],
+        'author' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.author',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
-                'items' => array('')
-            )
-        ),
-        'author_name' => array(
+                'items' => ['']
+            ]
+        ],
+        'author_name' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.author_name',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
-            )
-        ),
-        'author_mail' => array(
+            ]
+        ],
+        'author_mail' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.author_mail',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
-            )
-        ),
-        'author_ident' => array(
+            ]
+        ],
+        'author_ident' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.author_ident',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
-            )
-        ),
-        'message' => array(
+            ]
+        ],
+        'message' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.message',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => 30,
                 'rows' => 10
-            )
-        ),
-        'votes' => array(
+            ]
+        ],
+        'votes' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.votes',
-            'config' => array(
+            'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'tx_pwcomments_domain_model_vote',
                 'MM' => 'tx_pwcomments_comment_vote_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
-                'behaviour' => array(
+                'behaviour' => [
                     'enableCascadingDelete' => true
-                ),
-                'appearance' => array(
+                ],
+                'appearance' => [
                     'collapseAll' => true,
                     'newRecordLinkPosition' => 'none',
                     'levelLinksPosition' => 'none',
                     'useSortable' => false,
-                    'enabledControls' => array(
+                    'enabledControls' => [
                         'new' => false,
                         'dragdrop' => false,
                         'sort' => false,
                         'hide' => false,
                         'delete' => false
-                    )
-                )
-            )
-        )
-    )
-);
+                    ]
+                ]
+            ]
+        ]
+    ]
+];

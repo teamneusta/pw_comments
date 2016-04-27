@@ -18,10 +18,10 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 class ProcessDatamap
 {
     /** @var array */
-    protected $enabledTables = array('tx_pwcomments_domain_model_comment');
+    protected $enabledTables = ['tx_pwcomments_domain_model_comment'];
 
     /** @var array */
-    protected $enabledStatus = array('update');
+    protected $enabledStatus = ['update'];
 
     /**
      * After Save hook
@@ -48,7 +48,7 @@ class ProcessDatamap
                     'Comment',
                     'sendAuthorMailWhenCommentHasBeenApproved',
                     'Pi2',
-                    array('_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => true),
+                    ['_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => true],
                     intval($row['pid'])
                 );
             }
@@ -72,7 +72,7 @@ class ProcessDatamap
         $controller,
         $action = 'index',
         $pluginName = 'Pi1',
-        $settings = array(),
+        $settings = [],
         $pageUid = 0,
         $vendorName = 'PwCommentsTeam'
     ) {
@@ -109,27 +109,27 @@ class ProcessDatamap
 
         $extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
 
-        $localLangArray = array();
+        $localLangArray = [];
         if (is_array($pluginSettings['_LOCAL_LANG.'])) {
             $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
             $localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
         }
-        $configuration = array(
+        $configuration = [
             'pluginName' => $pluginName,
             'extensionName' => $extensionName,
             'controller' => $controller,
             'vendorName' => $vendorName,
-            'controllerConfiguration' => array($controller),
+            'controllerConfiguration' => [$controller],
             'action' => $action,
-            'mvc' => array(
-                'requestHandlers' => array(
+            'mvc' => [
+                'requestHandlers' => [
                     'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler' => 'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler'
-                )
-            ),
+                ]
+            ],
             'settings' => $settings,
             'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
             '_LOCAL_LANG' => $localLangArray
-        );
+        ];
 
         return $bootstrap->run('', $configuration);
     }

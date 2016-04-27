@@ -15,8 +15,8 @@ $_EXTKEY = 'pw_comments';
 $ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:';
 $extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
 
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => $ll . 'tx_pwcomments_domain_model_vote',
         'label' => 'crdate',
         'hideTable' => true,
@@ -25,74 +25,74 @@ return array(
         'origUid' => 't3_origuid',
         'readOnly' => true,
         'typeicon_column' => 'type',
-        'typeicons' => array(
+        'typeicons' => [
             '0' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png',
             '1' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png'
-        )
-    ),
-    'interface' => array(
+        ]
+    ],
+    'interface' => [
         'showRecordFieldList' => 'type,crdate,author,author_ident'
-    ),
-    'types' => array(
-        '1' => array('showitem' => 'type,crdate,author,author_ident')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => '')
-    ),
-    'columns' => array(
-        'pid' => array(
+    ],
+    'types' => [
+        '1' => ['showitem' => 'type,crdate,author,author_ident']
+    ],
+    'palettes' => [
+        '1' => ['showitem' => '']
+    ],
+    'columns' => [
+        'pid' => [
             'exclude' => 0,
             'label' => $ll . 'general.pid',
-            'config' => array(
+            'config' => [
                 'type' => 'input'
-            )
-        ),
-        'crdate' => array(
+            ]
+        ],
+        'crdate' => [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'eval' => 'datetime',
                 'readOnly' => true
-            )
-        ),
-        'type' => array(
+            ]
+        ],
+        'type' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_vote.type',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
-                'items' => array(
-                    array($ll . 'tx_pwcomments_domain_model_vote.type.0', 0),
-                    array($ll . 'tx_pwcomments_domain_model_vote.type.1', 1)
-                ),
+                'items' => [
+                    [$ll . 'tx_pwcomments_domain_model_vote.type.0', 0],
+                    [$ll . 'tx_pwcomments_domain_model_vote.type.1', 1]
+                ],
                 'readOnly' => true
-            )
-        ),
-        'author' => array(
+            ]
+        ],
+        'author' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_vote.author',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
-                'items' => array(''),
+                'items' => [''],
                 'readOnly' => true
-            )
-        ),
-        'author_ident' => array(
+            ]
+        ],
+        'author_ident' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_vote.author_ident',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
                 'readOnly' => true
-            )
-        ),
-        'comment' => array(
+            ]
+        ],
+        'comment' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_vote.comment',
-            'config' => array(
+            'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'tx_pwcomments_domain_model_comment',
@@ -101,7 +101,7 @@ return array(
                 'minitems' => 0,
                 'maxitems' => 1,
                 'readOnly' => true
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];

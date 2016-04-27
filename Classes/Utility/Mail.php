@@ -21,7 +21,7 @@ class Mail
     /**
      * @var array settings of controller
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var \TYPO3\CMS\Fluid\View\TemplateView
@@ -101,7 +101,7 @@ class Mail
             LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.mail',
                 'PwComments',
-                array(GeneralUtility::getHostname())
+                [GeneralUtility::getHostname()]
             ),
             LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.name',
@@ -115,7 +115,7 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                array(GeneralUtility::getHostname())
+                [GeneralUtility::getHostname()]
             )
         );
         $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
@@ -151,7 +151,7 @@ class Mail
                             ->setTargetPageUid($comment->getPid())
                             ->setAddQueryString($this->getAddQueryStringToLinks())
                             ->setArgumentsToBeExcludedFromQueryString(
-                                array('id', 'cHash', 'tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]')
+                                ['id', 'cHash', 'tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]']
                             )
                             ->setUseCacheHash(false)
                             ->buildFrontendUri();

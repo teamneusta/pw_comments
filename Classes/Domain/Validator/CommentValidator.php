@@ -34,7 +34,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
     /**
      * @var array Settings defined in typoscript of pw_comments
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * Initial function to validate
@@ -55,7 +55,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
             $errorNumber = 1299628371;
         } elseif (!$this->messageIsSet($comment)) {
             $errorNumber = 1299628099;
-            $errorArguments = array($this->settings['secondsBetweenTwoComments']);
+            $errorArguments = [$this->settings['secondsBetweenTwoComments']];
         } elseif ($this->settings['useBadWordsList'] && !$this->checkTextForBadWords($comment->getMessage())) {
             $errorNumber = 1315608355;
         } elseif ($this->settings['useBadWordsListOnUsername']
@@ -66,7 +66,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
             $errorNumber = 1406644912;
         } elseif (!$this->lastCommentRespectsTimer($comment)) {
             $errorNumber = 1300280476;
-            $errorArguments = array($this->settings['secondsBetweenTwoComments']);
+            $errorArguments = [$this->settings['secondsBetweenTwoComments']];
         }
 
         if ($errorNumber !== null) {

@@ -58,7 +58,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $query->equals('parentComment', 0)
             )
         );
-        $query->setOrderings(array('crdate' => $this->getCommentSortingDirection()));
+        $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
         $comments = $query->execute();
 
         foreach ($comments as $comment) {
@@ -79,14 +79,14 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                array(
+                [
                     $query->equals('pid', $pid),
                     $query->equals('entryUid', $entryUid),
                     $query->equals('parentComment', 0)
-                )
+                ]
             )
         );
-        $query->setOrderings(array('crdate' => $this->getCommentSortingDirection()));
+        $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
         $comments = $query->execute();
 
         foreach ($comments as $comment) {
@@ -125,7 +125,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->equals('parentComment', $comment->getUid())
         );
-        $query->setOrderings(array('crdate' => $this->getReplySortingDirection()));
+        $query->setOrderings(['crdate' => $this->getReplySortingDirection()]);
         $comment->setReplies($query->execute());
     }
 

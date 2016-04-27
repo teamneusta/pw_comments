@@ -15,23 +15,23 @@ $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'PwCommentsTeam.' . $extensionKey,
         'Pi1',
-        array(
+        [
             'Comment' => 'index,new,create,upvote,downvote',
-        ),
-        array(
+        ],
+        [
             'Comment' => 'index,new,create,upvote,downvote',
-        )
+        ]
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'PwCommentsTeam.' . $extensionKey,
         'Pi2',
-        array(
+        [
             'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',
-        ),
-        array(
+        ],
+        [
             'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',
-        )
+        ]
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']

@@ -70,7 +70,7 @@ class Cookie
         }
         if ($cookieDomain) {
             if ($cookieDomain[0] == '/') {
-                $match = array();
+                $match = [];
                 $matchCnt = @preg_match(
                     $cookieDomain,
                     \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
