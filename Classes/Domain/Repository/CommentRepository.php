@@ -7,6 +7,7 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
  *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
@@ -32,13 +33,14 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Initializes the repository.
      *
-     * @return void
-     * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
+     * @param ObjectManagerInterface $objectManager
      */
-    public function initializeObject()
+    public function __construct(ObjectManagerInterface $objectManager)
     {
+        parent::__construct($objectManager);
+        
         /** @var $querySettings Typo3QuerySettings */
-        $querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
     }
