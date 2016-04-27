@@ -61,6 +61,7 @@ return [
             'label' => $ll . 'tx_pwcomments_domain_model_vote.type',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     [$ll . 'tx_pwcomments_domain_model_vote.type.0', 0],
                     [$ll . 'tx_pwcomments_domain_model_vote.type.1', 1]
@@ -73,6 +74,7 @@ return [
             'label' => $ll . 'tx_pwcomments_domain_model_vote.author',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
                 'items' => [''],
