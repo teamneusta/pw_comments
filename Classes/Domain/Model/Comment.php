@@ -7,6 +7,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
  *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -113,8 +114,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function __construct()
     {
-        $this->initializeObject();
-        $this->author = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\FrontendUser');
+        $this->author = GeneralUtility::makeInstance(FrontendUser::class);
         $this->votes = new ObjectStorage();
     }
 
@@ -230,10 +230,11 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCommentAuthorMailAddress()
     {
+        $authorMail = $this->getAuthorMail();
         if ($this->getAuthor() !== null) {
-            return $this->getAuthor()->getEmail();
+            $authorMail = $this->getAuthor()->getEmail();
         }
-        return $this->getAuthorMail();
+        return $authorMail;
     }
 
     /**
@@ -327,14 +328,14 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Returns the settings of this extension (not rendered)
      *
      * @return array rendered typoscript settings
+     * @todo This move this function into settings utility, because it's also used in comment validation class
      */
     protected function getExtensionSettings()
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
-
         /** @var ConfigurationManagerInterface $configurationManager */
-        $configurationManager = $objectManager->get('TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface');
+        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
+            ->get(ConfigurationManagerInterface::class);
+        
         $fullTyposcript = $configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
         );
