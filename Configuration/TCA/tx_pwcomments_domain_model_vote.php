@@ -77,7 +77,9 @@ return [
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
-                'items' => [''],
+                'items' => [
+                    ['', 0]
+                ],
                 'readOnly' => true
             ]
         ],
