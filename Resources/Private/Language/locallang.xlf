@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:38Z" product-name="pw_comments">
+		<header/>
+		<body>
+			<trans-unit id="tx_pwcomments.comment" xml:space="preserve">
+				<source>Comment</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.comments" xml:space="preserve">
+				<source>Comments</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1299628038" xml:space="preserve">
+				<source>Please log in or fill out your name and e-mail address.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1299628371" xml:space="preserve">
+				<source>The e-mail address you have entered is not valid.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1299628099" xml:space="preserve">
+				<source>The comment message may not be empty.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1300280476" xml:space="preserve">
+				<source>Please wait %s seconds between two comments.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1315608355" xml:space="preserve">
+				<source>Your comment message contains at least one bad word. These are not allowed.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1406644911" xml:space="preserve">
+				<source>Your name contains at least one bad word. These are not allowed.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1406644912" xml:space="preserve">
+				<source>Your mail address contains at least one bad word. These are not allowed.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.loggedInAs" xml:space="preserve">
+				<source>You are logged in as:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.name" xml:space="preserve">
+				<source>Your name:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.mail" xml:space="preserve">
+				<source>Your e-mail address:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.hiddenField" xml:space="preserve">
+				<source>Do not fill out!</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.comment" xml:space="preserve">
+				<source>Comment:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.submit" xml:space="preserve">
+				<source>Submit</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.reply" xml:space="preserve">
+				<source>Reply</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.noComments" xml:space="preserve">
+				<source>No comments found!</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.writeNewComment" xml:space="preserve">
+				<source>Write new comment</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.writeNewCommentReply" xml:space="preserve">
+				<source>Write new comment reply</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.thanks" xml:space="preserve">
+				<source>Thanks for your comment!</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.moderationNotice" xml:space="preserve">
+				<source>Your comment has to be checked before publishing. Thank you for your patience!</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.wrap" xml:space="preserve">
+				<source>%s ago</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.wrapAbsolute" xml:space="preserve">
+				<source>at %s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.fewSeconds" xml:space="preserve">
+				<source>few seconds</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.minute" xml:space="preserve">
+				<source>minute</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.hour" xml:space="preserve">
+				<source>hour</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.day" xml:space="preserve">
+				<source>day</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.week" xml:space="preserve">
+				<source>week</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.pluralSuffix" xml:space="preserve">
+				<source>s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.relativeDate.pluralSuffixForDay" xml:space="preserve">
+				<source>s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.from.mail" xml:space="preserve">
+				<source>newComment@%s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.from.name" xml:space="preserve">
+				<source>pwComments</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.subject" xml:space="preserve">
+				<source>New comment on %s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.salutation" xml:space="preserve">
+				<source>Hello,</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" xml:space="preserve">
+				<source>a new comment has been submitted and awaits your approval.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" xml:space="preserve">
+				<source>a new comment has been submitted.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.linkToArticle" xml:space="preserve">
+				<source>Link to article:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.linkToApproval" xml:space="preserve">
+				<source>Link to approval:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.name" xml:space="preserve">
+				<source>Name: </source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.registred" xml:space="preserve">
+				<source>(registred)</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.mail" xml:space="preserve">
+				<source>E-mail: </source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.notificationMail.comment" xml:space="preserve">
+				<source>Comment: </source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.salutation" xml:space="preserve">
+				<source>Hello,</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted" xml:space="preserve">
+				<source>you have posted a new comment which awaits our approval on this page: %s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted" xml:space="preserve">
+				<source>you have posted a new comment on this page: %s</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.subject" xml:space="preserve">
+				<source>Your comment on %s has been published</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.salutation" xml:space="preserve">
+				<source>Hello,</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished" xml:space="preserve">
+				<source>your comment has been published, on this page: %s</source>
+			</trans-unit>
+			<trans-unit id="mailSentToAuthorAfterPublish" xml:space="preserve">
+				<source>The author of this comment (%s) has been notified by mail.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.votes.upvote" xml:space="preserve">
+				<source>Upvote</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.votes.downvote" xml:space="preserve">
+				<source>Downvote</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.votes.selfVotingError" xml:space="preserve">
+				<source>You may not vote your own comments</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.votes.summary" xml:space="preserve">
+				<source>%s vote(s) (%s up, %s down)</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.custom.doNotVoteForYourself" xml:space="preserve">
+				<source>You can't vote for your own comment.</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.custom.votingDisabled" xml:space="preserve">
+				<source>To vote for comments, please login.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -117,7 +117,7 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
      * Shortcut for translate method
      *
      * @param string $key the key as string
-     * @return string string which matches the key, containing in locallang.xml
+     * @return string string which matches the key, containing in locallang.xlf
      */
     protected function getLabel($key)
     {

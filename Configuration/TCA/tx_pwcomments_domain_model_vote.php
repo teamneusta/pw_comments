@@ -12,7 +12,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $_EXTKEY = 'pw_comments';
-$ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xml:';
+$ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:';
 $extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
 
 return [

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments">
+		<header/>
+		<body>
+			<trans-unit id="general.pid" xml:space="preserve" approved="yes">
+				<source>PID</source>
+				<target>PID</target>
+			</trans-unit>
+			<trans-unit id="general.crdate" xml:space="preserve" approved="yes">
+				<source>Creation date</source>
+				<target>Erstellungsdatum</target>
+			</trans-unit>
+			<trans-unit id="general.hidden" xml:space="preserve" approved="yes">
+				<source>Hide</source>
+				<target>Verstecken</target>
+			</trans-unit>
+			<trans-unit id="general.language" xml:space="preserve" approved="yes">
+				<source>Language</source>
+				<target>Sprache</target>
+			</trans-unit>
+			<trans-unit id="general.l18n_parent" xml:space="preserve" approved="yes">
+				<source>Translated item</source>
+				<target>Übersetzes Element</target>
+			</trans-unit>
+			<trans-unit id="general.versionLabel" xml:space="preserve" approved="yes">
+				<source>Version</source>
+				<target>Version</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment" xml:space="preserve" approved="yes">
+				<source>Comment</source>
+				<target>Kommentar</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve" approved="yes">
+				<source>Entry uid</source>
+				<target>Eintrag UID</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author" xml:space="preserve" approved="yes">
+				<source>Author</source>
+				<target>Autor</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_name" xml:space="preserve" approved="yes">
+				<source>Name</source>
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_mail" xml:space="preserve" approved="yes">
+				<source>Mail</source>
+				<target>E-Mail</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_ident" xml:space="preserve" approved="yes">
+				<source>Author ident</source>
+				<target>Autor Identifizierung</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.message" xml:space="preserve" approved="yes">
+				<source>Message</source>
+				<target>Nachricht</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.parent_comment" xml:space="preserve" approved="yes">
+				<source>Related comment (parent)</source>
+				<target>Bezogener Kommentar (Eltern)</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.votes" xml:space="preserve" approved="yes">
+				<source>Votes</source>
+				<target>Bewertungen</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve" approved="yes">
+				<source>Vote</source>
+				<target>Bewertung</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.crdate" xml:space="preserve" approved="yes">
+				<source>Creation date</source>
+				<target>Erstelungsdatum</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve" approved="yes">
+				<source>Type</source>
+				<target>Typ</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type.0" xml:space="preserve" approved="yes">
+				<source>Downvote</source>
+				<target>Schlechte Bewertung</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type.1" xml:space="preserve" approved="yes">
+				<source>Upvote</source>
+				<target>Gute Bewertung</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.author" xml:space="preserve" approved="yes">
+				<source>Author</source>
+				<target>Autor</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.author_ident" xml:space="preserve" approved="yes">
+				<source>Author ident</source>
+				<target>Autor Identifizierung</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.comment" xml:space="preserve" approved="yes">
+				<source>Comment</source>
+				<target>Kommentar</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

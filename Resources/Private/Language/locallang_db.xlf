@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments">
+		<header/>
+		<body>
+			<trans-unit id="general.pid" xml:space="preserve">
+				<source>PID</source>
+			</trans-unit>
+			<trans-unit id="general.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			</trans-unit>
+			<trans-unit id="general.hidden" xml:space="preserve">
+				<source>Hide</source>
+			</trans-unit>
+			<trans-unit id="general.language" xml:space="preserve">
+				<source>Language</source>
+			</trans-unit>
+			<trans-unit id="general.l18n_parent" xml:space="preserve">
+				<source>Translated item</source>
+			</trans-unit>
+			<trans-unit id="general.versionLabel" xml:space="preserve">
+				<source>Version</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment" xml:space="preserve">
+				<source>Comment</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve">
+				<source>Entry uid</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author" xml:space="preserve">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_name" xml:space="preserve">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_mail" xml:space="preserve">
+				<source>Mail</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.message" xml:space="preserve">
+				<source>Message</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.parent_comment" xml:space="preserve">
+				<source>Related comment (parent)</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.votes" xml:space="preserve">
+				<source>Votes</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve">
+				<source>Vote</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type.0" xml:space="preserve">
+				<source>Downvote</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.type.1" xml:space="preserve">
+				<source>Upvote</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.author" xml:space="preserve">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.comment" xml:space="preserve">
+				<source>Comment</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
