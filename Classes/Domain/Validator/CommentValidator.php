@@ -8,6 +8,7 @@ namespace PwCommentsTeam\PwComments\Domain\Validator;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use PwCommentsTeam\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -19,18 +20,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
-     */
-    protected $configurationManager;
-
-    /**
-     * @var \PwCommentsTeam\PwComments\Utility\Settings
-     * @inject
-     */
-    protected $settingsUtility;
-
     /**
      * @var array Settings defined in typoscript of pw_comments
      */
@@ -44,7 +33,7 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
      */
     public function isValid($comment)
     {
-        $this->settings = $this->getExtensionSettings();
+        $this->settings = Settings::getRenderedExtensionSettings();
 
         $errorNumber = null;
         $errorArguments = null;
@@ -147,19 +136,5 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
         $badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
         $commentMessage = '-> ' . $textToCheck . ' <-';
         return (bool) !preg_match($badWordsRegExp, $commentMessage);
-    }
-
-    /**
-     * Returns the rendered settings of this extension
-     *
-     * @return array rendered typoscript settings
-     */
-    protected function getExtensionSettings()
-    {
-        $fullTyposcript = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-        );
-        $extensionTyposcript = $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
-        return $this->settingsUtility->renderConfigurationArray($extensionTyposcript);
     }
 }

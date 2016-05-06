@@ -7,10 +7,9 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
  *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use PwCommentsTeam\PwComments\Utility\Settings;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -280,7 +279,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         // Decode html tags
         $message = htmlspecialchars($message);
 
-        $settings = $this->getExtensionSettings();
+        $settings = Settings::getExtensionSettings();
         if ($settings['linkUrlsInComments']) {
             // Create links
             $message = preg_replace(
@@ -322,24 +321,6 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getAuthor()
     {
         return $this->author;
-    }
-
-    /**
-     * Returns the settings of this extension (not rendered)
-     *
-     * @return array rendered typoscript settings
-     * @todo This move this function into settings utility, because it's also used in comment validation class
-     */
-    protected function getExtensionSettings()
-    {
-        /** @var ConfigurationManagerInterface $configurationManager */
-        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(ConfigurationManagerInterface::class);
-        
-        $fullTyposcript = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-        );
-        return $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
     }
 
     /**

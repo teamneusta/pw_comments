@@ -7,6 +7,7 @@ namespace PwCommentsTeam\PwComments\Utility;
  *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * This class provides some methods to prepare and render given
@@ -14,30 +15,8 @@ namespace PwCommentsTeam\PwComments\Utility;
  *
  * @package PwCommentsTeam\PwComments
  */
-class Settings
+class Settings extends AbstractUtility
 {
-    /**
-     * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
-     */
-    protected $contentObject;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
-     */
-    protected $configurationManager = null;
-
-
-    /**
-     * Initialize this settings utility
-     *
-     * @return void
-     */
-    public function initializeObject()
-    {
-        $this->contentObject = $this->configurationManager->getContentObject();
-    }
-
     /**
      * Renders a given typoscript configuration and returns the whole array with
      * calculated values.
@@ -46,10 +25,12 @@ class Settings
      * @param bool $makeSettingsRenderable If TRUE settings are renderable
      * @return array the configuration array with the rendered typoscript
      */
-    public function renderConfigurationArray(array $settings, $makeSettingsRenderable = false)
+    public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false)
     {
+        $contentObject = self::getConfigurationManagerInterface()->getContentObject();
+
         if ($makeSettingsRenderable === true) {
-            $settings = $this->makeConfigurationArrayRenderable($settings);
+            $settings = self::makeConfigurationArrayRenderable($settings);
         }
         $result = [];
 
@@ -57,12 +38,12 @@ class Settings
             if (substr($key, -1) === '.') {
                 $keyWithoutDot = substr($key, 0, -1);
                 if (array_key_exists($keyWithoutDot, $settings)) {
-                    $result[$keyWithoutDot] = $this->contentObject->cObjGetSingle(
+                    $result[$keyWithoutDot] = $contentObject->cObjGetSingle(
                         $settings[$keyWithoutDot],
                         $value
                     );
                 } else {
-                    $result[$keyWithoutDot] = $this->renderConfigurationArray($value);
+                    $result[$keyWithoutDot] = self::renderConfigurationArray($value);
                 }
             } else {
                 if (!array_key_exists($key . '.', $settings)) {
@@ -71,6 +52,30 @@ class Settings
             }
         }
         return $result;
+    }
+
+    /**
+     * Returns the pw_comments typoscript settings
+     *
+     * @return array not rendered typoscript settings
+     */
+    public static function getExtensionSettings()
+    {
+        $configurationManager = self::getConfigurationManagerInterface();
+        $fullTypoScript = $configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+        );
+        return $fullTypoScript['plugin.']['tx_pwcomments.']['settings.'];
+    }
+
+    /**
+     * Returns the rendered settings of this extension
+     *
+     * @return array rendered typoscript settings
+     */
+    public static function getRenderedExtensionSettings()
+    {
+        return self::renderConfigurationArray(self::getExtensionSettings());
     }
 
     /**
@@ -86,7 +91,7 @@ class Settings
      * @param array $configuration settings array to make renderable
      * @return array the renderable settings
      */
-    protected function makeConfigurationArrayRenderable(array $configuration)
+    protected static function makeConfigurationArrayRenderable(array $configuration)
     {
         $dottedConfiguration = [];
         foreach ($configuration as $key => $value) {
@@ -94,7 +99,7 @@ class Settings
                 if (array_key_exists('_typoScriptNodeValue', $value)) {
                     $dottedConfiguration[$key] = $value['_typoScriptNodeValue'];
                 }
-                $dottedConfiguration[$key . '.'] = $this->makeConfigurationArrayRenderable($value);
+                $dottedConfiguration[$key . '.'] = self::makeConfigurationArrayRenderable($value);
             } else {
                 $dottedConfiguration[$key] = $value;
             }
