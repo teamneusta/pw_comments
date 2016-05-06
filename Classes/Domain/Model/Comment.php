@@ -248,19 +248,6 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Getter for Gravatar link by author's mail
-     *
-     * @return string Gravatar link
-     */
-    public function getAuthorGravatar()
-    {
-        $link = '.gravatar.com/avatar/';
-        $hash = md5(strtolower($this->getAuthorMail()));
-        $domainHash = hexdec($hash[0]) % 3;
-        return 'https://' . $domainHash . $link . $hash;
-    }
-
-    /**
      * Setter for message
      *
      * @param string $message message

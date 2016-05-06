@@ -1,18 +1,14 @@
-{namespace c=PwCommentsTeam\PwComments\ViewHelpers}
+{namespace pw=PwCommentsTeam\PwComments\ViewHelpers}
+
 <f:if condition="{settings.showGravatarImage}">
-	<f:if condition="{comment.author}">
-		<f:then>
-			<img src="{c:Gravatar(email:'{comment.author.email}', size:'{settings.gravatarSize}', default:'{settings.gravatarDefault}')}" alt="{comment.author.name}{comment.authorName}" class="comment_author_image"/>
-		</f:then>
-		<f:else>
-			<img src="{comment.authorGravatar}?s={settings.gravatarSize}&amp;d={settings.gravatarDefault}" alt="{comment.author.name}{comment.authorName}" class="comment_author_image"/>
-		</f:else>
-	</f:if>
+	<pw:Gravatar email="{comment.commentAuthorMailAddress}" size="{settings.gravatarSize}" default="{settings.gravatarDefault}"
+				alt="{comment.author.name}{comment.authorName}" class="comment_author_image"/>
 </f:if>
+
 <div class="comment_content_wrap">
 	<div class="comment_header">
 		<span class="comment_author">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</span>
-		<span class="comment_date" title="{c:format.date(timestamp:'{comment.crdate}', format:'%d.%m.%Y %T')}"> <c:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
+		<span class="comment_date" title="{pw:format.date(timestamp:'{comment.crdate}', format:'%d.%m.%Y %T')}"> <pw:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
 	</div>
 	<div class="comment_body">
 		<div class="message">
