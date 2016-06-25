@@ -10,6 +10,7 @@ namespace PwCommentsTeam\PwComments\Controller;
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
 use PwCommentsTeam\PwComments\Domain\Model\Vote;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -94,6 +95,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
 		if ($this->settings['useEntryUid']) {
 			$this->entryUid = intval($this->settings['entryUid']);
+		}
+
+		if (isset($this->request->getArguments()['newComment']) || isset($this->request->getArguments()['comment'])) {
+			$this->clearPageCache($this->pageUid);
 		}
 	}
 
@@ -228,6 +233,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		} else {
 			$anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
 		}
+
 		$this->redirectToURI($this->buildUriByUid($this->pageUid, TRUE) . $anchor);
 		return FALSE;
 	}
@@ -511,5 +517,19 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
 		$objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 		return $objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+	}
+
+	/**
+	 * Clears the cache of the page with the given page id.
+	 *
+	 * @param int $pageId
+	 * @return void
+	 */
+	protected function clearPageCache($pageId) {
+		$pageId = (int) $pageId;
+		if ($pageId <= 0) {
+			return;
+		}
+		$this->cacheService->clearPageCache($pageId);
 	}
 }
