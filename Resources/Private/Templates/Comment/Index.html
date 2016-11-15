@@ -7,7 +7,7 @@
 			<f:if condition="{hasCustomMessages}">
 				<f:flashMessages id="{settings.customMessagesAnchor}" />
 			</f:if>
-			<f:if condition="{f:count(subject:'{comments}')} > 0">
+			<f:if condition="{comments -> f:count()} > 0">
 				<f:then>
 					<ol class="comment_list list">
 						<f:for each="{comments}" as="comment" iteration="commentIterator">
