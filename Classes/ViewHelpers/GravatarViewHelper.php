@@ -60,6 +60,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
+        $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
     }
 
     /**
@@ -83,6 +84,12 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
         ];
 
         $this->tag->addAttribute('src', $this->getGravatarSrc($uriParts));
+
+        // The alt-attribute is mandatory to have valid html-code, therefore add it even if it is empty
+        if (empty($this->arguments['alt'])) {
+            $this->tag->addAttribute('alt', '');
+        }
+
         return $this->tag->render();
     }
 
