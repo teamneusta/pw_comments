@@ -1,4 +1,26 @@
 plugin.tx_pwcomments {
+	mvc.callDefaultActionIfActionCantBeResolved = 1
+
+	views {
+		templateRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Templates/
+			1 = {$plugin.tx_pwcomments.view.templateRootPaths}
+		}
+
+		PartilasRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Partials/
+			1 = {$plugin.tx_pwcomments.view.partialsRootPaths}
+		}
+		layoutRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Layouts/
+			1 = {$plugin.tx_pwcomments.view.layoutRootPaths}
+		}
+	}
+
+	persistence {
+		storagePid = {$plugin.tx_pwcomments.persistence.storagePid}
+	}
+
 	settings {
 		commentAnchorPrefix = comment
 		showCommentAnchor = comments
@@ -57,10 +79,6 @@ plugin.tx_pwcomments {
 
 		relativeDate.absoluteFormatFallback = %d.%m.%Y
 	}
-	persistence {
-		storagePid =
-	}
-	mvc.callDefaultActionIfActionCantBeResolved = 1
 }
 
 
@@ -105,6 +123,7 @@ lib.pwCommentsIndex {
 		}
 	}
 
+	view < plugin.tx_pwcomments.view
 	persistence =< plugin.tx_pwcomments.persistence
 	settings =< plugin.tx_pwcomments.settings
 }

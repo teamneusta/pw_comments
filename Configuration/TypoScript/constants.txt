@@ -1,0 +1,16 @@
+plugin.tx_pwcomments {
+   view {
+      # cat=plugin.tx_pwcomments/file; type=string; label=Path to template root
+      templateRootPath = EXT:pw_comments/Resources/Private/Templates/
+
+      # cat=plugin.tx_pwcomments/file; type=string; label=Path to partial root
+      partialRootPath = EXT:pw_comments/Resources/Private/Partials/
+
+      # cat=plugin.tx_pwcomments/file; type=string; label=Path to layout root
+      layoutRootPath = EXT:pw_comments/Resources/Private/Layouts/
+   }
+
+   persistence {
+      storagePid =
+   }
+}
