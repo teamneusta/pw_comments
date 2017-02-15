@@ -41,6 +41,24 @@ $boot = function ($extensionKey) {
         // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
         'PwCommentsTeam\PwComments\Hooks\ProcessDatamap';
+
+    if (TYPO3_MODE === 'BE') {
+        /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
+        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Imaging\IconRegistry::class
+        );
+        $iconRegistry->registerIcon(
+            'ext-pwcomments-type-vote_down',
+            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+            ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png']
+        );
+
+        $iconRegistry->registerIcon(
+            'ext-pwcomments-type-vote_up',
+            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+            ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png']
+        );
+    }
 };
 
 $boot($_EXTKEY);

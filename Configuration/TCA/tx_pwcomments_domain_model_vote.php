@@ -11,9 +11,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$_EXTKEY = 'pw_comments';
 $ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:';
-$extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
 
 return [
     'ctrl' => [
@@ -25,10 +23,10 @@ return [
         'origUid' => 't3_origuid',
         'readOnly' => true,
         'typeicon_column' => 'type',
-        'typeicons' => [
-            '0' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png',
-            '1' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png'
-        ]
+        'typeicon_classes' => [
+            '0' => 'ext-pwcomments-type-vote_down',
+            '1' => 'ext-pwcomments-type-vote_up'
+        ],
     ],
     'interface' => [
         'showRecordFieldList' => 'type,crdate,author,author_ident'

@@ -11,9 +11,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$_EXTKEY = 'pw_comments';
 $ll = 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:';
-$extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY);
 
 return [
     'ctrl' => [
@@ -31,7 +29,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden'
         ],
-        'iconfile' => $extensionPath . 'Resources/Public/Icons/tx_pwcomments_domain_model_comment.png'
+        'iconfile' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_comment.png'
     ],
     'interface' => [
         'showRecordFieldList' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
@@ -65,6 +63,7 @@ return [
             'label' => $ll . 'general.l18n_parent',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     ['', 0]
                 ],
