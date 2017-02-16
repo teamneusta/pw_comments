@@ -17,10 +17,10 @@ $boot = function ($extensionKey) {
         'PwCommentsTeam.' . $extensionKey,
         'Pi1',
         [
-            'Comment' => 'index,new,create,upvote,downvote',
+            'Comment' => 'index,new,create,upvote,downvote,confirmComment',
         ],
         [
-            'Comment' => 'index,new,create,upvote,downvote',
+            'Comment' => 'index,new,create,upvote,downvote,confirmComment',
         ]
     );
 

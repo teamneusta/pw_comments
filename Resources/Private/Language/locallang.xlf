@@ -133,10 +133,10 @@
 				<source>Hello,</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted" xml:space="preserve">
-				<source>you have posted a new comment which awaits our approval on this page: %s</source>
+				<source>you have posted a new comment which awaits our approval on this page:</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted" xml:space="preserve">
-				<source>you have posted a new comment on this page: %s</source>
+				<source>you have posted a new comment on this page:</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.subject" xml:space="preserve">
 				<source>Your comment on %s has been published</source>
@@ -145,7 +145,7 @@
 				<source>Hello,</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished" xml:space="preserve">
-				<source>your comment has been published, on this page: %s</source>
+				<source>your comment has been published, on this page:</source>
 			</trans-unit>
 			<trans-unit id="mailSentToAuthorAfterPublish" xml:space="preserve">
 				<source>The author of this comment (%s) has been notified by mail.</source>
@@ -167,6 +167,12 @@
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.custom.votingDisabled" xml:space="preserve">
 				<source>To vote for comments, please login.</source>
+			</trans-unit>
+			<trans-unit id="noCommentAvailable" xml:space="preserve">
+				<source>Could not find comment to publish</source>
+			</trans-unit>
+			<trans-unit id="commentPublished" xml:space="preserve">
+				<source>The comment has been publish</source>
 			</trans-unit>
 		</body>
 	</file>

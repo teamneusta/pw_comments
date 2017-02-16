@@ -176,12 +176,12 @@
 				<target>Hallo,</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted" xml:space="preserve" approved="yes">
-				<source>you have posted a new comment which awaits our approval on this page: %s</source>
-				<target>Sie haben einen neuen Kommentar eingesendet, welcher durch uns freigeschaltet wird, auf der Seite: %s</target>
+				<source>you have posted a new comment which awaits our approval on this page:</source>
+				<target>Sie haben einen neuen Kommentar eingesendet, welcher durch uns freigeschaltet wird, auf der Seite:</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted" xml:space="preserve" approved="yes">
-				<source>you have posted a new comment on this page: %s</source>
-				<target>Sie haben auf dieser Seite einen neuen Kommentar eingesendet: %s</target>
+				<source>you have posted a new comment on this page:</source>
+				<target>Sie haben auf dieser Seite einen neuen Kommentar eingesendet:</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.subject" xml:space="preserve" approved="yes">
 				<source>Your comment on %s has been published</source>
@@ -192,8 +192,8 @@
 				<target>Hallo,</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished" xml:space="preserve" approved="yes">
-				<source>your comment has been published, on this page: %s</source>
-				<target>Ihr Kommentar wurde auf dieser Seite veröffentlicht: %s</target>
+				<source>your comment has been published, on this page:</source>
+				<target>Ihr Kommentar wurde auf dieser Seite veröffentlicht:</target>
 			</trans-unit>
 			<trans-unit id="mailSentToAuthorAfterPublish" xml:space="preserve" approved="yes">
 				<source>The author of this comment (%s) has been notified by mail.</source>
@@ -222,6 +222,14 @@
 			<trans-unit id="tx_pwcomments.custom.votingDisabled" xml:space="preserve" approved="yes">
 				<source>To vote for comments, please login.</source>
 				<target>Um Kommentare zu bewerten, bitte anmelden.</target>
+			</trans-unit>
+			<trans-unit id="noCommentAvailable" xml:space="preserve" approved="yes">
+				<source>Could not find comment to publish</source>
+				<target>Zu veröffentlichender Kommentar konnte nicht gefunden werden</target>
+			</trans-unit>
+			<trans-unit id="commentPublished" xml:space="preserve" approved="yes">
+				<source>The comment has been publish</source>
+				<target>Der Kommentar wurde veröffentlicht</target>
 			</trans-unit>
 		</body>
 	</file>

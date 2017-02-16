@@ -47,8 +47,6 @@ plugin.tx_pwcomments {
 		sendMailOnNewCommentsTo =
 		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
 		sendMailMimeType = text/plain
-		overwriteBackendDomain =
-		subFolder =
 
 		enableCommentVotes = 1
 		enableReplyVotes = 1
@@ -130,9 +128,15 @@ lib.pwCommentsIndex {
 
 # Lib for form to post new comments
 lib.pwCommentsNew < lib.pwCommentsIndex
-lib.pwCommentsNew.switchableControllerActions.Comment.1 = new
-lib.pwCommentsNew.switchableControllerActions.Comment.2 = create
-lib.pwCommentsNew.switchableControllerActions.Comment.3 >
+lib.pwCommentsNew {
+	switchableControllerActions {
+		Comment {
+			1 = new
+			2 = create
+			3 = confirmComment
+		}
+	}
+}
 
 # Number of comments of current/given page
 lib.pwCommentsGetCount = COA_INT

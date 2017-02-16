@@ -91,9 +91,10 @@ class Mail
      * Creates and sends mail
      *
      * @param Comment $comment comment
+     * @param string $hash validation string to add to url if comment must be moderate
      * @return bool Returns TRUE if the mail has been sent successfully
      */
-    public function sendMail(Comment $comment)
+    public function sendMail(Comment $comment, $hash = '')
     {
         /** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
         $mail = GeneralUtility::makeInstance('TYPO3\CMS\Core\Mail\MailMessage');
@@ -119,7 +120,7 @@ class Mail
                 [GeneralUtility::getHostname()]
             )
         );
-        $mail->addPart($this->getMailMessage($comment), $this->settings['sendMailMimeType']);
+        $mail->addPart($this->getMailMessage($comment, $hash), $this->settings['sendMailMimeType']);
         return (bool) $mail->send();
     }
 
@@ -127,45 +128,26 @@ class Mail
      * Gets the message for a notification mail as fluid template
      *
      * @param Comment $comment comment which triggers the mail send method
+     * @param string $hash validation string to add to url if comment must be moderate
      * @return string The rendered fluid template (HTML or plain text)
      *
      * @throws \Exception
      */
-    protected function getMailMessage(Comment $comment)
+    protected function getMailMessage(Comment $comment, $hash)
     {
         $mailTemplate = GeneralUtility::getFileAbsFileName($this->getTemplatePath());
         if (!file_exists($mailTemplate)) {
             throw new \Exception('Mail template (' . $mailTemplate . ') not found. ');
         }
+
         $this->fluidTemplate->setTemplatePathAndFilename($mailTemplate);
-
-        // Assign variables
-        $this->fluidTemplate->assign('comment', $comment);
-        $this->fluidTemplate->assign('settings', $this->settings);
-
-        $uriBuilder = $this->controllerContext->getUriBuilder();
-
-        $subFolder = ($this->settings['subFolder']) ? $this->settings['subFolder'] : '';
-
-        $articleLink = 'http://' . GeneralUtility::getHostname() . $subFolder . '/' .
-                        $uriBuilder
-                            ->setTargetPageUid($comment->getPid())
-                            ->setAddQueryString($this->getAddQueryStringToLinks())
-                            ->setArgumentsToBeExcludedFromQueryString(
-                                ['id', 'cHash', 'tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]']
-                            )
-                            ->setUseCacheHash(false)
-                            ->buildFrontendUri();
-        $this->fluidTemplate->assign('articleLink', $articleLink);
-
-        $backendDomain = $this->settings['overwriteBackendDomain']
-            ? $this->settings['overwriteBackendDomain']
-            : GeneralUtility::getHostname();
-
-        $backendLink = 'http://' . $backendDomain . $subFolder . '/typo3/alt_doc.php?M=web_list&id=' .
-            $comment->getPid() . '&edit[tx_pwcomments_domain_model_comment][' . $comment->getUid() . ']=edit';
-
-        $this->fluidTemplate->assign('backendLink', $backendLink);
+        $this->fluidTemplate->assignMultiple(
+            [
+                'hash' => $hash,
+                'comment' => $comment,
+                'settings' => $this->settings
+            ]
+        );
         return $this->fluidTemplate->render();
     }
 

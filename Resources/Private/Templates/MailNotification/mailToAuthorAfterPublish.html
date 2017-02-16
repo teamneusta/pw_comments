@@ -1,5 +1,6 @@
 {namespace pw=PwCommentsTeam\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterPublish.salutation" />
-<f:translate key="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished" arguments="{0:'{articleLink -> f:format.raw()}'}" />
+<f:translate key="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished"/>
+<f:uri.page addQueryString="true" argumentsToBeExcludedFromQueryString="{0:'id', 1:'cHash', 2:'tx_pwcomments_pi1'}" noCacheHash="true"/>
 
 ---------------------------------------------------
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}

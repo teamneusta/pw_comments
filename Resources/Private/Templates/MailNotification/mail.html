@@ -2,10 +2,10 @@
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" /></f:then><f:else><f:translate key="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" /></f:else></f:if>
 
 <f:translate key="tx_pwcomments.notificationMail.linkToArticle" />
-<f:format.raw>{articleLink}</f:format.raw>
+<f:uri.page addQueryString="true" argumentsToBeExcludedFromQueryString="{0:'id', 1:'cHash', 2:'tx_pwcomments_pi1'}" noCacheHash="true"/>
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
-<f:format.raw>{backendLink}</f:format.raw>
+<f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}" noCacheHash="true"/>
 </f:if>
 ---------------------------------------------------
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}

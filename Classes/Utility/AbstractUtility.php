@@ -22,6 +22,21 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class AbstractUtility
 {
     /**
+     * Get TYPO3 encryption key
+     *
+     * @return string
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected static function getEncryptionKey()
+    {
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'])) {
+            throw new \Exception('No encryption key found in this TYPO3 installation');
+        }
+        return $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
+    }
+
+    /**
      * Returns the configuration manager interface
      *
      * @return ConfigurationManagerInterface
