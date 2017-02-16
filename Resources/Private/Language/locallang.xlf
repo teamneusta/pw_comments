@@ -174,7 +174,7 @@
 			<trans-unit id="commentPublished" xml:space="preserve">
 				<source>The comment has been publish</source>
 			</trans-unit>
-			<trans-unit id="showComments" xml:space="preserve">
+            <trans-unit id="showComments" xml:space="preserve">
 				<source>Show comments</source>
 			</trans-unit>
 			<trans-unit id="totalCommentsAmount" xml:space="preserve">

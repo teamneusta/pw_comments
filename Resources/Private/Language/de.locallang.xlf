@@ -233,24 +233,6 @@
 			</trans-unit>
 			<trans-unit id="showComments" xml:space="preserve">
 				<source>Show comments</source>
-				<source></source>
-			</trans-unit>
-			<trans-unit id="totalCommentsAmount" xml:space="preserve">
-				<source></source>
-			</trans-unit>
-			<trans-unit id="totalCommentsAmountOne" xml:space="preserve">
-				<source></source>
-			</trans-unit>
-			<trans-unit id="unreleasedCommentsAmount" xml:space="preserve">
-				<source></source>
-			</trans-unit>
-			<trans-unit id="unreleasedCommentsAmountOne" xml:space="preserve">
-				<source></source>
-			</trans-unit>
-
-
-			<trans-unit id="showComments" xml:space="preserve">
-				<source>Show comments</source>
 				<target>Kommentare anzeigen</target>
 			</trans-unit>
 			<trans-unit id="totalCommentsAmount" xml:space="preserve">
