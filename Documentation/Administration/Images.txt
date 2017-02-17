@@ -1,0 +1,5 @@
+.. |comment_ext-manager|      image:: ../Images/pw_comments_ext-manager.png
+.. :align: left
+.. :border: 0
+.. :name: extension manager
+.. :vspace: 20
