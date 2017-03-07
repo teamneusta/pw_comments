@@ -1,0 +1,36 @@
+{
+    "name": "instituteweb/pw_comments",
+    "type": "typo3-cms-extension",
+    "description": "Powerful extension for providing comments, including replies on comments and voting.",
+    "keywords": ["TYPO3", "extension", "comment", "voting"],
+    "homepage": "http://v.ieweg.de/",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Armin Vieweg",
+            "role": "Lead Developer",
+            "email": "armin@v.ieweg.de",
+            "homepage": "http://v.ieweg.de/"
+        },
+        {
+            "name": "Dennis Roemmich",
+            "role": "Developer"
+        },
+        {
+            "name": "Christian Wolfram",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6,<8.0",
+        "typo3/cms-core": ">=7.6.0,<9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PwCommentsTeam\\PwComments\\": "Classes"
+        }
+    },
+    "replace": {
+        "pw_comments": "self.version"
+    }
+}
