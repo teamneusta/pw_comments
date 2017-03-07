@@ -16,7 +16,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package PwCommentsTeam\PwComments
  */
-class HashUtility extends AbstractUtility
+class HashEncryptionUtility extends AbstractEncryptionUtility
 {
     /**
      * Check if given hash is correct

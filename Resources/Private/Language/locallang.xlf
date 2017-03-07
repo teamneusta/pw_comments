@@ -174,6 +174,24 @@
 			<trans-unit id="commentPublished" xml:space="preserve">
 				<source>The comment has been publish</source>
 			</trans-unit>
+            <trans-unit id="showComments" xml:space="preserve">
+				<source>Show comments</source>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmount" xml:space="preserve">
+				<source>This page has %s comments.</source>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmountOne" xml:space="preserve">
+				<source>This page has one comment.</source>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmount" xml:space="preserve">
+				<source>%s comments remain unreleased!</source>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmountOne" xml:space="preserve">
+				<source>One comment remains unreleased!</source>
+			</trans-unit>
+			<trans-unit id="pageModuleNotice" xml:space="preserve">
+				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

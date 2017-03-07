@@ -43,6 +43,13 @@ $boot = function ($extensionKey) {
         'PwCommentsTeam\PwComments\Hooks\ProcessDatamap';
 
     if (TYPO3_MODE === 'BE') {
+        $extensionConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']);
+        if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'] = array(
+                'className' => 'PwCommentsTeam\\PwComments\\XClass\\PageLayoutController',
+            );
+        }
+
         /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
         $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Imaging\IconRegistry::class
