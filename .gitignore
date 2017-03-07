@@ -1,13 +1,11 @@
-### IDE/editor
+### Editor meta data
 /.idea
 /nbproject
 /*.sublime-*
 
-### Tools
-/_vagrant
+### Vagrant & Composer
 /.vagrant
-/Vagrantfile
-/puphpet
+package.box
 /composer.lock
 /composer.phar
 /vendor
