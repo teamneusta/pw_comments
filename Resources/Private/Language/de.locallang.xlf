@@ -231,6 +231,48 @@
 				<source>The comment has been publish</source>
 				<target>Der Kommentar wurde veröffentlicht</target>
 			</trans-unit>
+			<trans-unit id="showComments" xml:space="preserve">
+				<source>Show comments</source>
+				<source></source>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmount" xml:space="preserve">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmountOne" xml:space="preserve">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmount" xml:space="preserve">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmountOne" xml:space="preserve">
+				<source></source>
+			</trans-unit>
+
+
+			<trans-unit id="showComments" xml:space="preserve">
+				<source>Show comments</source>
+				<target>Kommentare anzeigen</target>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmount" xml:space="preserve">
+				<source>This page has %s comments.</source>
+				<target>Diese Seite hat %s Kommentare.</target>
+			</trans-unit>
+			<trans-unit id="totalCommentsAmountOne" xml:space="preserve">
+				<source>This page has one comment.</source>
+				<target>Diese Seite hat einen Kommentar.</target>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmount" xml:space="preserve">
+				<source>%s comments remain unreleased!</source>
+				<target>%s von ihnen verweilen unveröffentlicht!</target>
+			</trans-unit>
+			<trans-unit id="unreleasedCommentsAmountOne" xml:space="preserve">
+				<source>One comment remains unreleased!</source>
+				<target>Einer von ihnen verweilt unveröffentlicht!</target>
+			</trans-unit>
+			<trans-unit id="pageModuleNotice" xml:space="preserve">
+				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
+				<target>Seitenmodul Notiz: Zeigt Infoormationen über Kommentare auf aktueller Seite als Notiz im Seitenmodul an.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
