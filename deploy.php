@@ -47,7 +47,9 @@ task('watch:upload', function(){
                 writeln('File modified <info>' . $path . '</info>');
             }
             forEachDeployPath(function($deployPath) use ($path, $relativePath) {
-                upload($path, $deployPath . '/' . $relativePath);
+                if (file_exists($path)) {
+                    upload($path, $deployPath . '/' . $relativePath);
+                }
             });
         }
     });
@@ -58,7 +60,9 @@ task('watch:upload', function(){
                 writeln('New file <info>' . $path . '</info>');
             }
             forEachDeployPath(function($deployPath) use ($path, $relativePath) {
-                upload($path, $deployPath . '/' . $relativePath);
+                if (file_exists($path)) {
+                    upload($path, $deployPath . '/' . $relativePath);
+                }
             });
         }
     });
