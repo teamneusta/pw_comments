@@ -12,9 +12,10 @@
 		</f:else>
 	</f:if></h3>
 
-	<f:form name="newComment" object="{newComment}" action="create" section="{settings.writeCommentAnchor}" addQueryString="1" noCacheHash="1" noCache="1" argumentsToBeExcludedFromQueryString="{0: 'cHash'}">
+	<f:form name="newComment" object="{newComment}" action="create" section="{settings.writeCommentAnchor}">
 		<div class="typo3-messages">
-			<f:flashMessages id="{settings.successfulAnchor}" />
+			<a name="{settings.successfulAnchor}"></a>
+			<f:flashMessages />
 			<f:render partial="Comment/FormErrors/ValidationResults" />
 		</div>
 

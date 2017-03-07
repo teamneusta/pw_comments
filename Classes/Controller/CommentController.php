@@ -419,7 +419,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 * @return string The link
 	 */
 	private function buildUriByUid($uid, $excludeCommentToReplyTo = FALSE) {
-		$excludeFromQueryString = array('tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]');
+		$excludeFromQueryString = array('tx_pwcomments_pi1[action]', 'tx_pwcomments_pi1[controller]', 'cHash');
 		if ($excludeCommentToReplyTo === TRUE) {
 			$excludeFromQueryString[] = 'tx_pwcomments_pi1[commentToReplyTo]';
 		}

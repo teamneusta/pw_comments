@@ -5,7 +5,8 @@
 		<div id="{settings.showCommentAnchor}">
 			<h1><f:translate key="tx_pwcomments.comments" /> ({commentCount})</h1>
 			<f:if condition="{hasCustomMessages}">
-				<f:flashMessages id="{settings.customMessagesAnchor}" />
+				<a name="{settings.customMessagesAnchor}"></a>
+				<f:flashMessages />
 			</f:if>
 			<f:if condition="{comments -> f:count()} > 0">
 				<f:then>
