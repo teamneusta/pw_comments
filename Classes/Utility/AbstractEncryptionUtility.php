@@ -16,10 +16,9 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 /**
  * Class AbstractUtility
  *
- * @package TYPO3
- * @subpackage tx_pwcomments
+ * @package PwCommentsTeam\PwComments
  */
-class AbstractUtility
+abstract class AbstractEncryptionUtility
 {
     /**
      * Get TYPO3 encryption key

@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  *
  * @package PwCommentsTeam\PwComments
  */
-class Settings extends AbstractUtility
+class Settings extends AbstractEncryptionUtility
 {
     /**
      * Renders a given typoscript configuration and returns the whole array with
