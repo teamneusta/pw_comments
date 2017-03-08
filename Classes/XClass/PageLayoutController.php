@@ -7,7 +7,6 @@ namespace PwCommentsTeam\PwComments\XClass;
  *  | (c) 2011-2017 Armin Ruediger Vieweg <armin@v.ieweg.de>
  */
 use PwCommentsTeam\PwComments\Utility\DatabaseUtility;
-use TYPO3\CMS\Backend\Module\ModuleLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -29,7 +28,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $total = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_pwcomments_domain_model_comment',
-            '1=1' . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment', true)
+            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment', true)
         );
         if (!$total) {
             return $content;
@@ -38,7 +37,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $released = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_pwcomments_domain_model_comment',
-            '1=1' . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment')
+            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment')
         );
         $unreleased = $total - $released;
 
