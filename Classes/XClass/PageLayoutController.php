@@ -60,7 +60,14 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         }
         $message = '<p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
-        $message .= '<a class="btn btn-warning" href="javascript:top.goToModule(\'web_list\',1);">' . $this->translate('showComments') . '</a>';
+        $uriBuilder = new \TYPO3\CMS\Backend\Routing\UriBuilder();
+        $path = $uriBuilder->buildUriFromModule('web_list', [
+            'id' => $this->pageinfo['uid'],
+            'table' => 'tx_pwcomments_domain_model_comment',
+            'imagemode' => 1
+        ]);
+
+        $message .= '<a class="btn btn-warning" href="' . $path . '">' . $this->translate('showComments') . '</a>';
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,
