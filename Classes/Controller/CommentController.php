@@ -10,7 +10,7 @@ namespace PwCommentsTeam\PwComments\Controller;
  */
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
 use PwCommentsTeam\PwComments\Domain\Model\Vote;
-use PwCommentsTeam\PwComments\Utility\HashUtility;
+use PwCommentsTeam\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -218,7 +218,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
             $this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
-            $this->mailUtility->sendMail($newComment, HashUtility::createHashForComment($newComment));
+            $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
         }
 
         if ($this->settings['sendMailToAuthorAfterSubmit'] && $newComment->hasCommentAuthorMailAddress()) {
@@ -323,7 +323,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         /**@var Comment $comment*/
         $comment = $this->commentRepository->findByCommentUid($comment);
-        if ($comment === null || !HashUtility::validCommentHash($hash, $comment)) {
+        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment)) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('noCommentAvailable', 'PwComments'),
                 '',
@@ -484,7 +484,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $excludeFromQueryString = [
             'tx_pwcomments_pi1[action]',
             'tx_pwcomments_pi1[controller]',
-            'tx_pwcomments_pi1[hash]'
+            'tx_pwcomments_pi1[hash]',
+            'cHash'
         ];
 
         if ($excludeCommentToReplyTo === true) {
