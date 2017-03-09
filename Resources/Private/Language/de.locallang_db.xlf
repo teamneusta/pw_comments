@@ -95,6 +95,26 @@
 				<source>Comment</source>
 				<target>Kommentar</target>
 			</trans-unit>
+			<trans-unit id="plugin.title" xml:space="preserve">
+				<source>pw_comments</source>
+				<target>pw_comments</target>
+			</trans-unit>
+			<trans-unit id="plugin.sheet" xml:space="preserve">
+				<source>Settings</source>
+				<target>Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="plugin.mode" xml:space="preserve">
+				<source>Mode</source>
+				<target>Modus</target>
+			</trans-unit>
+			<trans-unit id="plugin.mode.index" xml:space="preserve">
+				<source>Show comments</source>
+				<target>Zeige Kommentare</target>
+			</trans-unit>
+			<trans-unit id="plugin.mode.new" xml:space="preserve">
+				<source>Show new comment</source>
+				<target>Zeige Formular für neue Kommentare</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

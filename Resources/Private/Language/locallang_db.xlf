@@ -72,6 +72,21 @@
 			<trans-unit id="tx_pwcomments_domain_model_vote.comment" xml:space="preserve">
 				<source>Comment</source>
 			</trans-unit>
+			<trans-unit id="plugin.title" xml:space="preserve">
+				<source>pw_comments</source>
+			</trans-unit>
+			<trans-unit id="plugin.sheet" xml:space="preserve">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="plugin.mode" xml:space="preserve">
+				<source>Mode</source>
+			</trans-unit>
+			<trans-unit id="plugin.mode.index" xml:space="preserve">
+				<source>Show comments</source>
+			</trans-unit>
+			<trans-unit id="plugin.mode.new" xml:space="preserve">
+				<source>Show new comment form</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

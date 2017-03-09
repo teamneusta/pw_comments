@@ -13,15 +13,34 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $boot = function ($extensionKey) {
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+        'InstituteWeb.' . $extensionKey,
+        'Pi1',
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title'
+    );
+    $extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($extensionKey);
+    $pluginSignature = strtolower($extensionName) . '_pi1';
+
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key,pages,recursive';
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+        $pluginSignature,
+        'FILE:EXT:' . $extensionKey . '/Configuration/FlexForms/Plugin.xml'
+    );
+
+
+
+    // Add optional typoscript
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         $extensionKey,
         'Configuration/TypoScript',
         'pwComments'
     );
 
+    // TCA options
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
-    
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
 };
 
