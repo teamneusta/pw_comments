@@ -56,9 +56,8 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
             $textUnreleased = $unreleased == 1
                 ? $this->translate('unreleasedCommentsAmountOne')
                 : $this->translate('unreleasedCommentsAmount', [$total]);
-            $textUnreleased = '<b>' . $textUnreleased . '</b>';
+            $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
-        $message = '<p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
         $uriBuilder = new \TYPO3\CMS\Backend\Routing\UriBuilder();
         $path = $uriBuilder->buildUriFromModule('web_list', [
@@ -67,7 +66,9 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
             'imagemode' => 1
         ]);
 
-        $message .= '<a class="btn btn-warning" href="' . $path . '">' . $this->translate('showComments') . '</a>';
+        $message = '<a class="btn btn-warning pull-right" href="' . $path . '">' . $this->translate('showComments') . '</a>';
+        $message .= '<p>' . $textTotal . ' ' . $textUnreleased . '</p>';
+
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,

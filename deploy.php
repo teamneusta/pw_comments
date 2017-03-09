@@ -22,6 +22,7 @@ set('bin/rm', 'rm -Rf ');
 set('bin/touch', 'touch ');
 set('bin/composer:install', 'composer install --no-ansi -n');
 set('bin/composer:update', 'composer update --no-ansi -n');
+set('bin/webbrowser', 'explorer ');
 
 server('vagrant', '192.168.0.100')
     ->user('vagrant')
@@ -113,6 +114,12 @@ task('set-up', [
     'upload'
 ]);
 
+desc('Open browser with configured server hostname/ip');
+task('show', function(){
+    /** @var \Deployer\Server\Remote\PhpSecLib $server */
+    $server = Deployer::get()->servers->get('vagrant');
+    runLocally(get('bin/webbrowser') . ' http://' . $server->getConfiguration()->getHost());
+});
 
 // Functions
 
