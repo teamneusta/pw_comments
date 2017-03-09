@@ -181,7 +181,7 @@ return [
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'tx_pwcomments_domain_model_vote',
-                'MM' => 'tx_pwcomments_comment_vote_mm',
+                'foreign_field' => 'comment',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
