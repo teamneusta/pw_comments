@@ -11,6 +11,7 @@ namespace PwCommentsTeam\PwComments\Controller;
 use PwCommentsTeam\PwComments\Domain\Model\Comment;
 use PwCommentsTeam\PwComments\Domain\Model\Vote;
 use PwCommentsTeam\PwComments\Utility\HashEncryptionUtility;
+use PwCommentsTeam\PwComments\Utility\StringUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -174,6 +175,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->createAuthorIdent();
 
+        $newComment->setMessage(
+            StringUtility::prepareCommentMessage($newComment->getMessage(), $this->settings['linkUrlsInComments'])
+        );
         $newComment->setPid($this->pageUid);
         $newComment->setEntryUid($this->entryUid);
         $newComment->setAuthorIdent($this->currentAuthorIdent);
