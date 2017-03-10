@@ -37,15 +37,17 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $pid pid to get comments for
      * @param string $authorIdent
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult found votes
+     * @return object|\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult found votes
      */
     public function findByPidAndAuthorIdent($pid, $authorIdent)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                $query->equals('pid', $pid),
-                $query->equals('authorIdent', $authorIdent)
+                [
+                    $query->equals('pid', $pid),
+                    $query->equals('authorIdent', $authorIdent)
+                ]
             )
         );
         return $query->execute();
@@ -56,15 +58,17 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param Comment $comment
      * @param string $authorIdent
-     * @return \PwCommentsTeam\PwComments\Domain\Model\Vote
+     * @return object|\PwCommentsTeam\PwComments\Domain\Model\Vote
      */
     public function findOneByCommentAndAuthorIdent(Comment $comment, $authorIdent)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                $query->equals('comment', $comment),
-                $query->equals('authorIdent', $authorIdent)
+                [
+                    $query->equals('comment', $comment),
+                    $query->equals('authorIdent', $authorIdent)
+                ]
             )
         );
         return $query->execute()->getFirst();
