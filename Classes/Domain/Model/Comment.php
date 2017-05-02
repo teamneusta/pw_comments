@@ -256,27 +256,6 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setMessage($message)
     {
-        $message = trim($message);
-
-        $threeNewLines = "\r\n\r\n\r\n";
-        $twoNewLines = "\r\n\r\n";
-        do {
-            $message = str_replace($threeNewLines, $twoNewLines, $message);
-        } while (strstr($message, $threeNewLines));
-
-        // Decode html tags
-        $message = htmlspecialchars($message);
-
-        $settings = Settings::getExtensionSettings();
-        if ($settings['linkUrlsInComments']) {
-            // Create links
-            $message = preg_replace(
-                '/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/',
-                '<a href="http$4://$5$6">$1</a>',
-                $message
-            );
-        }
-
         $this->message = $message;
     }
 
