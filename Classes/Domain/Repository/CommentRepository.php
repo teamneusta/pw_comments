@@ -50,15 +50,17 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Find comments by pid
      *
      * @param int $pid pid to get comments for
-     * @return QueryResult<Comment> found comments
+     * @return object|QueryResult<Comment> found comments
      */
     public function findByPid($pid)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                $query->equals('pid', $pid),
-                $query->equals('parentComment', 0)
+                [
+                    $query->equals('pid', $pid),
+                    $query->equals('parentComment', 0)
+                ]
             )
         );
         $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
@@ -75,7 +77,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $pid pid to get comments for
      * @param int $entryUid entry id to get comments for
-     * @return QueryResult<Comment> found comments
+     * @return object|QueryResult<Comment> found comments
      */
     public function findByPidAndEntryUid($pid, $entryUid)
     {
