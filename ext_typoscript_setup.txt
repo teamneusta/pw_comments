@@ -1,12 +1,7 @@
-plugin.tx_pwcomments {
-	persistence {
-		classes {
-			PwCommentsTeam\PwComments\Domain\Model\FrontendUser {
-				mapping {
-					tableName = fe_users
-				}
-			}
-		}
-		storagePid =
-	}
+config.tx_extbase.persistence.classes {
+    PwCommentsTeam\PwComments\Domain\Model\FrontendUser {
+        mapping {
+            tableName = fe_users
+        }
+    }
 }
