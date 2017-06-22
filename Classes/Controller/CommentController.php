@@ -423,7 +423,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         /** @var Vote $newVote */
         $newVote = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
         $newVote->setComment($comment);
-        $newVote->setPid($this->pageUid);
+        $newVote->setPid($this->commentStorageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
         if ($this->currentUser['uid']) {
             /** @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author */
