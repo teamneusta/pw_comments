@@ -106,6 +106,13 @@ return [
                 'type' => 'check'
             ]
         ],
+        'orig_pid' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.orig_pid',
+            'config' => [
+                'type' => 'input'
+            ]
+        ],
         'entry_uid' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.entry_uid',

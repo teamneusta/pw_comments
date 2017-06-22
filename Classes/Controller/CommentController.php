@@ -180,6 +180,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             StringUtility::prepareCommentMessage($newComment->getMessage(), $this->settings['linkUrlsInComments'])
         );
         $newComment->setPid($this->commentStorageUid);
+        $newComment->setOrigPid($this->pageUid);
         $newComment->setEntryUid($this->entryUid);
         $newComment->setAuthorIdent($this->currentAuthorIdent);
 
@@ -424,6 +425,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $newVote = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
         $newVote->setComment($comment);
         $newVote->setPid($this->commentStorageUid);
+        $newVote->setOrigPid($this->pageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
         if ($this->currentUser['uid']) {
             /** @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author */

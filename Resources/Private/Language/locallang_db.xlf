@@ -24,6 +24,9 @@
 			<trans-unit id="tx_pwcomments_domain_model_comment" xml:space="preserve">
 				<source>Comment</source>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve">
 				<source>Entry uid</source>
 			</trans-unit>
@@ -53,6 +56,9 @@
 			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_vote.crdate" xml:space="preserve">
 				<source>Creation date</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve">
 				<source>Type</source>
