@@ -5,7 +5,9 @@
 <f:uri.page addQueryString="true" argumentsToBeExcludedFromQueryString="{0:'id', 1:'cHash', 2:'tx_pwcomments_pi1'}" noCacheHash="true"/>
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
-<f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}" noCacheHash="true"/>
+<f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}"
+              noCacheHash="true" addQueryString="true" argumentsToBeExcludedFromQueryString="{0:'id'}"
+              absolute="true"/>
 </f:if>
 ---------------------------------------------------
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}
