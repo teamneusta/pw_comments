@@ -197,7 +197,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $translateArguments = [
             'name' => $newComment->getAuthorName(),
-            'email' => $newComment->getAuthorMail(),
+            'email' => $newComment->getCommentAuthorMailAddress(),
             'message' => $newComment->getMessage(),
         ];
 
@@ -469,7 +469,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 LocalizationUtility::translate(
                     'mailSentToAuthorAfterPublish',
                     'PwComments',
-                    [$comment->getAuthorMail()]
+                    [$comment->getCommentAuthorMailAddress()]
                 )
             );
         }
