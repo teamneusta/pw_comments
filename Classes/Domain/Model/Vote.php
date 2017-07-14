@@ -22,6 +22,11 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     const TYPE_DOWNVOTE = 0;
 
     /**
+     * @var int uid of the page for what the comment is for
+     */
+    protected $origPid = 0;
+
+    /**
      * @var int
      */
     protected $type;
@@ -45,6 +50,27 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
      */
     protected $comment;
+
+    /**
+     * Getter for origPid
+     *
+     * @return int
+     */
+    public function getOrigPid()
+    {
+        return $this->origPid;
+    }
+
+    /**
+     * Setter for origPid
+     *
+     * @param int $origPid
+     * @return void
+     */
+    public function setOrigPid($origPid)
+    {
+        $this->origPid = $origPid;
+    }
 
     /**
      * Get type

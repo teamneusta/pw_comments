@@ -22,6 +22,8 @@ plugin.tx_pwcomments {
 	}
 
 	settings {
+		storagePid = {$plugin.tx_pwcomments.settings.storagePid}
+
 		commentAnchorPrefix = comment
 		showCommentAnchor = comments
 		writeCommentAnchor = writeComment

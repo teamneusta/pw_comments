@@ -31,6 +31,10 @@
 				<source>Comment</source>
 				<target>Kommentar</target>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.orig_pid" xml:space="preserve" approved="yes">
+				<source>Page uid of the commented page</source>
+				<target>UID der kommentierten Seite</target>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve" approved="yes">
 				<source>Entry uid</source>
 				<target>Eintrag UID</target>
@@ -74,6 +78,10 @@
 			<trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve" approved="yes">
 				<source>Type</source>
 				<target>Typ</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_vote.orig_pid" xml:space="preserve" approved="yes">
+				<source>Page uid of the commented page</source>
+				<target>UID der kommentierten Seite</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_vote.type.0" xml:space="preserve" approved="yes">
 				<source>Downvote</source>

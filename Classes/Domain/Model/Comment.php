@@ -22,6 +22,11 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
+     * @var int uid of the page for what the comment is for
+     */
+    protected $origPid = 0;
+
+    /**
      * @var int uid of entry for what the comment is for
      */
     protected $entryUid = 0;
@@ -116,6 +121,27 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->author = GeneralUtility::makeInstance(FrontendUser::class);
         $this->votes = new ObjectStorage();
+    }
+
+    /**
+     * Getter for origPid
+     *
+     * @return int
+     */
+    public function getOrigPid()
+    {
+        return $this->origPid;
+    }
+
+    /**
+     * Setter for origPid
+     *
+     * @param int $origPid
+     * @return void
+     */
+    public function setOrigPid($origPid)
+    {
+        $this->origPid = $origPid;
     }
 
     /**

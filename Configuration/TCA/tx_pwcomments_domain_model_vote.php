@@ -45,6 +45,13 @@ return [
                 'type' => 'input'
             ]
         ],
+        'orig_pid' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_vote.orig_pid',
+            'config' => [
+                'type' => 'input'
+            ]
+        ],
         'crdate' => [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
