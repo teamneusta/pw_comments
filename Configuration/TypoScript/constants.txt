@@ -13,4 +13,10 @@ plugin.tx_pwcomments {
    persistence {
       storagePid =
    }
+
+   settings {
+      # if this is set, all comments will be saved on this page
+      storagePid = 
+   }
+   
 }

@@ -92,6 +92,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
         );
         $this->pageUid = $GLOBALS['TSFE']->id;
+        $this->commentStorageUid = (is_numeric($this->settings['storagePid']))? $this->settings['storagePid']:$this->pageUid;
         $this->currentUser = $GLOBALS['TSFE']->fe_user->user;
         $this->currentAuthorIdent =
             ($this->currentUser['uid']) ? $this->currentUser['uid'] : $this->cookieUtility->get('ahash');
@@ -124,10 +125,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         if ($this->entryUid > 0) {
             /* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
-            $comments = $this->commentRepository->findByPidAndEntryUid($this->pageUid, $this->entryUid);
+            $comments = $this->commentRepository->findByPidAndEntryUid($this->commentStorageUid, $this->entryUid);
         } else {
             /* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
-            $comments = $this->commentRepository->findByPid($this->pageUid);
+            $comments = $this->commentRepository->findByPid($this->commentStorageUid);
         }
 
         $this->handleCustomMessages();
@@ -135,7 +136,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $upvotedCommentUids = [];
         $downvotedCommentUids = [];
         if ($this->currentAuthorIdent !== null) {
-            $votes = $this->voteRepository->findByPidAndAuthorIdent($this->pageUid, $this->currentAuthorIdent);
+            $votes = $this->voteRepository->findByPidAndAuthorIdent($this->commentStorageUid, $this->currentAuthorIdent);
             /** @var $vote Vote */
             foreach ($votes as $vote) {
                 if ($vote->isDownvote()) {
@@ -178,7 +179,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $newComment->setMessage(
             StringUtility::prepareCommentMessage($newComment->getMessage(), $this->settings['linkUrlsInComments'])
         );
-        $newComment->setPid($this->pageUid);
+        $newComment->setPid($this->commentStorageUid);
+        $newComment->setOrigPid($this->pageUid);
         $newComment->setEntryUid($this->entryUid);
         $newComment->setAuthorIdent($this->currentAuthorIdent);
 
@@ -197,7 +199,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $translateArguments = [
             'name' => $newComment->getAuthorName(),
-            'email' => $newComment->getAuthorMail(),
+            'email' => $newComment->getCommentAuthorMailAddress(),
             'message' => $newComment->getMessage(),
         ];
 
@@ -422,7 +424,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         /** @var Vote $newVote */
         $newVote = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
         $newVote->setComment($comment);
-        $newVote->setPid($this->pageUid);
+        $newVote->setPid($this->commentStorageUid);
+        $newVote->setOrigPid($this->pageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
         if ($this->currentUser['uid']) {
             /** @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author */
@@ -460,7 +463,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
-            $this->mailUtility->setReceivers($comment->getAuthorMail());
+            $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
@@ -469,7 +472,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 LocalizationUtility::translate(
                     'mailSentToAuthorAfterPublish',
                     'PwComments',
-                    [$comment->getAuthorMail()]
+                    [$comment->getCommentAuthorMailAddress()]
                 )
             );
         }

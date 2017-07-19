@@ -1,13 +1,13 @@
 plugin.tx_pwcomments {
 	mvc.callDefaultActionIfActionCantBeResolved = 1
 
-	views {
+	view {
 		templateRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Templates/
 			1 = {$plugin.tx_pwcomments.view.templateRootPaths}
 		}
 
-		PartilasRootPaths {
+		partialRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Partials/
 			1 = {$plugin.tx_pwcomments.view.partialsRootPaths}
 		}
@@ -22,6 +22,8 @@ plugin.tx_pwcomments {
 	}
 
 	settings {
+		storagePid = {$plugin.tx_pwcomments.settings.storagePid}
+
 		commentAnchorPrefix = comment
 		showCommentAnchor = comments
 		writeCommentAnchor = writeComment
