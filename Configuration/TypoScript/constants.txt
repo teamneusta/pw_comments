@@ -1,3 +1,15 @@
+# customsubcategory=anchors=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:anchors
+# customsubcategory=gravatar=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:gravatar
+# customsubcategory=entryuid=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:entryuid
+# customsubcategory=replying=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:replying
+# customsubcategory=sorting=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:sorting
+# customsubcategory=voting=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:voting
+# customsubcategory=moderation=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:moderation
+# customsubcategory=mails=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:mails
+# customsubcategory=permissions=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:permissions
+# customsubcategory=spamprotect=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:spamprotect
+# customsubcategory=misc=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:misc
+
 plugin.tx_pwcomments {
    view {
       # cat=plugin.tx_pwcomments/file; type=string; label=Path to template root
@@ -10,13 +22,99 @@ plugin.tx_pwcomments {
       layoutRootPath = EXT:pw_comments/Resources/Private/Layouts/
    }
 
-   persistence {
-      storagePid =
-   }
-
    settings {
-      # if this is set, all comments will be saved on this page
-      storagePid = 
+      # cat=plugin.tx_pwcomments/misc; type=string; label=StoragePid: If this is set, all comments will be saved on this page. If empty (default) the comments are stored at the page where it has been written.
+      storagePid =
+
+      # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.commentAnchorPrefix
+      commentAnchorPrefix = comment
+      # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showCommentAnchor
+      showCommentAnchor = comments
+      # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.writeCommentAnchor
+      writeCommentAnchor = writeComment
+      # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.successfulAnchor
+      successfulAnchor = thanksForYourComment
+      # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.customMessagesAnchor
+      customMessagesAnchor = customMessages
+
+      # cat=plugin.tx_pwcomments/gravatar; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showGravatarImage
+      showGravatarImage = 1
+      # cat=plugin.tx_pwcomments/gravatar; type=integer; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarSize
+      gravatarSize = 50
+      # cat=plugin.tx_pwcomments/gravatar; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarDefault
+      gravatarDefault = mm
+
+      # cat=plugin.tx_pwcomments/entryuid; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useEntryUid
+      useEntryUid = 0
+      # cat=plugin.tx_pwcomments/entryuid; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.entryUidData
+      entryUidData = GP:tx_extension|uid
+
+      # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRepliesToComments
+      enableRepliesToComments = 0
+      # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showRepliesToComments
+      showRepliesToComments = 0
+      # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.countReplies
+      countReplies = 1
+
+      # cat=plugin.tx_pwcomments/sorting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.invertCommentSorting
+      invertCommentSorting = 0
+      # cat=plugin.tx_pwcomments/sorting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.invertReplySorting
+      invertReplySorting = 0
+
+      # cat=plugin.tx_pwcomments/moderation; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.moderateNewComments
+      moderateNewComments = 1
+      # cat=plugin.tx_pwcomments/moderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailOnNewCommentsTo
+      sendMailOnNewCommentsTo =
+      # cat=plugin.tx_pwcomments/moderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailTemplate
+      sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
+      # cat=plugin.tx_pwcomments/moderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailMimeType
+      sendMailMimeType = text/plain
+
+      # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableCommentVotes
+      enableCommentVotes = 1
+      # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableReplyVotes
+      enableReplyVotes = 1
+      # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableVoting
+      enableVoting = 1
+      # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hideVoteButtons
+      hideVoteButtons = 0
+      # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.ignoreVotingForOwnComments
+      ignoreVotingForOwnComments = 1
+
+      # cat=plugin.tx_pwcomments/mails; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmit
+      sendMailToAuthorAfterSubmit = 0
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmitTemplate
+      sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
+      # cat=plugin.tx_pwcomments/mails; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublish
+      sendMailToAuthorAfterPublish = 0
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublishTemplate
+      sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
+
+      # cat=plugin.tx_pwcomments/permissions; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
+      secondsBetweenTwoComments = 300
+      # cat=plugin.tx_pwcomments/permissions; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.linkUrlsInComments
+      linkUrlsInComments = 1
+
+      # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsList
+      useBadWordsList = 1
+      # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnUsername
+      useBadWordsListOnUsername = 1
+      # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnMailAddress
+      useBadWordsListOnMailAddress = 0
+      # cat=plugin.tx_pwcomments/spamprotect; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.badWordsList
+      badWordsList = EXT:pw_comments/Resources/Private/Language/badwords.txt
+      # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldSpamProtection
+      hiddenFieldSpamProtection = 1
+      # cat=plugin.tx_pwcomments/spamprotect; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldName
+      hiddenFieldName = authorWebsite
+      # cat=plugin.tx_pwcomments/spamprotect; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldClass
+      hiddenFieldClass = hide_initally
+
+      replaceUsernameWith >
+      replaceMailWith >
+
+      # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback
+      relativeDate.absoluteFormatFallback = %d.%m.%Y
    }
    
 }

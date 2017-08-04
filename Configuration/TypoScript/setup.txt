@@ -17,67 +17,63 @@ plugin.tx_pwcomments {
 		}
 	}
 
-	persistence {
-		storagePid = {$plugin.tx_pwcomments.persistence.storagePid}
-	}
-
 	settings {
 		storagePid = {$plugin.tx_pwcomments.settings.storagePid}
 
-		commentAnchorPrefix = comment
-		showCommentAnchor = comments
-		writeCommentAnchor = writeComment
-		successfulAnchor = thanksForYourComment
-		customMessagesAnchor = customMessages
+		commentAnchorPrefix = {$plugin.tx_pwcomments.settings.commentAnchorPrefix}
+		showCommentAnchor = {$plugin.tx_pwcomments.settings.showCommentAnchor}
+		writeCommentAnchor = {$plugin.tx_pwcomments.settings.writeCommentAnchor}
+		successfulAnchor = {$plugin.tx_pwcomments.settings.successfulAnchor}
+		customMessagesAnchor = {$plugin.tx_pwcomments.settings.customMessagesAnchor}
 
-		showGravatarImage = 1
-		gravatarSize = 50
-		gravatarDefault = mm
+		showGravatarImage = {$plugin.tx_pwcomments.settings.showGravatarImage}
+		gravatarSize = {$plugin.tx_pwcomments.settings.gravatarSize}
+		gravatarDefault = {$plugin.tx_pwcomments.settings.gravatarDefault}
 
-		useEntryUid = 0
+		useEntryUid = {$plugin.tx_pwcomments.settings.useEntryUid}
 		entryUid = TEXT
-		entryUid.data = GP:tx_extension|uid
+		entryUid.data = {$plugin.tx_pwcomments.settings.entryUidData}
 
-		enableRepliesToComments = 0
-		showRepliesToComments = 0
-		countReplies = 1
+		enableRepliesToComments = {$plugin.tx_pwcomments.settings.enableRepliesToComments}
+		showRepliesToComments = {$plugin.tx_pwcomments.settings.showRepliesToComments}
+		countReplies = {$plugin.tx_pwcomments.settings.countReplies}
 
-		invertCommentSorting = 0
-		invertReplySorting = 0
+		invertCommentSorting = {$plugin.tx_pwcomments.settings.invertCommentSorting}
+		invertReplySorting = {$plugin.tx_pwcomments.settings.invertReplySorting}
 
-		moderateNewComments = 1
-		sendMailOnNewCommentsTo =
-		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
-		sendMailMimeType = text/plain
+		moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
+		sendMailOnNewCommentsTo = {$plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo}
+		sendMailTemplate = {$plugin.tx_pwcomments.settings.sendMailTemplate}
+		sendMailMimeType = {$plugin.tx_pwcomments.settings.sendMailMimeType}
 
-		enableCommentVotes = 1
-		enableReplyVotes = 1
-		enableVoting = 1
-		hideVoteButtons = 0
-		ignoreVotingForOwnComments = 1
+		enableCommentVotes = {$plugin.tx_pwcomments.settings.enableCommentVotes}
+		enableReplyVotes = {$plugin.tx_pwcomments.settings.enableReplyVotes}
+		enableVoting = {$plugin.tx_pwcomments.settings.enableVoting}
+		hideVoteButtons = {$plugin.tx_pwcomments.settings.hideVoteButtons}
+		ignoreVotingForOwnComments = {$plugin.tx_pwcomments.settings.ignoreVotingForOwnComments}
 
-		sendMailToAuthorAfterSubmit = 0
-		sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
+		sendMailToAuthorAfterSubmit = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit}
+		sendMailToAuthorAfterSubmitTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate}
 
-		sendMailToAuthorAfterPublish = 0
-		sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
+		sendMailToAuthorAfterPublish = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish}
+		sendMailToAuthorAfterPublishTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate}
 
-		secondsBetweenTwoComments = 300
-		linkUrlsInComments = 1
+		secondsBetweenTwoComments = {$plugin.tx_pwcomments.settings.secondsBetweenTwoComments}
+		linkUrlsInComments = {$plugin.tx_pwcomments.settings.linkUrlsInComments}
 
-		useBadWordsList = 1
-		useBadWordsListOnUsername = 1
-		useBadWordsListOnMailAddress = 0
-		badWordsList = EXT:pw_comments/Resources/Private/Language/badwords.txt
+		useBadWordsList = {$plugin.tx_pwcomments.settings.useBadWordsList}
+		useBadWordsListOnUsername = {$plugin.tx_pwcomments.settings.useBadWordsListOnUsername}
+		useBadWordsListOnMailAddress = {$plugin.tx_pwcomments.settings.useBadWordsListOnMailAddress}
+		badWordsList = {$plugin.tx_pwcomments.settings.badWordsList}
 
-		hiddenFieldSpamProtection = 1
-		hiddenFieldName = authorWebsite
-		hiddenFieldClass = hide_initally
+		hiddenFieldSpamProtection = {$plugin.tx_pwcomments.settings.hiddenFieldSpamProtection}
+		hiddenFieldName = {$plugin.tx_pwcomments.settings.hiddenFieldName}
+		hiddenFieldClass = {$plugin.tx_pwcomments.settings.hiddenFieldClass}
 
 		replaceUsernameWith >
 		replaceMailWith >
 
-		relativeDate.absoluteFormatFallback = %d.%m.%Y
+		relativeDate.absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
 	}
 }
 

@@ -17,8 +17,6 @@ moderateNewComments_                   boolean
 sendMailOnNewCommentsTo_               string
 sendMailTemplate_                      string
 sendMailMimeType_                      string
-overwriteBackendDomain_                string
-subFolder_                             string
 ===================================== ========
 
 .. _moderateNewComments:
@@ -81,31 +79,3 @@ sendMailMimeType
    Description
       Defines the MIME-type of the e-mail body. Please note that changes made here also need to be regarded in the
       appropriate template.
-
-.. _overwriteBackendDomain:
-
-overwriteBackendDomain
-""""""""""""""""""""""
-.. container:: table-row
-
-   Property
-      overwriteBackendDomain
-   Data type
-      string
-   Description
-      If your back end (sub-)domain is different to the one in the front end, you can change it here. The activation
-      link in notification e-mails is generated accordingly to this setting.
-
-.. _subFolder:
-
-subFolder
-"""""""""
-.. container:: table-row
-
-   Property
-      subFolder
-   Data type
-      string
-   Description
-      Since 1.3: If your TYPO3 instance is located in a subfolder you need to tell in this option the subfolder
-      with beginning slash (e.g. "/website")
