@@ -87,6 +87,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function initializeAction()
     {
+        if (!is_array($this->settings)) {
+            throw new \RuntimeException(
+                'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
+                1501862644
+            );
+        }
         $this->settings = $this->settingsUtility->renderConfigurationArray(
             $this->settings,
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
