@@ -381,7 +381,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
         if (!$this->settings['enableVoting']) {
-            $this->redirectToUri($this->buildUriToPage($this->pageUid, ['votingDisabled' => 1]) . $commentAnchor);
+            $this->forward('index');
             return;
         }
 
@@ -391,6 +391,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if ($this->currentAuthorIdent !== null) {
             if ($this->settings['ignoreVotingForOwnComments']
                 && $this->currentAuthorIdent == $comment->getAuthorIdent()) {
+                // TODO: use flash messages here?
                 $this->redirectToUri(
                     $this->buildUriToPage($this->pageUid, ['doNotVoteForYourself' => 1]) . $commentAnchor
                 );
@@ -414,7 +415,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $this->getPersistenceManager()->persistAll();
 
-        $this->redirectToUri($this->buildUriToPage($this->pageUid) . $commentAnchor);
+        $this->forward('index');
+        return;
     }
 
 
