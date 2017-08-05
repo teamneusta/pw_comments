@@ -4,6 +4,6 @@ pipelines:
   default:
     - step:
         script:
-          - phpcs --extensions=php --standard=PSR2 ./Classes ./*.php
-          - phpmd ./Classes text cleancode,design,codesize,naming,unusedcode --ignore-violations-on-exit
           - phploc ./Classes
+          - phpmd ./Classes text cleancode,design,codesize,naming,unusedcode --ignore-violations-on-exit
+          - phpcs --extensions=php --standard=PSR2 ./Classes ./*.php
