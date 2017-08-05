@@ -109,12 +109,7 @@ plugin.tx_pwcomments {
       hiddenFieldName = authorWebsite
       # cat=plugin.tx_pwcomments/spamprotect; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldClass
       hiddenFieldClass = hide_initally
-
-      replaceUsernameWith >
-      replaceMailWith >
-
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback
-      relativeDate.absoluteFormatFallback = %d.%m.%Y
+      absoluteFormatFallback = %d.%m.%Y
    }
-   
 }

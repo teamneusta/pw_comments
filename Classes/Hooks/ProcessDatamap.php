@@ -24,6 +24,8 @@ class ProcessDatamap
     /** @var array */
     protected $enabledStatus = ['update'];
 
+    // @codingStandardsIgnoreStart
+
     /**
      * After Save hook
      *
@@ -55,6 +57,8 @@ class ProcessDatamap
             }
         }
     }
+
+    // @codingStandardsIgnoreEnd
 
     /**
      * Initializes and runs an extbase controller
@@ -124,7 +128,8 @@ class ProcessDatamap
             'action' => $action,
             'mvc' => [
                 'requestHandlers' => [
-                    'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler' => 'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler'
+                    'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler' =>
+                        'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler'
                 ]
             ],
             'settings' => $settings,

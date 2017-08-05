@@ -98,7 +98,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
         );
         $this->pageUid = $GLOBALS['TSFE']->id;
-        $this->commentStorageUid = (is_numeric($this->settings['storagePid']))? $this->settings['storagePid']:$this->pageUid;
+        $this->commentStorageUid = is_numeric($this->settings['storagePid'])
+            ? $this->settings['storagePid']
+            : $this->pageUid;
         $this->currentUser = $GLOBALS['TSFE']->fe_user->user;
         $this->currentAuthorIdent =
             ($this->currentUser['uid']) ? $this->currentUser['uid'] : $this->cookieUtility->get('ahash');
@@ -142,7 +144,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $upvotedCommentUids = [];
         $downvotedCommentUids = [];
         if ($this->currentAuthorIdent !== null) {
-            $votes = $this->voteRepository->findByPidAndAuthorIdent($this->commentStorageUid, $this->currentAuthorIdent);
+            $votes = $this->voteRepository->findByPidAndAuthorIdent(
+                $this->commentStorageUid,
+                $this->currentAuthorIdent
+            );
             /** @var $vote Vote */
             foreach ($votes as $vote) {
                 if ($vote->isDownvote()) {
@@ -491,7 +496,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param int $uid The uid to use for building link
      * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be
-     * 			   removed from query string
+     *             removed from query string
      * @return string The link
      */
     private function buildUriByUid($uid, $excludeCommentToReplyTo = false)

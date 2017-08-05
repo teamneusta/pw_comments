@@ -41,7 +41,8 @@ class DatabaseUtility
     public static function getEnabledFields($tableName, $showHidden = false)
     {
         if (TYPO3_MODE === 'BE') {
-            return ($showHidden ? '' : BackendUtility::BEenableFields($tableName)) . BackendUtility::deleteClause($tableName);
+            return ($showHidden ? '' : BackendUtility::BEenableFields($tableName)) .
+                BackendUtility::deleteClause($tableName);
         } else {
             /** @var $contentObjectRenderer ContentObjectRenderer */
             $contentObjectRenderer = GeneralUtility::makeInstance(
