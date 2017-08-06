@@ -4,16 +4,15 @@ plugin.tx_pwcomments {
 	view {
 		templateRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Templates/
-			1 = {$plugin.tx_pwcomments.view.templateRootPaths}
+			1 = {$plugin.tx_pwcomments.view.templateRootPath}
 		}
-
 		partialRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Partials/
-			1 = {$plugin.tx_pwcomments.view.partialsRootPaths}
+			1 = {$plugin.tx_pwcomments.view.partialsRootPath}
 		}
 		layoutRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Layouts/
-			1 = {$plugin.tx_pwcomments.view.layoutRootPaths}
+			1 = {$plugin.tx_pwcomments.view.layoutRootPath}
 		}
 	}
 
