@@ -94,7 +94,7 @@ plugin.tx_pwcomments {
 			20.data = TSFE:fe_user|user|username
 			20.noTrimWrap = | <b>|</b>|
 
-			stdWrap.wrap = <div class="loggedInAs">|</div>
+			stdWrap.wrap = <span class="loggedInAs">|</span>
 		}
 
 		replaceMailWith = TEXT

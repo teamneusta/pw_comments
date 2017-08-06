@@ -102,9 +102,11 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->commentStorageUid = is_numeric($this->settings['storagePid'])
             ? $this->settings['storagePid']
             : $this->pageUid;
-        $this->currentUser = $GLOBALS['TSFE']->fe_user->user;
-        $this->currentAuthorIdent =
-            ($this->currentUser['uid']) ? $this->currentUser['uid'] : $this->cookieUtility->get('ahash');
+        $this->currentUser = isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user : [];
+        $this->currentAuthorIdent = ($this->currentUser['uid'])
+            ? $this->currentUser['uid']
+            : $this->cookieUtility->get('ahash');
+
         if (is_numeric($this->currentAuthorIdent) && !$this->currentUser['uid']) {
             $this->currentAuthorIdent = null;
         }
@@ -276,26 +278,22 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign('commentToReplyTo', $commentToReplyTo);
 
-        if ($this->currentUser) {
-            $this->view->assign('user', $this->currentUser);
+        // Get name of unregistred user
+        if ($newComment !== null && $newComment->getAuthorName()) {
+            $unregistredUserName = $newComment->getAuthorName();
         } else {
-            // Get name of unregistred user
-            if ($newComment !== null && $newComment->getAuthorName()) {
-                $unregistredUserName = $newComment->getAuthorName();
-            } else {
-                $unregistredUserName = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserName');
-            }
-
-                // Get mail of unregistred user
-            if ($newComment !== null && $newComment->getAuthorMail()) {
-                $unregistredUserMail = $newComment->getAuthorMail();
-            } else {
-                $unregistredUserMail = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserMail');
-            }
-
-            $this->view->assign('unregistredUserName', $unregistredUserName);
-            $this->view->assign('unregistredUserMail', $unregistredUserMail);
+            $unregistredUserName = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserName');
         }
+
+        // Get mail of unregistred user
+        if ($newComment !== null && $newComment->getAuthorMail()) {
+            $unregistredUserMail = $newComment->getAuthorMail();
+        } else {
+            $unregistredUserMail = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserMail');
+        }
+
+        $this->view->assign('unregistredUserName', $unregistredUserName);
+        $this->view->assign('unregistredUserMail', $unregistredUserMail);
     }
 
     /**
