@@ -80,6 +80,10 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.ignoreVotingForOwnComments
       ignoreVotingForOwnComments = 1
 
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderAddress
+      senderAddress =
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderName
+      senderName =
       # cat=plugin.tx_pwcomments/mails; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmit
       sendMailToAuthorAfterSubmit = 0
       # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmitTemplate
@@ -88,6 +92,8 @@ plugin.tx_pwcomments {
       sendMailToAuthorAfterPublish = 0
       # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublishTemplate
       sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sitenameUsedInMails
+      sitenameUsedInMails =
       
       # cat=plugin.tx_pwcomments/spamprotect; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
       secondsBetweenTwoComments = 300

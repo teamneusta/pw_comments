@@ -41,9 +41,11 @@ $boot = function ($extensionKey) {
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cHashExcludedParameters'] .= ',' . implode(
         ',',
         [
-            'tx_pwcomments_pi1[commentToReplyTo]',
             'tx_pwcomments_pi1[controller]',
             'tx_pwcomments_pi1[action]',
+            'tx_pwcomments_pi1[comment]',
+            'tx_pwcomments_pi1[commentToReplyTo]',
+            'tx_pwcomments_pi1[hash]',
             'tx_pwcomments_pi1[__referrer][@extension]',
             'tx_pwcomments_pi1[__referrer][@vendor]',
             'tx_pwcomments_pi1[__referrer][@controller]',

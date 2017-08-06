@@ -97,6 +97,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->settings,
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
         );
+        $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $GLOBALS['TSFE']->id;
         $this->commentStorageUid = is_numeric($this->settings['storagePid'])
             ? $this->settings['storagePid']
@@ -230,7 +231,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->getPersistenceManager()->persistAll();
 
         if ($this->settings['sendMailOnNewCommentsTo']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
@@ -239,7 +239,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         if ($this->settings['sendMailToAuthorAfterSubmit'] && $newComment->hasCommentAuthorMailAddress()) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
@@ -354,7 +353,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->getPersistenceManager()->persistAll();
 
         if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getAuthorMail());
@@ -473,7 +471,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
         if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());

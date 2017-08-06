@@ -52,11 +52,13 @@ plugin.tx_pwcomments {
 		hideVoteButtons = {$plugin.tx_pwcomments.settings.hideVoteButtons}
 		ignoreVotingForOwnComments = {$plugin.tx_pwcomments.settings.ignoreVotingForOwnComments}
 
+		senderAddress = {$plugin.tx_pwcomments.settings.senderAddress}
+		senderName = {$plugin.tx_pwcomments.settings.senderName}
 		sendMailToAuthorAfterSubmit = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit}
 		sendMailToAuthorAfterSubmitTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate}
-
 		sendMailToAuthorAfterPublish = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish}
 		sendMailToAuthorAfterPublishTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate}
+		sitenameUsedInMails = {$plugin.tx_pwcomments.settings.sitenameUsedInMails}
 
 		secondsBetweenTwoComments = {$plugin.tx_pwcomments.settings.secondsBetweenTwoComments}
 		linkUrlsInComments = {$plugin.tx_pwcomments.settings.linkUrlsInComments}
