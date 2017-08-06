@@ -288,8 +288,8 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	background-image: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down-active.svg');
 }
 
-.voted-positive { color: green; }
-.voted-negative { color: red; }
+.comment-actions .voted-positive { color: green !important; }
+.comment-actions .voted-negative { color: red !important; }
 
 #writeComment {
 	max-width: 768px;
