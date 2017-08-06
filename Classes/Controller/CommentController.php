@@ -339,13 +339,14 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         /**@var Comment $comment*/
         $comment = $this->commentRepository->findByCommentUid($comment);
-        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment)) {
+        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment) || !$comment->getHidden()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('noCommentAvailable', 'PwComments'),
                 '',
                 FlashMessage::ERROR
             );
             $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
+            return;
         }
 
         $comment->setHidden(false);
