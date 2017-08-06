@@ -30,12 +30,16 @@ $boot = function ($extensionKey) {
     );
 
 
-
-    // Add optional typoscript
+    // Add typoscript static includes
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         $extensionKey,
         'Configuration/TypoScript',
-        'pwComments'
+        'pw_comments Main Static Template (required)'
+    );
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+        $extensionKey,
+        'Configuration/TypoScript/Styling',
+        'pw_comments Optional Styles'
     );
 
     // TCA options

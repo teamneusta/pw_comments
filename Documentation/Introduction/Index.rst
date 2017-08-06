@@ -35,20 +35,19 @@ Requirements of pw_comments
 Features
 --------
 - Adds the possibility for users to post comments on pages
-- Easy to integrate into existing or new websites
-- Compatible with other extensions like tt_news
-- Uses modern technology: Extbase & Fluid
-- Awesome flexibility by TypoScript conditions
-- Gravatar support
-- "Hidden field" spam protection
-- Bad word list for comment message, name and mail address
-- Customizable waiting time between two comments
-- Moderate new comments
-- Replying to comments (one level deep, replies to other replies are not possible)
-- Change order of comments and/or replies (separately adjustable)
+- Easy to integrate into existing or new TYPO3 sites
+- Compatible with other extensions like EXT:news
+- Very(!!) customizable thanks to TypoScript (constant manager fully supported)
 - Vote comments and replies
-- E-mail notification
-- Use of relative dates (i.e. "15 minutes ago")
+- Replying to comments
+- Gravatar support
+- Spam protection:
+   - Bad word list for comment message, name and mail address
+   - "Hidden field" spam protection
+   - Customizable waiting time between two comments
+- Moderate new comments
+- Change order of comments and/or replies (separately adjustable)
+- Rich mail notifications
 
 .. _screenshots:
 
