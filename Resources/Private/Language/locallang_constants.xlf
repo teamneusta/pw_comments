@@ -27,9 +27,6 @@
 			<trans-unit id="mails" xml:space="preserve">
 				<source>Mails</source>
 			</trans-unit>
-			<trans-unit id="permissions" xml:space="preserve">
-				<source>Permissions</source>
-			</trans-unit>
 			<trans-unit id="spamprotect" xml:space="preserve">
 				<source>Spam protection</source>
 			</trans-unit>
