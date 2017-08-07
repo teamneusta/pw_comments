@@ -253,7 +253,7 @@
 			</trans-unit>
 			<trans-unit id="pageModuleNotice" xml:space="preserve">
 				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
-				<target>Seitenmodul Notiz: Zeigt Infoormationen über Kommentare auf aktueller Seite als Notiz im Seitenmodul an.</target>
+				<target>Seitenmodul Notiz: Zeigt Informationen über Kommentare auf aktueller Seite als Notiz im Seitenmodul an.</target>
 			</trans-unit>
 		</body>
 	</file>
