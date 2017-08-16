@@ -28,7 +28,9 @@ TYPO3 template:
 
 |comment_static-includes|
 
-The Main Static Template must be included. The Styles are optional, but recommended.
+The Main Static Template must be included. The Styles are optional, but recommended. When you are using TYPO3 7.6 there
+is also a "Style Fix" available, which you need to add after the optional styles, in order make icons in frontend work
+(Background: TYPO3 changed the depth of asset files in 8.7).
 
 When the statics have been added you can access several libs to include pw_comments into your page
 (as described in the chapter :ref:`configuration`).
