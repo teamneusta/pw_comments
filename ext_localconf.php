@@ -93,6 +93,8 @@ $boot = function ($extensionKey) {
             ['source' => 'EXT:pw_comments/ext_icon.svg']
         );
 
+        // @codingStandardsIgnoreStart
+
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
             mod.wizards.newContentElement.wizardItems.plugins.elements.pwcomments {
                 iconIdentifier = ext-pwcomments-ext-icon
@@ -107,6 +109,8 @@ $boot = function ($extensionKey) {
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['pwcomments_pi1']['pwcomments'] =
             \PwCommentsTeam\PwComments\Hooks\PageLayoutView::class . '->getExtensionSummary';
+
+        // @codingStandardsIgnoreEnd
     }
 };
 
