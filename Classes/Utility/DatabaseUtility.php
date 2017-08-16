@@ -4,7 +4,7 @@ namespace PwCommentsTeam\PwComments\Utility;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License..
  *  |
- *  | (c) 2011-2017 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2017 Armin Vieweg <armin@v.ieweg.de>
  */
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
