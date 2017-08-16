@@ -178,10 +178,10 @@
 				<source>Show comments</source>
 			</trans-unit>
 			<trans-unit id="totalCommentsAmount" xml:space="preserve">
-				<source>This page has %s comments.</source>
+				<source>This page contains %s comments.</source>
 			</trans-unit>
 			<trans-unit id="totalCommentsAmountOne" xml:space="preserve">
-				<source>This page has one comment.</source>
+				<source>This page contains one comment.</source>
 			</trans-unit>
 			<trans-unit id="unreleasedCommentsAmount" xml:space="preserve">
 				<source>%s comments remain unreleased!</source>

@@ -25,13 +25,12 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
     protected function getHeaderFlashMessagesForCurrentPid()
     {
         $content = parent::getHeaderFlashMessagesForCurrentPid();
+
         $total = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_pwcomments_domain_model_comment',
-            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields(
-                                                    'tx_pwcomments_domain_model_comment',
-                                                    true
-                                                )
+            'pid = ' . $this->pageinfo['uid'] .
+            DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment', true)
         );
         if (!$total) {
             return $content;
@@ -58,7 +57,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         if ($unreleased > 0) {
             $textUnreleased = $unreleased == 1
                 ? $this->translate('unreleasedCommentsAmountOne')
-                : $this->translate('unreleasedCommentsAmount', [$total]);
+                : $this->translate('unreleasedCommentsAmount', [$unreleased]);
             $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
 
