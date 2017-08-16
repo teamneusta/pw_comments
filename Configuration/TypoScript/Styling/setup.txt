@@ -255,7 +255,7 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 .comment-actions a.downvote:before,
 .comment-actions a.reply:before {
 	content: '';
-	background: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up.svg') no-repeat;
+	background: url('../../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up.svg') no-repeat;
 	background-size: cover;
 	opacity: 0.6;
 	width: 18px;
@@ -272,20 +272,20 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 }
 
 .comment-actions a.downvote:before {
-	background-image: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down.svg');
+	background-image: url('../../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down.svg');
 }
 
 .comment-actions a.reply:before {
-	background-image: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/reply.svg');
+	background-image: url('../../../typo3conf/ext/pw_comments/Resources/Public/Icons/reply.svg');
 }
 
 .comment-actions a.upvote.voted:before {
 	opacity: 1;
-	background-image: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up-active.svg');
+	background-image: url('../../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up-active.svg');
 }
 .comment-actions a.downvote.voted:before {
 	opacity: 1;
-	background-image: url('/typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down-active.svg');
+	background-image: url('../../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down-active.svg');
 }
 
 .comment-actions .voted-positive { color: green !important; }

@@ -1,0 +1,19 @@
+plugin.tx_pwcomments2._CSS_DEFAULT_STYLE (
+.comment-actions a.upvote:before,
+.comment-actions a.downvote:before,
+.comment-actions a.reply:before {
+	background-image: url('../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up.svg');
+}
+.comment-actions a.downvote:before {
+	background-image: url('../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down.svg');
+}
+.comment-actions a.reply:before {
+	background-image: url('../../typo3conf/ext/pw_comments/Resources/Public/Icons/reply.svg');
+}
+.comment-actions a.upvote.voted:before {
+	background-image: url('../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-up-active.svg');
+}
+.comment-actions a.downvote.voted:before {
+	background-image: url('../../typo3conf/ext/pw_comments/Resources/Public/Icons/thumbs-down-active.svg');
+}
+)

@@ -42,6 +42,16 @@ $boot = function ($extensionKey) {
         'pw_comments Optional Styles'
     );
 
+    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+        \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+    ) {
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+            $extensionKey,
+            'Configuration/TypoScript/Styling76',
+            'pw_comments Style Fix for TYPO3 7.6'
+        );
+    }
+
     // TCA options
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
