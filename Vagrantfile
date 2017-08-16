@@ -6,6 +6,11 @@
 #  `vagrant plugin install vagrant-bindfs`
 
 Vagrant.configure("2") do |config|
+  # PHP Helper to modify composer.json
+  addComposerRequirement = 'php -r \'$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");\' composer.json'
+  addComposerAutoloader = 'php -r \'$f=json_decode(file_get_contents($argv[1]),true);$f["autoload"]["psr-4"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");\' composer.json'
+
+  # Base configuration
   config.vm.box = "ArminVieweg/ubuntu-xenial64-lamp"
 
   config.vm.network "forwarded_port", guest: 80, host: 8080
@@ -29,14 +34,39 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
   end
 
+  # Provider Scripts
+  # Run always
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+    cd ~
+    sudo composer self-update --no-progress
+  SHELL
+
   # Run once (install TYPO3 8.7 LTS in /var/www/html)
   config.vm.provision "shell", inline: <<-SHELL
     cd /var/www/html
     echo "{}" > composer.json
 
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "typo3/cms" "^8.7"
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "helhum/typo3-console" "^4.5"
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "georgringer/news" "^6.0"
+    #{addComposerRequirement} "typo3/cms" "^8.7"
+    #{addComposerRequirement} "helhum/typo3-console" "^4.5"
+    #{addComposerRequirement} "georgringer/news" "^6.0"
+    #{addComposerRequirement} "typo3/cms-about" "^8.7"
+    #{addComposerRequirement} "typo3/cms-belog" "^8.7"
+    #{addComposerRequirement} "typo3/cms-beuser" "^8.7"
+    #{addComposerRequirement} "typo3/cms-fluid-styled-content" "^8.7"
+    #{addComposerRequirement} "typo3/cms-filelist" "^8.7"
+    #{addComposerRequirement} "typo3/cms-info" "^8.7"
+    #{addComposerRequirement} "typo3/cms-info-pagetsconfig" "^8.7"
+    #{addComposerRequirement} "typo3/cms-lang" "^8.7"
+    #{addComposerRequirement} "typo3/cms-lowlevel" "^8.7"
+    #{addComposerRequirement} "typo3/cms-reports" "^8.7"
+    #{addComposerRequirement} "typo3/cms-rsaauth" "^8.7"
+    #{addComposerRequirement} "typo3/cms-rte-ckeditor" "^8.7"
+    #{addComposerRequirement} "typo3/cms-saltedpasswords" "^8.7"
+    #{addComposerRequirement} "typo3/cms-scheduler" "^8.7"
+    #{addComposerRequirement} "typo3/cms-setup" "^8.7"
+    #{addComposerRequirement} "typo3/cms-t3editor" "^8.7"
+    #{addComposerRequirement} "typo3/cms-tstemplate" "^8.7"
+    #{addComposerRequirement} "typo3/cms-viewpage" "^8.7"
 
     echo "Fetching TYPO3 8.7 using composer..."
     composer update --no-progress -n -q
@@ -45,7 +75,7 @@ Vagrant.configure("2") do |config|
     vendor/bin/typo3cms install:setup --force --database-user-name "root" --database-user-password "" --database-host-name "localhost" --database-name "typo3" --database-port "3306" --database-socket "" --admin-user-name "admin" --admin-password "password" --site-name "pw_comments Dev Environment" --site-setup-type "site" --use-existing-database 0
     vendor/bin/typo3cms cache:flush
 
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["autoload"]["psr-4"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "PwCommentsTeam\\\\PwComments\\\\" typo3conf/ext/pw_comments/Classes/
+    #{addComposerAutoloader} "PwCommentsTeam\\\\PwComments\\\\" typo3conf/ext/pw_comments/Classes/
     composer dump -o
 
     php typo3/cli_dispatch.phpsh extbase extension:install news
@@ -67,9 +97,28 @@ Vagrant.configure("2") do |config|
     cd /var/www/html76
     echo "{}" > composer.json
 
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "typo3/cms" "^7.6"
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "helhum/typo3-console" "^4.5"
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["require"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "georgringer/news" "^6.0"
+    #{addComposerRequirement} "typo3/cms" "^7.6"
+    #{addComposerRequirement} "helhum/typo3-console" "^4.5"
+    #{addComposerRequirement} "georgringer/news" "^6.0"
+    #{addComposerRequirement} "typo3/cms-about" "^7.6"
+    #{addComposerRequirement} "typo3/cms-belog" "^7.6"
+    #{addComposerRequirement} "typo3/cms-beuser" "^7.6"
+    #{addComposerRequirement} "typo3/cms-fluid-styled-content" "^7.6"
+    #{addComposerRequirement} "typo3/cms-filelist" "^7.6"
+    #{addComposerRequirement} "typo3/cms-info" "^7.6"
+    #{addComposerRequirement} "typo3/cms-info-pagetsconfig" "^7.6"
+    #{addComposerRequirement} "typo3/cms-lang" "^7.6"
+    #{addComposerRequirement} "typo3/cms-lowlevel" "^7.6"
+    #{addComposerRequirement} "typo3/cms-reports" "^7.6"
+    #{addComposerRequirement} "typo3/cms-rsaauth" "^7.6"
+    #{addComposerRequirement} "typo3/cms-rtehtmlarea" "^7.6"
+    #{addComposerRequirement} "typo3/cms-saltedpasswords" "^7.6"
+    #{addComposerRequirement} "typo3/cms-scheduler" "^7.6"
+    #{addComposerRequirement} "typo3/cms-setup" "^7.6"
+    #{addComposerRequirement} "typo3/cms-t3editor" "^7.6"
+    #{addComposerRequirement} "typo3/cms-tstemplate" "^7.6"
+    #{addComposerRequirement} "typo3/cms-viewpage" "^7.6"
+
     echo "Fetching TYPO3 7.6 using composer..."
     composer update --no-progress -n -q
 
@@ -77,7 +126,7 @@ Vagrant.configure("2") do |config|
     vendor/bin/typo3cms  install:setup --force --database-user-name "root" --database-user-password "" --database-host-name "localhost" --database-name "typo3_76" --database-port "3306" --database-socket "" --admin-user-name "admin" --admin-password "password" --site-name "pw_comments Dev Environment" --site-setup-type "site" --use-existing-database 0
     vendor/bin/typo3cms cache:flush
 
-    php -r '$f=json_decode(file_get_contents($argv[1]),true);$f["autoload"]["psr-4"][$argv[2]]=$argv[3];file_put_contents($argv[1],json_encode($f,448)."\n");' composer.json "PwCommentsTeam\\\\PwComments\\\\" typo3conf/ext/pw_comments/Classes/
+    #{addComposerAutoloader} "PwCommentsTeam\\\\PwComments\\\\" typo3conf/ext/pw_comments/Classes/
     composer dump -o
 
     php typo3/cli_dispatch.phpsh extbase extension:install news
@@ -98,12 +147,6 @@ Vagrant.configure("2") do |config|
     a2enconf adminer
     echo "Restarting apache2..."
     service apache2 restart
-  SHELL
-
-  # Run always
-  config.vm.provision "shell", run: "always", inline: <<-SHELL
-    cd ~
-  	sudo composer self-update --no-progress
   SHELL
 
 end
