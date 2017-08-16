@@ -153,10 +153,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             );
             /** @var $vote Vote */
             foreach ($votes as $vote) {
-                if ($vote->isDownvote()) {
-                    $downvotedCommentUids[] = $vote->getComment()->getUid();
-                } else {
-                    $upvotedCommentUids[] = $vote->getComment()->getUid();
+                if ($vote->getComment()) {
+                    if ($vote->isDownvote()) {
+                        $downvotedCommentUids[] = $vote->getComment()->getUid();
+                    } else {
+                        $upvotedCommentUids[] = $vote->getComment()->getUid();
+                    }
                 }
             }
         }
