@@ -23,10 +23,12 @@ always contain the current development state, but in the tags folder you'll find
 Installation
 ------------
 After loading the extension onto the server, you will have to install it like every other extension. The installation
-will create a new table for storing comments. After the installation you should add the static setup to your current
+will create a new table for storing comments. After the installation you should add the static include to your current
 TYPO3 template:
 
-|comment_ext-manager|
+|comment_static-includes|
+
+The Main Static Template must be included. The Styles are optional, but recommended.
 
 When the statics have been added you can access several libs to include pw_comments into your page
 (as described in the chapter :ref:`configuration`).

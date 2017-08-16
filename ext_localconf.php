@@ -38,6 +38,29 @@ $boot = function ($extensionKey) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']
         = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['plugins'];
 
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cHashExcludedParameters'] .= ',' . implode(
+        ',',
+        [
+            'tx_pwcomments_pi1',
+            'tx_pwcomments_pi1[controller]',
+            'tx_pwcomments_pi1[action]',
+            'tx_pwcomments_pi1[comment]',
+            'tx_pwcomments_pi1[commentToReplyTo]',
+            'tx_pwcomments_pi1[hash]',
+            'tx_pwcomments_pi1[__referrer][@extension]',
+            'tx_pwcomments_pi1[__referrer][@vendor]',
+            'tx_pwcomments_pi1[__referrer][@controller]',
+            'tx_pwcomments_pi1[__referrer][@action]',
+            'tx_pwcomments_pi1[__referrer][arguments]',
+            'tx_pwcomments_pi1[__referrer][@request]',
+            'tx_pwcomments_pi1[__trustedProperties]',
+            'tx_pwcomments_pi1[newComment][authorName]',
+            'tx_pwcomments_pi1[newComment][authorMail]',
+            'tx_pwcomments_pi1[authorWebsite]',
+            'tx_pwcomments_pi1[newComment][message]',
+            'tx_pwcomments_pi1[newComment][parentComment][__identity]'
+        ]
+    );
         // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
         'PwCommentsTeam\PwComments\Hooks\ProcessDatamap';
@@ -45,9 +68,9 @@ $boot = function ($extensionKey) {
     if (TYPO3_MODE === 'BE') {
         $extensionConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']);
         if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'] = array(
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'] = [
                 'className' => 'PwCommentsTeam\\PwComments\\XClass\\PageLayoutController',
-            );
+            ];
         }
 
         /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */

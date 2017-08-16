@@ -1,4 +1,4 @@
-.. |comment_ext-manager|      image:: ../Images/pw_comments_ext-manager.png
+.. |comment_static-includes|      image:: ../Images/pw_comments_static-includes.png
 .. :align: left
 .. :border: 0
 .. :name: extension manager

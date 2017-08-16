@@ -6,7 +6,6 @@
 # customsubcategory=voting=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:voting
 # customsubcategory=moderation=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:moderation
 # customsubcategory=mails=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:mails
-# customsubcategory=permissions=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:permissions
 # customsubcategory=spamprotect=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:spamprotect
 # customsubcategory=misc=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:misc
 
@@ -40,7 +39,7 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/gravatar; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showGravatarImage
       showGravatarImage = 1
       # cat=plugin.tx_pwcomments/gravatar; type=integer; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarSize
-      gravatarSize = 50
+      gravatarSize = 65
       # cat=plugin.tx_pwcomments/gravatar; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarDefault
       gravatarDefault = mm
 
@@ -50,9 +49,9 @@ plugin.tx_pwcomments {
       entryUidData = GP:tx_extension|uid
 
       # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRepliesToComments
-      enableRepliesToComments = 0
+      enableRepliesToComments = 1
       # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showRepliesToComments
-      showRepliesToComments = 0
+      showRepliesToComments = 1
       # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.countReplies
       countReplies = 1
 
@@ -81,6 +80,10 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/voting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.ignoreVotingForOwnComments
       ignoreVotingForOwnComments = 1
 
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderAddress
+      senderAddress =
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderName
+      senderName =
       # cat=plugin.tx_pwcomments/mails; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmit
       sendMailToAuthorAfterSubmit = 0
       # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmitTemplate
@@ -89,12 +92,11 @@ plugin.tx_pwcomments {
       sendMailToAuthorAfterPublish = 0
       # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublishTemplate
       sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
-
-      # cat=plugin.tx_pwcomments/permissions; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
+      # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sitenameUsedInMails
+      sitenameUsedInMails =
+      
+      # cat=plugin.tx_pwcomments/spamprotect; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
       secondsBetweenTwoComments = 300
-      # cat=plugin.tx_pwcomments/permissions; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.linkUrlsInComments
-      linkUrlsInComments = 1
-
       # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsList
       useBadWordsList = 1
       # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnUsername
@@ -109,12 +111,10 @@ plugin.tx_pwcomments {
       hiddenFieldName = authorWebsite
       # cat=plugin.tx_pwcomments/spamprotect; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldClass
       hiddenFieldClass = hide_initally
-
-      replaceUsernameWith >
-      replaceMailWith >
-
+      
+      # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.linkUrlsInComments
+      linkUrlsInComments = 1
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback
-      relativeDate.absoluteFormatFallback = %d.%m.%Y
+      absoluteFormatFallback = %d.%m.%Y
    }
-   
 }

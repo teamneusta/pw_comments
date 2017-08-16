@@ -76,7 +76,8 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($GLOBALS['TSFE']->fe_user->user['uid']) || ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
+        return ($GLOBALS['TSFE']->fe_user->user['uid']) ||
+               ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
     /**

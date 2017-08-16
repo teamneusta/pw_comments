@@ -97,11 +97,16 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->settings,
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
         );
+        $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $GLOBALS['TSFE']->id;
-        $this->commentStorageUid = (is_numeric($this->settings['storagePid']))? $this->settings['storagePid']:$this->pageUid;
-        $this->currentUser = $GLOBALS['TSFE']->fe_user->user;
-        $this->currentAuthorIdent =
-            ($this->currentUser['uid']) ? $this->currentUser['uid'] : $this->cookieUtility->get('ahash');
+        $this->commentStorageUid = is_numeric($this->settings['storagePid'])
+            ? $this->settings['storagePid']
+            : $this->pageUid;
+        $this->currentUser = isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user : [];
+        $this->currentAuthorIdent = ($this->currentUser['uid'])
+            ? $this->currentUser['uid']
+            : $this->cookieUtility->get('ahash');
+
         if (is_numeric($this->currentAuthorIdent) && !$this->currentUser['uid']) {
             $this->currentAuthorIdent = null;
         }
@@ -142,7 +147,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $upvotedCommentUids = [];
         $downvotedCommentUids = [];
         if ($this->currentAuthorIdent !== null) {
-            $votes = $this->voteRepository->findByPidAndAuthorIdent($this->commentStorageUid, $this->currentAuthorIdent);
+            $votes = $this->voteRepository->findByPidAndAuthorIdent(
+                $this->commentStorageUid,
+                $this->currentAuthorIdent
+            );
             /** @var $vote Vote */
             foreach ($votes as $vote) {
                 if ($vote->isDownvote()) {
@@ -225,7 +233,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->getPersistenceManager()->persistAll();
 
         if ($this->settings['sendMailOnNewCommentsTo']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
@@ -234,7 +241,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         if ($this->settings['sendMailToAuthorAfterSubmit'] && $newComment->hasCommentAuthorMailAddress()) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
@@ -272,26 +278,22 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign('commentToReplyTo', $commentToReplyTo);
 
-        if ($this->currentUser) {
-            $this->view->assign('user', $this->currentUser);
+        // Get name of unregistred user
+        if ($newComment !== null && $newComment->getAuthorName()) {
+            $unregistredUserName = $newComment->getAuthorName();
         } else {
-            // Get name of unregistred user
-            if ($newComment !== null && $newComment->getAuthorName()) {
-                $unregistredUserName = $newComment->getAuthorName();
-            } else {
-                $unregistredUserName = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserName');
-            }
-
-                // Get mail of unregistred user
-            if ($newComment !== null && $newComment->getAuthorMail()) {
-                $unregistredUserMail = $newComment->getAuthorMail();
-            } else {
-                $unregistredUserMail = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserMail');
-            }
-
-            $this->view->assign('unregistredUserName', $unregistredUserName);
-            $this->view->assign('unregistredUserMail', $unregistredUserMail);
+            $unregistredUserName = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserName');
         }
+
+        // Get mail of unregistred user
+        if ($newComment !== null && $newComment->getAuthorMail()) {
+            $unregistredUserMail = $newComment->getAuthorMail();
+        } else {
+            $unregistredUserMail = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_unregistredUserMail');
+        }
+
+        $this->view->assign('unregistredUserName', $unregistredUserName);
+        $this->view->assign('unregistredUserMail', $unregistredUserMail);
     }
 
     /**
@@ -335,13 +337,14 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         /**@var Comment $comment*/
         $comment = $this->commentRepository->findByCommentUid($comment);
-        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment)) {
+        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment) || !$comment->getHidden()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('noCommentAvailable', 'PwComments'),
                 '',
                 FlashMessage::ERROR
             );
             $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
+            return;
         }
 
         $comment->setHidden(false);
@@ -349,7 +352,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->getPersistenceManager()->persistAll();
 
         if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getAuthorMail());
@@ -381,7 +383,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
         if (!$this->settings['enableVoting']) {
-            $this->redirectToUri($this->buildUriToPage($this->pageUid, ['votingDisabled' => 1]) . $commentAnchor);
+            $this->forward('index');
             return;
         }
 
@@ -391,6 +393,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if ($this->currentAuthorIdent !== null) {
             if ($this->settings['ignoreVotingForOwnComments']
                 && $this->currentAuthorIdent == $comment->getAuthorIdent()) {
+                // TODO: use flash messages here?
                 $this->redirectToUri(
                     $this->buildUriToPage($this->pageUid, ['doNotVoteForYourself' => 1]) . $commentAnchor
                 );
@@ -414,7 +417,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $this->getPersistenceManager()->persistAll();
 
-        $this->redirectToUri($this->buildUriToPage($this->pageUid) . $commentAnchor);
+        $this->forward('index');
+        return;
     }
 
 
@@ -466,7 +470,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
         if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
-            $this->mailUtility->setSettings($this->settings);
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());
@@ -489,7 +492,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param int $uid The uid to use for building link
      * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be
-     * 			   removed from query string
+     *             removed from query string
      * @return string The link
      */
     private function buildUriByUid($uid, $excludeCommentToReplyTo = false)

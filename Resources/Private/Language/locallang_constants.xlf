@@ -27,9 +27,6 @@
 			<trans-unit id="mails" xml:space="preserve">
 				<source>Mails</source>
 			</trans-unit>
-			<trans-unit id="permissions" xml:space="preserve">
-				<source>Permissions</source>
-			</trans-unit>
 			<trans-unit id="spamprotect" xml:space="preserve">
 				<source>Spam protection</source>
 			</trans-unit>
@@ -117,6 +114,12 @@
                 <source>Send mail mime type: Defines the MIME-type of the e-mail body. Please note that changes made here also need to be regarded in the appropriate template.</source>
 			</trans-unit>
 
+            <trans-unit id="settings.senderAddress" xml:space="preserve">
+                <source>Sender address: Sender's mail address when pw_comments sends out mails.</source>
+			</trans-unit>
+            <trans-unit id="settings.senderName" xml:space="preserve">
+                <source>Sender name (optional): Name to display in mail clients, instead of mail address.</source>
+			</trans-unit>
             <trans-unit id="settings.sendMailToAuthorAfterSubmit" xml:space="preserve">
                 <source>Send mail to author after submit: If this option is enabled, the author receives a mail after each comment he/she has written.</source>
 			</trans-unit>
@@ -128,6 +131,9 @@
 			</trans-unit>
             <trans-unit id="settings.sendMailToAuthorAfterPublishTemplate" xml:space="preserve">
                 <source>After publish mail template: Defines the path to the Fluid template which should be used for the e-mail to comment author.</source>
+			</trans-unit>
+            <trans-unit id="settings.sitenameUsedInMails" xml:space="preserve">
+                <source>Sitename used in mails: When this option is set, it replaces the getHostname() output, used in mail subject.</source>
 			</trans-unit>
 
             <trans-unit id="settings.secondsBetweenTwoComments" xml:space="preserve">

@@ -28,7 +28,10 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $total = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_pwcomments_domain_model_comment',
-            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment', true)
+            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields(
+                                                    'tx_pwcomments_domain_model_comment',
+                                                    true
+                                                )
         );
         if (!$total) {
             return $content;
@@ -66,8 +69,8 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
             'imagemode' => 1
         ]);
 
-        $message = '<a class="btn btn-warning pull-right" href="' . $path . '">' . $this->translate('showComments') . '</a>';
-        $message .= '<p>' . $textTotal . ' ' . $textUnreleased . '</p>';
+        $message = '<a class="btn btn-warning pull-right" href="' . $path . '">' .
+            $this->translate('showComments') . '</a><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
         $view->assignMultiple([
             'title' => $title,

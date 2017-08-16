@@ -100,12 +100,14 @@ class Mail
         $mail = GeneralUtility::makeInstance('TYPO3\CMS\Core\Mail\MailMessage');
 
         $mail->setFrom(
-            LocalizationUtility::translate(
+            $this->settings['senderAddress'] ? $this->settings['senderAddress'] : LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.mail',
                 'PwComments',
-                [GeneralUtility::getHostname()]
+                [$this->settings['sitenameUsedInMails']
+                    ? $this->settings['sitenameUsedInMails']
+                    : GeneralUtility::getHostname()]
             ),
-            LocalizationUtility::translate(
+            $this->settings['senderName'] ? $this->settings['senderName'] : LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.name',
                 'PwComments'
             )
@@ -117,7 +119,9 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                [GeneralUtility::getHostname()]
+                [$this->settings['sitenameUsedInMails']
+                    ? $this->settings['sitenameUsedInMails']
+                    : GeneralUtility::getHostname()]
             )
         );
         $mail->addPart($this->getMailMessage($comment, $hash), $this->settings['sendMailMimeType']);
