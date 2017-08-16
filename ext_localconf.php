@@ -104,6 +104,9 @@ $boot = function ($extensionKey) {
                 }
             }
         ');
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['pwcomments_pi1']['pwcomments'] =
+            \PwCommentsTeam\PwComments\Hooks\PageLayoutView::class . '->getExtensionSummary';
     }
 };
 
