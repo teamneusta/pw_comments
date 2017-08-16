@@ -7,6 +7,7 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 
 	entry_uid int(11) unsigned DEFAULT '0' NOT NULL,
 	parent_comment int(11) unsigned DEFAULT '0' NOT NULL,
+	orig_pid int(11) unsigned DEFAULT '0' NOT NULL,
 
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	author_name tinytext,
@@ -28,6 +29,7 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 	t3ver_stage tinyint(4) DEFAULT '0' NOT NULL,
 	t3ver_count int(11) DEFAULT '0' NOT NULL,
 	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
+	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 	t3_origuid int(11) DEFAULT '0' NOT NULL,
 
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
@@ -45,6 +47,7 @@ CREATE TABLE tx_pwcomments_domain_model_vote (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	orig_pid int(11) unsigned DEFAULT '0' NOT NULL,
 	type int(11) unsigned DEFAULT '1' NOT NULL,
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	author_ident tinytext,
@@ -61,21 +64,9 @@ CREATE TABLE tx_pwcomments_domain_model_vote (
 	t3ver_stage tinyint(4) DEFAULT '0' NOT NULL,
 	t3ver_count int(11) DEFAULT '0' NOT NULL,
 	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
+	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 	t3_origuid int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-);
-
-#
-# Table structure for table 'tx_pwcomments_comment_vote_mm'
-#
-CREATE TABLE tx_pwcomments_comment_vote_mm (
-	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
-	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign)
 );

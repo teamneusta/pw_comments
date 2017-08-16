@@ -1,23 +1,61 @@
 <?php
 
-/*  | This extension is part of the TYPO3 project. The TYPO3 project is
- *  | free software and is licensed under GNU General Public License.
+/*  | This extension is made for TYPO3 CMS and is licensed
+ *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2017 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
+ *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
 
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
+if (!defined('TYPO3_MODE')) {
+    die('Access denied.');
 }
 
-$boot = function($extensionKey) {
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($extensionKey, 'Configuration/TypoScript', 'pwComments');
+$boot = function ($extensionKey) {
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+        'InstituteWeb.' . $extensionKey,
+        'Pi1',
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title'
+    );
+    $extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($extensionKey);
+    $pluginSignature = strtolower($extensionName) . '_pi1';
 
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] =
+        'select_key,pages,recursive';
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+        $pluginSignature,
+        'FILE:EXT:' . $extensionKey . '/Configuration/FlexForms/Plugin.xml'
+    );
 
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
+
+    // Add typoscript static includes
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+        $extensionKey,
+        'Configuration/TypoScript',
+        'pw_comments Main Static Template (required)'
+    );
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+        $extensionKey,
+        'Configuration/TypoScript/Styling',
+        'pw_comments Optional Styles'
+    );
+
+    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+        \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+    ) {
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+            $extensionKey,
+            'Configuration/TypoScript/Styling76',
+            'pw_comments Style Fix for TYPO3 7.6'
+        );
+    }
+
+    // TCA options
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
 };
 
 $boot($_EXTKEY);

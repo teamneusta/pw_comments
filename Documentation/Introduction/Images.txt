@@ -1,0 +1,17 @@
+.. |comment_fe|      image:: ../Images/pw_comments_fe.png
+.. :align: left
+.. :border: 0
+.. :name: comments
+.. :vspace: 20
+
+.. |comment_fe_voting|      image:: ../Images/pw_comments_fe_voting.png
+.. :align: left
+.. :border: 0
+.. :name: voting
+.. :vspace: 20
+
+.. |comment_be_record|      image:: ../Images/pw_comments_be_record.png
+.. :align: left
+.. :border: 0
+.. :name: Backend record
+.. :vspace: 20

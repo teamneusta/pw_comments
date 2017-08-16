@@ -1,66 +1,81 @@
 plugin.tx_pwcomments {
+	mvc.callDefaultActionIfActionCantBeResolved = 1
+
+	view {
+		templateRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Templates/
+			1 = {$plugin.tx_pwcomments.view.templateRootPath}
+		}
+		partialRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Partials/
+			1 = {$plugin.tx_pwcomments.view.partialsRootPath}
+		}
+		layoutRootPaths {
+			0 = EXT:pw_comments/Resources/Private/Layouts/
+			1 = {$plugin.tx_pwcomments.view.layoutRootPath}
+		}
+	}
+
 	settings {
-		commentAnchorPrefix = comment
-		showCommentAnchor = comments
-		writeCommentAnchor = writeComment
-		successfulAnchor = thanksForYourComment
-		customMessagesAnchor = customMessages
+		storagePid = {$plugin.tx_pwcomments.settings.storagePid}
 
-		showGravatarImage = 1
-		gravatarSize = 50
-		gravatarDefault = mm
+		commentAnchorPrefix = {$plugin.tx_pwcomments.settings.commentAnchorPrefix}
+		showCommentAnchor = {$plugin.tx_pwcomments.settings.showCommentAnchor}
+		writeCommentAnchor = {$plugin.tx_pwcomments.settings.writeCommentAnchor}
+		successfulAnchor = {$plugin.tx_pwcomments.settings.successfulAnchor}
+		customMessagesAnchor = {$plugin.tx_pwcomments.settings.customMessagesAnchor}
 
-		useEntryUid = 0
+		showGravatarImage = {$plugin.tx_pwcomments.settings.showGravatarImage}
+		gravatarSize = {$plugin.tx_pwcomments.settings.gravatarSize}
+		gravatarDefault = {$plugin.tx_pwcomments.settings.gravatarDefault}
+
+		useEntryUid = {$plugin.tx_pwcomments.settings.useEntryUid}
 		entryUid = TEXT
-		entryUid.data = GP:tx_extension|uid
+		entryUid.data = {$plugin.tx_pwcomments.settings.entryUidData}
 
-		enableRepliesToComments = 0
-		showRepliesToComments = 0
-		countReplies = 1
+		enableRepliesToComments = {$plugin.tx_pwcomments.settings.enableRepliesToComments}
+		showRepliesToComments = {$plugin.tx_pwcomments.settings.showRepliesToComments}
+		countReplies = {$plugin.tx_pwcomments.settings.countReplies}
 
-		invertCommentSorting = 0
-		invertReplySorting = 0
+		invertCommentSorting = {$plugin.tx_pwcomments.settings.invertCommentSorting}
+		invertReplySorting = {$plugin.tx_pwcomments.settings.invertReplySorting}
 
-		moderateNewComments = 1
-		sendMailOnNewCommentsTo =
-		sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
-		sendMailMimeType = text/plain
-		overwriteBackendDomain =
-		subFolder =
+		moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
+		sendMailOnNewCommentsTo = {$plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo}
+		sendMailTemplate = {$plugin.tx_pwcomments.settings.sendMailTemplate}
+		sendMailMimeType = {$plugin.tx_pwcomments.settings.sendMailMimeType}
 
-		enableCommentVotes = 1
-		enableReplyVotes = 1
-		enableVoting = 1
-		hideVoteButtons = 0
-		ignoreVotingForOwnComments = 1
+		enableCommentVotes = {$plugin.tx_pwcomments.settings.enableCommentVotes}
+		enableReplyVotes = {$plugin.tx_pwcomments.settings.enableReplyVotes}
+		enableVoting = {$plugin.tx_pwcomments.settings.enableVoting}
+		hideVoteButtons = {$plugin.tx_pwcomments.settings.hideVoteButtons}
+		ignoreVotingForOwnComments = {$plugin.tx_pwcomments.settings.ignoreVotingForOwnComments}
 
-		sendMailToAuthorAfterSubmit = 0
-		sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
+		senderAddress = {$plugin.tx_pwcomments.settings.senderAddress}
+		senderName = {$plugin.tx_pwcomments.settings.senderName}
+		sendMailToAuthorAfterSubmit = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit}
+		sendMailToAuthorAfterSubmitTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate}
+		sendMailToAuthorAfterPublish = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish}
+		sendMailToAuthorAfterPublishTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate}
+		sitenameUsedInMails = {$plugin.tx_pwcomments.settings.sitenameUsedInMails}
 
-		sendMailToAuthorAfterPublish = 0
-		sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
+		secondsBetweenTwoComments = {$plugin.tx_pwcomments.settings.secondsBetweenTwoComments}
+		linkUrlsInComments = {$plugin.tx_pwcomments.settings.linkUrlsInComments}
 
-		secondsBetweenTwoComments = 300
-		linkUrlsInComments = 1
+		useBadWordsList = {$plugin.tx_pwcomments.settings.useBadWordsList}
+		useBadWordsListOnUsername = {$plugin.tx_pwcomments.settings.useBadWordsListOnUsername}
+		useBadWordsListOnMailAddress = {$plugin.tx_pwcomments.settings.useBadWordsListOnMailAddress}
+		badWordsList = {$plugin.tx_pwcomments.settings.badWordsList}
 
-		useBadWordsList = 1
-		useBadWordsListOnUsername = 1
-		useBadWordsListOnMailAddress = 0
-		badWordsList = EXT:pw_comments/Resources/Private/Language/badwords.txt
-
-		hiddenFieldSpamProtection = 1
-		hiddenFieldName = authorWebsite
-		hiddenFieldClass = hide_initally
+		hiddenFieldSpamProtection = {$plugin.tx_pwcomments.settings.hiddenFieldSpamProtection}
+		hiddenFieldName = {$plugin.tx_pwcomments.settings.hiddenFieldName}
+		hiddenFieldClass = {$plugin.tx_pwcomments.settings.hiddenFieldClass}
 
 		replaceUsernameWith >
 		replaceMailWith >
 
-		relativeDate.absoluteFormatFallback = %d.%m.%Y
+		relativeDate.absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
 	}
-	persistence {
-		storagePid =
-	}
-	mvc.callDefaultActionIfActionCantBeResolved = 1
 }
 
 
@@ -79,7 +94,7 @@ plugin.tx_pwcomments {
 			20.data = TSFE:fe_user|user|username
 			20.noTrimWrap = | <b>|</b>|
 
-			stdWrap.wrap = <div class="loggedInAs">|</div>
+			stdWrap.wrap = <span class="loggedInAs">|</span>
 		}
 
 		replaceMailWith = TEXT
@@ -105,15 +120,22 @@ lib.pwCommentsIndex {
 		}
 	}
 
+	view < plugin.tx_pwcomments.view
 	persistence =< plugin.tx_pwcomments.persistence
 	settings =< plugin.tx_pwcomments.settings
 }
 
 # Lib for form to post new comments
 lib.pwCommentsNew < lib.pwCommentsIndex
-lib.pwCommentsNew.switchableControllerActions.Comment.1 = new
-lib.pwCommentsNew.switchableControllerActions.Comment.2 = create
-lib.pwCommentsNew.switchableControllerActions.Comment.3 >
+lib.pwCommentsNew {
+	switchableControllerActions {
+		Comment {
+			1 = new
+			2 = create
+			3 = confirmComment
+		}
+	}
+}
 
 # Number of comments of current/given page
 lib.pwCommentsGetCount = COA_INT
@@ -149,202 +171,3 @@ lib.pwCommentsGetCountWithLabel {
 
 	20.override.if.value.cObject < lib.pwCommentsGetCountWithLabel.10
 }
-
-# Add default css
-plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
-	.tx-pwcomment-pi1 h1 {
-		margin-bottom: 8px;
-	}
-
-	.tx-pwcomment-pi1 ol {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.tx-pwcomment-pi1 ol li {
-		background: #e4e4e4;
-		padding: 10px;
-		margin-bottom: 15px;
-		border-radius: 6px;
-		-moz-border-radius: 6px;
-		-webkit-border-radius: 6px;
-	}
-
-	.tx-pwcomment-pi1 ol li.comment {
-		position: relative;
-	}
-
-	.tx-pwcomment-pi1 div.actions {
-		position: absolute;
-		right: 15px;
-		top: 12px;
-	}
-
-	.tx-pwcomment-pi1 div.actions .comment_voting, div.actions .comment_reply {
-		float: left;
-	}
-	.tx-pwcomment-pi1 div.actions .comment_voting {
-		margin-right: 10px;
-	}
-
-	.tx-pwcomment-pi1 .comment-reply div.actions .comment_voting {
-		margin-right: 0;
-	}
-
-	.tx-pwcomment-pi1 div.actions .voting .already_voted {
-		color: #ff8700;
-	}
-
-	.tx-pwcomment-pi1 .votedPositive {
-		color: #009900;
-	}
-
-	.tx-pwcomment-pi1 .votedNegative {
-		color: #990000;
-	}
-
-	.tx-pwcomment-pi1 ol li.highlighted {
-		background: #dddad0;
-	}
-
-	.tx-pwcomment-pi1 ol li div.clear {
-		clear: left;
-		height: 0;
-		font-size: 0;
-		line-height: 0;
-	}
-
-	.tx-pwcomment-pi1 ol li ol {
-		padding-left: 12%;
-		padding-top: 10px;
-	}
-
-	.tx-pwcomment-pi1 ol li ol li {
-		background: #d5d5d5;
-	}
-
-	.tx-pwcomment-pi1 img.comment_author_image {
-		float: left;
-	}
-
-	.tx-pwcomment-pi1 .comment_content_wrap {
-		float: left;
-		padding-left: 15px;
-	}
-
-	.tx-pwcomment-pi1 ol li ol li .comment_content_wrap {
-	}
-
-	.tx-pwcomment-pi1 .comment-reply {
-		position: relative;
-		margin-bottom: 8px;
-		width: auto;
-	}
-
-	.tx-pwcomment-pi1 .last-reply {
-		margin-bottom: 0;
-	}
-
-	.tx-pwcomment-pi1 .comment_body a {
-		color: #333;
-	}
-
-
-	.tx-pwcomment-pi1 .comment_author {
-		font-size: 15px;
-	}
-
-	.tx-pwcomment-pi1 .comment_date, .tx-pwcomment-pi1 .guest {
-		color: #565656;
-		font-size: 11px;
-	}
-
-	.tx-pwcomment-pi1 .comment_header {
-		padding-top: 0px;
-		padding-bottom: 5px;
-	}
-	.tx-pwcomment-pi1 .comment_header a {
-		color: #111;
-		text-decoration: none;
-	}
-
-	.tx-pwcomment-pi1 .comment_body {
-		font-size: 11px;
-		line-height: 16px;
-	}
-
-	#writeComment h3 {
-		padding: 20px 0 8px;
-	}
-
-	#writeComment div.hide_initally {
-		display: none;
-	}
-
-	#writeComment .comment_error {
-		background: #ffd4d4;
-		border: 1px solid #bf2222;
-		color: #bf2222;
-		font-weight: bold;
-		padding: 6px 10px;
-		margin-bottom: 15px;
-	}
-
-	#writeComment label {
-		display: block;
-	}
-
-	#writeComment label span {
-		font-size: 10px;
-		color: #777;
-	}
-	#writeComment label span a {
-		text-decoration: none;
-		color: #777;
-	}
-
-	#writeComment input {
-		font-family: Verdana,Tahoma,Arial,sans-serif;
-		font-size: 15px;
-		width: 66%;
-		padding: 2px;
-		margin-bottom: 14px;
-	}
-
-	#writeComment textarea {
-		width: 100%;
-		line-height: 16px;
-		padding: 5px;
-		font-family: Verdana,Tahoma,Arial,sans-serif;
-		font-size: 11px;
-		margin-bottom: 10px;
-	}
-
-	#writeComment input.button {
-		padding: 2px 10px;
-		margin-bottom: 0;
-		width: auto;
-	}
-
-	#thanksForYourComment, #customMessages {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	#thanksForYourComment li, #customMessages li {
-		background: #ccffcc;
-		border: 1px solid #009900;
-		color: #009900;
-		font-weight: bold;
-		padding: 6px 10px;
-		margin-bottom: 15px;
-	}
-
-	#customMessages li {
-		background: #ffcccc;
-		border-color: #990000;
-		color: #990000;
-	}
-)

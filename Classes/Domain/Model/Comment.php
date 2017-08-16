@@ -1,15 +1,16 @@
 <?php
 namespace PwCommentsTeam\PwComments\Domain\Model;
 
-/*  | This extension is part of the TYPO3 project. The TYPO3 project is
- *  | free software and is licensed under GNU General Public License.
+/*  | This extension is made for TYPO3 CMS and is licensed
+ *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2017 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
+ *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
+use PwCommentsTeam\PwComments\Utility\Settings;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -17,458 +18,471 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  *
  * @package PwCommentsTeam\PwComments
  */
-class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+{
 
-	/**
-	 * @var int uid of entry for what the comment is for
-	 */
-	protected $entryUid = 0;
+    /**
+     * @var int uid of the page for what the comment is for
+     */
+    protected $origPid = 0;
 
-	/**
-	 * crdate as unix timestamp
-	 *
-	 * @var int
-	 */
-	protected $crdate;
+    /**
+     * @var int uid of entry for what the comment is for
+     */
+    protected $entryUid = 0;
 
-	/**
-	 * hidden state
-	 *
-	 * @var bool
-	 */
-	protected $hidden;
+    /**
+     * crdate as unix timestamp
+     *
+     * @var int
+     */
+    protected $crdate;
 
-	/**
-	 * The author as model or NULL if comment author wasn't logged in
-	 *
-	 * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
-	 */
-	protected $author = NULL;
+    /**
+     * hidden state
+     *
+     * @var bool
+     */
+    protected $hidden;
 
-	/**
-	 * author name
-	 *
-	 * @var string
-	 */
-	protected $authorName = '';
+    /**
+     * The author as model or NULL if comment author wasn't logged in
+     *
+     * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
+     */
+    protected $author = null;
 
-	/**
-	 * author's mail
-	 *
-	 * @var string
-	 */
-	protected $authorMail = '';
+    /**
+     * author name
+     *
+     * @var string
+     */
+    protected $authorName = '';
 
-	/**
-	 * @var string
-	 */
-	protected $authorIdent;
+    /**
+     * author's mail
+     *
+     * @var string
+     */
+    protected $authorMail = '';
 
-	/**
-	 * the comment's message
-	 *
-	 * @var string
-	 */
-	protected $message;
+    /**
+     * @var string
+     */
+    protected $authorIdent;
 
-	/**
-	 * Parent comment (if set this comment is an answer). One comment can just have
-	 * child comments or parent comment - not unlimited nested!
-	 *
-	 * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
-	 */
-	protected $parentComment = NULL;
+    /**
+     * the comment's message
+     *
+     * @var string
+     */
+    protected $message;
 
-	/**
-	 * Replies (child comments). One comment can just have child comments
-	 * or parent comment - not unlimited nested!
-	 *
-	 * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
-	 */
-	protected $replies = NULL;
+    /**
+     * Parent comment (if set this comment is an answer). One comment can just have
+     * child comments or parent comment - not unlimited nested!
+     *
+     * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
+     */
+    protected $parentComment = null;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
-	 */
-	protected $votes;
+    /**
+     * Replies (child comments). One comment can just have child comments
+     * or parent comment - not unlimited nested!
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     */
+    protected $replies = null;
 
-	/**
-	 * @var int
-	 */
-	protected $upvoteAmount = 0;
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
+     */
+    protected $votes;
 
-	/**
-	 * @var int
-	 */
-	protected $downvoteAmount = 0;
+    /**
+     * @var int
+     */
+    protected $upvoteAmount = 0;
 
-	/**
-	 * @var bool
-	 */
-	protected $votesCounted = FALSE;
+    /**
+     * @var int
+     */
+    protected $downvoteAmount = 0;
 
-	/**
-	 * The constructor.
-	 */
-	public function __construct() {
-		$this->initializeObject();
-		$this->author = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\FrontendUser');
-		$this->votes = new ObjectStorage();
-	}
+    /**
+     * @var bool
+     */
+    protected $votesCounted = false;
 
-	/**
-	 * Getter for entryUid
-	 *
-	 * @return int
-	 */
-	public function getEntryUid() {
-		return $this->entryUid;
-	}
+    /**
+     * The constructor.
+     */
+    public function __construct()
+    {
+        $this->author = GeneralUtility::makeInstance(FrontendUser::class);
+        $this->votes = new ObjectStorage();
+    }
 
-	/**
-	 * Setter for entryUid
-	 *
-	 * @param int $entryUid
-	 * @return void
-	 */
-	public function setEntryUid($entryUid) {
-		$this->entryUid = $entryUid;
-	}
+    /**
+     * Getter for origPid
+     *
+     * @return int
+     */
+    public function getOrigPid()
+    {
+        return $this->origPid;
+    }
 
-	/**
-	 * Setter for crdate
-	 *
-	 * @param int $crdate crdate
-	 * @return void
-	 */
-	public function setCrdate($crdate) {
-		$this->crdate = $crdate;
-	}
+    /**
+     * Setter for origPid
+     *
+     * @param int $origPid
+     * @return void
+     */
+    public function setOrigPid($origPid)
+    {
+        $this->origPid = $origPid;
+    }
 
-	/**
-	 * Getter for crdate
-	 *
-	 * @return int crdate
-	 */
-	public function getCrdate() {
-		return $this->crdate;
-	}
+    /**
+     * Getter for entryUid
+     *
+     * @return int
+     */
+    public function getEntryUid()
+    {
+        return $this->entryUid;
+    }
 
-	/**
-	 * Setter for hidden state
-	 *
-	 * @param bool $hidden
-	 * @return void
-	 */
-	public function setHidden($hidden) {
-		$this->hidden = $hidden;
-	}
+    /**
+     * Setter for entryUid
+     *
+     * @param int $entryUid
+     * @return void
+     */
+    public function setEntryUid($entryUid)
+    {
+        $this->entryUid = $entryUid;
+    }
 
-	/**
-	 * Getter for hidden state
-	 *
-	 * @return bool
-	 */
-	public function getHidden() {
-		return $this->hidden;
-	}
+    /**
+     * Setter for crdate
+     *
+     * @param int $crdate crdate
+     * @return void
+     */
+    public function setCrdate($crdate)
+    {
+        $this->crdate = $crdate;
+    }
 
-	/**
-	 * Setter for authorName
-	 *
-	 * @param string $authorName authorName
-	 * @return void
-	 */
-	public function setAuthorName($authorName) {
-		$this->authorName = trim($authorName);
-	}
+    /**
+     * Getter for crdate
+     *
+     * @return int crdate
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
 
-	/**
-	 * Getter for authorName
-	 *
-	 * @return string authorName
-	 */
-	public function getAuthorName() {
-		return $this->authorName;
-	}
+    /**
+     * Setter for hidden state
+     *
+     * @param bool $hidden
+     * @return void
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
+    }
 
-	/**
-	 * Setter for authorMail
-	 *
-	 * @param string $authorMail authorMail
-	 * @return void
-	 */
-	public function setAuthorMail($authorMail) {
-		$this->authorMail = trim($authorMail);
-	}
+    /**
+     * Getter for hidden state
+     *
+     * @return bool
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
 
-	/**
-	 * Getter for authorMail
-	 *
-	 * @return string authorMail
-	 */
-	public function getAuthorMail() {
-		return $this->authorMail;
-	}
+    /**
+     * Setter for authorName
+     *
+     * @param string $authorName authorName
+     * @return void
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = trim($authorName);
+    }
 
-	/**
-	 * Get email address of comment author (respecting fe_users or anonymous users)
-	 *
-	 * @return string
-	 */
-	public function getCommentAuthorMailAddress() {
-		if ($this->getAuthor() !== NULL) {
-			return $this->getAuthor()->getEmail();
-		}
-		return $this->getAuthorMail();
-	}
+    /**
+     * Getter for authorName
+     *
+     * @return string authorName
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
 
-	/**
-	 * Checks if comment author has got an email address
-	 *
-	 * @return bool
-	 */
-	public function hasCommentAuthorMailAddress() {
-		$mailAddress = $this->getCommentAuthorMailAddress();
-		return !empty($mailAddress);
-	}
+    /**
+     * Setter for authorMail
+     *
+     * @param string $authorMail authorMail
+     * @return void
+     */
+    public function setAuthorMail($authorMail)
+    {
+        $this->authorMail = trim($authorMail);
+    }
 
-	/**
-	 * Getter for Gravatar link by author's mail
-	 *
-	 * @return string Gravatar link
-	 */
-	public function getAuthorGravatar() {
-		$link = '.gravatar.com/avatar/';
-		$hash = md5(strtolower($this->getAuthorMail()));
-		$domainHash = hexdec($hash[0]) % 3;
-		return 'https://' . $domainHash . $link . $hash;
-	}
+    /**
+     * Getter for authorMail
+     *
+     * @return string authorMail
+     */
+    public function getAuthorMail()
+    {
+        return $this->authorMail;
+    }
 
-	/**
-	 * Setter for message
-	 *
-	 * @param string $message message
-	 * @return void
-	 */
-	public function setMessage($message) {
-		$message = trim($message);
+    /**
+     * Get email address of comment author (respecting fe_users or anonymous users)
+     *
+     * @return string
+     */
+    public function getCommentAuthorMailAddress()
+    {
+        $authorMail = $this->getAuthorMail();
+        if ($this->getAuthor() !== null) {
+            $authorMail = $this->getAuthor()->getEmail();
+        }
+        return $authorMail;
+    }
 
-		$threeNewLines = "\r\n\r\n\r\n";
-		$twoNewLines = "\r\n\r\n";
-		do {
-			$message = str_replace($threeNewLines, $twoNewLines, $message);
-		} while (strstr($message, $threeNewLines));
+    /**
+     * Checks if comment author has got an email address
+     *
+     * @return bool
+     */
+    public function hasCommentAuthorMailAddress()
+    {
+        $mailAddress = $this->getCommentAuthorMailAddress();
+        return !empty($mailAddress);
+    }
 
-		// Decode html tags
-		$message = htmlspecialchars($message);
+    /**
+     * Setter for message
+     *
+     * @param string $message message
+     * @return void
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
 
-		$settings = $this->getExtensionSettings();
-		if ($settings['linkUrlsInComments']) {
-			// Create links
-			$message = preg_replace('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', '<a href="http$4://$5$6">$1</a>', $message);
-		}
+    /**
+     * Getter for message
+     *
+     * @return string message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-		$this->message = $message;
-	}
+    /**
+     * Setter for author
+     *
+     * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author author
+     * @return void
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
 
-	/**
-	 * Getter for message
-	 *
-	 * @return string message
-	 */
-	public function getMessage() {
-		return $this->message;
-	}
+    /**
+     * Getter for author
+     *
+     * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser The author
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
 
-	/**
-	 * Setter for author
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author author
-	 * @return void
-	 */
-	public function setAuthor($author) {
-		$this->author = $author;
-	}
+    /**
+     * Get parent comment
+     *
+     * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
+     */
+    public function getParentComment()
+    {
+        return $this->parentComment;
+    }
 
-	/**
-	 * Getter for author
-	 *
-	 * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser The author
-	 */
-	public function getAuthor() {
-		return $this->author;
-	}
+    /**
+     * Set parent comment
+     *
+     * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $parentComment
+     * @return void
+     */
+    public function setParentComment($parentComment)
+    {
+        $this->parentComment = $parentComment;
+    }
 
-	/**
-	 * Returns the settings of this extension (not rendered)
-	 *
-	 * @return array rendered typoscript settings
-	 */
-	protected function getExtensionSettings() {
-		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-		$objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+    /**
+     * Get comment replies
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     */
+    public function getReplies()
+    {
+        return $this->replies;
+    }
 
-		/** @var ConfigurationManagerInterface $configurationManager */
-		$configurationManager = $objectManager->get('TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface');
-		$fullTyposcript = $configurationManager->getConfiguration(
-			ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-		);
-		return $fullTyposcript['plugin.']['tx_pwcomments.']['settings.'];
-	}
+    /**
+     * Set comment replies
+     *
+     * @param QueryResultInterface $replies Containing comments
+     * @return void
+     */
+    public function setReplies(QueryResultInterface $replies)
+    {
+        $this->replies = $replies;
+    }
 
-	/**
-	 * Get parent comment
-	 *
-	 * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
-	 */
-	public function getParentComment() {
-		return $this->parentComment;
-	}
+    /**
+     * Get votes
+     *
+     * @return ObjectStorage
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
 
-	/**
-	 * Set parent comment
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $parentComment
-	 * @return void
-	 */
-	public function setParentComment($parentComment) {
-		$this->parentComment = $parentComment;
-	}
+    /**
+     * Set votes
+     *
+     * @param ObjectStorage $votes
+     * @return void
+     */
+    public function setVotes(ObjectStorage $votes)
+    {
+        $this->votes = $votes;
+    }
 
-	/**
-	 * Get comment replies
-	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
-	 */
-	public function getReplies() {
-		return $this->replies;
-	}
+    /**
+     * Add single vote
+     *
+     * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
+     * @return void
+     */
+    public function addVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote)
+    {
+        $this->votes->attach($vote);
+    }
 
-	/**
-	 * Set comment replies
-	 *
-	 * @param QueryResultInterface $replies Containing comments
-	 * @return void
-	 */
-	public function setReplies(QueryResultInterface $replies) {
-		$this->replies = $replies;
-	}
+    /**
+     * Remove single vote
+     *
+     * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
+     * @return void
+     */
+    public function removeVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote)
+    {
+        $this->votes->detach($vote);
+    }
 
-	/**
-	 * Get votes
-	 *
-	 * @return ObjectStorage
-	 */
-	public function getVotes() {
-		return $this->votes;
-	}
+    /**
+     * Get amount of upvotes
+     *
+     * @return int
+     */
+    public function getUpvoteAmount()
+    {
+        if ($this->votesCounted === false) {
+            $this->countVotes();
+        }
+        return $this->upvoteAmount;
+    }
 
-	/**
-	 * Set votes
-	 *
-	 * @param ObjectStorage $votes
-	 * @return void
-	 */
-	public function setVotes(ObjectStorage $votes) {
-		$this->votes = $votes;
-	}
+    /**
+     * Get amount of downvotes
+     *
+     * @return int
+     */
+    public function getDownvoteAmount()
+    {
+        if ($this->votesCounted === false) {
+            $this->countVotes();
+        }
+        return $this->downvoteAmount;
+    }
 
-	/**
-	 * Add single vote
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
-	 * @return void
-	 */
-	public function addVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote) {
-		$this->votes->attach($vote);
-	}
+    /**
+     * Get sum of up- and downvotes
+     *
+     * @return int
+     */
+    public function getVoteSum()
+    {
+        return $this->getUpvoteAmount() - $this->getDownvoteAmount();
+    }
 
-	/**
-	 * Remove single vote
-	 *
-	 * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
-	 * @return void
-	 */
-	public function removeVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote) {
-		$this->votes->detach($vote);
-	}
+    /**
+     * Get count of votes
+     *
+     * @return int
+     */
+    public function getVoteCount()
+    {
+        return $this->getVotes()->count();
+    }
 
-	/**
-	 * Get amount of upvotes
-	 *
-	 * @return int
-	 */
-	public function getUpvoteAmount() {
-		if ($this->votesCounted === FALSE) {
-			$this->countVotes();
-		}
-		return $this->upvoteAmount;
-	}
+    /**
+     * Count up- and downvotes
+     *
+     * @return void
+     */
+    protected function countVotes()
+    {
+        /** @var $vote \PwCommentsTeam\PwComments\Domain\Model\Vote */
+        foreach ($this->getVotes() as $vote) {
+            if ($vote->isDownvote()) {
+                $this->downvoteAmount = $this->downvoteAmount + 1;
+            } else {
+                $this->upvoteAmount = $this->upvoteAmount + 1;
+            }
+        }
+        $this->votesCounted = true;
+    }
 
-	/**
-	 * Get amount of downvotes
-	 *
-	 * @return int
-	 */
-	public function getDownvoteAmount() {
-		if ($this->votesCounted === FALSE) {
-			$this->countVotes();
-		}
-		return $this->downvoteAmount;
-	}
+    /**
+     * Get author ident
+     *
+     * @return string
+     */
+    public function getAuthorIdent()
+    {
+        return $this->authorIdent;
+    }
 
-	/**
-	 * Get sum of up- and downvotes
-	 *
-	 * @return int
-	 */
-	public function getVoteSum() {
-		return $this->getUpvoteAmount() - $this->getDownvoteAmount();
-	}
-
-	/**
-	 * Get count of votes
-	 *
-	 * @return int
-	 */
-	public function getVoteCount() {
-		return $this->getVotes()->count();
-	}
-
-	/**
-	 * Count up- and downvotes
-	 *
-	 * @return void
-	 */
-	protected function countVotes() {
-		/** @var $vote \PwCommentsTeam\PwComments\Domain\Model\Vote */
-		foreach ($this->getVotes() as $vote) {
-			if ($vote->isDownvote()) {
-				$this->downvoteAmount = $this->downvoteAmount + 1;
-			} else {
-				$this->upvoteAmount = $this->upvoteAmount + 1;
-			}
-		}
-		$this->votesCounted = TRUE;
-	}
-
-	/**
-	 * Get author ident
-	 *
-	 * @return string
-	 */
-	public function getAuthorIdent() {
-		return $this->authorIdent;
-	}
-
-	/**
-	 * Set author ident
-	 *
-	 * @param string $authorIdent
-	 * @return void
-	 */
-	public function setAuthorIdent($authorIdent) {
-		$this->authorIdent = $authorIdent;
-	}
+    /**
+     * Set author ident
+     *
+     * @param string $authorIdent
+     * @return void
+     */
+    public function setAuthorIdent($authorIdent)
+    {
+        $this->authorIdent = $authorIdent;
+    }
 }

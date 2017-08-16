@@ -1,0 +1,2 @@
+# cat=basic; type=boolean; label=LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:pageModuleNotice
+pageModuleNotice = 1
