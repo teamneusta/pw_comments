@@ -82,12 +82,28 @@ $boot = function ($extensionKey) {
             \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
             ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png']
         );
-
         $iconRegistry->registerIcon(
             'ext-pwcomments-type-vote_up',
             \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
             ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png']
         );
+        $iconRegistry->registerIcon(
+            'ext-pwcomments-ext-icon',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:pw_comments/ext_icon.svg']
+        );
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
+            mod.wizards.newContentElement.wizardItems.plugins.elements.pwcomments {
+                iconIdentifier = ext-pwcomments-ext-icon
+                title = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardTitle
+                description = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription
+                tt_content_defValues {
+                    CType = list
+                    list_type = pwcomments_pi1
+                }
+            }
+        ');
     }
 };
 

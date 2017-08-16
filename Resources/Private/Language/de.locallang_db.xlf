@@ -3,6 +3,14 @@
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments">
 		<header/>
 		<body>
+			<trans-unit id="newContentElementWizardTitle" xml:space="preserve">
+				<source>Comments</source>
+				<target>Kommentare</target>
+			</trans-unit>
+			<trans-unit id="newContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides display of existing and creation of new comments.</source>
+				<source>Plugin von pw_comments zum Anzeigen von bestehenden und Anlegen von neuen Kommentaren.</source>
+			</trans-unit>
 			<trans-unit id="general.pid" xml:space="preserve" approved="yes">
 				<source>PID</source>
 				<target>PID</target>

@@ -3,6 +3,12 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments">
 		<header/>
 		<body>
+			<trans-unit id="newContentElementWizardTitle" xml:space="preserve">
+				<source>Comments</source>
+			</trans-unit>
+			<trans-unit id="newContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides display of existing and creation of new comments.</source>
+			</trans-unit>
 			<trans-unit id="general.pid" xml:space="preserve">
 				<source>PID</source>
 			</trans-unit>
