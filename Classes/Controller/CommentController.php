@@ -379,8 +379,11 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $unregistredUserMail = $this->request->getAttribute('frontend.user')->getKey('ses', 'tx_pwcomments_unregistredUserMail');
         }
 
+        $user = isset($this->currentUser['uid']) && $this->currentUser['uid'] ? $this->frontendUserRepository->findByUid($this->currentUser['uid']) : null;
+
         $this->view->assign('unregistredUserName', $unregistredUserName);
         $this->view->assign('unregistredUserMail', $unregistredUserMail);
+        $this->view->assign('user', $user);
 
         return $this->htmlResponse();
     }

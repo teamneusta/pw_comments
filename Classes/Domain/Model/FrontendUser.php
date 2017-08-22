@@ -14,6 +14,12 @@ class FrontendUser extends AbstractEntity
 
     protected string $name = '';
 
+    protected string $firstName = '';
+
+    protected string $lastName = '';
+
+    protected int $gender = 0;
+
     protected string $title = '';
 
     public function getEmail(): string
@@ -36,6 +42,26 @@ class FrontendUser extends AbstractEntity
         $this->username = $username;
     }
 
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -44,6 +70,16 @@ class FrontendUser extends AbstractEntity
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getGender(): int
+    {
+        return $this->gender;
+    }
+
+    public function setGender(int $gender): void
+    {
+        $this->gender = $gender;
     }
 
     public function getTitle(): string
