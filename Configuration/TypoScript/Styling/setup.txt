@@ -317,8 +317,6 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	display: none;
 }
 
-
-
 #writeComment label {
 	display: block;
 }

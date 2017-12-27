@@ -86,7 +86,7 @@ contains different settings for users who are logged in:
             replaceUsernameWith = COA_INT
             replaceUsernameWith {
                10 = TEXT
-               10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.newComment.loggedInAs
+               10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
 
                20 = TEXT
                20.data = TSFE:fe_user|user|username

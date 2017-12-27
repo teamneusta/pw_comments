@@ -8,7 +8,7 @@ plugin.tx_pwcomments {
 		}
 		partialRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Partials/
-			1 = {$plugin.tx_pwcomments.view.partialsRootPath}
+			1 = {$plugin.tx_pwcomments.view.partialRootPath}
 		}
 		layoutRootPaths {
 			0 = EXT:pw_comments/Resources/Private/Layouts/
@@ -91,7 +91,7 @@ plugin.tx_pwcomments {
 		replaceUsernameWith = COA_INT
 		replaceUsernameWith {
 			10 = TEXT
-			10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.newComment.loggedInAs
+			10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
 
 			20 = TEXT
 			20.data = TSFE:fe_user|user|username
@@ -163,12 +163,12 @@ lib.pwCommentsGetCountWithLabel < lib.pwCommentsGetCount
 lib.pwCommentsGetCountWithLabel {
 	20 = TEXT
 	20 {
-		data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.comments
+		data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comments
 		override.if {
 			value.cObject =< .10
 			equals = 1
 		}
-		override.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xml:tx_pwcomments.comment
+		override.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comment
 		noTrimWrap = | ||
 	}
 
