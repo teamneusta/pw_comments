@@ -55,6 +55,7 @@ pw_comments includes the following settings which make it highly customizable:
    Sortings/Index
    SpamProtection/Index
    Voting/Index
+   TermsAccepted/Index
 
 TypoScript in settings
 ----------------------

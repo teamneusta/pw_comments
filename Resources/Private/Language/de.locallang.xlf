@@ -39,6 +39,10 @@
 				<source>Your mail address contains at least one bad word. These are not allowed.</source>
 				<target>Die angegebene E-Mail Adresse beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</target>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1528633964" xml:space="preserve" approved="yes">
+				<source>You need to accept the terms before posting a new comment.</source>
+				<target>Die Bedingungen müssen akzeptiert werden, bevor ein neuer Kommentar gepostet werden kann.</target>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments.newComment.loggedInAs" xml:space="preserve" approved="yes">
 				<source>You are logged in as:</source>
 				<target>Angemeldet als:</target>
@@ -58,6 +62,18 @@
 			<trans-unit id="tx_pwcomments.newComment.comment" xml:space="preserve" approved="yes">
 				<source>Comment:</source>
 				<target>Kommentar:</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.termsBefore" xml:space="preserve" approved="yes">
+				<source>I understand and accept the </source>
+				<target>Ich verstehe und akzeptiere die </target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.terms" xml:space="preserve" approved="yes">
+				<source>terms</source>
+				<target>Bedingungen</target>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.termsAfter" xml:space="preserve" approved="yes">
+				<source>.</source>
+				<target>.</target>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.newComment.submit" xml:space="preserve" approved="yes">
 				<source>Submit</source>

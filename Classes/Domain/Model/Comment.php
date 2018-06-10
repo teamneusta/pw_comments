@@ -115,6 +115,11 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $votesCounted = false;
 
     /**
+     * @var bool
+     */
+    protected $termsAccepted = false;
+
+    /**
      * The constructor.
      */
     public function __construct()
@@ -484,5 +489,22 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setAuthorIdent($authorIdent)
     {
         $this->authorIdent = $authorIdent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTermsAccepted() : bool
+    {
+        return $this->termsAccepted;
+    }
+
+    /**
+     * @param bool $termsAccepted
+     * @return void
+     */
+    public function setTermsAccepted(bool $termsAccepted)
+    {
+        $this->termsAccepted = $termsAccepted;
     }
 }

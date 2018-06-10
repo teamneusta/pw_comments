@@ -46,6 +46,8 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
         } elseif (!$this->messageIsSet($comment)) {
             $errorNumber = 1299628099;
             $errorArguments = [$this->settings['secondsBetweenTwoComments']];
+        } elseif ($this->settings['requireAcceptedTerms'] && !$comment->getTermsAccepted()) {
+            $errorNumber = 1528633964;
         } elseif ($this->settings['useBadWordsList'] && !$this->checkTextForBadWords($comment->getMessage())) {
             $errorNumber = 1315608355;
         } elseif ($this->settings['useBadWordsListOnUsername']

@@ -36,8 +36,8 @@ return [
                                 . 'parent_comment,votes'
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
-                                . 'parent_comment,votes']
+        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,terms_accepted,' .
+                              'message,parent_comment,votes']
     ],
     'palettes' => [
         '1' => ['showitem' => '']
@@ -209,6 +209,13 @@ return [
                     ]
                 ]
             ]
-        ]
+        ],
+        'terms_accepted' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.terms_accepted',
+            'config' => [
+                'type' => 'check'
+            ]
+        ],
     ]
 ];
