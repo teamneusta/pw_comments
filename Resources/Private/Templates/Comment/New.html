@@ -19,18 +19,18 @@
 			<f:render partial="Comment/FormErrors/ValidationResults" />
 		</div>
 
-		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceUsernameWith')}">
+		<f:if condition="{settings.replaceUsernameWith}">
 			<f:then>
-				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceUsernameWith" />
+				{settings.replaceUsernameWith}
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textfield property="authorName" value="{unregistredUserName}" /></div>
 			</f:else>
 		</f:if>
 
-		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceMailWith')}">
+		<f:if condition="{settings.replaceMailWith}">
 			<f:then>
-				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceMailWith" />
+				{settings.replaceMailWith}
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textfield property="authorMail" value="{unregistredUserMail}" /></div>

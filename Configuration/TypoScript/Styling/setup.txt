@@ -319,7 +319,7 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	color: #777;
 }
 
-#writeComment input {
+#writeComment input[type=text] {
 	font-family: Verdana,Tahoma,Arial,sans-serif;
 	font-size: 15px;
 	width: 66%;
@@ -338,6 +338,7 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 
 #writeComment input.button {
 	padding: 2px 10px;
+    margin-top: 15px;
 	margin-bottom: 0;
 	width: auto;
 }

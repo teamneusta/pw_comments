@@ -56,14 +56,16 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
         } elseif ($this->settings['useBadWordsListOnMailAddress']
             && !$this->checkTextForBadWords($comment->getAuthorMail())) {
             $errorNumber = 1406644912;
-        } elseif (!$this->lastCommentRespectsTimer($comment)) {
+        } elseif (!$this->lastCommentRespectsTimer()) {
             $errorNumber = 1300280476;
             $errorArguments = [$this->settings['secondsBetweenTwoComments']];
         }
 
         if ($errorNumber !== null) {
             $errorMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-                'tx_pwcomments.validation_error.' . $errorNumber, 'PwComments', $errorArguments
+                'tx_pwcomments.validation_error.' . $errorNumber,
+                'PwComments',
+                $errorArguments
             );
             $this->addError($errorMessage, $errorNumber);
         }
@@ -115,8 +117,8 @@ class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractV
         if (!$GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment')) {
             return true;
         }
-        $difference = intval(time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment'));
-        return $difference > $this->settings['secondsBetweenTwoComments'];
+        $difference = time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment');
+        return $difference > (int) $this->settings['secondsBetweenTwoComments'];
     }
 
     /**
