@@ -10,7 +10,7 @@
 			</f:if>
 			<f:if condition="{comments -> f:count()} > 0">
 				<f:then>
-					<ul class="comments-list">
+					<ul class="comments-list{f:if(condition:'!{settings.showAvatar}', then:' no-avatar')}">
 						<f:for each="{comments}" as="comment" iteration="commentIterator">
 							<li>
 								<div class="comment-main-level comment{f:if(condition:'{commentToReplyTo.uid} == {comment.uid}', then:' replyingToThisComment')}{f:if(condition:'{commentIterator.isFirst}', then:' first-comment')}{f:if(condition:'{commentIterator.isLast}', then:' last-comment')}" id="{settings.commentAnchorPrefix}{comment.uid}">

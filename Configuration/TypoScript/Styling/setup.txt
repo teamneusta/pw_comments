@@ -45,6 +45,19 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	border-radius: 50%;
 }
 
+.comments-list.no-avatar:before {
+    display: none;
+}
+.comments-list.no-avatar:after {
+    display: none;
+}
+.comments-list.no-avatar .comment-box:before, .comments-list.no-avatar .comment-box:after {
+    display: none;
+}
+.comments-list.no-avatar .comment-box {
+    float: none;
+}
+
 .reply-list:before, .reply-list:after {display: none;}
 .reply-list li:before {
 	content: '';

@@ -5,7 +5,7 @@
 
 .. include:: ../../Includes.txt
 
-.. _moderation:
+.. _termsAccepted:
 
 Terms accepted
 ==============

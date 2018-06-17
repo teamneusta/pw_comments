@@ -164,11 +164,12 @@
             <trans-unit id="settings.hiddenFieldClass" xml:space="preserve">
                 <source>Hidden field CSS class: CSS class for hiding the field</source>
 			</trans-unit>
-
             <trans-unit id="settings.absoluteFormatFallback" xml:space="preserve">
                 <source>Absolute format fallback for relative dates: The dates of comments will be shown as relative dates (for example "2 hours ago"). After a longer period of time, the view helper switches to an absolute date. This setting controlls the output of this absolute date.</source>
 			</trans-unit>
-
+            <trans-unit id="settings.showAvatar" xml:space="preserve">
+                <source>Show avatar: If enabled an avatar image is displayed for each comment.</source>
+			</trans-unit>
             <trans-unit id="settings.requireAcceptedTerms" xml:space="preserve">
                 <source>Require accepted terms (to post a new comment)</source>
 			</trans-unit>
