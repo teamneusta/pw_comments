@@ -27,7 +27,7 @@ PwComments
       comments
 
    :Copyright:
-      2017
+      2018
 
    :Author:
       Armin Vieweg

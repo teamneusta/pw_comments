@@ -4,7 +4,7 @@ namespace PwCommentsTeam\PwComments\XClass;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2017 Armin Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2018 Armin Vieweg <armin@v.ieweg.de>
  */
 use PwCommentsTeam\PwComments\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
