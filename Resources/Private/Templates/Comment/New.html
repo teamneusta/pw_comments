@@ -19,18 +19,18 @@
 			<f:render partial="Comment/FormErrors/ValidationResults" />
 		</div>
 
-		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceUsernameWith')}">
+		<f:if condition="{settings.replaceUsernameWith}">
 			<f:then>
-				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceUsernameWith" />
+				{settings.replaceUsernameWith}
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textfield property="authorName" value="{unregistredUserName}" /></div>
 			</f:else>
 		</f:if>
 
-		<f:if condition="{f:cObject(typoscriptObjectPath:'plugin.tx_pwcomments.settings.replaceMailWith')}">
+		<f:if condition="{settings.replaceMailWith}">
 			<f:then>
-				<f:cObject typoscriptObjectPath="plugin.tx_pwcomments.settings.replaceMailWith" />
+				{settings.replaceMailWith}
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textfield property="authorMail" value="{unregistredUserMail}" /></div>
@@ -41,6 +41,15 @@
 		<div class="{settings.hiddenFieldClass}"><label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label><f:form.textfield name="{settings.hiddenFieldName}" /></div>
 
 		<div><label><f:translate key="tx_pwcomments.newComment.comment" /></label><f:form.textarea property="message" rows="8" cols="40" /></div>
+
+		<f:if condition="{settings.requireAcceptedTerms}">
+			<div>
+				<label>
+					<f:form.checkbox property="termsAccepted" value="1" />
+					<f:translate key="tx_pwcomments.newComment.termsBefore" /><f:link.typolink parameter="{settings.termsTypolinkParameter}"><f:translate key="tx_pwcomments.newComment.terms" /></f:link.typolink><f:translate key="tx_pwcomments.newComment.termsAfter" />
+				</label>
+			</div>
+		</f:if>
 
 		<f:if condition="{settings.enableRepliesToComments}">
 			<f:if condition="{commentToReplyTo}">

@@ -30,6 +30,9 @@
 			<trans-unit id="tx_pwcomments.validation_error.1406644912" xml:space="preserve">
 				<source>Your mail address contains at least one bad word. These are not allowed.</source>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1528633964" xml:space="preserve">
+				<source>You need to accept the terms before posting a new comment.</source>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments.newComment.loggedInAs" xml:space="preserve">
 				<source>You are logged in as:</source>
 			</trans-unit>
@@ -44,6 +47,15 @@
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.newComment.comment" xml:space="preserve">
 				<source>Comment:</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.termsBefore" xml:space="preserve">
+				<source>I understand and accept the </source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.terms" xml:space="preserve">
+				<source>terms</source>
+			</trans-unit>
+			<trans-unit id="tx_pwcomments.newComment.termsAfter" xml:space="preserve">
+				<source>.</source>
 			</trans-unit>
 			<trans-unit id="tx_pwcomments.newComment.submit" xml:space="preserve">
 				<source>Submit</source>

@@ -57,6 +57,9 @@
 			<trans-unit id="tx_pwcomments_domain_model_comment.votes" xml:space="preserve">
 				<source>Votes</source>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.terms_accepted" xml:space="preserve">
+				<source>Terms accepted</source>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve">
 				<source>Vote</source>
 			</trans-unit>

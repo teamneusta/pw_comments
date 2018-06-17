@@ -1,19 +1,19 @@
 {namespace pw=PwCommentsTeam\PwComments\ViewHelpers}
 
-<!-- Avatar -->
-<div class="comment-avatar">
-	<f:if condition="{settings.showGravatarImage}">
-		<f:then>
-			<pw:Gravatar email="{comment.commentAuthorMailAddress}" size="{settings.gravatarSize}" default="{settings.gravatarDefault}"
-						alt="{comment.author.name}{comment.authorName}" class="comment-author-image"/>
-		</f:then>
-		<f:else>
-			<f:image src="{f:uri.resource(path:'Icons/avatar.svg')}" class="comment-author-image default-user-icon" />
-		</f:else>
-	</f:if>
-</div>
+<f:if condition="{settings.showAvatar}">
+	<div class="comment-avatar">
+		<f:if condition="{settings.showGravatarImage}">
+			<f:then>
+				<pw:Gravatar email="{comment.commentAuthorMailAddress}" size="{settings.gravatarSize}" default="{settings.gravatarDefault}"
+							alt="{comment.author.name}{comment.authorName}" class="comment-author-image"/>
+			</f:then>
+			<f:else>
+				<f:image src="{f:uri.resource(path:'Icons/avatar.svg')}" class="comment-author-image default-user-icon" />
+			</f:else>
+		</f:if>
+	</div>
+</f:if>
 
-<!-- Contenedor del Comentario -->
 <div class="comment-box">
 	<div class="comment-head">
 		<h5 class="comment-name">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</h5>

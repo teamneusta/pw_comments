@@ -15,6 +15,7 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 	author_ident tinytext,
 	message text,
 	votes int(11) unsigned DEFAULT '0' NOT NULL,
+	terms_accepted int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

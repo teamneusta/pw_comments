@@ -45,6 +45,19 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	border-radius: 50%;
 }
 
+.comments-list.no-avatar:before {
+    display: none;
+}
+.comments-list.no-avatar:after {
+    display: none;
+}
+.comments-list.no-avatar .comment-box:before, .comments-list.no-avatar .comment-box:after {
+    display: none;
+}
+.comments-list.no-avatar .comment-box {
+    float: none;
+}
+
 .reply-list:before, .reply-list:after {display: none;}
 .reply-list li:before {
 	content: '';
@@ -319,7 +332,7 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 	color: #777;
 }
 
-#writeComment input {
+#writeComment input[type=text] {
 	font-family: Verdana,Tahoma,Arial,sans-serif;
 	font-size: 15px;
 	width: 66%;
@@ -338,6 +351,7 @@ plugin.tx_pwcomments._CSS_DEFAULT_STYLE (
 
 #writeComment input.button {
 	padding: 2px 10px;
+    margin-top: 15px;
 	margin-bottom: 0;
 	width: auto;
 }

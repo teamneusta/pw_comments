@@ -75,6 +75,10 @@
 				<source>Votes</source>
 				<target>Bewertungen</target>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments_domain_model_comment.terms_accepted" xml:space="preserve" approved="yes">
+				<source>Terms accepted</source>
+				<target>Bedingungen akzeptiert</target>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve" approved="yes">
 				<source>Vote</source>
 				<target>Bewertung</target>
