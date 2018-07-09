@@ -494,7 +494,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @return bool
      */
-    public function getTermsAccepted() : bool
+    public function getTermsAccepted()
     {
         return $this->termsAccepted;
     }
@@ -503,7 +503,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param bool $termsAccepted
      * @return void
      */
-    public function setTermsAccepted(bool $termsAccepted)
+    public function setTermsAccepted($termsAccepted)
     {
         $this->termsAccepted = $termsAccepted;
     }
