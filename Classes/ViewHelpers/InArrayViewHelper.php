@@ -11,24 +11,30 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
 
 /**
  * InArray ViewHelper
- *
- * @package PwCommentsTeam\PwComments
  */
-class InArrayViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class InArrayViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
+    /**
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('subject', 'array', 'The subject');
+        $this->registerArgument('needle', 'string', '', true);
+    }
 
     /**
      * Checks if the given subject is an array
      *
-     * @param array $subject
-     * @param string $needle
      * @return bool TRUE if given needle is in array
      */
-    public function render(array $subject = null, $needle)
+    public function render()
     {
+        $subject = $this->arguments['subject'];
         if ($subject === null) {
             $subject = $this->renderChildren();
         }
-        return in_array($needle, $subject);
+        return \in_array($this->arguments['needle'], $subject, true);
     }
 }

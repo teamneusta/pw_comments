@@ -69,24 +69,32 @@ namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
  *
  * @package PwCommentsTeam\PwComments
  */
-class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
+
+    /**
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('timestamp', 'mixed', 'unix timestamp', false);
+        $this->registerArgument('format', 'string', 'Format String to be parsed by strftime', false, '%Y-%m-%d');
+        $this->registerArgument('get', 'string', 'get some related date (see class doc)', false, '');
+    }
 
     /**
      * Render the supplied unix timestamp in a localized human-readable string.
      *
-     * @param int|string|\DateTime $timestamp unix timestamp
-     * @param string $format Format String to be parsed by strftime
-     * @param string $get get some related date (see class doc)
      * @return string Formatted date
      */
-    public function render($timestamp = null, $format = '%Y-%m-%d', $get = '')
+    public function render()
     {
-        $timestamp = $this->normalizeTimestamp($timestamp);
-        if ($get) {
-            $timestamp = $this->modifyDate($timestamp, $get);
+        $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
+        if ($this->arguments['get']) {
+            $timestamp = $this->modifyDate($timestamp, $this->arguments['get']);
         }
-        $format = preg_replace('/([a-zA-Z])/is', '%$1', $format);
+        $format = preg_replace('/([a-zA-Z])/is', '%$1', $this->arguments['format']);
         $format = str_replace('%%', '%', $format);
         return strftime($format, $timestamp);
     }
@@ -94,18 +102,18 @@ class DateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
     /**
      * Handle all the different input formats and return a real timestamp
      *
-     * @param int $timestamp
-     * @return int
+     * @param int|string|null|\DateTime $timestamp
+     * @return int|bool
      *
      * @throws \InvalidArgumentException
      */
     protected function normalizeTimestamp($timestamp)
     {
-        if (is_null($timestamp)) {
+        if ($timestamp === null) {
             $timestamp = time();
         } elseif (is_numeric($timestamp)) {
             $timestamp = (int) $timestamp;
-        } elseif (is_string($timestamp)) {
+        } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
         } elseif ($timestamp instanceof \DateTime) {
             $timestamp = (int) $timestamp->format('U');

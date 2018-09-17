@@ -8,7 +8,6 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * Gravatar Viewhelper
@@ -38,7 +37,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
  *
  * @package PwCommentsTeam\PwComments
  */
-class GravatarViewHelper extends AbstractTagBasedViewHelper
+class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -62,26 +61,23 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
         $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
+
+        $this->registerArgument('email', 'string', 'The mail to create Gravatar link for', true);
+        $this->registerArgument('size', 'integer', 'The size of avatar in pixel', false, 100);
+        $this->registerArgument('default', 'string', 'The image to take if user has no Gravatar', false, 'mm');
     }
 
     /**
      * Generates a Gravatar image tag
      *
-     * @param string $email The mail to create Gravatar link for
-     * @param int $size The size of avatar in pixel
-     * @param string $default The image to take if user has no Gravatar
      * @return string html image tag with the gravatar image uri
      */
-    public function render($email = null, $size = 100, $default = 'mm')
+    public function render()
     {
-        if ($email === null) {
-            $email = $this->renderChildren();
-        }
-
         $uriParts = [
-            md5(strtolower(trim($email))),
-            '?s=' . $size,
-            '&d=' . $default
+            md5(strtolower(trim($this->arguments['email']))),
+            '?s=' . $this->arguments['size'],
+            '&d=' . $this->arguments['default']
         ];
 
         $this->tag->addAttribute('src', $this->getGravatarSrc($uriParts));

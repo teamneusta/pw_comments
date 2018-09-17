@@ -15,30 +15,39 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @package PwCommentsTeam\PwComments
  */
-class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
-
+    /**
+     * @var bool
+     */
     protected $dateIsAbsolute = false;
+
+    /**
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('timestamp', 'mixed', 'Unix timestamp', true);
+        $this->registerArgument('format', 'string', 'String to be parsed by strftime', true);
+        $this->registerArgument('wrap', 'string', 'Uses sprintf to wrap relative date (use %s for date)', false, '%s');
+        $this->registerArgument('wrapAbsolute', 'string', 'Same like wrap, but used if date is absolute', false, '%s');
+    }
 
     /**
      * Render the supplied unix timestamp in a localized human-readable string.
      *
-     * @param int|string|\DateTime $timestamp unix timestamp
-     * @param string $format Format String to be parsed by strftime
-     * @param string $wrap Uses sprintf to wrap relative date (use %s for date)
-     * @param string $wrapAbsolute Same like $wrap, but used if date is absolute
-     *
      * @return string Formatted date
      */
-    public function render($timestamp = null, $format = null, $wrap = '%s', $wrapAbsolute = '%s')
+    public function render()
     {
         $this->dateIsAbsolute = false;
-        $timestamp = $this->normalizeTimestamp($timestamp);
-        $relativeDate = $this->makeDateRelative($timestamp, $format);
+        $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
+        $relativeDate = $this->makeDateRelative($timestamp, $this->arguments['format']);
         if ($this->dateIsAbsolute === true) {
-            return sprintf($wrapAbsolute, $relativeDate);
+            return sprintf($this->arguments['wrapAbsolute'], $relativeDate);
         }
-        return sprintf($wrap, $relativeDate);
+        return sprintf($this->arguments['wrap'], $relativeDate);
     }
 
     /**
@@ -49,11 +58,11 @@ class RelativeDateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
      */
     protected function normalizeTimestamp($timestamp)
     {
-        if (is_null($timestamp)) {
+        if ($timestamp === null) {
             $timestamp = time();
         } elseif (is_numeric($timestamp)) {
-            $timestamp = intval($timestamp);
-        } elseif (is_string($timestamp)) {
+            $timestamp = (int) $timestamp;
+        } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
         } elseif ($timestamp instanceof \DateTime) {
             $timestamp = $timestamp->format('U');
