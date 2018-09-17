@@ -20,10 +20,10 @@ $EM_CONF[$_EXTKEY] = [
     'createDirs' => null,
     'modify_tables' => '',
     'clearCacheOnLoad' => false,
-    'version' => '4.1.2',
+    'version' => '5.0.0-dev',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-8.9.99'
+            'typo3' => '8.7.0-9.5.99'
         ],
         'conflicts' => [
         ],

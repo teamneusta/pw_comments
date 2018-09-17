@@ -6,8 +6,8 @@
 conf.py:
   copyright: 2018
   project: PwComments
-  version: 4.1
-  release: 4.1.2
+  version: 5.0
+  release: 5.0.0
   latex_documents:
   - - Index
     - pwcomments.tex
