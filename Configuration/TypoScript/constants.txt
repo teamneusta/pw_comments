@@ -36,6 +36,8 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/anchors; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.customMessagesAnchor
       customMessagesAnchor = customMessages
 
+      # cat=plugin.tx_pwcomments/gravatar; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showAvatar
+      showAvatar = 1
       # cat=plugin.tx_pwcomments/gravatar; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showGravatarImage
       showGravatarImage = 1
       # cat=plugin.tx_pwcomments/gravatar; type=integer; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarSize
@@ -94,7 +96,7 @@ plugin.tx_pwcomments {
       sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
       # cat=plugin.tx_pwcomments/mails; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sitenameUsedInMails
       sitenameUsedInMails =
-      
+
       # cat=plugin.tx_pwcomments/spamprotect; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
       secondsBetweenTwoComments = 300
       # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsList
@@ -116,8 +118,6 @@ plugin.tx_pwcomments {
       linkUrlsInComments = 1
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback
       absoluteFormatFallback = %d.%m.%Y
-      # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showAvatar
-      showAvatar = 1
       # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.requireAcceptedTerms
       requireAcceptedTerms = 1
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.termsTypolinkParameter

@@ -13,10 +13,27 @@ Gravatar
 ===================================== ========
 Property                               Type
 ===================================== ========
+showAvatar_                            boolean
 showGravatarImage_                     boolean
 gravatarSize_                          integer
 gravatarDefault_                       string
 ===================================== ========
+
+.. _showAvatar:
+
+showAvatar
+"""""""""""""""""""
+.. container:: table-row
+
+   Property
+      showAvatar
+   Data type
+      boolean
+   Default
+      1
+   Description
+      If enabled an avatar image is displayed for each comment. If disabled, no image is displayed at all.
+
 
 .. _showGravatarImage:
 
@@ -31,7 +48,7 @@ showGravatarImage
    Default
       1
    Description
-      Enables or disables the usage of gravatar images
+      Enables or disables the usage of gravatar images. If disabled, a static icon is displayed.
 
 .. _gravatarSize:
 

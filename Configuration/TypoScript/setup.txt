@@ -25,6 +25,7 @@ plugin.tx_pwcomments {
 		successfulAnchor = {$plugin.tx_pwcomments.settings.successfulAnchor}
 		customMessagesAnchor = {$plugin.tx_pwcomments.settings.customMessagesAnchor}
 
+        showAvatar = {$plugin.tx_pwcomments.settings.showAvatar}
 		showGravatarImage = {$plugin.tx_pwcomments.settings.showGravatarImage}
 		gravatarSize = {$plugin.tx_pwcomments.settings.gravatarSize}
 		gravatarDefault = {$plugin.tx_pwcomments.settings.gravatarDefault}
@@ -75,7 +76,6 @@ plugin.tx_pwcomments {
 		replaceMailWith >
 
 		relativeDate.absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
-        showAvatar = {$plugin.tx_pwcomments.settings.showAvatar}
 		requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
 		termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
 	}
