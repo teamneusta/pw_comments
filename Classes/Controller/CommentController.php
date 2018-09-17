@@ -122,7 +122,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $commentToReplyTo
      * @return void
      *
-     * @dontvalidate $commentToReplyTo
      * @ignorevalidation $commentToReplyTo
      */
     public function indexAction(Comment $commentToReplyTo = null)
@@ -175,7 +174,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param Comment $newComment
      * @return bool
-     * @dontverifyrequesthash
      */
     public function createAction(Comment $newComment = null)
     {
@@ -267,11 +265,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $commentToReplyTo Comment to reply to
      * @return void
      *
-     * @dontvalidate $newComment
-     * @dontvalidate $commentToReplyTo
      * @ignorevalidation $newComment
      * @ignorevalidation $commentToReplyTo
-     * @dontverifyrequesthash
      */
     public function newAction(Comment $newComment = null, Comment $commentToReplyTo = null)
     {
@@ -304,7 +299,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
      *
-     * @dontvalidate $comment
      * @ignorevalidation $comment
      */
     public function upvoteAction(Comment $comment)
@@ -319,7 +313,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
      *
-     * @dontvalidate $comment
      * @ignorevalidation $comment
      */
     public function downvoteAction(Comment $comment)

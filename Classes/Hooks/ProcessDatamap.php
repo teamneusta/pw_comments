@@ -24,41 +24,46 @@ class ProcessDatamap
     /** @var array */
     protected $enabledStatus = ['update'];
 
-    // @codingStandardsIgnoreStart
-
     /**
      * After Save hook
      *
      * @param string $status
-     * @param  string $table
-     * @param  int $id
+     * @param string $table
+     * @param int $id
      * @param array $fieldArray
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      * @return void
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $pObj)
     {
-        if (in_array($table, $this->enabledTables) && in_array($status, $this->enabledStatus)) {
-            if (isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
-                $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-                    '*',
-                    'tx_pwcomments_domain_model_comment',
-                    'uid=' . $id
-                );
+        if (\in_array($table, $this->enabledTables, true) &&
+            \in_array($status, $this->enabledStatus, true) &&
+            isset($fieldArray['hidden']) &&
+            (int)$fieldArray['hidden'] === 0
+        ) {
+            /** @var \TYPO3\CMS\Core\Database\ConnectionPool $pool */
+            $pool = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class);
+            $queryBuilder = $pool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+            $queryBuilder->getRestrictions()->removeAll();
+            $row = $queryBuilder
+                ->select('*')
+                ->from('tx_pwcomments_domain_model_comment')
+                ->where($queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)
+                ))
+                ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                $this->runExtbaseController(
-                    'PwComments',
-                    'Comment',
-                    'sendAuthorMailWhenCommentHasBeenApproved',
-                    'Pi2',
-                    ['_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => true],
-                    intval($row['pid'])
-                );
-            }
+            $this->runExtbaseController(
+                'PwComments',
+                'Comment',
+                'sendAuthorMailWhenCommentHasBeenApproved',
+                'Pi2',
+                ['_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => true],
+                (int) $row['pid']
+            );
         }
     }
-
-    // @codingStandardsIgnoreEnd
 
     /**
      * Initializes and runs an extbase controller
@@ -71,6 +76,8 @@ class ProcessDatamap
      * @param int $pageUid Uid of current page
      * @param string $vendorName VendorName
      * @return string output of controller's action
+     *
+     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
      */
     protected function runExtbaseController(
         $extensionName,
@@ -78,7 +85,7 @@ class ProcessDatamap
         $action = 'index',
         $pluginName = 'Pi1',
         $settings = [],
-        $pageUid = 0,
+        $pageUid = 1,
         $vendorName = 'PwCommentsTeam'
     ) {
         $GLOBALS['TT'] = GeneralUtility::makeInstance('TYPO3\CMS\Core\TimeTracker\TimeTracker');
@@ -99,7 +106,7 @@ class ProcessDatamap
 
         \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage('de');
         \TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
-        \TYPO3\CMS\Frontend\Utility\EidUtility::initExtensionTCA('pw_comments');
+//        \TYPO3\CMS\Frontend\Utility\EidUtility::initExtensionTCA('pw_comments');
 
         if (unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])) {
             $settings = array_merge(
