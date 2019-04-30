@@ -21,7 +21,7 @@
 
 		<f:if condition="{settings.replaceUsernameWith}">
 			<f:then>
-				{settings.replaceUsernameWith}
+				<f:format.raw>{settings.replaceUsernameWith}</f:format.raw>
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textfield property="authorName" value="{unregistredUserName}" /></div>
@@ -30,7 +30,7 @@
 
 		<f:if condition="{settings.replaceMailWith}">
 			<f:then>
-				{settings.replaceMailWith}
+				<f:format.raw>{settings.replaceMailWith}</f:format.raw>
 			</f:then>
 			<f:else>
 				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textfield property="authorMail" value="{unregistredUserMail}" /></div>
