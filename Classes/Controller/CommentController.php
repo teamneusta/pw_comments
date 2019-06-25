@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Controller;
+namespace T3\PwComments\Controller;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,10 +8,10 @@ namespace PwCommentsTeam\PwComments\Controller;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
-use PwCommentsTeam\PwComments\Domain\Model\Vote;
-use PwCommentsTeam\PwComments\Utility\HashEncryptionUtility;
-use PwCommentsTeam\PwComments\Utility\StringUtility;
+use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Vote;
+use T3\PwComments\Utility\HashEncryptionUtility;
+use T3\PwComments\Utility\StringUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -19,7 +19,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * The comment controller
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -44,37 +44,37 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected $currentAuthorIdent;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Utility\Settings
+     * @var \T3\PwComments\Utility\Settings
      * @inject
      */
     protected $settingsUtility;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Utility\Mail
+     * @var \T3\PwComments\Utility\Mail
      * @inject
      */
     protected $mailUtility;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Utility\Cookie
+     * @var \T3\PwComments\Utility\Cookie
      * @inject
      */
     protected $cookieUtility;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Domain\Repository\CommentRepository
+     * @var \T3\PwComments\Domain\Repository\CommentRepository
      * @inject
      */
     protected $commentRepository;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Domain\Repository\FrontendUserRepository
+     * @var \T3\PwComments\Domain\Repository\FrontendUserRepository
      * @inject
      */
     protected $frontendUserRepository;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Domain\Repository\VoteRepository
+     * @var \T3\PwComments\Domain\Repository\VoteRepository
      * @inject
      */
     protected $voteRepository;
@@ -427,13 +427,13 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function createNewVote($type, Comment $comment)
     {
         /** @var Vote $newVote */
-        $newVote = GeneralUtility::makeInstance('PwCommentsTeam\PwComments\Domain\Model\Vote');
+        $newVote = GeneralUtility::makeInstance('T3\PwComments\Domain\Model\Vote');
         $newVote->setComment($comment);
         $newVote->setPid($this->commentStorageUid);
         $newVote->setOrigPid($this->pageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
         if ($this->currentUser['uid']) {
-            /** @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author */
+            /** @var \T3\PwComments\Domain\Model\FrontendUser $author */
             $author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
             $newVote->setAuthor($author);
         }

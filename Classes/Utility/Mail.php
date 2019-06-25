@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Utility;
+namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -10,12 +10,12 @@ namespace PwCommentsTeam\PwComments\Utility;
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Comment;
 
 /**
  * This class provides some methods to build and send mails
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class Mail
 {

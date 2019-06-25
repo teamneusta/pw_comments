@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Utility;
+namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -12,7 +12,7 @@ namespace PwCommentsTeam\PwComments\Utility;
 /**
  * Cookie Utility
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class Cookie
 {

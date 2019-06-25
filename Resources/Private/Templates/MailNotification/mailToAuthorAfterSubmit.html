@@ -1,4 +1,4 @@
-{namespace pw=PwCommentsTeam\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.salutation" />
+{namespace pw=T3\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.salutation" />
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted"/></f:then><f:else><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted"/></f:else></f:if>
 <f:format.raw><f:uri.page addQueryString="true" absolute="true" argumentsToBeExcludedFromQueryString="{0:'id', 1:'cHash', 2:'tx_pwcomments_pi1'}" /></f:format.raw>
 

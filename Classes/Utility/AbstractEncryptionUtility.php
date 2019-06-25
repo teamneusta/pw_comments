@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Utility;
+namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 /**
  * Class AbstractUtility
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 abstract class AbstractEncryptionUtility
 {

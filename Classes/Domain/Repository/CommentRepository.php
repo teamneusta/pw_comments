@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Repository;
+namespace T3\PwComments\Domain\Repository;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -11,13 +11,13 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
- * Repository for \PwCommentsTeam\PwComments\Domain\Model\Comment
+ * Repository for \T3\PwComments\Domain\Model\Comment
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {

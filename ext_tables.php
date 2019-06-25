@@ -14,7 +14,7 @@ if (!defined('TYPO3_MODE')) {
 
 $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-        'PwCommentsTeam.' . $extensionKey,
+        'T3.' . $extensionKey,
         'Pi1',
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title'
     );

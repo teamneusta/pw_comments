@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Tests\Unit\Domain\Model;
+namespace T3\PwComments\Tests\Unit\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,15 +8,15 @@ namespace PwCommentsTeam\PwComments\Tests\Unit\Domain\Model;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
-use PwCommentsTeam\PwComments\Domain\Model\FrontendUser;
-use PwCommentsTeam\PwComments\Domain\Model\Vote;
+use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\FrontendUser;
+use T3\PwComments\Domain\Model\Vote;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 
 /**
  * Class VoteTest
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class VoteTest extends UnitTestCase
 {

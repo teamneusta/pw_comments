@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Validator;
+namespace T3\PwComments\Domain\Validator;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,8 +8,8 @@ namespace PwCommentsTeam\PwComments\Domain\Validator;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
-use PwCommentsTeam\PwComments\Utility\Settings;
+use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -17,7 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * comprehensive validation. It checks that at least one of the required fields
  * has been filled.
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {

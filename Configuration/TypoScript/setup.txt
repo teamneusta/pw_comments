@@ -112,7 +112,7 @@ lib.pwCommentsIndex = USER
 lib.pwCommentsIndex {
 	userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
 	extensionName = PwComments
-	vendorName = PwCommentsTeam
+	vendorName = T3
 	pluginName = Pi1
 
 	switchableControllerActions {

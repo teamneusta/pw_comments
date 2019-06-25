@@ -1,5 +1,5 @@
 config.tx_extbase.persistence.classes {
-    PwCommentsTeam\PwComments\Domain\Model\FrontendUser {
+    T3\PwComments\Domain\Model\FrontendUser {
         mapping {
             tableName = fe_users
         }

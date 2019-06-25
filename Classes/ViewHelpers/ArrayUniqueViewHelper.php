@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\ViewHelpers;
+namespace T3\PwComments\ViewHelpers;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -12,7 +12,7 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
 /**
  * ArrayUnique ViewHelper
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class ArrayUniqueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {

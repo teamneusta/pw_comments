@@ -1,4 +1,4 @@
-{namespace pw=PwCommentsTeam\PwComments\ViewHelpers}
+{namespace pw=T3\PwComments\ViewHelpers}
 <span class="votesum{f:if(condition:'{comment.voteSum} < 0', then:' voted-negative')}{f:if(condition:'{comment.voteSum} > 0', then:' voted-positive')}" title="{f:translate(key:'tx_pwcomments.votes.summary', arguments:'{count:\'{comment.voteCount}\', up:\'{comment.upvoteAmount}\', down:\'{comment.downvoteAmount}\'}')}">
 	<f:if condition="{comment.voteSum} > 0">+</f:if>{comment.voteSum}
 </span>

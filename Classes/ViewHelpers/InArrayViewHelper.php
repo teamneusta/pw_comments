@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\ViewHelpers;
+namespace T3\PwComments\ViewHelpers;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.

@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Utility;
+namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,13 +8,13 @@ namespace PwCommentsTeam\PwComments\Utility;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class HashUtility
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class HashEncryptionUtility extends AbstractEncryptionUtility
 {

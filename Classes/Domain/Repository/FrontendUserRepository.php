@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Repository;
+namespace T3\PwComments\Domain\Repository;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -12,7 +12,7 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
 /**
  * Repository for frontend users (using fe_users)
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
 {

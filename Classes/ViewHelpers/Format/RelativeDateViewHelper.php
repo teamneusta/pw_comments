@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
+namespace T3\PwComments\ViewHelpers\Format;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -13,7 +13,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * Formats a unix timestamp to a human-readable, relative string
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {

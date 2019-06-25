@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Model;
+namespace T3\PwComments\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -12,7 +12,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 /**
  * Vote model (for comments)
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
@@ -37,7 +37,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $crdate;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
+     * @var \T3\PwComments\Domain\Model\FrontendUser
      */
     protected $author = null;
 
@@ -47,7 +47,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $authorIdent;
 
     /**
-     * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
+     * @var \T3\PwComments\Domain\Model\Comment
      */
     protected $comment;
 
@@ -117,7 +117,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get author (fe_user)
      *
-     * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
+     * @return \T3\PwComments\Domain\Model\FrontendUser
      */
     public function getAuthor()
     {
@@ -127,10 +127,10 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set author (fe_user)
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author
+     * @param \T3\PwComments\Domain\Model\FrontendUser $author
      * @return void
      */
-    public function setAuthor(\PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author)
+    public function setAuthor(\T3\PwComments\Domain\Model\FrontendUser $author)
     {
         $this->author = $author;
     }
@@ -179,7 +179,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get related comment
      *
-     * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
+     * @return \T3\PwComments\Domain\Model\Comment
      */
     public function getComment()
     {
@@ -189,10 +189,10 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set related comment
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $comment
+     * @param \T3\PwComments\Domain\Model\Comment $comment
      * @return void
      */
-    public function setComment(\PwCommentsTeam\PwComments\Domain\Model\Comment $comment)
+    public function setComment(\T3\PwComments\Domain\Model\Comment $comment)
     {
         $this->comment = $comment;
     }

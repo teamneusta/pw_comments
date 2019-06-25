@@ -14,7 +14,7 @@ if (!defined('TYPO3_MODE')) {
 
 $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'PwCommentsTeam.' . $extensionKey,
+        'T3.' . $extensionKey,
         'Pi1',
         [
             'Comment' => 'index,new,create,upvote,downvote,confirmComment',
@@ -25,7 +25,7 @@ $boot = function ($extensionKey) {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'PwCommentsTeam.' . $extensionKey,
+        'T3.' . $extensionKey,
         'Pi2',
         [
             'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',
@@ -63,13 +63,13 @@ $boot = function ($extensionKey) {
     );
         // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
-        'PwCommentsTeam\PwComments\Hooks\ProcessDatamap';
+        'T3\PwComments\Hooks\ProcessDatamap';
 
     if (TYPO3_MODE === 'BE') {
         $extensionConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments']);
         if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'] = [
-                'className' => 'PwCommentsTeam\\PwComments\\XClass\\PageLayoutController',
+                'className' => 'T3\\PwComments\\XClass\\PageLayoutController',
             ];
         }
 
@@ -108,7 +108,7 @@ $boot = function ($extensionKey) {
         ');
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['pwcomments_pi1']['pwcomments'] =
-            \PwCommentsTeam\PwComments\Hooks\PageLayoutView::class . '->getExtensionSummary';
+            \T3\PwComments\Hooks\PageLayoutView::class . '->getExtensionSummary';
 
         // @codingStandardsIgnoreEnd
     }

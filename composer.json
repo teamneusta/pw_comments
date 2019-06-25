@@ -1,5 +1,5 @@
 {
-    "name": "instituteweb/pw_comments",
+    "name": "t3/pw_comments",
     "type": "typo3-cms-extension",
     "description": "Powerful extension for providing comments, including replies on comments and voting.",
     "keywords": ["TYPO3", "extension", "comment", "voting"],
@@ -10,7 +10,7 @@
             "name": "Armin Vieweg",
             "role": "Lead Developer",
             "email": "armin@v.ieweg.de",
-            "homepage": "http://v.ieweg.de/"
+            "homepage": "https://v.ieweg.de/"
         },
         {
             "name": "Dennis Roemmich",
@@ -22,16 +22,16 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "typo3/cms-core": ">=8.7.0,<9.5"
+        "php": ">=7.1",
+        "typo3/cms-core": "^8.7 || ^9.5"
     },
     "autoload": {
         "psr-4": {
-            "PwCommentsTeam\\PwComments\\": "Classes"
+            "T3\\PwComments\\": "Classes"
         }
     },
     "replace": {
-        "pw_comments": "self.version"
+        "instituteweb/pw_comments": "*"
     },
     "scripts": {
         "phpcs": "phpcs --extension=php --standard=PSR2 .",

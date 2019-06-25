@@ -1,4 +1,4 @@
-{namespace pw=PwCommentsTeam\PwComments\ViewHelpers}
+{namespace pw=T3\PwComments\ViewHelpers}
 <f:form.validationResults>
 	<f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyName">
 		<f:for each="{errors -> pw:arrayUnique()}" as="error">

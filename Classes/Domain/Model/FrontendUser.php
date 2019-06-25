@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Model;
+namespace T3\PwComments\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -12,7 +12,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
 /**
  * The frontend user model
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
 {

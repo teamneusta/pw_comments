@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Model;
+namespace T3\PwComments\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,7 +8,7 @@ namespace PwCommentsTeam\PwComments\Domain\Model;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Utility\Settings;
+use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 /**
  * The comment model
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
@@ -48,7 +48,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * The author as model or NULL if comment author wasn't logged in
      *
-     * @var \PwCommentsTeam\PwComments\Domain\Model\FrontendUser
+     * @var \T3\PwComments\Domain\Model\FrontendUser
      */
     protected $author = null;
 
@@ -82,7 +82,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Parent comment (if set this comment is an answer). One comment can just have
      * child comments or parent comment - not unlimited nested!
      *
-     * @var \PwCommentsTeam\PwComments\Domain\Model\Comment
+     * @var \T3\PwComments\Domain\Model\Comment
      */
     protected $parentComment = null;
 
@@ -95,7 +95,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $replies = null;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\PwCommentsTeam\PwComments\Domain\Model\Vote>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\T3\PwComments\Domain\Model\Vote>
      */
     protected $votes;
 
@@ -303,7 +303,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Setter for author
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\FrontendUser $author author
+     * @param \T3\PwComments\Domain\Model\FrontendUser $author author
      * @return void
      */
     public function setAuthor($author)
@@ -314,7 +314,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Getter for author
      *
-     * @return \PwCommentsTeam\PwComments\Domain\Model\FrontendUser The author
+     * @return \T3\PwComments\Domain\Model\FrontendUser The author
      */
     public function getAuthor()
     {
@@ -324,7 +324,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get parent comment
      *
-     * @return \PwCommentsTeam\PwComments\Domain\Model\Comment
+     * @return \T3\PwComments\Domain\Model\Comment
      */
     public function getParentComment()
     {
@@ -334,7 +334,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set parent comment
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\Comment $parentComment
+     * @param \T3\PwComments\Domain\Model\Comment $parentComment
      * @return void
      */
     public function setParentComment($parentComment)
@@ -387,10 +387,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Add single vote
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
+     * @param \T3\PwComments\Domain\Model\Vote $vote
      * @return void
      */
-    public function addVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote)
+    public function addVote(\T3\PwComments\Domain\Model\Vote $vote)
     {
         $this->votes->attach($vote);
     }
@@ -398,10 +398,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Remove single vote
      *
-     * @param \PwCommentsTeam\PwComments\Domain\Model\Vote $vote
+     * @param \T3\PwComments\Domain\Model\Vote $vote
      * @return void
      */
-    public function removeVote(\PwCommentsTeam\PwComments\Domain\Model\Vote $vote)
+    public function removeVote(\T3\PwComments\Domain\Model\Vote $vote)
     {
         $this->votes->detach($vote);
     }
@@ -459,7 +459,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function countVotes()
     {
-        /** @var $vote \PwCommentsTeam\PwComments\Domain\Model\Vote */
+        /** @var $vote \T3\PwComments\Domain\Model\Vote */
         foreach ($this->getVotes() as $vote) {
             if ($vote->isDownvote()) {
                 $this->downvoteAmount = $this->downvoteAmount + 1;

@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Utility;
+namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -14,7 +14,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  * This class provides some methods to prepare and render given
  * extension settings
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class Settings extends AbstractEncryptionUtility
 {

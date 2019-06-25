@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Domain\Repository;
+namespace T3\PwComments\Domain\Repository;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -8,13 +8,13 @@ namespace PwCommentsTeam\PwComments\Domain\Repository;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-use PwCommentsTeam\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 
 /**
  * Repository for votes
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
@@ -58,7 +58,7 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param Comment $comment
      * @param string $authorIdent
-     * @return object|\PwCommentsTeam\PwComments\Domain\Model\Vote
+     * @return object|\T3\PwComments\Domain\Model\Vote
      */
     public function findOneByCommentAndAuthorIdent(Comment $comment, $authorIdent)
     {

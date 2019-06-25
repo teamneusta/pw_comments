@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Hooks;
+namespace T3\PwComments\Hooks;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * ProcessDatamap Hook
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class ProcessDatamap
 {
@@ -86,7 +86,7 @@ class ProcessDatamap
         $pluginName = 'Pi1',
         $settings = [],
         $pageUid = 1,
-        $vendorName = 'PwCommentsTeam'
+        $vendorName = 'T3'
     ) {
         $GLOBALS['TT'] = GeneralUtility::makeInstance('TYPO3\CMS\Core\TimeTracker\TimeTracker');
         $GLOBALS['TSFE'] = GeneralUtility::makeInstance(

@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\Hooks;
+namespace T3\PwComments\Hooks;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -11,7 +11,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * PageLayoutView Hook
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class PageLayoutView
 {

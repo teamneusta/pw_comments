@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\ViewHelpers;
+namespace T3\PwComments\ViewHelpers;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -35,7 +35,7 @@ namespace PwCommentsTeam\PwComments\ViewHelpers;
  * <img src="https://www.gravatar.com/avatar/19acb70929e62bf326957428f65331f3?s=20&d=mm" />
  * </output>
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
 {

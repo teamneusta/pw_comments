@@ -1,5 +1,5 @@
 <?php
-namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
+namespace T3\PwComments\ViewHelpers\Format;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -67,7 +67,7 @@ namespace PwCommentsTeam\PwComments\ViewHelpers\Format;
  * @see http://www.php.net/manual/en/function.strtotime.php
  * @see http://www.php.net/manual/en/datetime.formats.relative.php
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {

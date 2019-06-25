@@ -1,19 +1,19 @@
 <?php
-namespace PwCommentsTeam\PwComments\XClass;
+namespace T3\PwComments\XClass;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
  *  | (c) 2011-2018 Armin Vieweg <armin@v.ieweg.de>
  */
-use PwCommentsTeam\PwComments\Utility\DatabaseUtility;
+use T3\PwComments\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * XClass for PageLayoutController
  *
- * @package PwCommentsTeam\PwComments
+ * @package T3\PwComments
  */
 class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutController
 {
