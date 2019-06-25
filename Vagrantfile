@@ -6,19 +6,19 @@
 # - vagrant-hostmanager
 # - vagrant-winnfsd (Windows only)
 #
-# More infos: http://bit.ly/bionic64-lamp
+# More infos for VM: http://bit.ly/bionic64-lamp
 
 Vagrant.configure("2") do |config|
 
-    # Extension
+    # Adapt these four settings for each new extension/box
     extensionKey = "pw_comments"
-    packageName = "instituteweb/pw_comments"
+    packageName = "t3/pw_comments"
+    staticIpAddress = "192.168.155.57"
+    extensionRepo = "https://bitbucket.org/ArminVieweg/pw_comments/" # Only used as help link
 
     # Base configuration
     config.vm.box = "ArminVieweg/ubuntu-bionic64-lamp"
-
     hostname = extensionKey.gsub("_", "-")
-    staticIpAddress = "192.168.103.49"
 
     config.vm.hostname = "#{hostname}.local"
     config.hostmanager.aliases = ["www.#{hostname}.local"]
@@ -49,7 +49,11 @@ Vagrant.configure("2") do |config|
     end
 
     # Provider Scripts
-    # Run once
+    config.vm.provision "shell", run: "once", privileged: true, name: "init", inline: <<-SHELL
+        /home/vagrant/enable-php/7.2.sh
+    SHELL
+
+    # Set up SSL certificate for given hostname
     config.vm.provision "shell", run: "once", privileged: true, name: "update-ssl-certificate", inline: <<-SHELL
         openssl genrsa -des3 -passout pass:xxxx -out /tmp/server.pass.key 2048 2>/dev/null
         openssl rsa -passin pass:xxxx -in /tmp/server.pass.key -out /etc/apache2/ssl/apache.key 2>/dev/null
@@ -61,7 +65,6 @@ Vagrant.configure("2") do |config|
         openssl x509 -req -days 1024 -in /tmp/server.csr -signkey /etc/apache2/ssl/apache.key \
          -out /etc/apache2/ssl/apache.crt 2>/dev/null
         rm /tmp/server.csr
-        service apache2 restart
         echo "Created new SSL certificate for Apache, based on hostname: #{config.vm.hostname}"
     SHELL
 
@@ -78,11 +81,20 @@ Vagrant.configure("2") do |config|
         composer require t3/cms:"^8.0" #{packageName}:"*@dev" --no-progress --no-suggest --no-interaction
 
         vendor/bin/typo3cms install:setup --force --database-user-name "root" --database-user-password "root" --database-host-name "localhost" --database-name "typo3_8" --database-port "3306" --database-socket "" --admin-user-name "admin" --admin-password "password" --site-name "EXT:#{extensionKey} Dev Environment" --site-setup-type "site"
+        vendor/bin/typo3cms configuration:set BE/debug true
+        vendor/bin/typo3cms configuration:set FE/debug true
+        vendor/bin/typo3cms configuration:set SYS/displayErrors 1
+        vendor/bin/typo3cms configuration:set SYS/systemLogLevel 0
+        vendor/bin/typo3cms configuration:set SYS/exceptionalErrors 12290
+        vendor/bin/typo3cms configuration:remove SYS/devIPmask
+        vendor/bin/typo3cms configuration:set MAIL/transport smtp
+        vendor/bin/typo3cms configuration:set MAIL/transport_smtp_server 127.0.0.1:1025
         vendor/bin/typo3cms cache:flush
     SHELL
     config.vm.provision "shell", run: "once", privileged: true, name: "setup-typo3-8-root", inline: <<-SHELL
         cd /var/www/typo3_8
-        chmod 2776 . ./public/typo3conf ./public/typo3conf/ext
+        wget -qO.htaccess https://raw.githubusercontent.com/TYPO3/TYPO3.CMS/TYPO3_8-7/_.htaccess
+        chmod 2775 . ./public/typo3conf ./public/typo3conf/ext
         chown -R vagrant .
         chgrp -R www-data .
 
@@ -103,11 +115,20 @@ Vagrant.configure("2") do |config|
         composer require t3/cms:"^9.0" #{packageName}:"*@dev" --no-progress --no-suggest --no-interaction
 
         vendor/bin/typo3cms install:setup --force --database-user-name "root" --database-user-password "root" --database-host-name "localhost" --database-name "typo3_9" --database-port "3306" --database-socket "" --admin-user-name "admin" --admin-password "password" --site-name "EXT:#{extensionKey} Dev Environment" --site-setup-type "site"
+        vendor/bin/typo3cms configuration:set BE/debug true
+        vendor/bin/typo3cms configuration:set FE/debug true
+        vendor/bin/typo3cms configuration:set SYS/displayErrors 1
+        vendor/bin/typo3cms configuration:set SYS/systemLogLevel 0
+        vendor/bin/typo3cms configuration:set SYS/exceptionalErrors 12290
+        vendor/bin/typo3cms configuration:set MAIL/transport smtp
+        vendor/bin/typo3cms configuration:set MAIL/transport_smtp_server 127.0.0.1:1025
         vendor/bin/typo3cms cache:flush
     SHELL
     config.vm.provision "shell", run: "once", privileged: true, name: "setup-typo3-9-root", inline: <<-SHELL
         cd /var/www/typo3_9
-        chmod 2776 . ./public/typo3conf ./public/typo3conf/ext
+        cp /var/www/typo3_9/public/typo3/sysext/install/Resources/Private/FolderStructureTemplateFiles/root-htaccess /var/www/typo3_9/public/.htaccess
+        sed -i s,base:\\ ht/,base:\\ 9/,g /var/www/typo3_9/config/sites/main/config.yaml
+        chmod 2775 . ./public/typo3conf ./public/typo3conf/ext
         chown -R vagrant .
         chgrp -R www-data .
 
@@ -132,6 +153,15 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", run: "once", privileged: true, name: "finish", inline: <<-SHELL
         printf "\ncd /var/www" >> /home/vagrant/.bashrc
         service apache2 restart
+
+        su vagrant
+        printf '<!DOCTYPE html><html lang="en"><head> <meta charset="UTF-8"> <title>EXT:#{extensionKey} Dev Environment</title> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous"></head><body><div class="container mt-5"> <div class="jumbotron mb-0"> <h1 class="display-4">EXT:#{extensionKey} <small class="lead text-nowrap">Dev Environment</small></h1> <hr class="my-5"> <div class="row mt-5"> ' > /var/www/html/index.html
+        printf '<div class="col"><div class="card"><div class="card-body"> <h2 class="h5 card-title mb-4">TYPO3 CMS 8.7 LTS</h2> <a href="/8" class="btn btn-secondary">Frontend</a> <a href="/8/typo3" class="btn btn-primary">Backend</a> <a href="/8/typo3/install.php" class="btn btn-danger">Install Tool</a> </div></div></div>' >> /var/www/html/index.html
+        printf '<div class="col"><div class="card"><div class="card-body"> <h2 class="h5 card-title mb-4">TYPO3 CMS 9.x</h2> <a href="/9" class="btn btn-secondary">Frontend</a> <a href="/9/typo3" class="btn btn-primary">Backend</a> <a href="/9/typo3/install.php" class="btn btn-danger">Install Tool</a> </div></div></div>' >> /var/www/html/index.html
+        printf '<div class="col"><div class="card"><div class="card-body"> <h2 class="h5 card-title mb-4">Tools</h2> <a href="/adminer" class="btn btn-secondary" title="Database tool (root/root)">Adminer</a> <a href="http://deployable-records.vagrant:1080/" class="btn btn-primary" title="Fetches all mails send from inside the VM">Mailcatcher</a> </div></div></div>' >> /var/www/html/index.html
+        printf '</div></div><div class="row mt-0"> <div class="col"> <h2 class="h4 mt-5 mb-2">Credentials</h2> <p> Username and password for TYPO3 is: <code>admin</code> / <code>password</code> (also for install tool).<br>For MySQL/MariaDB you can use <code>root</code> / <code>root</code> to login. </p><h2 class="h4 mt-5 mb-3">Links</h2> <ul class="nav flex-column"> <li class="nav-item"> <a class="nav-link" href="#{extensionRepo}">Extension repository</a> </li></ul> </div></div></div></body></html>' >> /var/www/html/index.html
+        chown -R vagrant /var/www/html/index.html
+        chgrp -R www-data /var/www/html/index.html
     SHELL
 
     # Run always
@@ -139,9 +169,10 @@ Vagrant.configure("2") do |config|
         touch /var/www/typo3_8/public/typo3conf/ENABLE_INSTALL_TOOL
         touch /var/www/typo3_9/public/typo3conf/ENABLE_INSTALL_TOOL
 
-        echo "TYPO3 8: http://#{config.vm.hostname}/8  |  http://#{config.vm.hostname}/8/typo3 (BE Login: admin/password)"
-        echo "TYPO3 9: http://#{config.vm.hostname}/9  |  http://#{config.vm.hostname}/9/typo3 (Install Tool: password)"
-        echo "Adminer: http://#{config.vm.hostname}/adminer (root/root)"
+        echo "Overview: http://#{config.vm.hostname}"
+        echo " TYPO3 8: http://#{config.vm.hostname}/8  |  http://#{config.vm.hostname}/8/typo3 (BE Login: admin/password)"
+        echo " TYPO3 9: http://#{config.vm.hostname}/9  |  http://#{config.vm.hostname}/9/typo3 (Install Tool: password)"
+        echo " Adminer: http://#{config.vm.hostname}/adminer (root/root)"
         echo "Happy Coding!"
     SHELL
 
