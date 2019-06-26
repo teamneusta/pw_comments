@@ -7,6 +7,8 @@ namespace T3\PwComments\XClass;
  *  | (c) 2011-2018 Armin Vieweg <armin@v.ieweg.de>
  */
 use T3\PwComments\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -22,25 +24,35 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
      *
      * @return string HTML content with flashmessages
      */
-    protected function getHeaderFlashMessagesForCurrentPid()
+    protected function getHeaderFlashMessagesForCurrentPid(): string
     {
         $content = parent::getHeaderFlashMessagesForCurrentPid();
 
-        $total = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
-            'uid',
-            'tx_pwcomments_domain_model_comment',
-            'pid = ' . $this->pageinfo['uid'] .
-            DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment', true)
-        );
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+
+        $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+        $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
+        $total = $queryBuilder
+            ->count('uid')
+            ->from('tx_pwcomments_domain_model_comment')
+            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])
+            ->execute()
+            ->fetchColumn();
+
+
         if (!$total) {
             return $content;
         }
 
-        $released = DatabaseUtility::getDatabaseConnection()->exec_SELECTcountRows(
-            'uid',
-            'tx_pwcomments_domain_model_comment',
-            'pid = ' . $this->pageinfo['uid'] . DatabaseUtility::getEnabledFields('tx_pwcomments_domain_model_comment')
-        );
+        $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+        $released = $queryBuilder
+            ->count('uid')
+            ->from('tx_pwcomments_domain_model_comment')
+            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])
+            ->execute()
+            ->fetchColumn();
+
         $unreleased = $total - $released;
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
