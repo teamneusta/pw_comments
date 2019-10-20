@@ -71,8 +71,11 @@ class Mail
      * @param \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate the fluid template
      * @return void
      */
-    public function setFluidTemplate(\TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate)
+    public function setFluidTemplate(\TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate = null)
     {
+        if (!$fluidTemplate) {
+            $fluidTemplate = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
+        }
         $this->fluidTemplate = $fluidTemplate;
     }
 

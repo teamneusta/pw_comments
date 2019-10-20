@@ -40,7 +40,8 @@ class Settings extends AbstractEncryptionUtility
                 $keyWithoutDot = substr($key, 0, -1);
                 if (array_key_exists($keyWithoutDot, $settings)) {
                     $result[$keyWithoutDot] = $contentObject->cObjGetSingle(
-                        $settings[$keyWithoutDot],
+                        is_array($settings[$keyWithoutDot])
+                            ? $settings[$keyWithoutDot]['_typoScriptNodeValue'] : $settings[$keyWithoutDot],
                         $value
                     );
                 } else {
