@@ -9,8 +9,15 @@ namespace T3\PwComments\Controller;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
+use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Core\Bootstrap;
+use TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
@@ -86,14 +93,14 @@ class MailNotificationController
         $pageUid = 1,
         $vendorName = 'T3'
     ) {
-        $GLOBALS['TT'] = GeneralUtility::makeInstance('TYPO3\CMS\Core\TimeTracker\TimeTracker');
+        $GLOBALS['TT'] = GeneralUtility::makeInstance(TimeTracker::class);
         $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-            'TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController',
+            TypoScriptFrontendController::class,
             $GLOBALS['TYPO3_CONF_VARS'],
             $pageUid,
             0
         );
-        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\Page\PageRepository');
+        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
         $GLOBALS['TSFE']->initTemplate();
         $rootline = $GLOBALS['TSFE']->sys_page->getRootLine($pageUid);
         $GLOBALS['TSFE']->tmpl->start($rootline);
@@ -113,13 +120,14 @@ class MailNotificationController
         }
         $settings = array_merge($settings, $pwCommentsTypoScript);
 
-        $bootstrap = new \TYPO3\CMS\Extbase\Core\Bootstrap();
-        $bootstrap->cObj = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
+        $bootstrap = new Bootstrap();
+        $bootstrap->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
 
         $extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
 
         $localLangArray = [];
         if (is_array($pluginSettings['_LOCAL_LANG.'])) {
+            // This class does not really exist instead it's: \TYPO3\CMS\Core\TypoScript\TypoScriptService
             $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
             $localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
         }
@@ -132,8 +140,7 @@ class MailNotificationController
             'action' => $action,
             'mvc' => [
                 'requestHandlers' => [
-                    'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler' =>
-                        'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler'
+                    FrontendRequestHandler::class => FrontendRequestHandler::class
                 ]
             ],
             'settings' => $settings,
@@ -151,15 +158,15 @@ class MailNotificationController
      */
     protected function getExtensionTyposcriptSetup()
     {
-        /** @var $tsParser \TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser */
-        $tsParser = GeneralUtility::makeInstance('TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser');
+        /** @var $tsParser TypoScriptParser */
+        $tsParser = GeneralUtility::makeInstance(TypoScriptParser::class);
         $tsParser->parse(
             file_get_contents(
                 ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'
             )
         );
+        // This class does not really exist instead it's: \TYPO3\CMS\Core\TypoScript\TypoScriptService
         $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
         return $typoScriptService->convertTypoScriptArrayToPlainArray($tsParser->setup);
     }
-
 }

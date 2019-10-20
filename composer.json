@@ -26,7 +26,7 @@
         "instituteweb/pw_comments": "*"
     },
     "scripts": {
-        "phpcs": "phpcs --extension=php --standard=PSR2 .",
-        "phpcbf": "phpcbf --extension=php --standard=PSR2 ."
+        "phpcs": "phpcs --extensions=php --standard=PSR2 .",
+        "phpcbf": "phpcbf --extensions=php --standard=PSR2 ."
     }
 }

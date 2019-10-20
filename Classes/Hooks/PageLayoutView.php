@@ -7,6 +7,7 @@ namespace T3\PwComments\Hooks;
  *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 
 /**
  * PageLayoutView Hook
@@ -31,7 +32,7 @@ class PageLayoutView
         $flexformData = GeneralUtility::xml2array($params['row']['pi_flexform']);
         if (is_array($flexformData)) {
             $action = $flexformData['data']['sDEF']['lDEF']['switchableControllerActions']['vDEF'];
-            $mode = \TYPO3\CMS\Core\Utility\StringUtility::beginsWith($action, 'Comment->index') ? 'index' : 'new';
+            $mode = StringUtility::beginsWith($action, 'Comment->index') ? 'index' : 'new';
             $result .= $this->getLanguageService()->sL(self::LLPATH . 'plugin.mode.' . $mode);
         }
         return $result;

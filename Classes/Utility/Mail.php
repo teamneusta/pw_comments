@@ -8,9 +8,13 @@ namespace T3\PwComments\Utility;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use T3\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * This class provides some methods to build and send mails
@@ -25,14 +29,14 @@ class Mail
     protected $settings = [];
 
     /**
-     * @var \TYPO3\CMS\Fluid\View\TemplateView
+     * @var TemplateView
      */
-    protected $fluidTemplate = null;
+    protected $fluidTemplate;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext
+     * @var ControllerContext
      */
-    protected $controllerContext = null;
+    protected $controllerContext;
 
     /**
      * @var string comma separated string of mail addresses
@@ -68,13 +72,13 @@ class Mail
     /**
      * Set the fluid template from controller
      *
-     * @param \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate the fluid template
+     * @param StandaloneView $fluidTemplate the fluid template
      * @return void
      */
-    public function setFluidTemplate(\TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate = null)
+    public function setFluidTemplate(StandaloneView $fluidTemplate = null)
     {
         if (!$fluidTemplate) {
-            $fluidTemplate = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
+            $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
         }
         $this->fluidTemplate = $fluidTemplate;
     }
@@ -82,10 +86,10 @@ class Mail
     /**
      * Set the controller context from controller
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
+     * @param ControllerContext $controllerContext
      * @return void
      */
-    public function setControllerContext(\TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext)
+    public function setControllerContext(ControllerContext $controllerContext)
     {
         $this->controllerContext = $controllerContext;
     }
@@ -96,11 +100,12 @@ class Mail
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
      * @return bool Returns TRUE if the mail has been sent successfully
+     * @throws \Exception
      */
     public function sendMail(Comment $comment, $hash = '')
     {
-        /** @var \TYPO3\CMS\Core\Mail\MailMessage $mail */
-        $mail = GeneralUtility::makeInstance('TYPO3\CMS\Core\Mail\MailMessage');
+        /** @var MailMessage $mail */
+        $mail = GeneralUtility::makeInstance(MailMessage::class);
 
         $mail->setFrom(
             $this->settings['senderAddress'] ? $this->settings['senderAddress'] : LocalizationUtility::translate(

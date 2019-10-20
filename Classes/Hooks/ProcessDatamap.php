@@ -1,5 +1,6 @@
 <?php
 namespace T3\PwComments\Hooks;
+// phpcs:disable
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -9,6 +10,7 @@ namespace T3\PwComments\Hooks;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
 use T3\PwComments\Domain\Repository\CommentRepository;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
@@ -36,7 +38,7 @@ class ProcessDatamap
      * @param string $table
      * @param int $id
      * @param array $fieldArray
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
+     * @param DataHandler $pObj
      * @return void
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $pObj)
@@ -84,3 +86,4 @@ class ProcessDatamap
         }
     }
 }
+// phpcs:enable

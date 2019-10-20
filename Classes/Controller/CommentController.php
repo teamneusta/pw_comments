@@ -9,12 +9,17 @@ namespace T3\PwComments\Controller;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
 use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\FrontendUser;
 use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use T3\PwComments\Utility\StringUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * The comment controller
@@ -134,10 +139,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         if ($this->entryUid > 0) {
-            /* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
+            /* @var $comments QueryResult */
             $comments = $this->commentRepository->findByPidAndEntryUid($this->commentStorageUid, $this->entryUid);
         } else {
-            /* @var $comments \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult */
+            /* @var $comments QueryResult */
             $comments = $this->commentRepository->findByPid($this->commentStorageUid);
         }
 
@@ -386,8 +391,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $vote = null;
         if ($this->currentAuthorIdent !== null) {
-            if ($this->settings['ignoreVotingForOwnComments']
-                && $this->currentAuthorIdent == $comment->getAuthorIdent()) {
+            if ($this->settings['ignoreVotingForOwnComments'] &&
+                $this->currentAuthorIdent === $comment->getAuthorIdent()
+            ) {
                 // TODO: use flash messages here?
                 $this->redirectToUri(
                     $this->buildUriToPage($this->pageUid, ['doNotVoteForYourself' => 1]) . $commentAnchor
@@ -426,14 +432,13 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function createNewVote($type, Comment $comment)
     {
-        /** @var Vote $newVote */
-        $newVote = GeneralUtility::makeInstance('T3\PwComments\Domain\Model\Vote');
+        $newVote = GeneralUtility::makeInstance(Vote::class);
         $newVote->setComment($comment);
         $newVote->setPid($this->commentStorageUid);
         $newVote->setOrigPid($this->pageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
         if ($this->currentUser['uid']) {
-            /** @var \T3\PwComments\Domain\Model\FrontendUser $author */
+            /** @var FrontendUser $author */
             $author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
             $newVote->setAuthor($author);
         }
@@ -536,8 +541,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function makeFluidTemplateObject()
     {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate  */
-        $fluidTemplate = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
+        /** @var StandaloneView $fluidTemplate  */
+        $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
 
         // Set controller context
         $controllerContext = $this->buildControllerContext();
@@ -550,10 +555,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Returns count of comments and/or comments and replies.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments
+     * @param QueryResult $comments
      * @return int
      */
-    protected function calculateCommentCount(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $comments)
+    protected function calculateCommentCount(QueryResult $comments)
     {
         $replyAmount = 0;
         if ($this->settings['countReplies']) {
@@ -598,12 +603,11 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Get PersistenceManager
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @return PersistenceManager
      */
     protected function getPersistenceManager()
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
-        return $objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        return $objectManager->get(PersistenceManager::class);
     }
 }

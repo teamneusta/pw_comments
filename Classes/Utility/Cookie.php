@@ -70,7 +70,7 @@ class Cookie
             $cookieDomain = $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'];
         }
         if ($cookieDomain) {
-            if ($cookieDomain[0] == '/') {
+            if ($cookieDomain[0] === '/') {
                 $match = [];
                 $matchCnt = @preg_match(
                     $cookieDomain,
