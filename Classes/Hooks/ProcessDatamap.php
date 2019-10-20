@@ -1,5 +1,6 @@
 <?php
 namespace T3\PwComments\Hooks;
+
 // phpcs:disable
 
 /*  | This extension is made for TYPO3 CMS and is licensed
