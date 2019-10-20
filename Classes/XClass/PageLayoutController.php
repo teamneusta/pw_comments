@@ -7,9 +7,12 @@ namespace T3\PwComments\XClass;
  *  | (c) 2011-2018 Armin Vieweg <armin@v.ieweg.de>
  */
 use T3\PwComments\Utility\DatabaseUtility;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -73,8 +76,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
             $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
 
-        $uriBuilder = new \TYPO3\CMS\Backend\Routing\UriBuilder();
-        $path = $uriBuilder->buildUriFromModule('web_list', [
+        $path = self::getModuleUrl('web_list', [
             'id' => $this->pageinfo['uid'],
             'table' => 'tx_pwcomments_domain_model_comment',
             'imagemode' => 1
@@ -108,5 +110,38 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
             return vsprintf($translation, $arguments);
         }
         return $translation;
+    }
+
+    /**
+     * Returns the URL to a given module
+     *
+     * @param string $moduleName Name of the module
+     * @param array $urlParameters URL parameters that should be added as key value pairs
+     * @return string Calculated URL
+     * @throws RouteNotFoundException
+     */
+    protected static function getModuleUrl($moduleName, $urlParameters = []) : string
+    {
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        try {
+            $uri = $uriBuilder->buildUriFromRoute($moduleName, $urlParameters);
+        } catch (RouteNotFoundException $e) {
+            $uri = static::isTypo3Version()
+                ? $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters)
+                : $uriBuilder->buildUriFromModule($moduleName, $urlParameters);
+        }
+        return (string) $uri;
+    }
+
+    /**
+     * Checks if current TYPO3 version is 9.0.0 or greater (by default)
+     *
+     * @param string $version e.g. 9.0.0
+     * @return bool
+     */
+    protected static function isTypo3Version($version = '9.0.0') : bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+            VersionNumberUtility::convertVersionNumberToInteger($version);
     }
 }
