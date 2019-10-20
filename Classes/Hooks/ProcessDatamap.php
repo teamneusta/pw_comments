@@ -8,8 +8,13 @@ namespace T3\PwComments\Hooks;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
+use T3\PwComments\Domain\Repository\CommentRepository;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * ProcessDatamap Hook
@@ -41,127 +46,41 @@ class ProcessDatamap
             isset($fieldArray['hidden']) &&
             (int)$fieldArray['hidden'] === 0
         ) {
-            /** @var \TYPO3\CMS\Core\Database\ConnectionPool $pool */
-            $pool = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class);
-            $queryBuilder = $pool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
-            $queryBuilder->getRestrictions()->removeAll();
-            $row = $queryBuilder
-                ->select('*')
-                ->from('tx_pwcomments_domain_model_comment')
-                ->where($queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)
-                ))
-                ->execute()->fetch(\PDO::FETCH_ASSOC);
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $repo = $objectManager->get(CommentRepository::class);
+            $comment = $repo->findByCommentUid($id);
 
-            $this->runExtbaseController(
+            // Build URL to eID script
+            $url = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+            if (!$url) {
+                throw new \UnexpectedValueException('Environment variable "TYPO3_SITE_URL" is empty!');
+            }
+
+            // Save eID access hash to registry
+            $registry = GeneralUtility::makeInstance(Registry::class);
+            $registry->set('pw_comments', $hash = uniqid('eidhash', true), time());
+
+            $url = rtrim($url, '/') . '/?eID=pw_comments_send_mail';
+            $url .= '&action=sendAuthorMailWhenCommentHasBeenApproved';
+            $url .= '&uid=' . (int) $comment->getUid();
+            $url .= '&pid=' . (int) $comment->getPid();
+            $url .= '&hash=' . $hash;
+
+            // Call eID script
+            $content = GeneralUtility::getUrl($url);
+            if (!$content) {
+                $registry->remove('pw_comments', $hash);
+                throw new \RuntimeException('Error while calling the following url: ' . $url);
+            }
+
+            // Add flash message
+            $flashMessageService = $objectManager->get(FlashMessageService::class);
+            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $messageQueue->addMessage(new FlashMessage(LocalizationUtility::translate(
+                'mailSentToAuthorAfterPublish',
                 'PwComments',
-                'Comment',
-                'sendAuthorMailWhenCommentHasBeenApproved',
-                'Pi2',
-                ['_commentUid' => $row['uid'], '_skipMakingSettingsRenderable' => true],
-                (int) $row['pid']
-            );
+                [$comment->getCommentAuthorMailAddress()]
+            )));
         }
-    }
-
-    /**
-     * Initializes and runs an extbase controller
-     *
-     * @param string $extensionName Name of extension, in UpperCamelCase
-     * @param string $controller Name of controller, in UpperCamelCase
-     * @param string $action Optional name of action, in lowerCamelCase
-     * @param string $pluginName Optional name of plugin. Default is 'Pi1'
-     * @param array $settings Optional array of settings to use in controller
-     * @param int $pageUid Uid of current page
-     * @param string $vendorName VendorName
-     * @return string output of controller's action
-     *
-     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
-     */
-    protected function runExtbaseController(
-        $extensionName,
-        $controller,
-        $action = 'index',
-        $pluginName = 'Pi1',
-        $settings = [],
-        $pageUid = 1,
-        $vendorName = 'T3'
-    ) {
-        $GLOBALS['TT'] = GeneralUtility::makeInstance('TYPO3\CMS\Core\TimeTracker\TimeTracker');
-        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-            'TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController',
-            $GLOBALS['TYPO3_CONF_VARS'],
-            $pageUid,
-            0
-        );
-        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\Page\PageRepository');
-        $GLOBALS['TSFE']->initTemplate();
-        $rootline = $GLOBALS['TSFE']->sys_page->getRootLine($pageUid);
-        $GLOBALS['TSFE']->tmpl->start($rootline);
-        $GLOBALS['TSFE']->getConfigArray();
-
-        $pluginSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.'];
-        $pwCommentsTypoScript = $pluginSettings['settings.'];
-
-        \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage('de');
-        \TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
-//        \TYPO3\CMS\Frontend\Utility\EidUtility::initExtensionTCA('pw_comments');
-
-        if (unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])) {
-            $settings = array_merge(
-                $settings,
-                unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])
-            );
-        }
-        $settings = array_merge($settings, $pwCommentsTypoScript);
-
-        $bootstrap = new \TYPO3\CMS\Extbase\Core\Bootstrap();
-        $bootstrap->cObj = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
-
-        $extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
-
-        $localLangArray = [];
-        if (is_array($pluginSettings['_LOCAL_LANG.'])) {
-            $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
-            $localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
-        }
-        $configuration = [
-            'pluginName' => $pluginName,
-            'extensionName' => $extensionName,
-            'controller' => $controller,
-            'vendorName' => $vendorName,
-            'controllerConfiguration' => [$controller],
-            'action' => $action,
-            'mvc' => [
-                'requestHandlers' => [
-                    'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler' =>
-                        'TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler'
-                ]
-            ],
-            'settings' => $settings,
-            'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
-            '_LOCAL_LANG' => $localLangArray
-        ];
-
-        return $bootstrap->run('', $configuration);
-    }
-
-    /**
-     * Gets the typoscript setup defined in ext_typoscript_setup.txt as array
-     *
-     * @return array
-     */
-    protected function getExtensionTyposcriptSetup()
-    {
-        /** @var $tsParser \TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser */
-        $tsParser = GeneralUtility::makeInstance('TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser');
-        $tsParser->parse(
-            file_get_contents(
-                ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'
-            )
-        );
-        $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
-        return $typoScriptService->convertTypoScriptArrayToPlainArray($tsParser->setup);
     }
 }
