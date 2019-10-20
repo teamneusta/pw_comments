@@ -27,8 +27,8 @@ on Extbase and Fluid.
 
 Requirements of pw_comments
 ---------------------------
-- TYPO3 7.6.x
-- Extbase / Fluid
+- PHP 7.1
+- TYPO3 8.7 or 9.5
 
 .. _features:
 

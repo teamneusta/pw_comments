@@ -11,14 +11,6 @@
             "role": "Lead Developer",
             "email": "armin@v.ieweg.de",
             "homepage": "https://v.ieweg.de/"
-        },
-        {
-            "name": "Dennis Roemmich",
-            "role": "Developer"
-        },
-        {
-            "name": "Christian Wolfram",
-            "role": "Developer"
         }
     ],
     "require": {
