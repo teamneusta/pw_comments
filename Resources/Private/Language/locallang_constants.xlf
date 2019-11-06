@@ -67,6 +67,9 @@
             <trans-unit id="settings.entryUidData" xml:space="preserve">
                 <source>Entry uid: GET Parameter configuration of entry (e.g. news "GP:tx_news_pi1|news")</source>
 			</trans-unit>
+            <trans-unit id="settings.enhancedRouting" xml:space="preserve">
+                <source>Enhanced Routing: When a routing enhancer has been used (e.g. for news), pw_comments is unable to redirect to beautified URL. To bypass this, enabled this option and redirections will be performed on route's path only. Disable this option, when you need additional query parameters.</source>
+			</trans-unit>
 
             <trans-unit id="settings.enableRepliesToComments" xml:space="preserve">
                 <source>Enable replies to comments: Enables or disables the reply link and adds a hidden field to new comment form with uid of parent comment. If this option is activated the next one should be activated, too.</source>

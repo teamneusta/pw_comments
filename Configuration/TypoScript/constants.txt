@@ -49,6 +49,8 @@ plugin.tx_pwcomments {
       useEntryUid = 0
       # cat=plugin.tx_pwcomments/entryuid; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.entryUidData
       entryUidData = GP:tx_extension|uid
+      # cat=plugin.tx_pwcomments/entryuid; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enhancedRouting
+      enhancedRouting = 0
 
       # cat=plugin.tx_pwcomments/replying; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRepliesToComments
       enableRepliesToComments = 1
