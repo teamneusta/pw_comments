@@ -11,10 +11,10 @@ namespace T3\PwComments\Hooks;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
 use T3\PwComments\Domain\Repository\CommentRepository;
+use T3\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -60,9 +60,7 @@ class ProcessDatamap
             }
 
             // Save eID access hash to registry
-            $registry = GeneralUtility::makeInstance(Registry::class);
-            $registry->set('pw_comments', $hash = uniqid('eidhash', true), time());
-
+            $hash = HashEncryptionUtility::createHashForComment($comment);
             $url = rtrim($url, '/') . '/?eID=pw_comments_send_mail';
             $url .= '&action=sendAuthorMailWhenCommentHasBeenApproved';
             $url .= '&uid=' . (int) $comment->getUid();
@@ -72,7 +70,6 @@ class ProcessDatamap
             // Call eID script
             $content = GeneralUtility::getUrl($url);
             if (!$content) {
-                $registry->remove('pw_comments', $hash);
                 throw new \RuntimeException('Error while calling the following url: ' . $url);
             }
 

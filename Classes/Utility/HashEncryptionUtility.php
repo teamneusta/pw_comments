@@ -31,6 +31,29 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
     }
 
     /**
+     * Check if given hash is correct
+     *
+     * @param string $hash
+     * @param string $message
+     * @return bool
+     */
+    public static function validCommentMessageHash($hash, string $message)
+    {
+        return self::createHashForCommentMessage($message) === $hash;
+    }
+
+    /**
+     * Create hash for a comment message
+     *
+     * @param string $message
+     * @return string
+     */
+    public static function createHashForCommentMessage(string $message)
+    {
+        return self::hashString($message);
+    }
+
+    /**
      * Create hash for a comment
      *
      * @param Comment $comment
@@ -38,7 +61,7 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
      */
     public static function createHashForComment(Comment $comment)
     {
-        return self::hashString($comment->getMessage());
+        return self::createHashForCommentMessage($comment->getMessage());
     }
 
     /**

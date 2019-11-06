@@ -7,8 +7,9 @@ namespace T3\PwComments\Controller;
  *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
  */
 use Psr\Http\Message\ResponseInterface;
+use T3\PwComments\Utility\HashEncryptionUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -40,16 +41,28 @@ class MailNotificationController
             throw new \InvalidArgumentException('Invalid arguments given.');
         }
 
+        // Get comment row
+        /** @var ConnectionPool $pool */
+        $pool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $pool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+        $queryBuilder->getRestrictions()->removeAll();
+        $row = $queryBuilder
+            ->select('*')
+            ->from('tx_pwcomments_domain_model_comment')
+            ->where($queryBuilder->expr()->eq(
+                'uid',
+                $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+            ))
+            ->execute()->fetch(\PDO::FETCH_ASSOC);
+
+
         // Check hash
-        $registry = GeneralUtility::makeInstance(Registry::class);
-        $hashTimestamp = $registry->get('pw_comments', $hash);
-        if (!$hashTimestamp || time() - $hashTimestamp > 60) {
+        $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
+        if (!$valid) {
             throw new \RuntimeException('Given hash not valid!');
         }
-        $registry->remove('pw_comments', $hash);
-        unset($hash);
 
-        if ($action === 'sendAuthorMailWhenCommentHasBeenApproved') {
+        if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {
             $this->runExtbaseController(
                 $request,
                 'PwComments',
