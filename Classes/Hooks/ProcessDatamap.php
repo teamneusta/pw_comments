@@ -18,6 +18,8 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * ProcessDatamap Hook
@@ -50,8 +52,25 @@ class ProcessDatamap
             (int)$fieldArray['hidden'] === 0
         ) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            /** @var CommentRepository $repo */
             $repo = $objectManager->get(CommentRepository::class);
             $comment = $repo->findByCommentUid($id);
+
+            // Get typoscript settings
+            /** @var TypoScriptFrontendController $tsfe */
+            $GLOBALS['TSFE'] = $tsfe = $objectManager->get(TypoScriptFrontendController::class, null, $comment->getOrigPid(), 0);
+            $tsfe->fe_user = EidUtility::initFeUser();
+            $tsfe->id = $comment->getOrigPid();
+            $tsfe->connectToDB();
+            $tsfe->determineId();
+            $tsfe->initTemplate();
+            $tsfe->getConfigArray();
+
+            $settings = $tsfe->tmpl->setup['plugin.']['tx_pwcomments.']['settings.'];
+
+            if (!$settings['moderateNewComments'] || !$settings['sendMailToAuthorAfterPublish']) {
+                return;
+            }
 
             // Build URL to eID script
             $url = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
