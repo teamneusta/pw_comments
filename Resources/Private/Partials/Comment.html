@@ -37,12 +37,12 @@
 			<f:if condition="{settings.enableRepliesToComments} == 1">
 				<f:if condition="{comment.parentComment}">
 					<f:then>
-						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment.parentComment}" section="{settings.writeCommentAnchor}" addQueryString="true">
+						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment.parentComment}" section="{settings.writeCommentAnchor}" addQueryString="true" addQueryStringMethod="GET">
 							<f:translate key="tx_pwcomments.reply" />
 						</f:link.action>
 					</f:then>
 					<f:else>
-						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" addQueryString="true">
+						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" addQueryString="true" addQueryStringMethod="GET">
 							<f:translate key="tx_pwcomments.reply" />
 						</f:link.action>
 					</f:else>

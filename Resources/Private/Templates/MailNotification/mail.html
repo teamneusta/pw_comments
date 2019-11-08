@@ -6,7 +6,7 @@
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
 <f:format.raw><f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}"
-              addQueryString="true" argumentsToBeExcludedFromQueryString="{0:'id', 1:'chash', 2:'tx_pwcomments_pi1'}" absolute="true"
+              addQueryString="true" addQueryStringMethod="GET" argumentsToBeExcludedFromQueryString="{0:'id', 1:'chash', 2:'tx_pwcomments_pi1'}" absolute="true"
               section="{settings.commentAnchorPrefix}{comment.uid}" /></f:format.raw>
 </f:if>
 ---------------------------------------------------

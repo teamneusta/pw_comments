@@ -396,7 +396,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ) {
                 // TODO: use flash messages here?
                 $this->redirectToUri(
-                    $this->buildUriToPage($this->pageUid, ['doNotVoteForYourself' => 1]) . $commentAnchor
+                    $this->buildUriByUid($this->pageUid, true, ['doNotVoteForYourself' => 1]) . $commentAnchor
                 );
                 return;
             }
@@ -491,12 +491,15 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * Returns a built URI by pageUid
      *
      * @param int $uid The uid to use for building link
-     * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be
+     * @param bool $excludeCommentRelatedParameter If TRUE the comment to reply to will be
      *             removed from query string
      * @return string The link
      */
-    private function buildUriByUid($uid, $excludeCommentToReplyTo = false)
-    {
+    private function buildUriByUid(
+        $uid,
+        $excludeCommentRelatedParameter = false,
+        array $arguments = []
+    ) {
         $excludeFromQueryString = [
             'tx_pwcomments_pi1[action]',
             'tx_pwcomments_pi1[controller]',
@@ -504,7 +507,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             'cHash'
         ];
 
-        if ($excludeCommentToReplyTo === true) {
+        if ($excludeCommentRelatedParameter === true) {
+            $excludeFromQueryString[] = 'tx_pwcomments_pi1[comment]';
             $excludeFromQueryString[] = 'tx_pwcomments_pi1[commentToReplyTo]';
         }
 
@@ -512,7 +516,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 ->reset()
                 ->setTargetPageUid($uid)
                 ->setAddQueryString(true)
+                ->setAddQueryStringMethod('GET')
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
+                ->setArguments($arguments)
                 ->build();
         $uri = $this->addBaseUriIfNecessary($uri);
         return $uri;
