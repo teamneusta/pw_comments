@@ -33,7 +33,6 @@ plugin.tx_pwcomments {
 		useEntryUid = {$plugin.tx_pwcomments.settings.useEntryUid}
 		entryUid = TEXT
 		entryUid.data = {$plugin.tx_pwcomments.settings.entryUidData}
-		enhancedRouting = {$plugin.tx_pwcomments.settings.enhancedRouting}
 
 		enableRepliesToComments = {$plugin.tx_pwcomments.settings.enableRepliesToComments}
 		showRepliesToComments = {$plugin.tx_pwcomments.settings.showRepliesToComments}

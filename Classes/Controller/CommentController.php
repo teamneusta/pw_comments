@@ -13,12 +13,8 @@ use T3\PwComments\Domain\Model\FrontendUser;
 use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use T3\PwComments\Utility\StringUtility;
-use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility as CoreStringUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -51,11 +47,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var string
      */
     protected $currentAuthorIdent;
-
-    /**
-     * @var array
-     */
-    protected $originalSettings;
 
     /**
      * @var \T3\PwComments\Utility\Settings
@@ -107,7 +98,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 1501862644
             );
         }
-        $this->originalSettings = $this->settings;
         $this->settings = $this->settingsUtility->renderConfigurationArray(
             $this->settings,
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
@@ -498,8 +488,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
-     * Returns a built URI by pageUid.
-     * When enhanced routing is enabled, the URL to current path is returned.
+     * Returns a built URI by pageUid
      *
      * @param int $uid The uid to use for building link
      * @param bool $excludeCommentToReplyTo If TRUE the comment to reply to will be
@@ -508,38 +497,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     private function buildUriByUid($uid, $excludeCommentToReplyTo = false)
     {
-        if ($this->settings['enhancedRouting']) {
-            /** @var ServerRequest $serverRequest */
-            $serverRequest = $GLOBALS['TYPO3_REQUEST'];
-
-            $uri = '';
-            if (!empty($serverRequest->getUri()->getScheme())) {
-                $uri .= $serverRequest->getUri()->getScheme() . ':';
-            }
-            $authority = $serverRequest->getUri()->getAuthority();
-            if (!empty($authority)) {
-                $uri .= '//' . $authority;
-            }
-            $path = $serverRequest->getUri()->getPath();
-            if (!empty($path)) {
-                $uri .= '/' . ltrim($path, '/');
-            }
-            return $uri;
-        }
-
-        $arguments = [];
-        $recordUidPath = $this->originalSettings['entryUid']['data'] ?? null;
-        if ($recordUidPath && CoreStringUtility::beginsWith($recordUidPath, 'GP:')) {
-            $recordUidPath = substr($recordUidPath, 3);
-            try {
-                $recordUid = ArrayUtility::getValueByPath(GeneralUtility::_GET(), $recordUidPath, '|');
-            } catch (MissingArrayPathException $e) {
-            }
-            if ($recordUid) {
-                $arguments = ArrayUtility::setValueByPath($arguments, $recordUidPath, $recordUid, '|');
-            }
-        }
-
         $excludeFromQueryString = [
             'tx_pwcomments_pi1[action]',
             'tx_pwcomments_pi1[controller]',
@@ -556,7 +513,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 ->setTargetPageUid($uid)
                 ->setAddQueryString(true)
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
-                ->setArguments($arguments)
                 ->build();
         $uri = $this->addBaseUriIfNecessary($uri);
         return $uri;
