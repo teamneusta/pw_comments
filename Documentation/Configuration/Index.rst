@@ -18,8 +18,8 @@ add the following TypoScript lines to your main column output in order to output
 
 .. code-block:: typoscript
 
-   lib.content = COA
-   lib.content {
+   page = PAGE
+   page {
       10 < styles.content.get
 
       # List comments
@@ -30,7 +30,7 @@ add the following TypoScript lines to your main column output in order to output
    }
 
 This will display the comments on every page. You can use any conditions you want
-(for example: [globalVar = TSFE:page|layout = 1]) to define the visibility of comments for specified pages
+(for example: ``[globalVar = TSFE:page|layout = 1]``) to define the visibility of comments for specified pages
 (since you probably wouldn't want comments to appear on all pages).
 
 Settings

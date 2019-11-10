@@ -19,15 +19,14 @@ Introduction
 
 What is 'pw_comments'?
 ----------------------
-pw_comments is an extension for TYPO3 which adds the possibility to post comments on pages
-(similar to the comment function in blogs) or extension entries like tt_news-news. This extension is based completely
-on Extbase and Fluid.
+pw_comments is an extension for TYPO3 CMS which adds the possibility to post comments on pages
+(similar to the comment function in blogs) or extension entries like news (or even tt_news).
 
 .. _requirements:
 
 Requirements of pw_comments
 ---------------------------
-- PHP 7.1
+- PHP 7.1+
 - TYPO3 8.7 or 9.5
 
 .. _features:
@@ -36,10 +35,10 @@ Features
 --------
 - Adds the possibility for users to post comments on pages
 - Easy to integrate into existing or new TYPO3 sites
-- Compatible with other extensions like EXT:news
+- Compatible with other extensions like EXT:news or EXT:tt_news
 - Very(!!) customizable thanks to TypoScript (constant manager fully supported)
-- Vote comments and replies
-- Replying to comments
+- Supports replies/answers to comments
+- Up/Down Voting for comments and replies
 - Gravatar support
 - Spam protection:
    - Bad word list for comment message, name and mail address
