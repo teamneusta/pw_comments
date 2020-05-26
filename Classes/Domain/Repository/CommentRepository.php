@@ -13,13 +13,14 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for \T3\PwComments\Domain\Model\Comment
  *
  * @package T3\PwComments
  */
-class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class CommentRepository extends Repository
 {
     /**
      * @var bool

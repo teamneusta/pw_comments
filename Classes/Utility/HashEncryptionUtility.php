@@ -14,6 +14,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class HashUtility
  *
+ * Todo: use \TYPO3\CMS\Extbase\Security\Cryptography\HashService instead?
+ *
  * @package T3\PwComments
  */
 class HashEncryptionUtility extends AbstractEncryptionUtility

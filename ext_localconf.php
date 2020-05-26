@@ -14,24 +14,24 @@ if (!defined('TYPO3_MODE')) {
 
 $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'T3.' . $extensionKey,
+        $extensionKey,
         'Pi1',
         [
-            'Comment' => 'index,new,create,upvote,downvote,confirmComment',
+            \T3\PwComments\Controller\CommentController::class => 'index,new,create,upvote,downvote,confirmComment',
         ],
         [
-            'Comment' => 'index,new,create,upvote,downvote,confirmComment',
+            \T3\PwComments\Controller\CommentController::class => 'index,new,create,upvote,downvote,confirmComment',
         ]
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'T3.' . $extensionKey,
+        $extensionKey,
         'Pi2',
         [
-            'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',
+            \T3\PwComments\Controller\CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ],
         [
-            'Comment' => 'sendAuthorMailWhenCommentHasBeenApproved',
+            \T3\PwComments\Controller\CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ]
     );
 
@@ -118,5 +118,5 @@ $boot = function ($extensionKey) {
     }
 };
 
-$boot($_EXTKEY);
+$boot('pw_comments');
 unset($boot);

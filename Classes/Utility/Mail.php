@@ -113,7 +113,7 @@ class Mail
                 'PwComments',
                 [$this->settings['sitenameUsedInMails']
                     ? $this->settings['sitenameUsedInMails']
-                    : GeneralUtility::getHostname()]
+                    : GeneralUtility::getIndpEnv('HTTP_HOST')]
             ),
             $this->settings['senderName'] ? $this->settings['senderName'] : LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.name',
@@ -129,10 +129,15 @@ class Mail
                 'PwComments',
                 [$this->settings['sitenameUsedInMails']
                     ? $this->settings['sitenameUsedInMails']
-                    : GeneralUtility::getHostname()]
+                    : GeneralUtility::getIndpEnv('HTTP_HOST')]
             )
         );
-        $mail->addPart($this->getMailMessage($comment, $hash), $this->settings['sendMailMimeType']);
+        if ($this->settings['sendMailMimeType'] === 'text/plain') {
+            $mail->text($this->getMailMessage($comment, $hash));
+        } else {
+            $mail->html($this->getMailMessage($comment, $hash));
+        }
+
         return (bool) $mail->send();
     }
 

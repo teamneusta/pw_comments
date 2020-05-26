@@ -10,13 +10,14 @@ namespace T3\PwComments\Domain\Repository;
  */
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for votes
  *
  * @package T3\PwComments
  */
-class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class VoteRepository extends Repository
 {
     /**
      * Initializes the repository.
@@ -27,7 +28,7 @@ class VoteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function initializeObject()
     {
         /** @var $querySettings Typo3QuerySettings */
-        $querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
     }

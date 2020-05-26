@@ -1,7 +1,0 @@
-config.tx_extbase.persistence.classes {
-    T3\PwComments\Domain\Model\FrontendUser {
-        mapping {
-            tableName = fe_users
-        }
-    }
-}

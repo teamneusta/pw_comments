@@ -11,6 +11,7 @@ namespace T3\PwComments\Domain\Model;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
  * The comment model
@@ -47,7 +48,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * The author as model or NULL if comment author wasn't logged in
      *
-     * @var \T3\PwComments\Domain\Model\FrontendUser
+     * @var FrontendUser
      */
     protected $author = null;
 
@@ -302,7 +303,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Setter for author
      *
-     * @param \T3\PwComments\Domain\Model\FrontendUser $author author
+     * @param FrontendUser $author author
      * @return void
      */
     public function setAuthor($author)
@@ -313,7 +314,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Getter for author
      *
-     * @return \T3\PwComments\Domain\Model\FrontendUser The author
+     * @return FrontendUser The author
      */
     public function getAuthor()
     {

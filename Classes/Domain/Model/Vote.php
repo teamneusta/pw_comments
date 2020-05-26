@@ -9,6 +9,8 @@ namespace T3\PwComments\Domain\Model;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
 
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+
 /**
  * Vote model (for comments)
  *
@@ -37,7 +39,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $crdate;
 
     /**
-     * @var \T3\PwComments\Domain\Model\FrontendUser
+     * @var FrontendUser
      */
     protected $author = null;
 
@@ -117,7 +119,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get author (fe_user)
      *
-     * @return \T3\PwComments\Domain\Model\FrontendUser
+     * @return FrontendUser
      */
     public function getAuthor()
     {
@@ -127,10 +129,10 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set author (fe_user)
      *
-     * @param \T3\PwComments\Domain\Model\FrontendUser $author
+     * @param FrontendUser $author
      * @return void
      */
-    public function setAuthor(\T3\PwComments\Domain\Model\FrontendUser $author)
+    public function setAuthor(FrontendUser $author)
     {
         $this->author = $author;
     }

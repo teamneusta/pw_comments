@@ -12,6 +12,7 @@
                             <label>LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.mode</label>
                             <config>
                                 <type>select</type>
+                                <renderType>selectSingle</renderType>
                                 <items>
                                     <numIndex index="1">
                                         <numIndex index="0">LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.mode.index</numIndex>

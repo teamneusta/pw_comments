@@ -11,6 +11,7 @@ namespace T3\PwComments\Domain\Validator;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
  * This class is a domain validator of comment model for attribute
@@ -19,7 +20,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package T3\PwComments
  */
-class CommentValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
+class CommentValidator extends AbstractValidator
 {
     /**
      * @var array Settings defined in typoscript of pw_comments

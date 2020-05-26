@@ -14,7 +14,7 @@ if (!defined('TYPO3_MODE')) {
 
 $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-        'T3.' . $extensionKey,
+        $extensionKey,
         'Pi1',
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title'
     );
@@ -42,21 +42,11 @@ $boot = function ($extensionKey) {
         'pw_comments Optional Styles'
     );
 
-    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-        \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
-    ) {
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            $extensionKey,
-            'Configuration/TypoScript/Styling76',
-            'pw_comments Style Fix for TYPO3 7.6'
-        );
-    }
-
     // TCA options
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_comment');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_pwcomments_domain_model_vote');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
 };
 
-$boot($_EXTKEY);
+$boot('pw_comments');
 unset($boot);

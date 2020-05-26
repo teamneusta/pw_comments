@@ -14,7 +14,7 @@ namespace T3\PwComments\ViewHelpers;
  *
  * @package T3\PwComments
  */
-class ArrayUniqueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class ArrayUniqueViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 
     /**
