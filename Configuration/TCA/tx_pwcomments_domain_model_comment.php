@@ -31,10 +31,6 @@ return [
         ],
         'iconfile' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_comment.png'
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden,author,author_name,author_mail,author_website,author_ident,message,'
-                                . 'parent_comment,votes'
-    ],
     'types' => [
         '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,terms_accepted,' .
                               'message,parent_comment,votes']
@@ -59,7 +55,6 @@ return [
         ],
         'l18n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => 0,
             'label' => $ll . 'general.l18n_parent',
             'config' => [
                 'type' => 'select',

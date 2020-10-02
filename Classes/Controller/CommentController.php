@@ -10,7 +10,12 @@ namespace T3\PwComments\Controller;
  */
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Model\Vote;
+use T3\PwComments\Domain\Repository\CommentRepository;
+use T3\PwComments\Domain\Repository\VoteRepository;
+use T3\PwComments\Utility\Cookie;
 use T3\PwComments\Utility\HashEncryptionUtility;
+use T3\PwComments\Utility\Mail;
+use T3\PwComments\Utility\Settings;
 use T3\PwComments\Utility\StringUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -21,8 +26,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Annotation\Inject;
-use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
 
 /**
  * The comment controller
@@ -52,40 +55,94 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected $currentAuthorIdent;
 
     /**
-     * @var \T3\PwComments\Utility\Settings
-     * @inject
+     * @var Settings
      */
     protected $settingsUtility;
 
     /**
-     * @var \T3\PwComments\Utility\Mail
-     * @inject
+     * @var Mail
      */
     protected $mailUtility;
 
     /**
-     * @var \T3\PwComments\Utility\Cookie
-     * @inject
+     * @var Cookie
      */
     protected $cookieUtility;
 
     /**
-     * @var \T3\PwComments\Domain\Repository\CommentRepository
-     * @inject
+     * @var CommentRepository
      */
     protected $commentRepository;
 
     /**
      * @var FrontendUserRepository
-     * @inject
      */
     protected $frontendUserRepository;
 
     /**
-     * @var \T3\PwComments\Domain\Repository\VoteRepository
-     * @inject
+     * @var VoteRepository
      */
     protected $voteRepository;
+
+    /**
+     * Inject SettingsUtility
+     *
+     * @param Settings $settingsUtility
+     */
+    public function injectSettingsUtility(Settings $settingsUtility)
+    {
+        $this->settingsUtility = $settingsUtility;
+    }
+
+    /**
+     * Inject MailUtility
+     *
+     * @param Mail $mailUtility
+     */
+    public function injectMailUtility(Mail $mailUtility)
+    {
+        $this->mailUtility = $mailUtility;
+    }
+
+    /**
+     * Inject Cookie
+     *
+     * @param Cookie $cookieUtility
+     */
+    public function injectCookie(Cookie $cookieUtility)
+    {
+        $this->cookieUtility = $cookieUtility;
+    }
+
+    /**
+     * Inject CommentRepository
+     *
+     * @param CommentRepository $commentRepository
+     */
+    public function injectCommentRepository(CommentRepository $commentRepository)
+    {
+        $this->commentRepository = $commentRepository;
+    }
+
+    /**
+     * Inject frontendUserRepository
+     *
+     * @param FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
+
+    /**
+     * Inject VoteRepository
+     *
+     * @param VoteRepository $voteRepository
+     */
+    public function injectVoteRepository(VoteRepository $voteRepository)
+    {
+        $this->voteRepository = $voteRepository;
+    }
 
     /**
      * Initialize action, which will be executed before every
@@ -101,10 +158,16 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 1501862644
             );
         }
+        if ($this->settingsUtility === null) {
+            $this->settingsUtility = GeneralUtility::makeInstance(Settings::class);
+        }
         $this->settings = $this->settingsUtility->renderConfigurationArray(
             $this->settings,
             ($this->settings['_skipMakingSettingsRenderable']) ? false : true
         );
+        if ($this->mailUtility === null) {
+            $this->mailUtility = GeneralUtility::makeInstance(Mail::class);
+        }
         $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $GLOBALS['TSFE']->id;
         $this->commentStorageUid = is_numeric($this->settings['storagePid'])
@@ -130,7 +193,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $commentToReplyTo
      * @return void
      *
-     * @ignorevalidation $commentToReplyTo
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("commentToReplyTo")
      */
     public function indexAction(Comment $commentToReplyTo = null)
     {
@@ -273,8 +336,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $commentToReplyTo Comment to reply to
      * @return void
      *
-     * @ignorevalidation $newComment
-     * @ignorevalidation $commentToReplyTo
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("newComment")
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("commentToReplyTo")
      */
     public function newAction(Comment $newComment = null, Comment $commentToReplyTo = null)
     {
@@ -307,7 +370,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
      *
-     * @ignorevalidation $comment
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
      */
     public function upvoteAction(Comment $comment)
     {
@@ -321,7 +384,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
      *
-     * @ignorevalidation $comment
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
      */
     public function downvoteAction(Comment $comment)
     {

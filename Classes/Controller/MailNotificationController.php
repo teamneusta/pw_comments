@@ -7,31 +7,36 @@ namespace T3\PwComments\Controller;
  *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
  */
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\TimeTracker\TimeTracker;
-use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\TypoScript\TemplateService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Core\Bootstrap;
 use TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Page\PageRepository;
-use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
- * Called by eID script "pw_comments_send_mail"
- *
- * @TODO Create middleware instead eid script. needed for TYPO3 v10
+ * Called by middleware request FrontendHandler
  */
 class MailNotificationController
 {
 
-    public function sendMail(ServerRequest $request, ResponseInterface $response)
+    /**
+     * Send mail
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
+     * @throws \TYPO3\CMS\Core\Exception
+     */
+    public function sendMail(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $params = $request->getQueryParams();
+        $params = (array)$request->getQueryParams()['tx_pwcomments'] ?? [];
         $action = $params['action'];
         $hash = $params['hash'];
         $uid = (int) $params['uid'];
@@ -61,10 +66,9 @@ class MailNotificationController
         if (!$valid) {
             throw new \RuntimeException('Given hash not valid!');
         }
-
+        // Send mail and respond
         if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {
             $this->runExtbaseController(
-                $request,
                 'PwComments',
                 'Comment',
                 'sendAuthorMailWhenCommentHasBeenApproved',
@@ -72,19 +76,17 @@ class MailNotificationController
                 ['_commentUid' => $uid, '_skipMakingSettingsRenderable' => true],
                 $pid
             );
-            $response->getBody()->write('200');
-            return $response;
+            $statusCode = 200; // OK
+        } else {
+            $statusCode = 400; // Bad request
         }
-
-        $response->getBody()->write('Nothing happend.');
-        return $response;
+        return (new Response())->withStatus($statusCode);
     }
 
 
     /**
      * Initializes and runs an extbase controller
      *
-     * @param ServerRequest $request
      * @param string $extensionName Name of extension, in UpperCamelCase
      * @param string $controller Name of controller, in UpperCamelCase
      * @param string $action Optional name of action, in lowerCamelCase
@@ -97,53 +99,44 @@ class MailNotificationController
      * @throws \TYPO3\CMS\Core\Exception
      */
     protected function runExtbaseController(
-        ServerRequest $request,
         $extensionName,
         $controller,
         $action = 'index',
         $pluginName = 'Pi1',
         $settings = [],
-        $pageUid = 1,
+        $pid = 0,
         $vendorName = 'T3'
     ) {
-        $GLOBALS['TT'] = GeneralUtility::makeInstance(TimeTracker::class);
-        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-            TypoScriptFrontendController::class,
-            $GLOBALS['TYPO3_CONF_VARS'],
-            $pageUid,
-            0
-        );
-        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
-        $GLOBALS['TSFE']->initTemplate();
-        $rootline = $GLOBALS['TSFE']->sys_page->getRootLine($pageUid);
-        $GLOBALS['TSFE']->tmpl->start($rootline);
-        $GLOBALS['TSFE']->getConfigArray();
+        /** @var TypoScriptService $typoScriptService */
+        $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
 
-        $GLOBALS['TSFE']->fe_user = EidUtility::initFeUser();
+        // Get plugin setup
+        $typoScriptSetup = $this->getTypoScriptSetup($pid);
+        $pluginSetup = $typoScriptSetup['plugin.']['tx_pwcomments.'];
 
-
-        $pluginSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pwcomments.'];
-        $pwCommentsTypoScript = $pluginSettings['settings.'];
-
-        if (unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])) {
-            $settings = array_merge(
-                $settings,
-                unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pw_comments'])
-            );
+        // Get plugin setup: settings
+        $pluginSetupSettings = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['settings.']);
+        $extensionConfig = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+        )->get('pw_comments');
+        if (is_array($extensionConfig)) {
+            $settings = array_merge($settings, $extensionConfig);
         }
-        $settings = array_merge($settings, $pwCommentsTypoScript);
+        $pluginSetupSettings = array_merge($settings, $pluginSetupSettings);
 
-        $bootstrap = new Bootstrap();
+        // Get plugin setup: persistence
+        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['persistence.']);
+
+        // Get plugin setup: _LOCAL_LANG
+        $pluginSetupLocalLang = [];
+        if (is_array($pluginSetup['_LOCAL_LANG.'])) {
+            $pluginSetupLocalLang = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['_LOCAL_LANG.']);
+        }
+
+        // Run bootstrap with configuration
+        /** @var Bootstrap $bootstrap */
+        $bootstrap = GeneralUtility::makeInstance(Bootstrap::class);
         $bootstrap->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-
-        $extensionTyposcriptSetup = $this->getExtensionTyposcriptSetup();
-
-        $localLangArray = [];
-        if (is_array($pluginSettings['_LOCAL_LANG.'])) {
-            // This class does not really exist instead it's: \TYPO3\CMS\Core\TypoScript\TypoScriptService
-            $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
-            $localLangArray = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSettings['_LOCAL_LANG.']);
-        }
         $configuration = [
             'pluginName' => $pluginName,
             'extensionName' => $extensionName,
@@ -156,30 +149,41 @@ class MailNotificationController
                     FrontendRequestHandler::class => FrontendRequestHandler::class
                 ]
             ],
-            'settings' => $settings,
-            'persistence' => $extensionTyposcriptSetup['plugin']['tx_pwcomments']['persistence'],
-            '_LOCAL_LANG' => $localLangArray
+            'settings' => $pluginSetupSettings,
+            'persistence' => $pluginSetupPersistence,
+            '_LOCAL_LANG' => $pluginSetupLocalLang
         ];
 
         return $bootstrap->run('', $configuration);
     }
 
     /**
-     * Gets the typoscript setup defined in ext_typoscript_setup.txt as array
+     * Returns TypoScript Setup array from a given page id
+     * Adoption of same method in BackendConfigurationManager
      *
-     * @return array
+     * @param int|null $pageId
+     * @return array the raw TypoScript setup
      */
-    protected function getExtensionTyposcriptSetup()
+    protected function getTypoScriptSetup($pageId): array
     {
-        /** @var $tsParser TypoScriptParser */
-        $tsParser = GeneralUtility::makeInstance(TypoScriptParser::class);
-        $tsParser->parse(
-            file_get_contents(
-                ExtensionManagementUtility::extPath('pw_comments') . 'ext_typoscript_setup.txt'
-            )
-        );
-        // This class does not really exist instead it's: \TYPO3\CMS\Core\TypoScript\TypoScriptService
-        $typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Service\TypoScriptService');
-        return $typoScriptService->convertTypoScriptArrayToPlainArray($tsParser->setup);
+        /** @var TemplateService $template */
+        $template = GeneralUtility::makeInstance(TemplateService::class);
+        // do not log time-performance information
+        $template->tt_track = false;
+        // Explicitly trigger processing of extension static files
+        $template->setProcessExtensionStatics(true);
+        // Get the root line
+        $rootline = [];
+        if ($pageId > 0) {
+            try {
+                $rootline = GeneralUtility::makeInstance(RootlineUtility::class, $pageId)->get();
+            } catch (\RuntimeException $e) {
+                $rootline = [];
+            }
+        }
+        // This generates the constants/config + hierarchy info for the template.
+        $template->runThroughTemplates($rootline, 0);
+        $template->generateConfig();
+        return $template->setup;
     }
 }

@@ -28,9 +28,6 @@ return [
             '1' => 'ext-pwcomments-type-vote_up'
         ],
     ],
-    'interface' => [
-        'showRecordFieldList' => 'type,crdate,author,author_ident'
-    ],
     'types' => [
         '1' => ['showitem' => 'type,crdate,author,author_ident']
     ],

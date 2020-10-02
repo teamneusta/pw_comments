@@ -11,6 +11,7 @@ use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -126,7 +127,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         try {
             $uri = $uriBuilder->buildUriFromRoute($moduleName, $urlParameters);
         } catch (RouteNotFoundException $e) {
-            $uri = static::isTypo3Version()
+            $uri = static::isTypo3VersionOrGreater(9)
                 ? $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters)
                 : $uriBuilder->buildUriFromModule($moduleName, $urlParameters);
         }
@@ -134,14 +135,17 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
     }
 
     /**
-     * Checks if current TYPO3 version is 9.0.0 or greater (by default)
+     * Checks if current TYPO3 version is given or greater
      *
-     * @param string $version e.g. 9.0.0
+     * @param int $version default is 9
      * @return bool
      */
-    protected static function isTypo3Version($version = '9.0.0') : bool
+    protected static function isTypo3VersionOrGreater($version = 9) : bool
     {
-        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
-            VersionNumberUtility::convertVersionNumberToInteger($version);
+        $versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
+        if ($versionInformation->getMajorVersion() >= $version) {
+            return true;
+        }
+        return false;
     }
 }
