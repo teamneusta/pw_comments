@@ -112,10 +112,10 @@ class MailNotificationController
 
         // Get plugin setup
         $typoScriptSetup = $this->getTypoScriptSetup($pid);
-        $pluginSetup = $typoScriptSetup['plugin.']['tx_pwcomments.'];
+        $plugin = $typoScriptSetup['plugin.']['tx_pwcomments.'];
 
         // Get plugin setup: settings
-        $pluginSetupSettings = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['settings.']);
+        $pluginSetupSettings = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['settings.']);
         $extensionConfig = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
         )->get('pw_comments');
@@ -125,12 +125,12 @@ class MailNotificationController
         $pluginSetupSettings = array_merge($settings, $pluginSetupSettings);
 
         // Get plugin setup: persistence
-        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['persistence.']);
+        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['persistence.']);
 
         // Get plugin setup: _LOCAL_LANG
         $pluginSetupLocalLang = [];
-        if (is_array($pluginSetup['_LOCAL_LANG.'])) {
-            $pluginSetupLocalLang = $typoScriptService->convertTypoScriptArrayToPlainArray($pluginSetup['_LOCAL_LANG.']);
+        if (is_array($plugin['_LOCAL_LANG.'])) {
+            $pluginSetupLocalLang = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['_LOCAL_LANG.']);
         }
 
         // Run bootstrap with configuration
