@@ -92,7 +92,7 @@ class MailNotificationController
      * @param string $action Optional name of action, in lowerCamelCase
      * @param string $pluginName Optional name of plugin. Default is 'Pi1'
      * @param array $settings Optional array of settings to use in controller
-     * @param int $pageUid Uid of current page
+     * @param int $pid Uid of current page
      * @param string $vendorName VendorName
      * @return string output of controller's action
      * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException

@@ -101,11 +101,11 @@ class CommentValidator extends AbstractValidator
      * Validator to check that message has been set
      *
      * @param Comment $comment Comment model to validate
-     * @return bool
+     * @return bool True when message is set, otherwise false
      */
     protected function messageIsSet(Comment $comment)
     {
-        return trim($comment->getMessage());
+        return !empty(trim($comment->getMessage()));
     }
 
     /**

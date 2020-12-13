@@ -127,25 +127,8 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         try {
             $uri = $uriBuilder->buildUriFromRoute($moduleName, $urlParameters);
         } catch (RouteNotFoundException $e) {
-            $uri = static::isTypo3VersionOrGreater(9)
-                ? $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters)
-                : $uriBuilder->buildUriFromModule($moduleName, $urlParameters);
+            $uri = $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters);
         }
         return (string) $uri;
-    }
-
-    /**
-     * Checks if current TYPO3 version is given or greater
-     *
-     * @param int $version default is 9
-     * @return bool
-     */
-    protected static function isTypo3VersionOrGreater($version = 9) : bool
-    {
-        $versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
-        if ($versionInformation->getMajorVersion() >= $version) {
-            return true;
-        }
-        return false;
     }
 }

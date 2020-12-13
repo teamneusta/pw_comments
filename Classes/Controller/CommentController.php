@@ -50,7 +50,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected $currentUser = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $currentAuthorIdent;
 
@@ -85,61 +85,37 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected $voteRepository;
 
     /**
-     * Inject SettingsUtility
-     *
-     * @param Settings $settingsUtility
+     * @var int
      */
-    public function injectSettingsUtility(Settings $settingsUtility)
+    protected $commentStorageUid;
+
+
+    public function injectSettingsUtility(Settings $settingsUtility): void
     {
         $this->settingsUtility = $settingsUtility;
     }
 
-    /**
-     * Inject MailUtility
-     *
-     * @param Mail $mailUtility
-     */
-    public function injectMailUtility(Mail $mailUtility)
+    public function injectMailUtility(Mail $mailUtility): void
     {
         $this->mailUtility = $mailUtility;
     }
 
-    /**
-     * Inject Cookie
-     *
-     * @param Cookie $cookieUtility
-     */
-    public function injectCookie(Cookie $cookieUtility)
+    public function injectCookie(Cookie $cookieUtility): void
     {
         $this->cookieUtility = $cookieUtility;
     }
 
-    /**
-     * Inject CommentRepository
-     *
-     * @param CommentRepository $commentRepository
-     */
-    public function injectCommentRepository(CommentRepository $commentRepository)
+    public function injectCommentRepository(CommentRepository $commentRepository): void
     {
         $this->commentRepository = $commentRepository;
     }
 
-    /**
-     * Inject frontendUserRepository
-     *
-     * @param FrontendUserRepository $frontendUserRepository
-     */
-    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
     {
         $this->frontendUserRepository = $frontendUserRepository;
     }
 
-    /**
-     * Inject VoteRepository
-     *
-     * @param VoteRepository $voteRepository
-     */
-    public function injectVoteRepository(VoteRepository $voteRepository)
+    public function injectVoteRepository(VoteRepository $voteRepository): void
     {
         $this->voteRepository = $voteRepository;
     }
@@ -221,7 +197,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $this->commentStorageUid,
                 $this->currentAuthorIdent
             );
-            /** @var $vote Vote */
+            /** @var Vote $vote */
             foreach ($votes as $vote) {
                 if ($vote->getComment()) {
                     if ($vote->isDownvote()) {
@@ -402,9 +378,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function confirmCommentAction($comment, $hash)
     {
-        /**@var Comment $comment*/
         $comment = $this->commentRepository->findByCommentUid($comment);
-        if ($comment === null || !HashEncryptionUtility::validCommentHash($hash, $comment) || !$comment->getHidden()) {
+        if (!$comment || !HashEncryptionUtility::validCommentHash($hash, $comment) || !$comment->getHidden()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('noCommentAvailable', 'PwComments'),
                 '',
@@ -636,7 +611,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $replyAmount = 0;
         if ($this->settings['countReplies']) {
-            /** @var $comment Comment */
+            /** @var Comment $comment */
             foreach ($comments as $comment) {
                 $replyAmount += count($comment->getReplies());
             }
@@ -667,7 +642,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Don't show Error Message because of own genereated error Messages
      *
-     * @return string The flash message or FALSE if no flash message should be set
+     * @return bool|string The flash message or FALSE if no flash message should be set
      */
     protected function getErrorFlashMessage()
     {

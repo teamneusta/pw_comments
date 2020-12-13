@@ -130,7 +130,7 @@ class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
      *
      * @param int $timestamp
      * @param string $timeString
-     * @return string
+     * @return int|bool
      */
     protected function modifyDate($timestamp, $timeString)
     {

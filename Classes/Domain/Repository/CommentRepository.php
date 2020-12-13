@@ -41,7 +41,7 @@ class CommentRepository extends Repository
     {
         parent::__construct($objectManager);
 
-        /** @var $querySettings Typo3QuerySettings */
+        /** @var Typo3QuerySettings $querySettings */
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
@@ -105,7 +105,7 @@ class CommentRepository extends Repository
      * Find comment by uid
      *
      * @param int $uid
-     * @return Comment
+     * @return Comment|null
      */
     public function findByCommentUid($uid)
     {
@@ -113,9 +113,11 @@ class CommentRepository extends Repository
         $query->getQuerySettings()->setIgnoreEnableFields(true);
         $query->matching($query->equals('uid', $uid));
 
-        /** @var Comment $comment */
+        /** @var Comment|null $comment */
         $comment = $query->execute()->getFirst();
-        $this->findAndAttachCommentReplies($comment);
+        if ($comment) {
+            $this->findAndAttachCommentReplies($comment);
+        }
         return $comment;
     }
 

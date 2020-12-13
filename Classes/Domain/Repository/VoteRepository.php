@@ -27,7 +27,7 @@ class VoteRepository extends Repository
      */
     public function initializeObject()
     {
-        /** @var $querySettings Typo3QuerySettings */
+        /** @var Typo3QuerySettings $querySettings */
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);

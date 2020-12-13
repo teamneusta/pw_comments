@@ -8,9 +8,10 @@ namespace T3\PwComments\Domain\Model;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
+
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
@@ -90,9 +91,9 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Replies (child comments). One comment can just have child comments
      * or parent comment - not unlimited nested!
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     * @var QueryResult
      */
-    protected $replies = null;
+    protected $replies;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\T3\PwComments\Domain\Model\Vote>
@@ -303,7 +304,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Setter for author
      *
-     * @param FrontendUser $author author
+     * @param FrontendUser|null $author author
      * @return void
      */
     public function setAuthor($author)
@@ -345,7 +346,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get comment replies
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     * @return QueryResult
      */
     public function getReplies()
     {
@@ -355,10 +356,10 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set comment replies
      *
-     * @param QueryResultInterface $replies Containing comments
+     * @param QueryResult $replies Containing comments
      * @return void
      */
-    public function setReplies(QueryResultInterface $replies)
+    public function setReplies(QueryResult $replies)
     {
         $this->replies = $replies;
     }
@@ -459,7 +460,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function countVotes()
     {
-        /** @var $vote \T3\PwComments\Domain\Model\Vote */
+        /** @var Vote $vote */
         foreach ($this->getVotes() as $vote) {
             if ($vote->isDownvote()) {
                 $this->downvoteAmount = $this->downvoteAmount + 1;

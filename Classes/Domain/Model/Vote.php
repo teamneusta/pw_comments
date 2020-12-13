@@ -181,7 +181,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Get related comment
      *
-     * @return \T3\PwComments\Domain\Model\Comment
+     * @return \T3\PwComments\Domain\Model\Comment|null
      */
     public function getComment()
     {

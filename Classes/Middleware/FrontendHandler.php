@@ -54,7 +54,7 @@ class FrontendHandler implements MiddlewareInterface
                 $statusCode = $mailSendResponse->getStatusCode();
                 $response = new Response();
                 $response->withStatus($statusCode);
-                $response->getBody()->write($statusCode);
+                $response->getBody()->write((string)$statusCode);
                 return $response;
             }
         }

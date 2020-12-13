@@ -29,7 +29,7 @@ class Mail
     protected $settings = [];
 
     /**
-     * @var TemplateView
+     * @var TemplateView|StandaloneView
      */
     protected $fluidTemplate;
 

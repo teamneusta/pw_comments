@@ -64,6 +64,9 @@ class Cookie
      */
     protected static function getCookieDomain()
     {
+        if (!defined('TYPO3_MODE')) {
+            define(TYPO3_MODE, 'FE');
+        }
         $result = '';
         $cookieDomain = $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'];
         if (!empty($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'])) {

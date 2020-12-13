@@ -41,7 +41,6 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
      */
     public function render()
     {
-        $this->dateIsAbsolute = false;
         $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
         $relativeDate = $this->makeDateRelative($timestamp, $this->arguments['format']);
         if ($this->dateIsAbsolute === true) {
@@ -114,7 +113,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
     /**
      * Returns plural suffix, if given integer is greater than one
      *
-     * @param int $num Integer which defines if it is plural or not
+     * @param int|float $num Integer which defines if it is plural or not
      * @param string $suffix Suffix to add to key of plural suffix
      * @return string Returns the plural suffix (may be empty)
      */
