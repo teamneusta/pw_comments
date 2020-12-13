@@ -1,4 +1,4 @@
-{namespace pw=T3\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.notificationMail.salutation" />
+{namespace pw=T3\PwComments\ViewHelpers}A<f:translate key="tx_pwcomments.notificationMail.salutation" />
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" /></f:then><f:else><f:translate key="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" /></f:else></f:if>
 
 <f:translate key="tx_pwcomments.notificationMail.linkToArticle" />
@@ -6,7 +6,7 @@
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
 <f:format.raw><f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}"
-              addQueryString="true" addQueryStringMethod="GET" argumentsToBeExcludedFromQueryString="{0:'id', 1:'chash', 2:'tx_pwcomments_pi1'}" absolute="true"
+              addQueryString="true" addQueryStringMethod="GET" argumentsToBeExcludedFromQueryString="{0:'id', 1:'chash', 2:'tx_pwcomments_pi1'}" absolute="1"
               section="{settings.commentAnchorPrefix}{comment.uid}" /></f:format.raw>
 </f:if>
 ---------------------------------------------------
