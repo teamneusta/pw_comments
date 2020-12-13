@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker-compose -f .ddev/manual.docker-compose.docs.yaml up docs

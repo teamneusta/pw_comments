@@ -1,11 +1,4 @@
-### Editor meta data
 /.idea
-/nbproject
-/*.sublime-*
-
-### Vagrant & Composer
-/.vagrant
-package.box
+/.Build
 /composer.lock
-/composer.phar
-/vendor
+/Documentation-GENERATED-temp
