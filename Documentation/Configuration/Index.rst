@@ -77,7 +77,7 @@ contains different settings for users who are logged in:
 
 .. code-block:: typoscript
 
-   [loginUser = *]
+   [loginUser('*')]
       plugin.tx_pwcomments {
          settings {
             moderateNewComments = 0
@@ -120,12 +120,12 @@ In TypoScript this could look like this:
 
 .. code-block:: typoscript
 
-   [globalVar = GP:tx_ttnews|tt_news > 0]
+   [request.getQueryParams()['tx_news_pi1'] && request.getQueryParams()['tx_news_pi1']['news'] > 0]
       # Enable the usage of entryUid and define entryUid
       plugin.tx_pwcomments.settings {
          useEntryUid = 1
          entryUid = TEXT
-         entryUid.data = GP:tx_ttnews|tt_news
+         entryUid.data = GP:tx_news_pi1|news
       }
 
       # And add comments if not done yet

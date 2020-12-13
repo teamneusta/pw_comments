@@ -82,7 +82,7 @@ plugin.tx_pwcomments {
 }
 
 
-[loginUser = *]
+[loginUser('*')]
 plugin.tx_pwcomments {
 	settings {
 		moderateNewComments = 0
