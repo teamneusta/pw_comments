@@ -4,7 +4,7 @@ namespace T3\PwComments\Controller;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2021 Armin Vieweg <armin@v.ieweg.de>
  */
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

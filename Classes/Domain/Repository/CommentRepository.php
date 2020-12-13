@@ -4,7 +4,7 @@ namespace T3\PwComments\Domain\Repository;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2021 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
@@ -40,7 +40,7 @@ class CommentRepository extends Repository
     public function __construct(ObjectManagerInterface $objectManager)
     {
         parent::__construct($objectManager);
-        
+
         /** @var $querySettings Typo3QuerySettings */
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);

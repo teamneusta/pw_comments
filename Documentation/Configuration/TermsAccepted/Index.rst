@@ -20,7 +20,7 @@ termsTypolinkParameter_                string
 .. _requireAcceptedTerms:
 
 requireAcceptedTerms
-"""""""""""""""""""
+""""""""""""""""""""
 .. container:: table-row
 
    Property
@@ -35,7 +35,7 @@ requireAcceptedTerms
 .. _termsTypolinkParameter:
 
 termsTypolinkParameter
-"""""""""""""""""""""""
+""""""""""""""""""""""
 .. container:: table-row
 
    Property

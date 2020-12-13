@@ -4,7 +4,7 @@ namespace T3\PwComments\XClass;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2019 Armin Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2021 Armin Vieweg <armin@v.ieweg.de>
  */
 use T3\PwComments\Utility\DatabaseUtility;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
