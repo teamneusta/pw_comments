@@ -245,6 +245,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param Comment $newComment
      * @return bool
+     * @TYPO3\CMS\Extbase\Annotation\Validate("T3\PwComments\Domain\Validator\CommentValidator", param="newComment")
      */
     public function createAction(Comment $newComment = null)
     {
@@ -498,6 +499,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function createNewVote($type, Comment $comment)
     {
+        /** @var Vote $newVote */
         $newVote = GeneralUtility::makeInstance(Vote::class);
         $newVote->setComment($comment);
         $newVote->setPid($this->commentStorageUid);
