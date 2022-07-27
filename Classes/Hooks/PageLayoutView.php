@@ -4,7 +4,7 @@ namespace T3\PwComments\Hooks;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
- *  | (c) 2011-2021 Armin Vieweg <armin@v.ieweg.de>
+ *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
