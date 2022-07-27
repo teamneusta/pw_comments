@@ -528,6 +528,8 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 )
             );
         }
+
+        return '';
     }
 
     /**

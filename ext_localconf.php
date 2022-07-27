@@ -38,8 +38,8 @@ $boot = function ($extensionKey) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']
         = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['plugins'];
 
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['cHashExcludedParameters'] .= ',' . implode(
-        ',',
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'] = array_merge(
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'],
         [
             'tx_pwcomments_pi1',
             'tx_pwcomments_pi1[controller]',
@@ -61,6 +61,7 @@ $boot = function ($extensionKey) {
             'tx_pwcomments_pi1[newComment][parentComment][__identity]'
         ]
     );
+
     // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
         'T3\PwComments\Hooks\ProcessDatamap';

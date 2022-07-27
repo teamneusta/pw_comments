@@ -80,7 +80,8 @@ class ProcessDatamap
             ];
             $typoLinkConfiguration = [
                 'parameter' => $comment->getOrigPid(),
-                'additionalParams' => GeneralUtility::implodeArrayForUrl('tx_pwcomments', $typoLinkAdditionalParams)
+                'additionalParams' => GeneralUtility::implodeArrayForUrl('tx_pwcomments', $typoLinkAdditionalParams),
+                'forceAbsoluteUrl' => true,
             ];
             $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
             $url = $contentObject->typoLink_URL($typoLinkConfiguration);
@@ -95,7 +96,7 @@ class ProcessDatamap
                     'mailSentToAuthorAfterPublish',
                     'PwComments',
                     [$comment->getCommentAuthorMailAddress()]
-                )));
+                ), '', FlashMessage::OK, true));
             } else {
                 throw new \RuntimeException('Error while calling the following url: ' . $url);
             }

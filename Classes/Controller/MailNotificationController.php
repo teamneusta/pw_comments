@@ -125,7 +125,7 @@ class MailNotificationController
         $pluginSetupSettings = array_merge($settings, $pluginSetupSettings);
 
         // Get plugin setup: persistence
-        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['persistence.']);
+        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['persistence.'] ?? []);
 
         // Get plugin setup: _LOCAL_LANG
         $pluginSetupLocalLang = [];
@@ -136,7 +136,11 @@ class MailNotificationController
         // Run bootstrap with configuration
         /** @var Bootstrap $bootstrap */
         $bootstrap = GeneralUtility::makeInstance(Bootstrap::class);
-        $bootstrap->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        if (!method_exists($bootstrap, 'setContentObjectRenderer')) {
+            $bootstrap->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        } else {
+            $bootstrap->setContentObjectRenderer(GeneralUtility::makeInstance(ContentObjectRenderer::class));
+        }
         $configuration = [
             'pluginName' => $pluginName,
             'extensionName' => $extensionName,
