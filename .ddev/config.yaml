@@ -1,17 +1,21 @@
 name: pw-comments
 type: php
-docroot: ./.Build/public
-working_dir:
-    web: /var/www/html/.Build
-php_version: "7.2"
+docroot: ~
+no_project_mount: true
+php_version: "7.4"
+composer_version: "2"
 webserver_type: apache-fpm
 router_http_port: "80"
 router_https_port: "443"
 xdebug_enabled: false
-additional_hostnames: []
+additional_hostnames:
+    - v10.pw-comments
+    - v11.pw-comments
 additional_fqdns: []
-mariadb_version: "10.2"
-mysql_version: ""
 provider: default
 use_dns_when_possible: true
-composer_version: "2"
+omit_containers:
+    - dba
+extra_services:
+    - v10-data
+    - v11-data
