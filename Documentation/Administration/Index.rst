@@ -31,3 +31,7 @@ The Main Static Template must be included. The Styles are optional, but recommen
 
 When the statics have been added you can access several libs to include pw_comments into your page
 (as described in the chapter :ref:`configuration`).
+
+.. important::
+   When you want to work with mail notifications, you should configure an absolute URL (like ``https://my-domain.com/``) in
+   TYPO3's **site configuration** instead of a plain ``/``. This is required by TypoLink to create absolute URLs in mails.

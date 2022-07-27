@@ -1,33 +1,21 @@
 # pw_comments
 
-The full documentation can be found here:
-
-https://docs.typo3.org/typo3cms/extensions/pw_comments/
-
-
-## DDEV setup
-
-A DDEV configuration is shipped with pw_comments.
-
-```
-$ ddev start
-```
-
-- TYPO3 frontend: https://pw-comments.ddev.site/
-- MailHog: http://pw-comments.ddev.site:8025/
+Powerful TYPO3 CMS extension for providing comments, including replies on comments and votings, 
+as well as mail notifications.
 
 
-### Credentials
+## Documentation
 
-- **For TYPO3:** *admin* / *password* (also install tool password)
+This extension provides a ReST documentation, located in [Documentation/](./Documentation) directory.
+
+You can see a rendered version on https://docs.typo3.org/p/t3/pw_comments/main/en-us/
 
 
-### Render documentation
+## Links
 
-Render pw_comments documentation and launch it in local browser:
-
-```
-$ ddev docs 
-$ ddev docs-launch 
-```
-
+- [Git Repository](https://github.com/a-r-m-i-n/pw_comments)
+- [Issue tracker](https://github.com/a-r-m-i-n/pw_comments/issues)
+- [Read documentation online](https://docs.typo3.org/p/t3/pw_comments/main/en-us/)
+- [EXT:min in TER](https://extensions.typo3.org/extension/pw_comments)
+- [EXT:min on Packagist](https://packagist.org/packages/t3/pw_comments)
+- [The author](https://v.ieweg.de)

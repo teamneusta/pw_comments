@@ -1,7 +1,7 @@
 {
     "name": "t3/pw_comments",
     "type": "typo3-cms-extension",
-    "description": "Powerful extension for providing comments, including replies on comments and voting.",
+    "description": "Powerful TYPO3 CMS extension for providing comments, including replies on comments and votings, as well as mail notifications.",
     "keywords": ["TYPO3", "extension", "comment", "voting"],
     "homepage": "http://v.ieweg.de/",
     "license": "GPL-2.0+",

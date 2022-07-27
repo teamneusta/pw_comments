@@ -10,6 +10,10 @@
 Moderation and e-mail notification
 ==================================
 
+.. important::
+   When you want to work with mail notifications, you should configure an absolute URL (like ``https://my-domain.com/``) in
+   TYPO3's **site configuration** instead of a plain ``/``. This is required by TypoLink to create absolute URLs in mails.
+
 ===================================== ========
 Property                               Type
 ===================================== ========
