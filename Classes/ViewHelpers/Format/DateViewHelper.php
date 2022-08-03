@@ -96,7 +96,8 @@ class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
         }
         $format = preg_replace('/([a-zA-Z])/is', '%$1', $this->arguments['format']);
         $format = str_replace('%%', '%', $format);
-        return strftime($format, $timestamp);
+
+        return (new \DateTime())->setTimestamp($timestamp)->format($format);
     }
 
     /**

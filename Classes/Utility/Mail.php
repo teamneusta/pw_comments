@@ -132,7 +132,7 @@ class Mail
                     : GeneralUtility::getIndpEnv('HTTP_HOST')]
             )
         );
-        if ($this->settings['sendMailMimeType'] === 'text/plain') {
+        if (isset($this->settings['sendMailMimeType']) && $this->settings['sendMailMimeType'] === 'text/plain') {
             $mail->text($this->getMailMessage($comment, $hash));
         } else {
             $mail->html($this->getMailMessage($comment, $hash));

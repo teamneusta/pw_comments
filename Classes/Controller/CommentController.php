@@ -100,7 +100,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->mailUtility = $mailUtility;
     }
 
-    public function injectCookie(Cookie $cookieUtility): void
+    public function injectCookieUtility(Cookie $cookieUtility): void
     {
         $this->cookieUtility = $cookieUtility;
     }
@@ -139,7 +139,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->settings = $this->settingsUtility->renderConfigurationArray(
             $this->settings,
-            ($this->settings['_skipMakingSettingsRenderable']) ? false : true
+            !isset($this->settings['_skipMakingSettingsRenderable']) || !$this->settings['_skipMakingSettingsRenderable']
         );
         if ($this->mailUtility === null) {
             $this->mailUtility = GeneralUtility::makeInstance(Mail::class);
@@ -150,16 +150,16 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ? $this->settings['storagePid']
             : $this->pageUid;
         $this->currentUser = isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user : [];
-        $this->currentAuthorIdent = ($this->currentUser['uid'])
+        $this->currentAuthorIdent = isset($this->currentUser['uid'])
             ? $this->currentUser['uid']
             : $this->cookieUtility->get('ahash');
 
-        if (is_numeric($this->currentAuthorIdent) && !$this->currentUser['uid']) {
+        if (is_numeric($this->currentAuthorIdent) && !isset($this->currentUser['uid'])) {
             $this->currentAuthorIdent = null;
         }
 
-        if ($this->settings['useEntryUid']) {
-            $this->entryUid = intval($this->settings['entryUid']);
+        if (isset($this->settings['useEntryUid']) && $this->settings['useEntryUid']) {
+            $this->entryUid = (int)$this->settings['entryUid'];
         }
     }
 
@@ -173,10 +173,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function indexAction(Comment $commentToReplyTo = null)
     {
-        if ($this->settings['invertCommentSorting']) {
+        if (isset($this->settings['invertCommentSorting']) && $this->settings['invertCommentSorting']) {
             $this->commentRepository->setInvertCommentSorting(true);
         }
-        if ($this->settings['invertReplySorting']) {
+        if (isset($this->settings['invertReplySorting']) && $this->settings['invertReplySorting']) {
             $this->commentRepository->setInvertReplySorting(true);
         }
 
@@ -226,7 +226,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function createAction(Comment $newComment = null)
     {
         // Hidden field Spam-Protection
-        if ($this->settings['hiddenFieldSpamProtection']
+        if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
             && $this->request->hasArgument($this->settings['hiddenFieldName'])
             && $this->request->getArgument($this->settings['hiddenFieldName'])) {
             $this->redirectToUri($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
@@ -247,7 +247,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $newComment->setAuthorIdent($this->currentAuthorIdent);
 
         $author = null;
-        if ($this->currentUser['uid']) {
+        if (isset($this->currentUser['uid'])) {
             $author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
         }
         if ($author !== null) {
@@ -266,7 +266,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         ];
 
             // Modify comment if moderation is active
-        if ($this->settings['moderateNewComments']) {
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) {
             $newComment->setHidden(true);
             $this->addFlashMessage(
                 LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
@@ -280,7 +280,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->commentRepository->add($newComment);
         $this->getPersistenceManager()->persistAll();
 
-        if ($this->settings['sendMailOnNewCommentsTo']) {
+        if (isset($this->settings['sendMailOnNewCommentsTo']) && $this->settings['sendMailOnNewCommentsTo']) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
@@ -288,7 +288,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
         }
 
-        if ($this->settings['sendMailToAuthorAfterSubmit'] && $newComment->hasCommentAuthorMailAddress()) {
+        if (isset($this->settings['sendMailToAuthorAfterSubmit']) &&
+            $this->settings['sendMailToAuthorAfterSubmit'] &&
+            $newComment->hasCommentAuthorMailAddress()
+        ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
@@ -296,7 +299,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->mailUtility->sendMail($newComment);
         }
 
-        if ($this->settings['moderateNewComments']) {
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) {
             $anchor = '#' . $this->settings['successfulAnchor'];
         } else {
             $anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
@@ -393,7 +396,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->commentRepository->update($comment);
         $this->getPersistenceManager()->persistAll();
 
-        if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
+            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getAuthorMail());
@@ -433,7 +438,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $vote = null;
         if ($this->currentAuthorIdent !== null) {
-            if ($this->settings['ignoreVotingForOwnComments'] &&
+            if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments'] &&
                 $this->currentAuthorIdent === $comment->getAuthorIdent()
             ) {
                 // TODO: use flash messages here?
@@ -480,7 +485,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $newVote->setPid($this->commentStorageUid);
         $newVote->setOrigPid($this->pageUid);
         $newVote->setAuthorIdent($this->currentAuthorIdent);
-        if ($this->currentUser['uid']) {
+        if (isset($this->currentUser['uid']) && $this->currentUser['uid']) {
             /** @var FrontendUser $author */
             $author = $this->frontendUserRepository->findByUid($this->currentUser['uid']);
             $newVote->setAuthor($author);
@@ -512,7 +517,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         /** @var Comment $comment */
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
-        if ($this->settings['moderateNewComments'] && $this->settings['sendMailToAuthorAfterPublish']) {
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
+            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
             $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());
@@ -561,7 +568,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 ->reset()
                 ->setTargetPageUid($uid)
                 ->setAddQueryString(true)
-                ->setAddQueryStringMethod('GET')
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
                 ->setArguments($arguments)
                 ->build();
@@ -612,7 +618,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function calculateCommentCount(QueryResult $comments)
     {
         $replyAmount = 0;
-        if ($this->settings['countReplies']) {
+        if (isset($this->settings['countReplies']) && $this->settings['countReplies']) {
             /** @var Comment $comment */
             foreach ($comments as $comment) {
                 $replyAmount += count($comment->getReplies());
@@ -628,12 +634,12 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function handleCustomMessages()
     {
-        if ($this->settings['ignoreVotingForOwnComments'] && GeneralUtility::_GP('doNotVoteForYourself') == 1) {
+        if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments'] && GeneralUtility::_GP('doNotVoteForYourself') == 1) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('tx_pwcomments.custom.doNotVoteForYourself', 'PwComments')
             );
             $this->view->assign('hasCustomMessages', true);
-        } elseif (!$this->settings['enableVoting'] && GeneralUtility::_GP('votingDisabled') == 1) {
+        } elseif ((!isset($this->settings['enableVoting']) || !$this->settings['enableVoting']) && GeneralUtility::_GP('votingDisabled') == 1) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('tx_pwcomments.custom.votingDisabled', 'PwComments')
             );

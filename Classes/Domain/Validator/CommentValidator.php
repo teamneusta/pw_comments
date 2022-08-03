@@ -47,14 +47,14 @@ class CommentValidator extends AbstractValidator
         } elseif (!$this->messageIsSet($comment)) {
             $errorNumber = 1299628099;
             $errorArguments = [$this->settings['secondsBetweenTwoComments']];
-        } elseif ($this->settings['requireAcceptedTerms'] && !$comment->getTermsAccepted()) {
+        } elseif (isset($this->settings['requireAcceptedTerms']) && $this->settings['requireAcceptedTerms'] && !$comment->getTermsAccepted()) {
             $errorNumber = 1528633964;
-        } elseif ($this->settings['useBadWordsList'] && !$this->checkTextForBadWords($comment->getMessage())) {
+        } elseif (isset($this->settings['useBadWordsList']) && $this->settings['useBadWordsList'] && !$this->checkTextForBadWords($comment->getMessage())) {
             $errorNumber = 1315608355;
-        } elseif ($this->settings['useBadWordsListOnUsername']
+        } elseif (isset($this->settings['useBadWordsListOnUsername']) && $this->settings['useBadWordsListOnUsername']
             && !$this->checkTextForBadWords($comment->getAuthorName())) {
             $errorNumber = 1406644911;
-        } elseif ($this->settings['useBadWordsListOnMailAddress']
+        } elseif (isset($this->settings['useBadWordsListOnMailAddress']) && $this->settings['useBadWordsListOnMailAddress']
             && !$this->checkTextForBadWords($comment->getAuthorMail())) {
             $errorNumber = 1406644912;
         } elseif (!$this->lastCommentRespectsTimer()) {
@@ -81,7 +81,7 @@ class CommentValidator extends AbstractValidator
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($GLOBALS['TSFE']->fe_user->user['uid']) ||
+        return ($GLOBALS['TSFE']->fe_user->user['uid'] ?? false) ||
                ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
@@ -93,7 +93,7 @@ class CommentValidator extends AbstractValidator
      */
     protected function mailIsValid(Comment $comment)
     {
-        return $GLOBALS['TSFE']->fe_user->user['uid']
+        return $GLOBALS['TSFE']->fe_user->user['uid'] ?? false
             || (is_string($comment->getAuthorMail()) && GeneralUtility::validEmail($comment->getAuthorMail()));
     }
 

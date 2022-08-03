@@ -43,7 +43,8 @@ class FrontendHandler implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $params = (array)$request->getQueryParams()['tx_pwcomments'] ?? [];
+        $queryParams = $request->getQueryParams();
+        $params = $queryParams['tx_pwcomments'] ?? [];
         if (!empty($params) && isset($params['action'])) {
             if ($params['action'] === 'sendAuthorMailWhenCommentHasBeenApproved') {
                 /** @var MailNotificationController $mailNotification */

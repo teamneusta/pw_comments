@@ -36,7 +36,8 @@ class MailNotificationController
      */
     public function sendMail(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $params = (array)$request->getQueryParams()['tx_pwcomments'] ?? [];
+        $queryParams = $request->getQueryParams();
+        $params = $queryParams['tx_pwcomments'] ?? [];
         $action = $params['action'];
         $hash = $params['hash'];
         $uid = (int) $params['uid'];
@@ -129,7 +130,7 @@ class MailNotificationController
 
         // Get plugin setup: _LOCAL_LANG
         $pluginSetupLocalLang = [];
-        if (is_array($plugin['_LOCAL_LANG.'])) {
+        if (isset($plugin['_LOCAL_LANG.']) && is_array($plugin['_LOCAL_LANG.'])) {
             $pluginSetupLocalLang = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['_LOCAL_LANG.']);
         }
 

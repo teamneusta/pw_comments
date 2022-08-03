@@ -18,7 +18,7 @@
 	<div class="comment-head">
 		<h5 class="comment-name">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</h5>
 		<span class="comment-date" title="{pw:format.date(timestamp:'{comment.crdate}', format:'%d.%m.%Y %T')}"> <pw:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
-		
+
 		<div class="comment-actions">
 			<f:if condition="{settings.enableCommentVotes}">
 				<f:if condition="{comment.parentComment}">
@@ -37,12 +37,12 @@
 			<f:if condition="{settings.enableRepliesToComments} == 1">
 				<f:if condition="{comment.parentComment}">
 					<f:then>
-						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment.parentComment}" section="{settings.writeCommentAnchor}" addQueryString="true" addQueryStringMethod="GET">
+						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment.parentComment}" section="{settings.writeCommentAnchor}" addQueryString="true">
 							<f:translate key="tx_pwcomments.reply" />
 						</f:link.action>
 					</f:then>
 					<f:else>
-						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" addQueryString="true" addQueryStringMethod="GET">
+						<f:link.action class="reply" action="new" arguments="{commentToReplyTo:comment}" section="{settings.writeCommentAnchor}" addQueryString="true">
 							<f:translate key="tx_pwcomments.reply" />
 						</f:link.action>
 					</f:else>

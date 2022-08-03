@@ -75,6 +75,6 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
      */
     protected static function hashString($string, $length = 20)
     {
-        return GeneralUtility::shortMD5($string . self::getEncryptionKey(), $length);
+        return substr(md5($string . self::getEncryptionKey()), 0, $length);
     }
 }

@@ -8,6 +8,7 @@ namespace T3\PwComments\Utility;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Cookie Utility
@@ -27,7 +28,7 @@ class Cookie
      * @param string $key
      * @return string|null
      */
-    public static function get($key)
+    public function get($key)
     {
         if (isset($_COOKIE[self::COOKIE_PREFIX . $key])) {
             return $_COOKIE[self::COOKIE_PREFIX . $key];
@@ -42,7 +43,7 @@ class Cookie
      * @param string $value
      * @return void
      */
-    public static function set($key, $value)
+    public function set($key, $value)
     {
         $cookieExpireDate = time() + self::COOKIE_LIFETIME_DAYS * 24 * 60 * 60;
         setcookie(
@@ -50,9 +51,9 @@ class Cookie
             $value,
             $cookieExpireDate,
             '/',
-            self::getCookieDomain(),
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieSecure'] > 0,
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly'] == 1
+            $this->getCookieDomain(),
+            isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieSecure']) && $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieSecure'] > 0,
+            isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly']) && $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly'] == 1
         );
     }
 
@@ -62,13 +63,13 @@ class Cookie
      *
      * @return string The domain to be used on setting cookies
      */
-    protected static function getCookieDomain()
+    protected function getCookieDomain()
     {
         if (!defined('TYPO3_MODE')) {
             define(TYPO3_MODE, 'FE');
         }
         $result = '';
-        $cookieDomain = $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'];
+        $cookieDomain = $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'] ?? null;
         if (!empty($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'])) {
             $cookieDomain = $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'];
         }
@@ -77,7 +78,7 @@ class Cookie
                 $match = [];
                 $matchCnt = @preg_match(
                     $cookieDomain,
-                    \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
+                    GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
                     $match
                 );
                 if ($matchCnt !== false) {
