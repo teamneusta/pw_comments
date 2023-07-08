@@ -53,9 +53,8 @@ plugin.tx_pwcomments {
     }
 }
 
-lib.pwCommentsIndex = USER
+lib.pwCommentsIndex = EXTBASEPLUGIN
 lib.pwCommentsIndex {
-    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = PwComments
     vendorName = T3
     pluginName = show
@@ -73,9 +72,8 @@ lib.pwCommentsIndex {
     settings =< plugin.tx_pwcomments.settings
 }
 
-lib.pwCommentsNew = USER
+lib.pwCommentsNew = EXTBASEPLUGIN
 lib.pwCommentsNew {
-    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = PwComments
     vendorName = T3
     pluginName = new
