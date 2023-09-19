@@ -1,9 +1,9 @@
 {
-    "name": "t3/pw_comments",
+    "name": "teamneusta/pw_comments",
     "type": "typo3-cms-extension",
     "description": "Powerful TYPO3 CMS extension for providing comments, including replies on comments and votings, as well as mail notifications.",
     "keywords": ["TYPO3", "extension", "comment", "voting"],
-    "homepage": "http://v.ieweg.de/",
+    "homepage": "https://team-neusta.de/",
     "license": "GPL-2.0+",
     "authors": [
         {
@@ -11,6 +11,12 @@
             "role": "Lead Developer",
             "email": "armin@v.ieweg.de",
             "homepage": "https://v.ieweg.de/"
+        },
+        {
+            "name": "Malek Olabi",
+            "role": "Developer",
+            "email": "m.olabi@neusta.de",
+            "homepage": "https://team-neusta.de/"
         }
     ],
     "require": {
