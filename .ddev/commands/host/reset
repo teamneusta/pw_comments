@@ -3,7 +3,7 @@
 read -p "Remove this project entirely? (incl. volumes) (y/n)? " CONT
 if [ "$CONT" = "y" ]; then
   ddev delete -Oy
-  docker volume rm pw-comments-v10-data pw-comments-v11-data
+  docker volume rm pw-comments-v11-data pw-comments-v12-data
 else
   echo "Canceled.";
 fi
