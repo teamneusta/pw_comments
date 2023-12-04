@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
 
+use T3\PwComments\Hooks\ProcessDatamap;
+use TYPO3\CMS\Backend\Controller\PageLayoutController;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use T3\PwComments\Controller\CommentController;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use T3\PwComments\Event\Listener\PageLayoutView;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -14,8 +25,8 @@ if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
-$boot = function ($extensionKey) {
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+(static function ($extensionKey): void {
+    ExtensionUtility::configurePlugin(
         $extensionKey,
         'show',
         [
@@ -94,58 +105,14 @@ $boot = function ($extensionKey) {
 
     // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
-        'T3\PwComments\Hooks\ProcessDatamap';
+        ProcessDatamap::class;
 
-    if (TYPO3_MODE === 'BE') {
-        $extensionConfig = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
-        )->get('pw_comments');
-        if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\PageLayoutController'] = [
-                'className' => 'T3\\PwComments\\XClass\\PageLayoutController',
-            ];
-        }
-
-        /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
-        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Imaging\IconRegistry::class
-        );
-        $iconRegistry->registerIcon(
-            'ext-pwcomments-type-vote_down',
-            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-            ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_down.png']
-        );
-        $iconRegistry->registerIcon(
-            'ext-pwcomments-type-vote_up',
-            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-            ['source' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_vote_up.png']
-        );
-        $iconRegistry->registerIcon(
-            'ext-pwcomments-ext-icon',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:pw_comments/ext_icon.svg']
-        );
-
-        // @codingStandardsIgnoreStart
-
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
-            mod.wizards.newContentElement.wizardItems.plugins.elements.pwcomments {
-                iconIdentifier = ext-pwcomments-ext-icon
-                title = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardTitle
-                description = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription
-                tt_content_defValues {
-                    CType = list
-                    list_type = pwcomments_pi1
-                }
-            }
-        ');
-
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['pwcomments_pi1']['pwcomments'] =
-            \T3\PwComments\Hooks\PageLayoutView::class . '->getExtensionSummary';
-
-        // @codingStandardsIgnoreEnd
+    $extensionConfig = GeneralUtility::makeInstance(
+        ExtensionConfiguration::class
+    )->get('pw_comments');
+    if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][PageLayoutController::class] = [
+            'className' => \T3\PwComments\XClass\PageLayoutController::class,
+        ];
     }
-};
-
-$boot('pw_comments');
-unset($boot);
+})('pw_comments');
