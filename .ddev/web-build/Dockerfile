@@ -19,4 +19,4 @@ RUN echo "<h1>Perform this first</h1> <code>ddev install-v12</code>" > /var/www/
 
 ARG uid
 ARG gid
-RUN chown -R $uid:$gid /var/www/html
+RUN chown -R $uid:$gid /var/www
