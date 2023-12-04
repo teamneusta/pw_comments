@@ -7,7 +7,7 @@
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
 
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
@@ -53,9 +53,8 @@ return [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
             'config' => [
-                'type' => 'input',
-                'eval' => 'datetime',
-                'readOnly' => true
+                'type' => 'datetime',
+                'readOnly' => true,
             ]
         ],
         'type' => [
@@ -65,8 +64,8 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [$ll . 'tx_pwcomments_domain_model_vote.type.0', 0],
-                    [$ll . 'tx_pwcomments_domain_model_vote.type.1', 1]
+                    ['label' => $ll . 'tx_pwcomments_domain_model_vote.type.0', 'value' => 0],
+                    ['label' => $ll . 'tx_pwcomments_domain_model_vote.type.1', 'value' => 1]
                 ],
                 'readOnly' => true
             ]
@@ -80,7 +79,7 @@ return [
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
                 'items' => [
-                    ['', 0]
+                    ['label' => '', 'value' => 0]
                 ],
                 'readOnly' => true
             ]
@@ -100,9 +99,7 @@ return [
             'label' => $ll . 'tx_pwcomments_domain_model_vote.comment',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_pwcomments_domain_model_comment',
-                'show_thumbs' => 1,
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,

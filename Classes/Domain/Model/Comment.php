@@ -7,19 +7,19 @@ namespace T3\PwComments\Domain\Model;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
  * The comment model
  *
  * @package T3\PwComments
  */
-class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Comment extends AbstractEntity
 {
 
     /**
@@ -51,7 +51,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var FrontendUser
      */
-    protected $author = null;
+    protected $author;
 
     /**
      * author name
@@ -85,7 +85,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \T3\PwComments\Domain\Model\Comment
      */
-    protected $parentComment = null;
+    protected $parentComment;
 
     /**
      * Replies (child comments). One comment can just have child comments
@@ -96,7 +96,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $replies;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\T3\PwComments\Domain\Model\Vote>
+     * @var ObjectStorage<Vote>
      */
     protected $votes;
 
@@ -266,6 +266,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($this->getAuthor() !== null) {
             $authorMail = $this->getAuthor()->getEmail();
         }
+
         return $authorMail;
     }
 
@@ -307,7 +308,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param FrontendUser|null $author author
      * @return void
      */
-    public function setAuthor($author)
+    public function setAuthor(?FrontendUser $author)
     {
         $this->author = $author;
     }
@@ -315,7 +316,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Getter for author
      *
-     * @return FrontendUser The author
+     * @return FrontendUser|null The author
      */
     public function getAuthor()
     {
@@ -377,7 +378,6 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set votes
      *
-     * @param ObjectStorage $votes
      * @return void
      */
     public function setVotes(ObjectStorage $votes)
@@ -388,10 +388,9 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Add single vote
      *
-     * @param \T3\PwComments\Domain\Model\Vote $vote
      * @return void
      */
-    public function addVote(\T3\PwComments\Domain\Model\Vote $vote)
+    public function addVote(Vote $vote)
     {
         $this->votes->attach($vote);
     }
@@ -399,10 +398,9 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Remove single vote
      *
-     * @param \T3\PwComments\Domain\Model\Vote $vote
      * @return void
      */
-    public function removeVote(\T3\PwComments\Domain\Model\Vote $vote)
+    public function removeVote(Vote $vote)
     {
         $this->votes->detach($vote);
     }

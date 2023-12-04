@@ -7,7 +7,7 @@
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  */
 
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
@@ -19,8 +19,7 @@ return [
         'label' => 'author_name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'versioningWS' => 2,
-        'versioning_followPages' => true,
+        'versioningWS' => true,
         'origUid' => 't3_origuid',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l18n_parent',
@@ -42,16 +41,7 @@ return [
         'sys_language_uid' => [
             'exclude' => 0,
             'label' => $ll . 'general.language',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => [
-                    ['LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1],
-                    ['LLL:EXT:lang/locallang_general.php:LGL.default_value', 0]
-                ]
-            ]
+            'config' => ['type' => 'language']
         ],
         'l18n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -60,7 +50,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0]
+                    ['label' => '', 'value' => 0]
                 ],
                 'foreign_table' => 'tx_pwcomments_domain_model_comment',
                 'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent###' .
@@ -77,7 +67,7 @@ return [
             'label' => $ll . 'general.versionLabel',
             'config' => [
                 'type' => 'none',
-                'cols' => 27
+                'size' => 27
             ]
         ],
         'pid' => [
@@ -91,7 +81,7 @@ return [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
             'config' => [
-                'type' => 'input'
+                'type' => 'datetime'
             ]
         ],
         'hidden' => [
@@ -120,9 +110,7 @@ return [
             'label' => $ll . 'tx_pwcomments_domain_model_comment.parent_comment',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_pwcomments_domain_model_comment',
-                'show_thumbs' => 1,
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1
@@ -137,7 +125,7 @@ return [
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
                 'items' => [
-                    ['', 0]
+                    ['label' => '', 'value' => 0]
                 ],
             ]
         ],
@@ -193,7 +181,7 @@ return [
                 'appearance' => [
                     'collapseAll' => true,
                     'newRecordLinkPosition' => 'none',
-                    'levelLinksPosition' => 'none',
+                    'showNewRecordLink' => false,
                     'useSortable' => false,
                     'enabledControls' => [
                         'new' => false,
