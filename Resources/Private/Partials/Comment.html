@@ -17,7 +17,7 @@
 <div class="comment-box">
 	<div class="comment-head">
 		<h5 class="comment-name">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</h5>
-		<span class="comment-date" title="{pw:format.date(timestamp:'{comment.crdate}', format:'%d.%m.%Y %T')}"> <pw:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
+		<span class="comment-date" title="{pw:format.date(timestamp:'{comment.crdate}', format:'d.m.Y T')}"> <pw:format.relativeDate timestamp="{comment.crdate}" format="{settings.relativeDate.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
 
 		<div class="comment-actions">
 			<f:if condition="{settings.enableCommentVotes}">
