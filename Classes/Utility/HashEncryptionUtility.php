@@ -7,6 +7,7 @@ namespace T3\PwComments\Utility;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -24,7 +25,6 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
      * Check if given hash is correct
      *
      * @param string $hash
-     * @param Comment $comment
      * @return bool
      */
     public static function validCommentHash($hash, Comment $comment)
@@ -36,7 +36,6 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
      * Check if given hash is correct
      *
      * @param string $hash
-     * @param string $message
      * @return bool
      */
     public static function validCommentMessageHash($hash, string $message)
@@ -47,7 +46,6 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
     /**
      * Create hash for a comment message
      *
-     * @param string $message
      * @return string
      */
     public static function createHashForCommentMessage(string $message)
@@ -58,7 +56,6 @@ class HashEncryptionUtility extends AbstractEncryptionUtility
     /**
      * Create hash for a comment
      *
-     * @param Comment $comment
      * @return string
      */
     public static function createHashForComment(Comment $comment)

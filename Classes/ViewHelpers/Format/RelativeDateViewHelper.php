@@ -7,7 +7,11 @@ namespace T3\PwComments\ViewHelpers\Format;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use DateTime;
+use InvalidArgumentException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -15,7 +19,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @package T3\PwComments
  */
-class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class RelativeDateViewHelper extends AbstractViewHelper
 {
     /**
      * @var bool
@@ -29,7 +33,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
     {
         parent::initializeArguments();
         $this->registerArgument('timestamp', 'mixed', 'Unix timestamp', true);
-        $this->registerArgument('format', 'string', 'String to be parsed by strftime', true);
+        $this->registerArgument('format', 'string', 'String to be parsed by date', true);
         $this->registerArgument('wrap', 'string', 'Uses sprintf to wrap relative date (use %s for date)', false, '%s');
         $this->registerArgument('wrapAbsolute', 'string', 'Same like wrap, but used if date is absolute', false, '%s');
     }
@@ -42,7 +46,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
     public function render()
     {
         $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
-        $relativeDate = $this->makeDateRelative($timestamp, $this->arguments['format']);
+        $relativeDate = $this->makeDateRelative($timestamp, $this->arguments['format'] ?? '');
         if ($this->dateIsAbsolute === true) {
             return sprintf($this->arguments['wrapAbsolute'], $relativeDate);
         }
@@ -52,10 +56,9 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
     /**
      * handle all the different input formats and return a real timestamp
      *
-     * @param int|string|\DateTime|null $timestamp
      * @return int
      */
-    protected function normalizeTimestamp($timestamp)
+    protected function normalizeTimestamp(int|string|DateTime|null $timestamp)
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -63,10 +66,10 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof \DateTime) {
+        } elseif ($timestamp instanceof DateTime) {
             $timestamp = $timestamp->format('U');
         } else {
-            throw new \InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.');
+            throw new InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.');
         }
         return $timestamp;
     }
@@ -79,7 +82,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
      *
      * @return string Relative time or formatted time
      */
-    protected function makeDateRelative($timestamp, $format = null)
+    protected function makeDateRelative($timestamp, $format = '')
     {
         $diff = time() - $timestamp;
         if ($diff < 60) {
@@ -107,7 +110,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
         }
 
         $this->dateIsAbsolute = true;
-        return strftime($format, $timestamp);
+        return date($format, $timestamp);
     }
 
     /**
@@ -117,7 +120,7 @@ class RelativeDateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractV
      * @param string $suffix Suffix to add to key of plural suffix
      * @return string Returns the plural suffix (may be empty)
      */
-    protected function plural($num, $suffix = '')
+    protected function plural(int|float $num, $suffix = '')
     {
         return ($num > 1) ? $this->getLabel('pluralSuffix' . ucfirst($suffix)) : '';
     }

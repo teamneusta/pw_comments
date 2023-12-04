@@ -7,8 +7,10 @@ namespace T3\PwComments\Domain\Repository;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use T3\PwComments\Domain\Model\Comment;
@@ -32,17 +34,9 @@ class CommentRepository extends Repository
      */
     protected $invertReplySorting = false;
 
-    /**
-     * Initializes the repository.
-     *
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function __construct(ObjectManagerInterface $objectManager)
+    public function initializeObject(): void
     {
-        parent::__construct($objectManager);
-
-        /** @var Typo3QuerySettings $querySettings */
-        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
     }
@@ -58,10 +52,8 @@ class CommentRepository extends Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                [
-                    $query->equals('pid', $pid),
-                    $query->equals('parentComment', 0)
-                ]
+                $query->equals('pid', $pid),
+                $query->equals('parentComment', 0)
             )
         );
         $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
@@ -69,7 +61,8 @@ class CommentRepository extends Repository
 
         foreach ($comments as $comment) {
             $this->findAndAttachCommentReplies($comment);
-        };
+        }
+
         return $comments;
     }
 
@@ -85,11 +78,9 @@ class CommentRepository extends Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                [
-                    $query->equals('pid', $pid),
-                    $query->equals('entryUid', $entryUid),
-                    $query->equals('parentComment', 0)
-                ]
+                $query->equals('pid', $pid),
+                $query->equals('entryUid', $entryUid),
+                $query->equals('parentComment', 0)
             )
         );
         $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
@@ -97,7 +88,8 @@ class CommentRepository extends Repository
 
         foreach ($comments as $comment) {
             $this->findAndAttachCommentReplies($comment);
-        };
+        }
+
         return $comments;
     }
 
@@ -105,9 +97,8 @@ class CommentRepository extends Repository
      * Find comment by uid
      *
      * @param int $uid
-     * @return Comment|null
      */
-    public function findByCommentUid($uid)
+    public function findByCommentUid($uid): ?Comment
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
@@ -124,7 +115,6 @@ class CommentRepository extends Repository
     /**
      * Find replies by given comment and attaches them to replies attribute.
      *
-     * @param Comment $comment
      * @return void
      */
     protected function findAndAttachCommentReplies(Comment $comment)
@@ -203,5 +193,10 @@ class CommentRepository extends Repository
     public function setInvertReplySorting($invertReplySorting)
     {
         $this->invertReplySorting = $invertReplySorting;
+    }
+
+    public function persistAll(): void
+    {
+        $this->persistenceManager->persistAll();
     }
 }

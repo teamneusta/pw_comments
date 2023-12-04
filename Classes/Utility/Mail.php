@@ -7,7 +7,9 @@ namespace T3\PwComments\Utility;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use Exception;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
@@ -32,11 +34,6 @@ class Mail
      * @var TemplateView|StandaloneView
      */
     protected $fluidTemplate;
-
-    /**
-     * @var ControllerContext
-     */
-    protected $controllerContext;
 
     /**
      * @var string comma separated string of mail addresses
@@ -84,23 +81,12 @@ class Mail
     }
 
     /**
-     * Set the controller context from controller
-     *
-     * @param ControllerContext $controllerContext
-     * @return void
-     */
-    public function setControllerContext(ControllerContext $controllerContext)
-    {
-        $this->controllerContext = $controllerContext;
-    }
-
-    /**
      * Creates and sends mail
      *
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
      * @return bool Returns TRUE if the mail has been sent successfully
-     * @throws \Exception
+     * @throws Exception
      */
     public function sendMail(Comment $comment, $hash = '')
     {
@@ -138,7 +124,7 @@ class Mail
             $mail->html($this->getMailMessage($comment, $hash));
         }
 
-        return (bool) $mail->send();
+        return $mail->send();
     }
 
     /**
@@ -148,13 +134,13 @@ class Mail
      * @param string $hash validation string to add to url if comment must be moderate
      * @return string The rendered fluid template (HTML or plain text)
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getMailMessage(Comment $comment, $hash)
     {
         $mailTemplate = GeneralUtility::getFileAbsFileName($this->getTemplatePath());
         if (!file_exists($mailTemplate)) {
-            throw new \Exception('Mail template (' . $mailTemplate . ') not found. ');
+            throw new Exception('Mail template (' . $mailTemplate . ') not found. ');
         }
 
         $this->fluidTemplate->setTemplatePathAndFilename($mailTemplate);

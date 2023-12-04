@@ -7,7 +7,10 @@ namespace T3\PwComments\Utility;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -18,17 +21,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Cookie
 {
     /** Cookie Prefix */
-    const COOKIE_PREFIX = 'tx_pwcomments_';
+    final const COOKIE_PREFIX = 'tx_pwcomments_';
     /** Lifetime of cookie in days */
-    const COOKIE_LIFETIME_DAYS = 365;
+    final const COOKIE_LIFETIME_DAYS = 365;
 
     /**
      * Get cookie value
      *
      * @param string $key
-     * @return string|null
      */
-    public function get($key)
+    public function get($key): ?string
     {
         if (isset($_COOKIE[self::COOKIE_PREFIX . $key])) {
             return $_COOKIE[self::COOKIE_PREFIX . $key];
@@ -65,20 +67,18 @@ class Cookie
      */
     protected function getCookieDomain()
     {
-        if (!defined('TYPO3_MODE')) {
-            define(TYPO3_MODE, 'FE');
-        }
+        $typo3Mode = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend() ? 'FE' : 'BE';
         $result = '';
         $cookieDomain = $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'] ?? null;
-        if (!empty($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'])) {
-            $cookieDomain = $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['cookieDomain'];
+        if (!empty($GLOBALS['TYPO3_CONF_VARS'][$typo3Mode]['cookieDomain'])) {
+            $cookieDomain = $GLOBALS['TYPO3_CONF_VARS'][$typo3Mode]['cookieDomain'];
         }
         if ($cookieDomain) {
             if ($cookieDomain[0] === '/') {
                 $match = [];
                 $matchCnt = @preg_match(
                     $cookieDomain,
-                    GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
+                    (string) GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
                     $match
                 );
                 if ($matchCnt !== false) {

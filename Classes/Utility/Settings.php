@@ -7,8 +7,12 @@ namespace T3\PwComments\Utility;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * This class provides some methods to prepare and render given
@@ -26,9 +30,13 @@ class Settings extends AbstractEncryptionUtility
      * @param bool $makeSettingsRenderable If TRUE settings are renderable
      * @return array the configuration array with the rendered typoscript
      */
-    public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false)
+    public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false, ServerRequestInterface $request = null)
     {
-        $contentObject = self::getConfigurationManagerInterface()->getContentObject();
+        /** @var ContentObjectRenderer|null $contentObject */
+        $contentObject = ($request ?? $GLOBALS['TYPO3_REQUEST'])?->getAttribute('currentContentObject');
+        if ($contentObject === null) {
+            return [];
+        }
 
         if ($makeSettingsRenderable === true) {
             $settings = self::makeConfigurationArrayRenderable($settings);
@@ -36,7 +44,7 @@ class Settings extends AbstractEncryptionUtility
         $result = [];
 
         foreach ($settings as $key => $value) {
-            if (substr($key, -1) === '.') {
+            if (str_ends_with($key, '.')) {
                 $keyWithoutDot = substr($key, 0, -1);
                 if (array_key_exists($keyWithoutDot, $settings)) {
                     $result[$keyWithoutDot] = $contentObject->cObjGetSingle(

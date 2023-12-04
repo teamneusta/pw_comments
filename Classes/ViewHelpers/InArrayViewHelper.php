@@ -1,6 +1,7 @@
 <?php
 namespace T3\PwComments\ViewHelpers;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -8,11 +9,10 @@ namespace T3\PwComments\ViewHelpers;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-
 /**
  * InArray ViewHelper
  */
-class InArrayViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class InArrayViewHelper extends AbstractViewHelper
 {
     /**
      * @return void

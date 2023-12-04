@@ -117,7 +117,7 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.linkUrlsInComments
       linkUrlsInComments = 1
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback
-      absoluteFormatFallback = %d.%m.%Y
+      absoluteFormatFallback = d.m.Y
       # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.requireAcceptedTerms
       requireAcceptedTerms = 1
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.termsTypolinkParameter

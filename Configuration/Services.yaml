@@ -1,0 +1,44 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  T3\PwComments\:
+    resource: '../Classes/*'
+
+  T3\PwComments\Hooks\ProcessDatamap:
+    public: true
+
+  qb.comment:
+    class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
+    factory:
+      - '@TYPO3\CMS\Core\Database\ConnectionPool'
+      - 'getQueryBuilderForTable'
+    arguments:
+      - 'tx_pwcomments_domain_model_comment'
+
+  qb.tt_content:
+    class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
+    factory:
+      - '@TYPO3\CMS\Core\Database\ConnectionPool'
+      - 'getQueryBuilderForTable'
+    arguments:
+      - 'tx_pwcomments_domain_model_comment'
+
+  pw_comments.extension_config:
+    class: array
+    factory:
+      - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+      - 'get'
+    arguments:
+      - 'pw_comments'
+
+  T3\PwComments\Controller\MailNotificationController:
+    arguments:
+      $queryBuilder: '@qb.comment'
+      $extConfig: '@pw_comments.extension_config'
+
+  T3\PwComments\Update\MigratePluginsUpgradeWizard:
+    arguments:
+      $queryBuilder: '@qb.tt_content'
