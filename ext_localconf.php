@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -6,32 +7,43 @@
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
 $boot = function ($extensionKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         $extensionKey,
-        'Pi1',
+        'show',
         [
-            \T3\PwComments\Controller\CommentController::class => 'index,new,create,upvote,downvote,confirmComment',
+            CommentController::class => 'index,upvote,downvote',
         ],
         [
-            \T3\PwComments\Controller\CommentController::class => 'index,new,create,upvote,downvote,confirmComment',
+            CommentController::class => 'index,upvote,downvote',
+        ]
+    );
+    ExtensionUtility::configurePlugin(
+        $extensionKey,
+        'new',
+        [
+            CommentController::class => 'new,create,confirmComment',
+        ],
+        [
+            CommentController::class => 'new,create,confirmComment',
         ]
     );
 
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    ExtensionUtility::configurePlugin(
         $extensionKey,
         'Pi2',
         [
-            \T3\PwComments\Controller\CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
+            CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ],
         [
-            \T3\PwComments\Controller\CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
+            CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ]
     );
 
@@ -41,24 +53,42 @@ $boot = function ($extensionKey) {
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'] = array_merge(
         $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'],
         [
-            'tx_pwcomments_pi1',
-            'tx_pwcomments_pi1[controller]',
-            'tx_pwcomments_pi1[action]',
-            'tx_pwcomments_pi1[comment]',
-            'tx_pwcomments_pi1[commentToReplyTo]',
-            'tx_pwcomments_pi1[hash]',
-            'tx_pwcomments_pi1[__referrer][@extension]',
-            'tx_pwcomments_pi1[__referrer][@vendor]',
-            'tx_pwcomments_pi1[__referrer][@controller]',
-            'tx_pwcomments_pi1[__referrer][@action]',
-            'tx_pwcomments_pi1[__referrer][arguments]',
-            'tx_pwcomments_pi1[__referrer][@request]',
-            'tx_pwcomments_pi1[__trustedProperties]',
-            'tx_pwcomments_pi1[newComment][authorName]',
-            'tx_pwcomments_pi1[newComment][authorMail]',
-            'tx_pwcomments_pi1[authorWebsite]',
-            'tx_pwcomments_pi1[newComment][message]',
-            'tx_pwcomments_pi1[newComment][parentComment][__identity]'
+            'tx_pwcomments_show',
+            'tx_pwcomments_show[controller]',
+            'tx_pwcomments_show[action]',
+            'tx_pwcomments_show[comment]',
+            'tx_pwcomments_show[commentToReplyTo]',
+            'tx_pwcomments_show[hash]',
+            'tx_pwcomments_show[__referrer][@extension]',
+            'tx_pwcomments_show[__referrer][@vendor]',
+            'tx_pwcomments_show[__referrer][@controller]',
+            'tx_pwcomments_show[__referrer][@action]',
+            'tx_pwcomments_show[__referrer][arguments]',
+            'tx_pwcomments_show[__referrer][@request]',
+            'tx_pwcomments_show[__trustedProperties]',
+            'tx_pwcomments_show[newComment][authorName]',
+            'tx_pwcomments_show[newComment][authorMail]',
+            'tx_pwcomments_show[authorWebsite]',
+            'tx_pwcomments_show[newComment][message]',
+            'tx_pwcomments_show[newComment][parentComment][__identity]',
+            'tx_pwcomments_new',
+            'tx_pwcomments_new[controller]',
+            'tx_pwcomments_new[action]',
+            'tx_pwcomments_new[comment]',
+            'tx_pwcomments_new[commentToReplyTo]',
+            'tx_pwcomments_new[hash]',
+            'tx_pwcomments_new[__referrer][@extension]',
+            'tx_pwcomments_new[__referrer][@vendor]',
+            'tx_pwcomments_new[__referrer][@controller]',
+            'tx_pwcomments_new[__referrer][@action]',
+            'tx_pwcomments_new[__referrer][arguments]',
+            'tx_pwcomments_new[__referrer][@request]',
+            'tx_pwcomments_new[__trustedProperties]',
+            'tx_pwcomments_new[newComment][authorName]',
+            'tx_pwcomments_new[newComment][authorMail]',
+            'tx_pwcomments_new[authorWebsite]',
+            'tx_pwcomments_new[newComment][message]',
+            'tx_pwcomments_new[newComment][parentComment][__identity]'
         ]
     );
 
