@@ -5,6 +5,7 @@
     "keywords": ["TYPO3", "extension", "comment", "voting"],
     "homepage": "https://team-neusta.de/",
     "license": "GPL-2.0+",
+    "version": "6.0.0",
     "authors": [
         {
             "name": "Armin Vieweg",
@@ -20,8 +21,8 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
-        "typo3/cms-core": "^10.4 || ^11.5"
+        "php": "^8.1",
+        "typo3/cms-core": "^12.4"
     },
     "autoload": {
         "psr-4": {
@@ -29,7 +30,7 @@
         }
     },
     "replace": {
-        "instituteweb/pw_comments": "*"
+        "t3/pw_comments": "*"
     },
     "extra": {
         "typo3/cms": {

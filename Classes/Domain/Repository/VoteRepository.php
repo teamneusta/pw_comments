@@ -7,15 +7,23 @@ namespace T3\PwComments\Domain\Repository;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for votes
  *
  * @package T3\PwComments
+ * @extends Repository<Vote>
  */
 class VoteRepository extends Repository
 {
@@ -25,12 +33,13 @@ class VoteRepository extends Repository
      * @return void
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
-        /** @var Typo3QuerySettings $querySettings */
-        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        /** @var QuerySettingsInterface $querySettings */
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
+        $this->defaultQuerySettings->setRespectStoragePage(false);
     }
 
     /**
@@ -38,17 +47,15 @@ class VoteRepository extends Repository
      *
      * @param int $pid pid to get comments for
      * @param string $authorIdent
-     * @return object|\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult found votes
+     * @return QueryResultInterface found votes
      */
-    public function findByPidAndAuthorIdent($pid, $authorIdent)
+    public function findByPidAndAuthorIdent($pid, $authorIdent): QueryResultInterface
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                [
-                    $query->equals('pid', $pid),
-                    $query->equals('authorIdent', $authorIdent)
-                ]
+                $query->equals('pid', $pid),
+                $query->equals('authorIdent', $authorIdent)
             )
         );
         return $query->execute();
@@ -57,19 +64,15 @@ class VoteRepository extends Repository
     /**
      * Find vote by given comment and authorIdent
      *
-     * @param Comment $comment
      * @param string $authorIdent
-     * @return object|\T3\PwComments\Domain\Model\Vote
      */
-    public function findOneByCommentAndAuthorIdent(Comment $comment, $authorIdent)
+    public function findOneByCommentAndAuthorIdent(Comment $comment, $authorIdent): ?object
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                [
-                    $query->equals('comment', $comment),
-                    $query->equals('authorIdent', $authorIdent)
-                ]
+                $query->equals('comment', $comment),
+                $query->equals('authorIdent', $authorIdent)
             )
         );
         return $query->execute()->getFirst();

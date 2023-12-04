@@ -1,14 +1,17 @@
 <?php
 namespace T3\PwComments\ViewHelpers\Format;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use DateTime;
+use InvalidArgumentException;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-
 /**
  * Formats a unix timestamp to a human-readable, localized string
  *
@@ -69,7 +72,7 @@ namespace T3\PwComments\ViewHelpers\Format;
  *
  * @package T3\PwComments
  */
-class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class DateViewHelper extends AbstractViewHelper
 {
 
     /**
@@ -94,21 +97,19 @@ class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
         if ($this->arguments['get']) {
             $timestamp = $this->modifyDate($timestamp, $this->arguments['get']);
         }
-        $format = preg_replace('/([a-zA-Z])/is', '%$1', $this->arguments['format']);
+        $format = preg_replace('/([a-zA-Z])/is', '%$1', (string) $this->arguments['format']);
         $format = str_replace('%%', '%', $format);
 
-        return (new \DateTime())->setTimestamp($timestamp)->format($format);
+        return (new DateTime())->setTimestamp($timestamp)->format($format);
     }
 
     /**
      * Handle all the different input formats and return a real timestamp
      *
-     * @param int|string|null|\DateTime $timestamp
-     * @return int|bool
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    protected function normalizeTimestamp($timestamp)
+    protected function normalizeTimestamp(int|string|null|DateTime $timestamp): int|bool
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -116,10 +117,10 @@ class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof \DateTime) {
+        } elseif ($timestamp instanceof DateTime) {
             $timestamp = (int) $timestamp->format('U');
         } else {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Timestamp might be an integer, a string or a DateTimeObject only.')
             );
         }
@@ -131,9 +132,8 @@ class DateViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
      *
      * @param int $timestamp
      * @param string $timeString
-     * @return int|bool
      */
-    protected function modifyDate($timestamp, $timeString)
+    protected function modifyDate($timestamp, $timeString): int|bool
     {
         return strtotime($timeString, $timestamp);
     }

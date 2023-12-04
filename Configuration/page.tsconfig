@@ -1,0 +1,19 @@
+mod.wizards.newContentElement.wizardItems.plugins.elements.pwcomments_show {
+    iconIdentifier = ext-pwcomments-ext-icon
+    title = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:showContentElementWizardTitle
+    description = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:showContentElementWizardDescription
+    tt_content_defValues {
+        CType = list
+        list_type = pwcomments_show
+    }
+}
+
+mod.wizards.newContentElement.wizardItems.plugins.elements.pwcomments_new {
+    iconIdentifier = ext-pwcomments-ext-icon
+    title = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardTitle
+    description = LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription
+    tt_content_defValues {
+        CType = list
+        list_type = pwcomments_new
+    }
+}

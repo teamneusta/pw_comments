@@ -7,11 +7,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use T3\PwComments\Controller\MailNotificationController;
 use TYPO3\CMS\Core\Exception;
-use TYPO3\CMS\Core\Http\NullResponse;
-use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Http\Stream;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Middleware frontend handler
@@ -19,17 +14,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class FrontendHandler implements MiddlewareInterface
 {
-    /**
-     * @var TypoScriptFrontendController
-     */
-    protected $typoScriptFrontendController;
-
-    /**
-     * @param TypoScriptFrontendController $typoScriptFrontendController
-     */
-    public function __construct(TypoScriptFrontendController $typoScriptFrontendController = null)
+    public function __construct(private readonly MailNotificationController $notificationController)
     {
-        $this->typoScriptFrontendController = $typoScriptFrontendController ?? $GLOBALS['TSFE'];
     }
 
     /**
@@ -45,20 +31,13 @@ class FrontendHandler implements MiddlewareInterface
     {
         $queryParams = $request->getQueryParams();
         $params = $queryParams['tx_pwcomments'] ?? [];
-        if (!empty($params) && isset($params['action'])) {
-            if ($params['action'] === 'sendAuthorMailWhenCommentHasBeenApproved') {
-                /** @var MailNotificationController $mailNotification */
-                $mailNotification = GeneralUtility::makeInstance(MailNotificationController::class);
-                $nullResponse = new NullResponse();
-                /** @var ResponseInterface $mailSendResponse */
-                $mailSendResponse = $mailNotification->sendMail($request, $nullResponse);
-                $statusCode = $mailSendResponse->getStatusCode();
-                $response = new Response();
-                $response->withStatus($statusCode);
-                $response->getBody()->write((string)$statusCode);
-                return $response;
-            }
+        if (!empty($params) && isset($params['action']) && $params['action'] === 'sendAuthorMailWhenCommentHasBeenApproved') {
+            $mailSendResponse = $this->notificationController->sendMail($request);
+            $mailSendResponse->getBody()->write((string)$mailSendResponse->getStatusCode());
+
+            return $mailSendResponse;
         }
+
         return $handler->handle($request);
     }
 }

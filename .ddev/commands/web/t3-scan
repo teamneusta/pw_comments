@@ -1,0 +1,12 @@
+#!/bin/bash
+
+VERSION=v12
+
+echo "change to $VERSION"
+cd /var/www/html/$VERSION || exit
+
+echo "ensuring log directory exists"
+mkdir -p /var/www/pw_comments/log
+
+echo "running typo3scan"
+./vendor/bin/typo3scan scan --target 12 /var/www/pw_comments --format html --reportFile /var/www/pw_comments/log/typo3scan.html

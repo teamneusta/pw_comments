@@ -1,6 +1,7 @@
 <?php
 namespace T3\PwComments\ViewHelpers;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -8,7 +9,6 @@ namespace T3\PwComments\ViewHelpers;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-
 /**
  * Gravatar Viewhelper
  *
@@ -37,7 +37,7 @@ namespace T3\PwComments\ViewHelpers;
  *
  * @package T3\PwComments
  */
-class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+class GravatarViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -49,7 +49,7 @@ class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBa
      *
      * @var string
      */
-    const GRAVATARURI = 'https://www.gravatar.com/avatar/';
+    final const GRAVATARURI = 'https://www.gravatar.com/avatar/';
 
     /**
      * Initialize arguments
@@ -75,7 +75,7 @@ class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBa
     public function render()
     {
         $uriParts = [
-            md5(strtolower(trim($this->arguments['email']))),
+            md5(strtolower(trim((string) $this->arguments['email']))),
             '?s=' . $this->arguments['size'],
             '&d=' . $this->arguments['default']
         ];
@@ -93,7 +93,6 @@ class GravatarViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBa
     /**
      * Returns the full garvatar uri
      *
-     * @param array $uriParts
      * @return string full uri of garvatar with uri params
      */
     protected function getGravatarSrc(array $uriParts)

@@ -8,20 +8,19 @@ namespace T3\PwComments\Domain\Model;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  */
-
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Vote model (for comments)
  *
  * @package T3\PwComments
  */
-class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Vote extends AbstractEntity
 {
     /** Constant for upvote */
-    const TYPE_UPVOTE = 1;
+    final const TYPE_UPVOTE = 1;
     /** Constant for downvote */
-    const TYPE_DOWNVOTE = 0;
+    final const TYPE_DOWNVOTE = 0;
 
     /**
      * @var int uid of the page for what the comment is for
@@ -41,7 +40,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var FrontendUser
      */
-    protected $author = null;
+    protected $author;
 
     /**
      * @var string
@@ -49,7 +48,7 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $authorIdent;
 
     /**
-     * @var \T3\PwComments\Domain\Model\Comment
+     * @var Comment
      */
     protected $comment;
 
@@ -129,7 +128,6 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set author (fe_user)
      *
-     * @param FrontendUser $author
      * @return void
      */
     public function setAuthor(FrontendUser $author)
@@ -180,10 +178,8 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * Get related comment
-     *
-     * @return \T3\PwComments\Domain\Model\Comment|null
      */
-    public function getComment()
+    public function getComment(): ?Comment
     {
         return $this->comment;
     }
@@ -191,10 +187,9 @@ class Vote extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Set related comment
      *
-     * @param \T3\PwComments\Domain\Model\Comment $comment
      * @return void
      */
-    public function setComment(\T3\PwComments\Domain\Model\Comment $comment)
+    public function setComment(Comment $comment)
     {
         $this->comment = $comment;
     }

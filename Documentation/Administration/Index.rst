@@ -17,7 +17,7 @@ How to get pw_comments
 ----------------------
 There are two ways to get pw_comments. You can visit the TER at
 https://extensions.typo3.org/extension/pw_comments and download pw_comments there or you can use
-Composer to check out the latest version (https://packagist.org/packages/t3/pw_comments).
+Composer to check out the latest version (https://packagist.org/packages/teamneusta/pw_comments).
 
 Installation
 ------------

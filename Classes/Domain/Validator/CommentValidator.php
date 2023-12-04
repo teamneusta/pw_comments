@@ -7,7 +7,9 @@ namespace T3\PwComments\Domain\Validator;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -31,9 +33,8 @@ class CommentValidator extends AbstractValidator
      * Initial function to validate
      *
      * @param Comment $comment Comment model to validate
-     * @return bool
      */
-    public function isValid($comment)
+    public function isValid(mixed $comment): void
     {
         $this->settings = Settings::getRenderedExtensionSettings();
 
@@ -63,14 +64,13 @@ class CommentValidator extends AbstractValidator
         }
 
         if ($errorNumber !== null) {
-            $errorMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+            $errorMessage = LocalizationUtility::translate(
                 'tx_pwcomments.validation_error.' . $errorNumber,
                 'PwComments',
                 $errorArguments
             );
             $this->addError($errorMessage, $errorNumber);
         }
-        return $errorNumber === null;
     }
 
     /**
@@ -105,7 +105,7 @@ class CommentValidator extends AbstractValidator
      */
     protected function messageIsSet(Comment $comment)
     {
-        return !empty(trim($comment->getMessage()));
+        return !empty(trim((string) $comment->getMessage()));
     }
 
     /**
@@ -119,7 +119,8 @@ class CommentValidator extends AbstractValidator
             return true;
         }
         $difference = time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment');
-        return $difference > (int) $this->settings['secondsBetweenTwoComments'];
+
+        return $difference > (int)($this->settings['secondsBetweenTwoComments'] ?? 300);
     }
 
     /**
@@ -138,10 +139,10 @@ class CommentValidator extends AbstractValidator
 
         $badWordsRegExp = '';
         foreach (file($badWordsListPath) as $badWord) {
-            $badWordsRegExp .= trim($badWord) . '|';
+            $badWordsRegExp .= trim((string) $badWord) . '|';
         }
         $badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
         $commentMessage = '-> ' . $textToCheck . ' <-';
-        return (bool) !preg_match($badWordsRegExp, $commentMessage);
+        return !preg_match($badWordsRegExp, $commentMessage);
     }
 }

@@ -7,10 +7,22 @@ namespace T3\PwComments\Controller;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use T3\PwComments\Domain\Validator\CommentValidator;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use RuntimeException;
+use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\FrontendUser;
 use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Domain\Repository\CommentRepository;
+use T3\PwComments\Domain\Repository\FrontendUserRepository;
 use T3\PwComments\Domain\Repository\VoteRepository;
 use T3\PwComments\Utility\Cookie;
 use T3\PwComments\Utility\HashEncryptionUtility;
@@ -19,8 +31,6 @@ use T3\PwComments\Utility\Settings;
 use T3\PwComments\Utility\StringUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -32,7 +42,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *
  * @package T3\PwComments
  */
-class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class CommentController extends ActionController
 {
     /**
      * @var int
@@ -53,11 +63,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var string|null
      */
     protected $currentAuthorIdent;
-
-    /**
-     * @var Settings
-     */
-    protected $settingsUtility;
 
     /**
      * @var Mail
@@ -88,12 +93,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var int
      */
     protected $commentStorageUid;
-
-
-    public function injectSettingsUtility(Settings $settingsUtility): void
-    {
-        $this->settingsUtility = $settingsUtility;
-    }
 
     public function injectMailUtility(Mail $mailUtility): void
     {
@@ -126,27 +125,25 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @return void
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         if (!is_array($this->settings)) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
                 1501862644
             );
         }
-        if ($this->settingsUtility === null) {
-            $this->settingsUtility = GeneralUtility::makeInstance(Settings::class);
-        }
-        $this->settings = $this->settingsUtility->renderConfigurationArray(
-            $this->settings,
-            !isset($this->settings['_skipMakingSettingsRenderable']) || !$this->settings['_skipMakingSettingsRenderable']
+        $this->settings = Settings::renderConfigurationArray(
+            settings: $this->settings,
+            request: $this->request,
+            makeSettingsRenderable: !isset($this->settings['_skipMakingSettingsRenderable']) || !$this->settings['_skipMakingSettingsRenderable']
         );
         if ($this->mailUtility === null) {
             $this->mailUtility = GeneralUtility::makeInstance(Mail::class);
         }
         $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $GLOBALS['TSFE']->id;
-        $this->commentStorageUid = is_numeric($this->settings['storagePid'])
+        $this->commentStorageUid = is_numeric($this->settings['storagePid'] ?? null)
             ? $this->settings['storagePid']
             : $this->pageUid;
         $this->currentUser = isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user : [];
@@ -166,12 +163,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Displays all comments by pid
      *
-     * @param Comment $commentToReplyTo
      * @return void
-     *
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("commentToReplyTo")
      */
-    public function indexAction(Comment $commentToReplyTo = null)
+    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
+    public function indexAction(Comment $commentToReplyTo = null): ResponseInterface
     {
         if (isset($this->settings['invertCommentSorting']) && $this->settings['invertCommentSorting']) {
             $this->commentRepository->setInvertCommentSorting(true);
@@ -214,16 +209,15 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign('comments', $comments);
         $this->view->assign('commentCount', $this->calculateCommentCount($comments));
         $this->view->assign('commentToReplyTo', $commentToReplyTo);
+
+        return $this->htmlResponse();
     }
 
     /**
      * Create action
-     *
-     * @param Comment $newComment
-     * @return bool
-     * @TYPO3\CMS\Extbase\Annotation\Validate("T3\PwComments\Domain\Validator\CommentValidator", param="newComment")
      */
-    public function createAction(Comment $newComment = null)
+    #[Validate(['validator' => CommentValidator::class, 'param' => 'newComment'])]
+    public function createAction(Comment $newComment = null): ResponseInterface
     {
         // Hidden field Spam-Protection
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
@@ -278,11 +272,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         $this->commentRepository->add($newComment);
-        $this->getPersistenceManager()->persistAll();
+        $this->commentRepository->persistAll();
 
         if (isset($this->settings['sendMailOnNewCommentsTo']) && $this->settings['sendMailOnNewCommentsTo']) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
-            $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
             $this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
@@ -293,7 +286,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $newComment->hasCommentAuthorMailAddress()
         ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
-            $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
             $this->mailUtility->sendMail($newComment);
@@ -305,8 +297,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
         }
 
-        $this->redirectToUri($this->buildUriByUid($this->pageUid, true) . $anchor);
-        return false;
+        return $this->redirectToUri($this->buildUriByUid($this->pageUid, true) . $anchor);
     }
 
     /**
@@ -315,11 +306,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Comment $newComment New Comment
      * @param Comment $commentToReplyTo Comment to reply to
      * @return void
-     *
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("newComment")
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("commentToReplyTo")
      */
-    public function newAction(Comment $newComment = null, Comment $commentToReplyTo = null)
+    #[IgnoreValidation(['value' => 'newComment'])]
+    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
+    public function newAction(Comment $newComment = null, Comment $commentToReplyTo = null): ResponseInterface
     {
         if ($newComment !== null) {
             $this->view->assign('newComment', $newComment);
@@ -342,34 +332,30 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $this->view->assign('unregistredUserName', $unregistredUserName);
         $this->view->assign('unregistredUserMail', $unregistredUserMail);
+
+        return $this->htmlResponse();
     }
 
     /**
      * Upvote action
      *
-     * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
-     *
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
      */
-    public function upvoteAction(Comment $comment)
+    #[IgnoreValidation(['value' => 'comment'])]
+    public function upvoteAction(Comment $comment): ResponseInterface
     {
-        $this->performVoting($comment, Vote::TYPE_UPVOTE);
-        return '';
+        return $this->performVoting($comment, Vote::TYPE_UPVOTE);
     }
 
     /**
      * Downvote action
      *
-     * @param Comment $comment
      * @return string Empty string. This action will perform a redirect
-     *
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
      */
-    public function downvoteAction(Comment $comment)
+    #[IgnoreValidation(['value' => 'comment'])]
+    public function downvoteAction(Comment $comment): ResponseInterface
     {
-        $this->performVoting($comment, Vote::TYPE_DOWNVOTE);
-        return '';
+        return $this->performVoting($comment, Vote::TYPE_DOWNVOTE);
     }
 
     /**
@@ -377,46 +363,44 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param int $comment uid of the comment
      * @param string $hash hash to confirm
-     * @return void
      */
-    public function confirmCommentAction($comment, $hash)
+    public function confirmCommentAction($comment, $hash): ResponseInterface
     {
-        $comment = $this->commentRepository->findByCommentUid($comment);
-        if (!$comment || !HashEncryptionUtility::validCommentHash($hash, $comment) || !$comment->getHidden()) {
+        $resolvedComment = $this->commentRepository->findByCommentUid($comment);
+        if (!$resolvedComment || !HashEncryptionUtility::validCommentHash($hash, $resolvedComment) || !$resolvedComment->getHidden()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('noCommentAvailable', 'PwComments'),
                 '',
-                FlashMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
-            $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
-            return;
+            return $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
         }
 
-        $comment->setHidden(false);
-        $this->commentRepository->update($comment);
-        $this->getPersistenceManager()->persistAll();
+        $resolvedComment->setHidden(false);
+        $this->commentRepository->update($resolvedComment);
+        $this->commentRepository->persistAll();
 
         if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
             isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
-            $this->mailUtility->setControllerContext($this->controllerContext);
-            $this->mailUtility->setReceivers($comment->getAuthorMail());
+            $this->mailUtility->setReceivers($resolvedComment->getAuthorMail());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
-            $this->mailUtility->sendMail($comment);
+            $this->mailUtility->sendMail($resolvedComment);
             $this->addFlashMessage(
                 LocalizationUtility::translate(
                     'mailSentToAuthorAfterPublish',
                     'PwComments',
-                    [$comment->getAuthorMail()]
+                    [$resolvedComment->getAuthorMail()]
                 )
             );
         }
 
         $this->addFlashMessage(LocalizationUtility::translate('commentPublished', 'PwComments'));
-        $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
+
+        return $this->redirectToUri($this->buildUriByUid($this->pageUid, true));
     }
 
     /**
@@ -424,14 +408,19 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param Comment $comment
      * @param int $type Check out Tx_PwComments_Domain_Model_Vote constants
-     * @return void
+     *
      */
-    protected function performVoting(Comment $comment, $type)
+    /**
+     * Perform database operations for voting
+     *
+     * @param int $type Check out Tx_PwComments_Domain_Model_Vote constants
+     * @return ResponseInterface
+     */
+    protected function performVoting(Comment $comment, $type): ResponseInterface
     {
         $commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
         if (!$this->settings['enableVoting']) {
-            $this->forward('index');
-            return;
+            return new ForwardResponse('index');
         }
 
         $this->createAuthorIdent();
@@ -442,10 +431,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $this->currentAuthorIdent === $comment->getAuthorIdent()
             ) {
                 // TODO: use flash messages here?
-                $this->redirectToUri(
+                return $this->redirectToUri(
                     $this->buildUriByUid($this->pageUid, true, ['doNotVoteForYourself' => 1]) . $commentAnchor
                 );
-                return;
             }
             $vote = $this->voteRepository->findOneByCommentAndAuthorIdent($comment, $this->currentAuthorIdent);
         }
@@ -458,15 +446,14 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->commentRepository->update($comment);
             $this->voteRepository->remove($vote);
             if ($type !== $vote->getType()) {
-                $this->getPersistenceManager()->persistAll();
+                $this->commentRepository->persistAll();
                 $this->performVoting($comment, $type);
             }
         }
 
-        $this->getPersistenceManager()->persistAll();
+        $this->commentRepository->persistAll();
 
-        $this->forward('index');
-        return;
+        return new ForwardResponse('index');
     }
 
 
@@ -474,7 +461,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * Creates new vote instance
      *
      * @param int $type See Tx_PwComments_Domain_Model_Vote constants
-     * @param Comment $comment
      * @return Vote
      */
     protected function createNewVote($type, Comment $comment)
@@ -491,6 +477,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $newVote->setAuthor($author);
         }
         $newVote->setType($type);
+
         return $newVote;
     }
 
@@ -502,7 +489,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function createAuthorIdent()
     {
         if ($this->currentAuthorIdent === null) {
-            $this->currentAuthorIdent = uniqid() . uniqid();
+            $this->currentAuthorIdent = uniqid(more_entropy: true) . uniqid(more_entropy: true);
             $this->cookieUtility->set('ahash', $this->currentAuthorIdent);
         }
     }
@@ -510,9 +497,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Sends mail to comment author whe comment has been approved (and published)
      *
-     * @return void
+     * @return ResponseInterface
      */
-    public function sendAuthorMailWhenCommentHasBeenApprovedAction()
+    public function sendAuthorMailWhenCommentHasBeenApprovedAction(): ResponseInterface
     {
         /** @var Comment $comment */
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
@@ -521,7 +508,6 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $this->mailUtility->setFluidTemplate($this->makeFluidTemplateObject());
-            $this->mailUtility->setControllerContext($this->controllerContext);
             $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
@@ -536,7 +522,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             );
         }
 
-        return '';
+        return $this->htmlResponse('');
     }
 
     /**
@@ -551,7 +537,7 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $uid,
         $excludeCommentRelatedParameter = false,
         array $arguments = []
-    ) {
+    ): string {
         $excludeFromQueryString = [
             'tx_pwcomments_pi1[action]',
             'tx_pwcomments_pi1[controller]',
@@ -571,40 +557,15 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
                 ->setArguments($arguments)
                 ->build();
-        $uri = $this->addBaseUriIfNecessary($uri);
-        return $uri;
-    }
 
-    /**
-     * Builds uri by uid and arguments
-     *
-     * @param int $uid
-     * @param array $arguments
-     * @return string
-     */
-    protected function buildUriToPage($uid, array $arguments = [])
-    {
-        $uri = $this->uriBuilder
-                ->setTargetPageUid($uid)
-                ->setArguments($arguments)
-                ->build();
         return $this->addBaseUriIfNecessary($uri);
     }
 
-    /**
-     * Makes and returns a fluid template object
-     *
-     * @return \TYPO3\CMS\Fluid\View\StandaloneView the fluid template object
-     */
-    protected function makeFluidTemplateObject()
+    protected function makeFluidTemplateObject(): StandaloneView
     {
-        /** @var StandaloneView $fluidTemplate  */
         $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
-
-        // Set controller context
-        $controllerContext = $this->buildControllerContext();
-        $controllerContext->setRequest($this->request);
-        $fluidTemplate->setControllerContext($controllerContext);
+        $fluidTemplate->setRequest($this->request);
+        $fluidTemplate->setPartialRootPaths($this->view->getPartialRootPaths());
 
         return $fluidTemplate;
     }
@@ -612,10 +573,9 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Returns count of comments and/or comments and replies.
      *
-     * @param QueryResult $comments
      * @return int
      */
-    protected function calculateCommentCount(QueryResult $comments)
+    protected function calculateCommentCount(QueryResult $comments): int
     {
         $replyAmount = 0;
         if (isset($this->settings['countReplies']) && $this->settings['countReplies']) {
@@ -624,15 +584,11 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $replyAmount += count($comment->getReplies());
             }
         }
+
         return count($comments) + $replyAmount;
     }
 
-    /**
-     * Adds flash messages based on predefined get parameters
-     *
-     * @return void
-     */
-    protected function handleCustomMessages()
+    protected function handleCustomMessages(): void
     {
         if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments'] && GeneralUtility::_GP('doNotVoteForYourself') == 1) {
             $this->addFlashMessage(
@@ -650,21 +606,10 @@ class CommentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * Don't show Error Message because of own genereated error Messages
      *
-     * @return bool|string The flash message or FALSE if no flash message should be set
+     * @return false The flash message or FALSE if no flash message should be set
      */
-    protected function getErrorFlashMessage()
+    protected function getErrorFlashMessage(): bool
     {
         return false;
-    }
-
-    /**
-     * Get PersistenceManager
-     *
-     * @return PersistenceManager
-     */
-    protected function getPersistenceManager()
-    {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        return $objectManager->get(PersistenceManager::class);
     }
 }

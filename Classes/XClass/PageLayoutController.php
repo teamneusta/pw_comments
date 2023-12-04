@@ -6,6 +6,7 @@ namespace T3\PwComments\XClass;
  *  |
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  */
+use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
 use T3\PwComments\Utility\DatabaseUtility;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -30,7 +31,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
      */
     protected function getHeaderFlashMessagesForCurrentPid(): string
     {
-        $content = parent::getHeaderFlashMessagesForCurrentPid();
+        $content = null;
 
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -40,8 +41,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $total = $queryBuilder
             ->count('uid')
             ->from('tx_pwcomments_domain_model_comment')
-            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])
-            ->execute()
+            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])->executeQuery()
             ->fetchColumn();
 
 
@@ -53,8 +53,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $released = $queryBuilder
             ->count('uid')
             ->from('tx_pwcomments_domain_model_comment')
-            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])
-            ->execute()
+            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])->executeQuery()
             ->fetchColumn();
 
         $unreleased = $total - $released;
@@ -89,17 +88,15 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,
-            'state' => \TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper::STATE_NOTICE
+            'state' => InfoboxViewHelper::STATE_NOTICE
         ]);
-        $content .= $view->render();
-        return $content;
+        return $content . $view->render();
     }
 
     /**
      * Resolves given label to locallang.xlf of pw_comments
      *
      * @param string $label of translation
-     * @param array $arguments
      * @return string Resolved translation
      */
     private function translate($label, array $arguments = [])

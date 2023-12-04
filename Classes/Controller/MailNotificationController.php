@@ -5,18 +5,22 @@ namespace T3\PwComments\Controller;
  *  | under GNU General Public License.
  *  |
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+
+use InvalidArgumentException;
+use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use T3\PwComments\Utility\HashEncryptionUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Error\Http\ServiceUnavailableException;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Core\Bootstrap;
-use TYPO3\CMS\Extbase\Mvc\Web\FrontendRequestHandler;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -24,19 +28,26 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class MailNotificationController
 {
+    private ServerRequestInterface $request;
+
+    public function __construct(
+        private readonly QueryBuilder $queryBuilder,
+        private readonly TypoScriptService $typoScriptService,
+        private readonly array $extConfig,
+    ) {
+    }
 
     /**
      * Send mail
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      * @return ResponseInterface
-     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
-     * @throws \TYPO3\CMS\Core\Exception
+     * @throws ServiceUnavailableException
+     * @throws Exception
      */
-    public function sendMail(ServerRequestInterface $request, ResponseInterface $response)
+    public function sendMail(ServerRequestInterface $request): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
+        $this->request = $request;
+        $queryParams = $this->request->getQueryParams();
         $params = $queryParams['tx_pwcomments'] ?? [];
         $action = $params['action'];
         $hash = $params['hash'];
@@ -44,28 +55,23 @@ class MailNotificationController
         $pid = (int) $params['pid'];
 
         if (!$action || !$uid || !$pid || !$hash) {
-            throw new \InvalidArgumentException('Invalid arguments given.');
+            throw new InvalidArgumentException('Invalid arguments given.');
         }
 
         // Get comment row
-        /** @var ConnectionPool $pool */
-        $pool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $pool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
-        $queryBuilder->getRestrictions()->removeAll();
-        $row = $queryBuilder
+        $this->queryBuilder->getRestrictions()->removeAll();
+        $row = $this->queryBuilder
             ->select('*')
-            ->from('tx_pwcomments_domain_model_comment')
-            ->where($queryBuilder->expr()->eq(
-                'uid',
-                $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
-            ))
-            ->execute()->fetch(\PDO::FETCH_ASSOC);
+            ->from('tx_pwcomments_domain_model_comment')->where($this->queryBuilder->expr()->eq(
+            'uid',
+            $this->queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
+        ))->executeQuery()->fetchAssociative();
 
 
         // Check hash
         $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
         if (!$valid) {
-            throw new \RuntimeException('Given hash not valid!');
+            throw new RuntimeException('Given hash not valid!');
         }
         // Send mail and respond
         if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {
@@ -75,12 +81,12 @@ class MailNotificationController
                 'sendAuthorMailWhenCommentHasBeenApproved',
                 'Pi2',
                 ['_commentUid' => $uid, '_skipMakingSettingsRenderable' => true],
-                $pid
             );
             $statusCode = 200; // OK
         } else {
             $statusCode = 400; // Bad request
         }
+
         return (new Response())->withStatus($statusCode);
     }
 
@@ -93,55 +99,44 @@ class MailNotificationController
      * @param string $action Optional name of action, in lowerCamelCase
      * @param string $pluginName Optional name of plugin. Default is 'Pi1'
      * @param array $settings Optional array of settings to use in controller
-     * @param int $pid Uid of current page
      * @param string $vendorName VendorName
      * @return string output of controller's action
-     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
-     * @throws \TYPO3\CMS\Core\Exception
+     * @throws ServiceUnavailableException
+     * @throws Exception
      */
     protected function runExtbaseController(
         $extensionName,
         $controller,
         $action = 'index',
-        $pluginName = 'Pi1',
+        $pluginName = 'show',
         $settings = [],
-        $pid = 0,
         $vendorName = 'T3'
     ) {
-        /** @var TypoScriptService $typoScriptService */
-        $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-
         // Get plugin setup
-        $typoScriptSetup = $this->getTypoScriptSetup($pid);
+        $typoScriptSetup = $this->getTypoScriptSetup();
         $plugin = $typoScriptSetup['plugin.']['tx_pwcomments.'];
 
         // Get plugin setup: settings
-        $pluginSetupSettings = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['settings.']);
-        $extensionConfig = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
-        )->get('pw_comments');
-        if (is_array($extensionConfig)) {
-            $settings = array_merge($settings, $extensionConfig);
+        $pluginSetupSettings = $this->typoScriptService->convertTypoScriptArrayToPlainArray($plugin['settings.']);
+        if (is_array($this->extConfig)) {
+            $settings = array_merge($settings, $this->extConfig);
         }
         $pluginSetupSettings = array_merge($settings, $pluginSetupSettings);
 
         // Get plugin setup: persistence
-        $pluginSetupPersistence = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['persistence.'] ?? []);
+        $pluginSetupPersistence = $this->typoScriptService->convertTypoScriptArrayToPlainArray($plugin['persistence.'] ?? []);
 
         // Get plugin setup: _LOCAL_LANG
         $pluginSetupLocalLang = [];
         if (isset($plugin['_LOCAL_LANG.']) && is_array($plugin['_LOCAL_LANG.'])) {
-            $pluginSetupLocalLang = $typoScriptService->convertTypoScriptArrayToPlainArray($plugin['_LOCAL_LANG.']);
+            $pluginSetupLocalLang = $this->typoScriptService->convertTypoScriptArrayToPlainArray($plugin['_LOCAL_LANG.']);
         }
 
         // Run bootstrap with configuration
         /** @var Bootstrap $bootstrap */
         $bootstrap = GeneralUtility::makeInstance(Bootstrap::class);
-        if (!method_exists($bootstrap, 'setContentObjectRenderer')) {
-            $bootstrap->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        } else {
-            $bootstrap->setContentObjectRenderer(GeneralUtility::makeInstance(ContentObjectRenderer::class));
-        }
+        $bootstrap->setContentObjectRenderer(GeneralUtility::makeInstance(ContentObjectRenderer::class));
+
         $configuration = [
             'pluginName' => $pluginName,
             'extensionName' => $extensionName,
@@ -149,46 +144,22 @@ class MailNotificationController
             'vendorName' => $vendorName,
             'controllerConfiguration' => [$controller],
             'action' => $action,
-            'mvc' => [
-                'requestHandlers' => [
-                    FrontendRequestHandler::class => FrontendRequestHandler::class
-                ]
-            ],
             'settings' => $pluginSetupSettings,
             'persistence' => $pluginSetupPersistence,
             '_LOCAL_LANG' => $pluginSetupLocalLang
         ];
 
-        return $bootstrap->run('', $configuration);
+        return $bootstrap->run('', $configuration, $this->request);
     }
 
     /**
      * Returns TypoScript Setup array from a given page id
      * Adoption of same method in BackendConfigurationManager
      *
-     * @param int|null $pageId
      * @return array the raw TypoScript setup
      */
-    protected function getTypoScriptSetup($pageId): array
+    protected function getTypoScriptSetup(): array
     {
-        /** @var TemplateService $template */
-        $template = GeneralUtility::makeInstance(TemplateService::class);
-        // do not log time-performance information
-        $template->tt_track = false;
-        // Explicitly trigger processing of extension static files
-        $template->setProcessExtensionStatics(true);
-        // Get the root line
-        $rootline = [];
-        if ($pageId > 0) {
-            try {
-                $rootline = GeneralUtility::makeInstance(RootlineUtility::class, $pageId)->get();
-            } catch (\RuntimeException $e) {
-                $rootline = [];
-            }
-        }
-        // This generates the constants/config + hierarchy info for the template.
-        $template->runThroughTemplates($rootline, 0);
-        $template->generateConfig();
-        return $template->setup;
+        return $this->request->getAttribute('frontend.typoscript')->getSetupArray();
     }
 }

@@ -113,9 +113,9 @@ lib.pwCommentsIndex {
 	userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
 	extensionName = PwComments
 	vendorName = T3
-	pluginName = Pi1
+	pluginName = show
 
-	switchableControllerActions {
+	controllerActions {
 		Comment {
 			1 = index
 			2 = upvote
@@ -131,7 +131,7 @@ lib.pwCommentsIndex {
 # Lib for form to post new comments
 lib.pwCommentsNew < lib.pwCommentsIndex
 lib.pwCommentsNew {
-	switchableControllerActions {
+	controllerActions {
 		Comment {
 			1 = new
 			2 = create

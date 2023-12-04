@@ -14,8 +14,9 @@ You can see a rendered version on https://docs.typo3.org/p/t3/pw_comments/main/e
 ## Links
 
 - [Git Repository](https://github.com/teamneusta/pw_comments)
-- [Issue tracker](https://github.com/teamaneusta/pw_comments/issues)
+- [Issue tracker](https://github.com/teamneusta/pw_comments/issues)
 - [Read documentation online](https://docs.typo3.org/p/t3/pw_comments/main/en-us/)
 - [EXT:pw_comments in TER](https://extensions.typo3.org/extension/pw_comments)
-- [EXT:pw_comments on Packagist](https://packagist.org/packages/t3/pw_comments)
+- [EXT:pw_comments on Packagist](https://packagist.org/packages/teamneusta/pw_comments)
 - [The author](https://v.ieweg.de)
+- [The maintainers](https://github.com/teamneusta)
