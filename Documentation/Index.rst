@@ -27,10 +27,10 @@ PwComments
       comments
 
    :Copyright:
-      2011-2022
+      2011-2023
 
    :Author:
-      Armin Vieweg
+      Armin Vieweg, Malek Olabi
 
    :License:
       This document is published under the Open Content License
