@@ -119,7 +119,8 @@ class CommentValidator extends AbstractValidator
             return true;
         }
         $difference = time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment');
-        return $difference > (int) $this->settings['secondsBetweenTwoComments'];
+
+        return $difference > (int)($this->settings['secondsBetweenTwoComments'] ?? 300);
     }
 
     /**

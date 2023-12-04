@@ -565,6 +565,7 @@ class CommentController extends ActionController
     {
         $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
         $fluidTemplate->setRequest($this->request);
+        $fluidTemplate->setPartialRootPaths($this->view->getPartialRootPaths());
 
         return $fluidTemplate;
     }
