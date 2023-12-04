@@ -1,0 +1,3 @@
+page.includeCSS {
+    pwCommentDefaultStyles = EXT:pw_comments/Resources/Public/CSS/default.css
+}
