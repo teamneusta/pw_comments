@@ -106,13 +106,4 @@ if (!defined('TYPO3')) {
     // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
         ProcessDatamap::class;
-
-    $extensionConfig = GeneralUtility::makeInstance(
-        ExtensionConfiguration::class
-    )->get('pw_comments');
-    if (!isset($extensionConfig['pageModuleNotice']) || $extensionConfig['pageModuleNotice'] !== '0') {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][PageLayoutController::class] = [
-            'className' => \T3\PwComments\XClass\PageLayoutController::class,
-        ];
-    }
 })('pw_comments');
