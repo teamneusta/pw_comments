@@ -1,13 +1,20 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace T3\PwComments\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use function implode;
+use function md5;
+use function strtolower;
+use function trim;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 /**
  * Gravatar Viewhelper
@@ -51,12 +58,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      */
     final const GRAVATARURI = 'https://www.gravatar.com/avatar/';
 
-    /**
-     * Initialize arguments
-     *
-     * @return void
-     */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
@@ -72,7 +74,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string html image tag with the gravatar image uri
      */
-    public function render()
+    public function render(): string
     {
         $uriParts = [
             md5(strtolower(trim((string) $this->arguments['email']))),
@@ -95,7 +97,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string full uri of garvatar with uri params
      */
-    protected function getGravatarSrc(array $uriParts)
+    private function getGravatarSrc(array $uriParts): string
     {
         return self::GRAVATARURI . implode('', $uriParts);
     }

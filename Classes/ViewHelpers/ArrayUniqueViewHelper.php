@@ -8,11 +8,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
- */
-/**
- * ArrayUnique ViewHelper
- *
- * @package T3\PwComments
+ *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 class ArrayUniqueViewHelper extends AbstractViewHelper
 {
@@ -28,6 +24,7 @@ class ArrayUniqueViewHelper extends AbstractViewHelper
         if ($subject === null) {
             $subject = $this->renderChildren();
         }
+
         return array_unique($subject);
     }
 
