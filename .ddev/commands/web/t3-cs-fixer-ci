@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## Description: Runs php-cs-fixer on the current version in diff mode only
+## Usage: t3-cs-fixer-ci [VERSION]
+## Example: ddev t3-cs-fixer-ci 12
+
+VERSION="v${1:-12}"
+
+echo "change to $VERSION"
+cd /var/www/html/$VERSION || exit
+
+echo "running php-cs-fixer"
+./vendor/bin/php-cs-fixer fix --config=./vendor/teamneusta/pw_comments/Build/.php-cs-fixer.php --diff
