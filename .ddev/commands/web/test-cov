@@ -1,0 +1,16 @@
+#!/bin/bash
+
+## Description: Runs unit tests with coverage report on the current version
+## Usage: test-cov
+## Example: ddev test-cov
+
+VERSION="v${1:-12}"
+
+echo "change to $VERSION"
+cd /var/www/html/$VERSION || exit
+
+echo "enabling xdebug"
+enable_xdebug
+
+echo "running unit tests with coverage"
+php -dxdebug.mode=coverage vendor/bin/phpunit -c ./vendor/teamneusta/pw_comments/Build/phpunit.xml ./vendor/teamneusta/pw_comments/Tests --coverage-text --coverage-html ./vendor/teamneusta/pw_comments/log/coverage

@@ -23,6 +23,10 @@ services:
               source: ../
               target: /var/www/pw_comments
               consistency: cached
+            - type: bind
+              source: ../vendor
+              target: /var/www/html/v12/vendor
+              consistency: cached
             - v12-data:/var/www/html/v12
 volumes:
     v12-data:

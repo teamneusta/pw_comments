@@ -29,6 +29,11 @@
             "T3\\PwComments\\": "Classes"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "T3\\PwComments\\Tests\\": "Tests"
+        }
+    },
     "replace": {
         "t3/pw_comments": "*"
     },

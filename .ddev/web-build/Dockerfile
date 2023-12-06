@@ -4,6 +4,8 @@ FROM $BASE_IMAGE
 ENV EXTENSION_KEY "pw_comments"
 ENV DDEV_SITENAME "pw-comments"
 
+RUN enable_xdebug
+
 RUN echo "<html><head><style>h2 {display:inline-block;margin-right:0.5em;vertical-align:middle;}</style></head>" > /var/www/html/index.html
 RUN echo "<body><h1>EXT:${EXTENSION_KEY} Dev Environments</h1><ul>" >> /var/www/html/index.html
 RUN echo "<li><h2>TYPO3 12.x</h2><a href="https://v12.${DDEV_SITENAME}.ddev.site/">Frontend</a> | <a href="https://v12.${DDEV_SITENAME}.ddev.site/typo3/">Backend</a></li>" >> /var/www/html/index.html

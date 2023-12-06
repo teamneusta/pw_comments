@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        backupGlobals="true"
+        backupStaticProperties="true"
+        beStrictAboutChangesToGlobalState="false"
+        beStrictAboutTestsThatDoNotTestAnything="true"
+        colors="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnIncompleteTests="true"
+        displayDetailsOnSkippedTests="true"
+        failOnWarning="true"
+        failOnNotice="true"
+        executionOrder="random"
+        resolveDependencies="true"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+        cacheDirectory=".phpunit.cache">
+    <coverage/>
+    <source>
+        <include>
+            <directory suffix=".php">../Classes/</directory>
+        </include>
+    </source>
+</phpunit>

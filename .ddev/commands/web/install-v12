@@ -14,7 +14,8 @@ composer req --dev --no-progress -n -W -d /var/www/html/$VERSION \
   friendsofphp/php-cs-fixer:'^3' \
   helmich/typo3-typoscript-lint:'^3' \
   michielroos/typo3scan:'^1.7' \
-  ssch/typo3-rector:'^1.3'
+  ssch/typo3-rector:'^1.3' \
+  phpunit/phpunit:'^10'
 
 cd /var/www/html/$VERSION
 
