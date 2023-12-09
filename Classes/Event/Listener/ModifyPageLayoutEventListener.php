@@ -1,60 +1,50 @@
 <?php
-namespace T3\PwComments\XClass;
+declare(strict_types=1);
 
-/*  | This extension is made for TYPO3 CMS and is licensed
- *  | under GNU General Public License.
- *  |
- *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
- */
-use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
-use T3\PwComments\Utility\DatabaseUtility;
+namespace T3\PwComments\Event\Listener;
+
+use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
+use function vsprintf;
 
-/**
- * XClass for PageLayoutController
- *
- * @package T3\PwComments
- */
-class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutController
+class ModifyPageLayoutEventListener
 {
-    /**
-     * Generate the flashmessages for current pid
-     *
-     * @return string HTML content with flashmessages
-     */
-    protected function getHeaderFlashMessagesForCurrentPid(): string
+    public function __construct(private readonly LanguageService $languageService)
     {
-        $content = null;
+    }
 
+    public function __invoke(ModifyPageLayoutContentEvent $event): void
+    {
+        $pageId = (int)($event->getRequest()->getQueryParams()['id'] ?? 0);
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-
         $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
-        $total = $queryBuilder
+        $total = (int)($queryBuilder
             ->count('uid')
             ->from('tx_pwcomments_domain_model_comment')
-            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])->executeQuery()
-            ->fetchColumn();
+            ->where('pid = :pageUid')->setParameter('pageUid', $pageId)
+            ->executeQuery()
+            ->fetchOne() ?: 0);
 
 
         if (!$total) {
-            return $content;
+            return;
         }
 
         $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
-        $released = $queryBuilder
+        $released = (int)($queryBuilder
             ->count('uid')
             ->from('tx_pwcomments_domain_model_comment')
-            ->where('pid = :pageUid')->setParameter('pageUid', $this->pageinfo['uid'])->executeQuery()
-            ->fetchColumn();
+            ->where('pid = :pageUid')->setParameter('pageUid', $pageId)->executeQuery()
+            ->fetchOne() ?: 0);
 
         $unreleased = $total - $released;
 
@@ -64,33 +54,34 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
         );
         $title = 'pw_comments';
 
-        $textTotal = $total == 1
+        $textTotal = $total === 1
             ? $this->translate('totalCommentsAmountOne')
             : $this->translate('totalCommentsAmount', [$total]);
 
         $textUnreleased = '';
         if ($unreleased > 0) {
-            $textUnreleased = $unreleased == 1
+            $textUnreleased = $unreleased === 1
                 ? $this->translate('unreleasedCommentsAmountOne')
                 : $this->translate('unreleasedCommentsAmount', [$unreleased]);
             $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
 
         $path = self::getModuleUrl('web_list', [
-            'id' => $this->pageinfo['uid'],
+            'id' => $pageId,
             'table' => 'tx_pwcomments_domain_model_comment',
             'imagemode' => 1
         ]);
 
-        $message = '<a class="btn btn-warning pull-right" href="' . $path . '">' .
+        $message = '<a class="btn btn-warning float-end" href="' . $path . '">' .
             $this->translate('showComments') . '</a><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,
-            'state' => InfoboxViewHelper::STATE_NOTICE
+            'state' => InfoboxViewHelper::STATE_INFO
         ]);
-        return $content . $view->render();
+
+        $event->setHeaderContent($view->render());
     }
 
     /**
@@ -101,7 +92,7 @@ class PageLayoutController extends \TYPO3\CMS\Backend\Controller\PageLayoutContr
      */
     private function translate($label, array $arguments = [])
     {
-        $translation = $this->getLanguageService()->sL(
+        $translation = $this->languageService->sL(
             'LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:' . $label
         );
         if (!empty($arguments)) {

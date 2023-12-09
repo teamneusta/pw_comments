@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  T3\PwComments\Event\Listener\:
+    resource: '../Classes/Event/Listener/*'
+
+  T3\PwComments\Event\Listener\ModifyPageLayoutEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'pw_comments/modify-page-module-content'
