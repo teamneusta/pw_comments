@@ -223,12 +223,10 @@ class CommentController extends ActionController
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
             && $this->request->hasArgument($this->settings['hiddenFieldName'])
             && $this->request->getArgument($this->settings['hiddenFieldName'])) {
-            $this->redirectToUri($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
-            return false;
+            return $this->redirectToUri($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
         }
         if ($newComment === null) {
-            $this->redirectToUri($this->buildUriByUid($this->pageUid));
-            return false;
+            return $this->redirectToUri($this->buildUriByUid($this->pageUid));
         }
         $this->createAuthorIdent();
 
