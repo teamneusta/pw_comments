@@ -162,8 +162,6 @@ class CommentController extends ActionController
 
     /**
      * Displays all comments by pid
-     *
-     * @return void
      */
     #[IgnoreValidation(['value' => 'commentToReplyTo'])]
     public function indexAction(Comment $commentToReplyTo = null): ResponseInterface
@@ -223,12 +221,10 @@ class CommentController extends ActionController
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
             && $this->request->hasArgument($this->settings['hiddenFieldName'])
             && $this->request->getArgument($this->settings['hiddenFieldName'])) {
-            $this->redirectToUri($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
-            return false;
+            return $this->redirectToUri($this->buildUriByUid($this->pageUid) . '#' . $this->settings['writeCommentAnchor']);
         }
         if ($newComment === null) {
-            $this->redirectToUri($this->buildUriByUid($this->pageUid));
-            return false;
+            return $this->redirectToUri($this->buildUriByUid($this->pageUid));
         }
         $this->createAuthorIdent();
 
@@ -305,7 +301,6 @@ class CommentController extends ActionController
      *
      * @param Comment $newComment New Comment
      * @param Comment $commentToReplyTo Comment to reply to
-     * @return void
      */
     #[IgnoreValidation(['value' => 'newComment'])]
     #[IgnoreValidation(['value' => 'commentToReplyTo'])]
@@ -338,8 +333,6 @@ class CommentController extends ActionController
 
     /**
      * Upvote action
-     *
-     * @return string Empty string. This action will perform a redirect
      */
     #[IgnoreValidation(['value' => 'comment'])]
     public function upvoteAction(Comment $comment): ResponseInterface
@@ -349,8 +342,6 @@ class CommentController extends ActionController
 
     /**
      * Downvote action
-     *
-     * @return string Empty string. This action will perform a redirect
      */
     #[IgnoreValidation(['value' => 'comment'])]
     public function downvoteAction(Comment $comment): ResponseInterface
@@ -414,7 +405,6 @@ class CommentController extends ActionController
      * Perform database operations for voting
      *
      * @param int $type Check out Tx_PwComments_Domain_Model_Vote constants
-     * @return ResponseInterface
      */
     protected function performVoting(Comment $comment, $type): ResponseInterface
     {
@@ -496,8 +486,6 @@ class CommentController extends ActionController
 
     /**
      * Sends mail to comment author whe comment has been approved (and published)
-     *
-     * @return ResponseInterface
      */
     public function sendAuthorMailWhenCommentHasBeenApprovedAction(): ResponseInterface
     {
