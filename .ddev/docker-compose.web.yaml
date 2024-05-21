@@ -23,7 +23,6 @@ services:
               source: ../
               target: /var/www/pw_comments
               consistency: cached
-            - v12-data:/var/www/html/v12
 volumes:
     v12-data:
         name: "${DDEV_SITENAME}-v12-data"

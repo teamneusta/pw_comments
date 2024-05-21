@@ -75,7 +75,7 @@ plugin.tx_pwcomments {
 		replaceUsernameWith >
 		replaceMailWith >
 
-		relativeDate.absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
+		absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
 		requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
 		termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
 	}

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+VERSION=${1:-12}
+
+shopt -s extglob
+rm -rf /var/www/html/* -- !(vendor)
+mkdir -p /var/www/html/
+echo "{}" > /var/www/html/composer.json
+composer config extra.typo3/cms.web-dir public -d /var/www/html/
+composer config repositories.$EXTENSION_KEY path /var/www/$EXTENSION_KEY -d /var/www/html/
+composer config --no-plugins allow-plugins.typo3/cms-composer-installers true -d /var/www/html/
+composer config --no-plugins allow-plugins.typo3/class-alias-loader true -d /var/www/html/
+composer req t3/cms:"^$VERSION" $PACKAGE_NAME:'*@dev' --no-progress -n -d /var/www/html/
+composer req --dev --no-progress -n -W -d /var/www/html/ \
+  friendsofphp/php-cs-fixer:'^3' \
+  helmich/typo3-typoscript-lint:'^3' \
+  michielroos/typo3scan:'^1.7' \
+  ssch/typo3-rector:'^1.3' \
+  phpunit/phpunit:'^10.5'
+
+cd /var/www/html/
+
+vendor/bin/typo3 install:setup --database-user-name=db --database-user-password=db --database-host-name=db --database-name=test --use-existing-database
+vendor/bin/typo3 configuration:set 'BE/debug' 1
+vendor/bin/typo3 configuration:set 'FE/debug' 1
+vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
+vendor/bin/typo3 configuration:set 'SYS/displayErrors' 1
+vendor/bin/typo3 configuration:set 'SYS/trustedHostsPattern' '.*.*'
+vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
+vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
+vendor/bin/typo3 configuration:set 'GFX/processor' 'ImageMagick'
+vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
+
+sed -i -e "s/base: ht\//base: \//g" /var/www/html/config/sites/main/config.yaml
+sed -i -e 's/base: \/en\//base: \//g' /var/www/html/config/sites/main/config.yaml
+
+vendor/bin/typo3 cache:flush
