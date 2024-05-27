@@ -260,14 +260,9 @@ class Comment extends AbstractEntity
      *
      * @return string
      */
-    public function getCommentAuthorMailAddress()
+    public function getCommentAuthorMailAddress(): string
     {
-        $authorMail = $this->getAuthorMail();
-        if ($this->getAuthor() !== null) {
-            $authorMail = $this->getAuthor()->getEmail();
-        }
-
-        return $authorMail;
+        return $this->getAuthor()?->getEmail() ?? $this->getAuthorMail();
     }
 
     /**
