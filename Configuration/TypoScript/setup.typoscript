@@ -131,6 +131,8 @@ lib.pwCommentsIndex {
 # Lib for form to post new comments
 lib.pwCommentsNew < lib.pwCommentsIndex
 lib.pwCommentsNew {
+	pluginName = new
+
 	controllerActions {
 		Comment {
 			1 = new
