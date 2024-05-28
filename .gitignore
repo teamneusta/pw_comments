@@ -1,5 +1,5 @@
 /.idea
-/.Build
+/Build
 /composer.lock
 /Documentation-GENERATED-temp
 /log
