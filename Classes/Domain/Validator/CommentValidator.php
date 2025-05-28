@@ -36,6 +36,7 @@ class CommentValidator extends AbstractValidator
      */
     public function isValid(mixed $comment): void
     {
+        // @todo: pass request with TYPO3 v13. See https://github.com/teamneusta/pw_comments/issues/19
         $this->settings = Settings::getRenderedExtensionSettings();
 
         $errorNumber = null;
