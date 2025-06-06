@@ -36,7 +36,8 @@ class Settings extends AbstractEncryptionUtility
         /** @var ContentObjectRenderer|null $contentObject */
         $contentObject = self::getConfigurationManagerInterface()->getContentObject();
         if ($contentObject === null) {
-            return [];
+            // This is a workaround until custom validators contain the current request to pass on to the current method
+            return $makeSettingsRenderable ? self::makeConfigurationArrayRenderable($settings) : $settings;
         }
 
         if ($makeSettingsRenderable === true) {
