@@ -5,17 +5,17 @@
     "keywords": ["TYPO3", "extension", "comment", "voting"],
     "homepage": "https://team-neusta.de/",
     "license": "GPL-2.0+",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "authors": [
         {
             "name": "Armin Vieweg",
-            "role": "Lead Developer",
+            "role": "Founder",
             "email": "armin@v.ieweg.de",
             "homepage": "https://v.ieweg.de/"
         },
         {
             "name": "Malek Olabi",
-            "role": "Developer",
+            "role": "Lead Developer",
             "email": "m.olabi@neusta.de",
             "homepage": "https://team-neusta.de/"
         }
