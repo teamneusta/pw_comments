@@ -32,8 +32,9 @@ class Settings extends AbstractEncryptionUtility
      */
     public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false, ServerRequestInterface $request = null)
     {
+        // @todo: this should be adjusted to use currentContentObject attribute from server request with v13
         /** @var ContentObjectRenderer|null $contentObject */
-        $contentObject = ($request ?? $GLOBALS['TYPO3_REQUEST'])?->getAttribute('currentContentObject');
+        $contentObject = self::getConfigurationManagerInterface()->getContentObject();
         if ($contentObject === null) {
             // This is a workaround until custom validators contain the current request to pass on to the current method
             return $makeSettingsRenderable ? self::makeConfigurationArrayRenderable($settings) : $settings;
