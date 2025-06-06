@@ -21,6 +21,12 @@ composer req --dev --no-progress -n -W -d /var/www/html/ \
 
 cd /var/www/html/
 
+mysql \
+  --host=db \
+  --user=db \
+  --password=db \
+  --execute="DROP DATABASE IF EXISTS test; CREATE DATABASE test; GRANT ALL PRIVILEGES ON test.* TO 'db'@'%'; FLUSH PRIVILEGES;"
+
 vendor/bin/typo3 install:setup --database-user-name=db --database-user-password=db --database-host-name=db --database-name=test --use-existing-database --force
 vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
@@ -31,6 +37,7 @@ vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3 configuration:set 'GFX/processor' 'ImageMagick'
 vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
+vendor/bin/typo3 backend:createadmin admin admin123
 
 sed -i -e "s/base: ht\//base: \//g" /var/www/html/config/sites/main/config.yaml
 sed -i -e 's/base: \/en\//base: \//g' /var/www/html/config/sites/main/config.yaml
