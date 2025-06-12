@@ -9,6 +9,10 @@
 			<trans-unit id="tx_pwcomments.comments" xml:space="preserve">
 				<source>Comments</source>
 			</trans-unit>
+
+			<trans-unit id="tx_pwcomments.validation_error.1406644913" xml:space="preserve" approved="yes">
+				<source>Please provide at least a on star rating.</source>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments.validation_error.1299628038" xml:space="preserve">
 				<source>Please log in or fill out your name and e-mail address.</source>
 			</trans-unit>
@@ -203,6 +207,15 @@
 			</trans-unit>
 			<trans-unit id="pageModuleNotice" xml:space="preserve">
 				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
+			</trans-unit>
+			<trans-unit id="textRating" xml:space="preserve">
+				<source>%s of 5</source>
+			</trans-unit>
+			<trans-unit id="rating.title" xml:space="preserve">
+				<source>Rating:</source>
+			</trans-unit>
+			<trans-unit id="rating.star" xml:space="preserve">
+				<source>Star</source>
 			</trans-unit>
 		</body>
 	</file>

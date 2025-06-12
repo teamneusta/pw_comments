@@ -173,6 +173,9 @@
             <trans-unit id="settings.requireAcceptedTerms" xml:space="preserve">
                 <source>Require accepted terms (to post a new comment)</source>
 			</trans-unit>
+            <trans-unit id="settings.enableRating" xml:space="preserve">
+                <source>Enable rating for comments</source>
+			</trans-unit>
             <trans-unit id="settings.termsTypolinkParameter" xml:space="preserve">
                 <source>Typolink parameters to terms (in string, next to checkbox to click)</source>
 			</trans-unit>

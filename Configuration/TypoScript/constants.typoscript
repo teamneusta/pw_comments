@@ -123,5 +123,7 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/misc; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.termsTypolinkParameter
       termsTypolinkParameter = t3://page?uid=1
 
+      # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRating
+      enableRating = 0
    }
 }

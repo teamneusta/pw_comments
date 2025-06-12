@@ -19,12 +19,31 @@
 			<f:render partial="Comment/FormErrors/ValidationResults" />
 		</div>
 
+		<f:if condition="{settings.enableRating}">
+			<label><f:translate key="rating.title" /></label>
+			<div class="rating">
+				<f:form.radio property="rating" value="5" id="rating-5" name="rating" />
+				<label for="rating-5" title="5 {f:translate(key: 'rating.star')}"></label>
+				<f:form.radio property="rating" value="4" id="rating-4" name="rating" />
+				<label for="rating-4" title="4 {f:translate(key: 'rating.star')}"></label>
+				<f:form.radio property="rating" value="3" id="rating-3" name="rating" />
+				<label for="rating-3" title="3 {f:translate(key: 'rating.star')}"></label>
+				<f:form.radio property="rating" value="2" id="rating-2" name="rating" />
+				<label for="rating-2" title="2 {f:translate(key: 'rating.star')}"></label>
+				<f:form.radio property="rating" value="1" id="rating-1" name="rating" />
+				<label for="rating-1" title="1 {f:translate(key: 'rating.star')}"></label>
+			</div>
+		</f:if>
+
 		<f:if condition="{settings.replaceUsernameWith}">
 			<f:then>
 				<f:format.raw>{settings.replaceUsernameWith}</f:format.raw>
 			</f:then>
 			<f:else>
-				<div><label><f:translate key="tx_pwcomments.newComment.name" /></label><f:form.textfield property="authorName" value="{unregistredUserName}" /></div>
+				<div>
+					<label><f:translate key="tx_pwcomments.newComment.name" /></label>
+					<f:form.textfield property="authorName" value="{unregistredUserName}" />
+				</div>
 			</f:else>
 		</f:if>
 
@@ -33,14 +52,23 @@
 				<f:format.raw>{settings.replaceMailWith}</f:format.raw>
 			</f:then>
 			<f:else>
-				<div><label><f:translate key="tx_pwcomments.newComment.mail" /></label><f:form.textfield property="authorMail" value="{unregistredUserMail}" /></div>
+				<div>
+					<label><f:translate key="tx_pwcomments.newComment.mail" /></label>
+					<f:form.textfield property="authorMail" value="{unregistredUserMail}" />
+				</div>
 			</f:else>
 		</f:if>
 
 
-		<div class="{settings.hiddenFieldClass}"><label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label><f:form.textfield name="{settings.hiddenFieldName}" /></div>
+		<div class="{settings.hiddenFieldClass}">
+			<label><f:translate key="tx_pwcomments.newComment.hiddenField" /></label>
+			<f:form.textfield name="{settings.hiddenFieldName}" />
+		</div>
 
-		<div><label><f:translate key="tx_pwcomments.newComment.comment" /></label><f:form.textarea property="message" rows="8" cols="40" /></div>
+		<div>
+			<label><f:translate key="tx_pwcomments.newComment.comment" /></label>
+			<f:form.textarea property="message" rows="8" cols="40" />
+		</div>
 
 		<f:if condition="{settings.requireAcceptedTerms}">
 			<div>

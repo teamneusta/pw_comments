@@ -120,6 +120,8 @@ class Comment extends AbstractEntity
      */
     protected $termsAccepted = false;
 
+    protected int $rating = 0;
+
     /**
      * The constructor.
      */
@@ -491,6 +493,16 @@ class Comment extends AbstractEntity
     public function getTermsAccepted()
     {
         return $this->termsAccepted;
+    }
+
+    public function getRating(): int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(int $rating): void
+    {
+        $this->rating = $rating;
     }
 
     /**

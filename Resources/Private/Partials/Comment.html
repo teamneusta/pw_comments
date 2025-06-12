@@ -19,6 +19,17 @@
 		<h5 class="comment-name">{f:if(condition: '{comment.author}', then: '{comment.author.username}', else: '{comment.authorName}')}</h5>
 		<span class="comment-date" title="{pw:format.date(timestamp:'{comment.crdate}', format:'d.m.Y T')}"> <pw:format.relativeDate timestamp="{comment.crdate}" format="{settings.absoluteFormatFallback}" wrap="{f:translate(key:'tx_pwcomments.relativeDate.wrap')}" wrapAbsolute="{f:translate(key:'tx_pwcomments.relativeDate.wrapAbsolute')}" /></span>
 
+		<f:if condition="{settings.enableRating}">
+			<span class="static-rating">
+			  <span class="star {f:if(condition: '{comment.rating} >= 1', then: 'filled')}">&#9733;</span>
+			  <span class="star {f:if(condition: '{comment.rating} >= 2', then: 'filled')}">&#9733;</span>
+			  <span class="star {f:if(condition: '{comment.rating} >= 3', then: 'filled')}">&#9733;</span>
+			  <span class="star {f:if(condition: '{comment.rating} >= 4', then: 'filled')}">&#9733;</span>
+			  <span class="star {f:if(condition: '{comment.rating} >= 5', then: 'filled')}">&#9733;</span>
+			</span>
+			<span class="rating-text"><f:translate key="textRating" arguments="{0: '{comment.rating}'}" /></span>
+		</f:if>
+
 		<div class="comment-actions">
 			<f:if condition="{settings.enableCommentVotes}">
 				<f:if condition="{comment.parentComment}">

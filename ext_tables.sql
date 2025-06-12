@@ -13,6 +13,7 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 	message text,
 	votes int(11) unsigned DEFAULT '0' NOT NULL,
 	terms_accepted int(11) unsigned DEFAULT '0' NOT NULL,
+	rating tinyint(4) unsigned DEFAULT '0' NOT NULL,
 );
 
 #

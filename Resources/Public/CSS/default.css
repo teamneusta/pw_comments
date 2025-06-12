@@ -406,3 +406,62 @@
     border-color: #990000;
     color: #990000;
 }
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+    padding-bottom: 6px;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 1.5rem;
+    color: #ccc;
+    padding: 0 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Standard Sterne (links nach rechts) */
+.rating label::before {
+    content: "\2605";
+}
+
+/* Hover-Effekt: Alle Sterne links vom aktuellen auch hervorheben */
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #ffc700;
+}
+
+/* Wenn ein Stern ausgewählt ist, färbe alle Sterne links davon */
+.rating input:checked ~ label {
+    color: #ffc700;
+}
+
+.static-rating {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.static-rating .star {
+    font-size: 1.3rem;
+    color: #ccc;
+    margin-right: 2px;
+}
+
+.static-rating .star.filled {
+    color: #ffc700;
+}
+
+.rating-text {
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #333;
+}
