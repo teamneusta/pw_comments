@@ -11,6 +11,10 @@
 				<source>Comments</source>
 				<target>Kommentare</target>
 			</trans-unit>
+			<trans-unit id="tx_pwcomments.validation_error.1406644913" xml:space="preserve" approved="yes">
+				<source>Please provide at least a on star rating.</source>
+				<target>Bitte vergebe mindestens einen Stern als Bewertung.</target>
+			</trans-unit>
 			<trans-unit id="tx_pwcomments.validation_error.1299628038" xml:space="preserve" approved="yes">
 				<source>Please log in or fill out your name and e-mail address.</source>
 				<target>Bitte melde Dich an oder fülle Name und E-Mail-Adresse aus.</target>
@@ -270,6 +274,18 @@
 			<trans-unit id="pageModuleNotice" xml:space="preserve">
 				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
 				<target>Seitenmodul Notiz: Zeigt Informationen über Kommentare auf aktueller Seite als Notiz im Seitenmodul an.</target>
+			</trans-unit>
+			<trans-unit id="textRating" xml:space="preserve">
+				<source>%s of 5</source>
+				<target>%s von 5</target>
+			</trans-unit>
+			<trans-unit id="rating.title" xml:space="preserve">
+				<source>Rating:</source>
+				<target>Rating:</target>
+			</trans-unit>
+			<trans-unit id="rating.star" xml:space="preserve">
+				<source>Star</source>
+				<target>Stern</target>
 			</trans-unit>
 		</body>
 	</file>

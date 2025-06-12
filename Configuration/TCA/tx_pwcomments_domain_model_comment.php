@@ -32,7 +32,7 @@ return [
     ],
     'types' => [
         '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,terms_accepted,' .
-                              'message,parent_comment,votes']
+                              'message,parent_comment,votes,rating']
     ],
     'palettes' => [
         '1' => ['showitem' => '']
@@ -198,6 +198,13 @@ return [
             'label' => $ll . 'tx_pwcomments_domain_model_comment.terms_accepted',
             'config' => [
                 'type' => 'check'
+            ]
+        ],
+        'rating' => [
+            'exclude' => 0,
+            'label' => 'rating',
+            'config' => [
+                'type' => 'input'
             ]
         ],
     ]

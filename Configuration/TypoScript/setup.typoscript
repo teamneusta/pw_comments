@@ -78,6 +78,7 @@ plugin.tx_pwcomments {
 		absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
 		requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
 		termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
+		enableRating = {$plugin.tx_pwcomments.settings.enableRating}
 	}
 }
 

@@ -59,6 +59,9 @@ class CommentValidator extends AbstractValidator
         } elseif (isset($this->settings['useBadWordsListOnMailAddress']) && $this->settings['useBadWordsListOnMailAddress']
             && !$this->checkTextForBadWords($comment->getAuthorMail())) {
             $errorNumber = 1406644912;
+        } elseif (isset($this->settings['enableRating']) && $this->settings['enableRating']
+            && $comment->getRating() <= 0) {
+            $errorNumber = 1406644913;
         } elseif (!$this->lastCommentRespectsTimer()) {
             $errorNumber = 1300280476;
             $errorArguments = [$this->settings['secondsBetweenTwoComments']];
