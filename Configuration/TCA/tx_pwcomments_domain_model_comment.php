@@ -203,6 +203,7 @@ return [
         'rating' => [
             'exclude' => 0,
             'label' => 'rating',
+            'displayCond' => 'USER:T3\\PwComments\\UserFunc\\TCA\\DisplayCondition->isRatingEnabled',
             'config' => [
                 'type' => 'input'
             ]
