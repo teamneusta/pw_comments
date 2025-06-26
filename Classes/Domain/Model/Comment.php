@@ -123,6 +123,21 @@ class Comment extends AbstractEntity
     protected int $rating = 0;
 
     /**
+     * @var string|null
+     */
+    protected $aiModerationStatus;
+
+    /**
+     * @var string|null
+     */
+    protected $aiModerationReason;
+
+    /**
+     * @var float|null
+     */
+    protected $aiModerationConfidence;
+
+    /**
      * The constructor.
      */
     public function __construct()
@@ -512,5 +527,68 @@ class Comment extends AbstractEntity
     public function setTermsAccepted($termsAccepted)
     {
         $this->termsAccepted = $termsAccepted;
+    }
+
+    /**
+     * Get AI moderation status
+     *
+     * @return string|null
+     */
+    public function getAiModerationStatus(): ?string
+    {
+        return $this->aiModerationStatus;
+    }
+
+    /**
+     * Set AI moderation status
+     *
+     * @param string|null $aiModerationStatus
+     * @return void
+     */
+    public function setAiModerationStatus(?string $aiModerationStatus): void
+    {
+        $this->aiModerationStatus = $aiModerationStatus;
+    }
+
+    /**
+     * Get AI moderation reason
+     *
+     * @return string|null
+     */
+    public function getAiModerationReason(): ?string
+    {
+        return $this->aiModerationReason;
+    }
+
+    /**
+     * Set AI moderation reason
+     *
+     * @param string|null $aiModerationReason
+     * @return void
+     */
+    public function setAiModerationReason(?string $aiModerationReason): void
+    {
+        $this->aiModerationReason = $aiModerationReason;
+    }
+
+    /**
+     * Get AI moderation confidence score
+     *
+     * @return float|null
+     */
+    public function getAiModerationConfidence(): ?float
+    {
+        return $this->aiModerationConfidence;
+    }
+
+    /**
+     * Set AI moderation confidence score
+     *
+     * @param float|null $aiModerationConfidence
+     * @return void
+     */
+    public function setAiModerationConfidence(?float $aiModerationConfidence): void
+    {
+        $this->aiModerationConfidence = $aiModerationConfidence;
     }
 }

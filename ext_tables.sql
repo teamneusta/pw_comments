@@ -14,6 +14,9 @@ CREATE TABLE tx_pwcomments_domain_model_comment (
 	votes int(11) unsigned DEFAULT '0' NOT NULL,
 	terms_accepted int(11) unsigned DEFAULT '0' NOT NULL,
 	rating tinyint(4) unsigned DEFAULT '0' NOT NULL,
+	ai_moderation_status varchar(20) DEFAULT NULL,
+	ai_moderation_reason text,
+	ai_moderation_confidence decimal(3,2) DEFAULT NULL,
 );
 
 #

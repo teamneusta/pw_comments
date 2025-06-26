@@ -41,7 +41,6 @@ plugin.tx_pwcomments {
 		invertCommentSorting = {$plugin.tx_pwcomments.settings.invertCommentSorting}
 		invertReplySorting = {$plugin.tx_pwcomments.settings.invertReplySorting}
 
-		moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
 		sendMailOnNewCommentsTo = {$plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo}
 		sendMailTemplate = {$plugin.tx_pwcomments.settings.sendMailTemplate}
 		sendMailMimeType = {$plugin.tx_pwcomments.settings.sendMailMimeType}
@@ -79,6 +78,14 @@ plugin.tx_pwcomments {
 		requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
 		termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
 		enableRating = {$plugin.tx_pwcomments.settings.enableRating}
+
+		moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
+		enableAiModeration = {$plugin.tx_pwcomments.settings.enableAiModeration}
+		aiModerationProvider = {$plugin.tx_pwcomments.settings.aiModerationProvider}
+		aiModerationApiKey = {$plugin.tx_pwcomments.settings.aiModerationApiKey}
+		aiModerationApiEndpoint = {$plugin.tx_pwcomments.settings.aiModerationApiEndpoint}
+		aiModerationThreshold = {$plugin.tx_pwcomments.settings.aiModerationThreshold}
+		aiModerationFallbackToManual = {$plugin.tx_pwcomments.settings.aiModerationFallbackToManual}
 	}
 }
 

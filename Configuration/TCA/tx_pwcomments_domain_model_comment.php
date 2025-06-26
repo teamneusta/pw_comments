@@ -32,7 +32,8 @@ return [
     ],
     'types' => [
         '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,terms_accepted,' .
-                              'message,parent_comment,votes,rating']
+                              'message,parent_comment,votes,rating,' .
+                              '--div--;AI Moderation,ai_moderation_status,ai_moderation_reason,ai_moderation_confidence,ai_moderation_control']
     ],
     'palettes' => [
         '1' => ['showitem' => '']
@@ -206,6 +207,52 @@ return [
             'displayCond' => 'USER:T3\\PwComments\\UserFunc\\TCA\\DisplayCondition->isRatingEnabled',
             'config' => [
                 'type' => 'input'
+            ]
+        ],
+        'ai_moderation_status' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.ai_moderation_status',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['label' => '', 'value' => ''],
+                    ['label' => 'Approved', 'value' => 'approved'],
+                    ['label' => 'Flagged', 'value' => 'flagged'],
+                    ['label' => 'Error', 'value' => 'error'],
+                ],
+                'readOnly' => true,
+            ]
+        ],
+        'ai_moderation_reason' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.ai_moderation_reason',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 3,
+                'readOnly' => true,
+            ]
+        ],
+        'ai_moderation_confidence' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.ai_moderation_confidence',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'double2',
+                'range' => [
+                    'lower' => 0,
+                    'upper' => 1
+                ],
+                'readOnly' => true,
+            ]
+        ],
+        'ai_moderation_control' => [
+            'exclude' => 0,
+            'label' => $ll . 'tx_pwcomments_domain_model_comment.ai_moderation_control',
+            'config' => [
+                'type' => 'user',
+                'renderType' => 'aiModerationControl',
             ]
         ],
     ]

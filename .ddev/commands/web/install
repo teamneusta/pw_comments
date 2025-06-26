@@ -27,7 +27,7 @@ mysql \
   --password=db \
   --execute="DROP DATABASE IF EXISTS test; CREATE DATABASE test; GRANT ALL PRIVILEGES ON test.* TO 'db'@'%'; FLUSH PRIVILEGES;"
 
-vendor/bin/typo3 install:setup --database-user-name=db --database-user-password=db --database-host-name=db --database-name=test --use-existing-database --force
+vendor/bin/typo3 install:setup --database-user-name=db --database-user-password=db --database-host-name=db --database-name=test --use-existing-database --force --site-base-url "/"
 vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
 vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
