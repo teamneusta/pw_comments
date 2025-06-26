@@ -11,6 +11,8 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\Writer\FileWriter;
 use T3\PwComments\Event\Listener\PageLayoutView;
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
@@ -106,4 +108,17 @@ if (!defined('TYPO3')) {
     // After save hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
         ProcessDatamap::class;
+
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['pw_comments']['writerConfiguration'] = [
+        LogLevel::INFO => [
+            FileWriter::class => []
+        ],
+    ];
+
+    // Register AI Moderation TCA control
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1671899200] = [
+        'nodeName' => 'aiModerationControl',
+        'priority' => 40,
+        'class' => \T3\PwComments\UserFunc\TCA\AiModerationControl::class,
+    ];
 })('pw_comments');

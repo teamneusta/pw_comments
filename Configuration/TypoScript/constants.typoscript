@@ -7,6 +7,7 @@
 # customsubcategory=moderation=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:moderation
 # customsubcategory=mails=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:mails
 # customsubcategory=spamprotect=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:spamprotect
+# customsubcategory=aimoderation=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:aimoderation
 # customsubcategory=misc=LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:misc
 
 plugin.tx_pwcomments {
@@ -62,8 +63,6 @@ plugin.tx_pwcomments {
       # cat=plugin.tx_pwcomments/sorting; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.invertReplySorting
       invertReplySorting = 0
 
-      # cat=plugin.tx_pwcomments/moderation; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.moderateNewComments
-      moderateNewComments = 1
       # cat=plugin.tx_pwcomments/moderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailOnNewCommentsTo
       sendMailOnNewCommentsTo =
       # cat=plugin.tx_pwcomments/moderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailTemplate
@@ -98,7 +97,7 @@ plugin.tx_pwcomments {
       sitenameUsedInMails =
 
       # cat=plugin.tx_pwcomments/spamprotect; type=int; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments
-      secondsBetweenTwoComments = 300
+      secondsBetweenTwoComments = 0
       # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsList
       useBadWordsList = 1
       # cat=plugin.tx_pwcomments/spamprotect; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnUsername
@@ -125,5 +124,20 @@ plugin.tx_pwcomments {
 
       # cat=plugin.tx_pwcomments/misc; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRating
       enableRating = 0
+
+      # cat=plugin.tx_pwcomments/moderation; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.moderateNewComments
+      moderateNewComments = 1
+      # cat=plugin.tx_pwcomments/aimoderation; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableAiModeration
+      enableAiModeration = 0
+      # cat=plugin.tx_pwcomments/aimoderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationProvider
+      aiModerationProvider = openai
+      # cat=plugin.tx_pwcomments/aimoderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiKey
+      aiModerationApiKey =
+      # cat=plugin.tx_pwcomments/aimoderation; type=string; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiEndpoint
+      aiModerationApiEndpoint = https://api.openai.com/v1/moderations
+      # cat=plugin.tx_pwcomments/aimoderation; type=options[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationThreshold
+      aiModerationThreshold = 0.7
+      # cat=plugin.tx_pwcomments/aimoderation; type=boolean; label= LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationFallbackToManual
+      aiModerationFallbackToManual = 1
    }
 }

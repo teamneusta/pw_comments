@@ -1,5 +1,8 @@
 /.idea
-/Build
+/Build/node_modules
 /composer.lock
 /Documentation-GENERATED-temp
 /log
+vendor
+.phpunit.cache
+.phpunit.result.cache

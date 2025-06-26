@@ -22,3 +22,9 @@
 *.mp3 binary
 *.ogg binary
 *.flv binary
+
+/Tests export-ignore
+/Build export-ignore
+/.gitattributes export-ignore
+/README.md export-ignore
+/.github export-ignore

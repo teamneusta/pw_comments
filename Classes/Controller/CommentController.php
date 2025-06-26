@@ -10,11 +10,15 @@ namespace T3\PwComments\Controller;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use T3\PwComments\Domain\Validator\CommentValidator;
+use T3\PwComments\Service\Moderation\ModerationProviderFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use RuntimeException;
 use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -36,14 +40,18 @@ use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Core\Log\Channel;
 
 /**
  * The comment controller
  *
  * @package T3\PwComments
  */
-class CommentController extends ActionController
+#[Channel('pw_comments')]
+class CommentController extends ActionController implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var int
      */
@@ -93,6 +101,12 @@ class CommentController extends ActionController
      * @var int
      */
     protected $commentStorageUid;
+    protected ModerationProviderFactory $moderationProviderFactory;
+
+    public function injectModerationProviderFactory(ModerationProviderFactory $moderationProviderFactory): void
+    {
+        $this->moderationProviderFactory = $moderationProviderFactory;
+    }
 
     public function injectMailUtility(Mail $mailUtility): void
     {
@@ -257,12 +271,66 @@ class CommentController extends ActionController
             'message' => $newComment->getMessage(),
         ];
 
-            // Modify comment if moderation is active
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) {
+        // AI Moderation check
+        $aiModerationViolation = false;
+        $aiModerationReason = '';
+        if (isset($this->settings['enableAiModeration']) && $this->settings['enableAiModeration']) {
+            try {
+                $moderationService = $this->moderationProviderFactory->createProvider(
+                    $this->settings['aiModerationProvider'] ?? 'openai',
+                    $this->settings
+                );
+                $moderationResult = $moderationService->moderateComment($newComment);
+                
+                if ($moderationResult->isViolation()) {
+                    $aiModerationViolation = true;
+                    $aiModerationReason = $moderationResult->getFormattedReason();
+                    $newComment->setHidden(true);
+                    $newComment->setAiModerationStatus('flagged');
+                    $newComment->setAiModerationReason($moderationResult->getReason());
+                    $newComment->setAiModerationConfidence($moderationResult->getMaxScore());
+                } else {
+                    $newComment->setAiModerationStatus('approved');
+                    $newComment->setAiModerationConfidence($moderationResult->getMaxScore());
+                }
+            } catch (\Exception $e) {
+                // Log error and fall back to manual moderation if configured
+                if (isset($this->settings['aiModerationFallbackToManual']) && $this->settings['aiModerationFallbackToManual']) {
+                    // Set error status and continue with normal moderation flow
+                    $newComment->setAiModerationStatus('error');
+                    $newComment->setAiModerationReason('AI moderation failed: ' . $e->getMessage());
+                    
+                    // Log the error for administrators
+                    $this->logger->error('AI moderation service failed', [
+                        'exception' => $e,
+                        'comment_message' => substr($newComment->getMessage(), 0, 100) . '...',
+                        'settings' => [
+                            'provider' => $this->settings['aiModerationProvider'] ?? 'openai',
+                            'endpoint' => $this->settings['aiModerationApiEndpoint'] ?? 'default'
+                        ]
+                    ]);
+                } else {
+                    // Re-throw the exception if no fallback is configured
+                    throw $e;
+                }
+            }
+        }
+
+        // Modify comment if moderation is active or AI flagged content
+        $moderationActive = (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) || $aiModerationViolation;
+        
+        if ($moderationActive) {
             $newComment->setHidden(true);
-            $this->addFlashMessage(
-                LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
-            );
+            if ($aiModerationViolation) {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason]) ?? 
+                    'Your comment has been flagged by our content moderation system: ' . $aiModerationReason
+                );
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('tx_pwcomments.moderationNotice', 'PwComments', $translateArguments)
+                );
+            }
         } else {
             $this->addFlashMessage(
                 LocalizationUtility::translate('tx_pwcomments.thanks', 'PwComments', $translateArguments)
@@ -289,7 +357,7 @@ class CommentController extends ActionController
             $this->mailUtility->sendMail($newComment);
         }
 
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) {
+        if ($moderationActive) {
             $anchor = '#' . $this->settings['successfulAnchor'];
         } else {
             $anchor = '#' . $this->settings['commentAnchorPrefix'] . $newComment->getUid();
