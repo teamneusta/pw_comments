@@ -5,7 +5,7 @@
     "keywords": ["TYPO3", "extension", "comment", "voting"],
     "homepage": "https://team-neusta.de/",
     "license": "GPL-2.0+",
-    "version": "6.0.3",
+    "version": "6.0.4",
     "authors": [
         {
             "name": "Armin Vieweg",
