@@ -17,7 +17,7 @@ class InArrayViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('subject', 'array', 'The subject');
@@ -29,7 +29,7 @@ class InArrayViewHelper extends AbstractViewHelper
      *
      * @return bool TRUE if given needle is in array
      */
-    public function render()
+    public function render(): bool
     {
         $subject = $this->arguments['subject'];
         if ($subject === null) {

@@ -34,7 +34,7 @@ class Settings extends AbstractEncryptionUtility
     {
         // @todo: this should be adjusted to use currentContentObject attribute from server request with v13
         /** @var ContentObjectRenderer|null $contentObject */
-        $contentObject = self::getConfigurationManagerInterface()->getContentObject();
+        $contentObject = $this->request->getAttribute('currentContentObject');
         if ($contentObject === null) {
             // This is a workaround until custom validators contain the current request to pass on to the current method
             return $makeSettingsRenderable ? self::makeConfigurationArrayRenderable($settings) : $settings;

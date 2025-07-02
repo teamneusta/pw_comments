@@ -56,12 +56,9 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('alt', 'string', 'Specifies an alternate text for an image', false);
-
         $this->registerArgument('email', 'string', 'The mail to create Gravatar link for', true);
         $this->registerArgument('size', 'integer', 'The size of avatar in pixel', false, 100);
         $this->registerArgument('default', 'string', 'The image to take if user has no Gravatar', false, 'mm');
@@ -83,7 +80,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
         $this->tag->addAttribute('src', $this->getGravatarSrc($uriParts));
 
         // The alt-attribute is mandatory to have valid html-code, therefore add it even if it is empty
-        if (empty($this->arguments['alt'])) {
+        if (empty($this->additionalArguments['alt'])) {
             $this->tag->addAttribute('alt', '');
         }
 

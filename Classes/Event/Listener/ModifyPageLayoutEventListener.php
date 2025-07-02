@@ -10,22 +10,26 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
 use function vsprintf;
 
-class ModifyPageLayoutEventListener
+final readonly class ModifyPageLayoutEventListener
 {
-    public function __construct(private readonly LanguageService $languageService)
-    {
+    public function __construct(
+        private LanguageService $languageService,
+        private ConnectionPool $connectionPool,
+        private ViewFactoryInterface $viewFactory,
+    ) {
     }
 
+    // @TODO: check if this still works after upgrade
     public function __invoke(ModifyPageLayoutContentEvent $event): void
     {
         $pageId = (int)($event->getRequest()->getQueryParams()['id'] ?? 0);
-        /** @var ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
         $total = (int)($queryBuilder
             ->count('uid')
@@ -39,7 +43,7 @@ class ModifyPageLayoutEventListener
             return;
         }
 
-        $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $released = (int)($queryBuilder
             ->count('uid')
             ->from('tx_pwcomments_domain_model_comment')
@@ -48,9 +52,12 @@ class ModifyPageLayoutEventListener
 
         $unreleased = $total - $released;
 
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Templates/InfoBox.html')
+        $view = $this->viewFactory->create(
+            new ViewFactoryData(
+                templatePathAndFilename: GeneralUtility::getFileAbsFileName(
+                'EXT:backend/Resources/Private/Templates/InfoBox.html',
+            ),
+            ),
         );
         $title = 'pw_comments';
 

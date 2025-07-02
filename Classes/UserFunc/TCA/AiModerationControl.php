@@ -11,6 +11,7 @@ use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Log\Channel;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -21,20 +22,13 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
 #[Channel('pw_comments')]
-class AiModerationControl extends AbstractNode implements LoggerAwareInterface
+class AiModerationControl extends AbstractNode
 {
-    use LoggerAwareTrait;
-
-    private CommentRepository $commentRepository;
-    private ModerationProviderFactory $moderationProviderFactory;
-    private PersistenceManager $persistenceManager;
-
-    public function __construct(?NodeFactory $nodeFactory = null, array $data = [])
-    {
-        parent::__construct($nodeFactory, $data);
-        $this->commentRepository = GeneralUtility::makeInstance(CommentRepository::class);
-        $this->moderationProviderFactory = GeneralUtility::makeInstance(ModerationProviderFactory::class);
-        $this->persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
+    public function __construct(
+        private readonly CommentRepository $commentRepository,
+        private readonly ModerationProviderFactory $moderationProviderFactory,
+        private readonly PersistenceManager $persistenceManager,
+    ) {
     }
 
     /**
@@ -59,7 +53,7 @@ class AiModerationControl extends AbstractNode implements LoggerAwareInterface
     {
 
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-        $recheckIcon = $iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL);
+        $recheckIcon = $iconFactory->getIcon('actions-refresh', IconSize::SMALL);
 
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
@@ -87,7 +81,7 @@ class AiModerationControl extends AbstractNode implements LoggerAwareInterface
      */
     public function recheckModeration(): void
     {
-        $commentUid = (int)GeneralUtility::_POST('commentUid');
+        $commentUid = (int)($GLOBALS['TYPO3_REQUEST']->getParsedBody()['commentUid'] ?? null);
         
         if (!$commentUid) {
             $this->outputJson(['success' => false, 'message' => 'Invalid comment ID']);

@@ -118,7 +118,7 @@ final class AiModerationControlTest extends TestCase
 
         $iconFactory->expects($this->once())
             ->method('getIcon')
-            ->with('actions-refresh', Icon::SIZE_SMALL)
+            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
             ->willReturn($icon);
         
         $icon->expects($this->once())
@@ -219,7 +219,7 @@ final class AiModerationControlTest extends TestCase
 
         $iconFactory->expects($this->once())
             ->method('getIcon')
-            ->with('actions-refresh', Icon::SIZE_SMALL)
+            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
             ->willReturn($icon);
         
         $icon->expects($this->once())

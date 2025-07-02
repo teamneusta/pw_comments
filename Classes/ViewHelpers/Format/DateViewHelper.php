@@ -78,7 +78,7 @@ class DateViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('timestamp', 'mixed', 'unix timestamp', false);
@@ -121,7 +121,7 @@ class DateViewHelper extends AbstractViewHelper
             $timestamp = (int) $timestamp->format('U');
         } else {
             throw new InvalidArgumentException(
-                sprintf('Timestamp might be an integer, a string or a DateTimeObject only.')
+                sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'), 3328256120
             );
         }
         return $timestamp;
