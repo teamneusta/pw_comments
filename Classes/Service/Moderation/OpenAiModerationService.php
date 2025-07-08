@@ -36,7 +36,7 @@ class OpenAiModerationService implements ModerationServiceInterface
     {
         if (empty($this->apiKey)) {
             $this->logger->warning('OpenAI API key not configured for moderation');
-            throw new \InvalidArgumentException('OpenAI API key not configured for moderation');
+            throw new \InvalidArgumentException('OpenAI API key not configured for moderation', 5155747862);
         }
 
         $message = trim($comment->getMessage());
@@ -97,7 +97,7 @@ class OpenAiModerationService implements ModerationServiceInterface
 
         $responseData = json_decode($responseBody, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Invalid JSON response from OpenAI API: ' . json_last_error_msg());
+            throw new \RuntimeException('Invalid JSON response from OpenAI API: ' . json_last_error_msg(), 7458663901);
         }
 
         return $responseData;
@@ -106,7 +106,7 @@ class OpenAiModerationService implements ModerationServiceInterface
     private function parseResponse(array $response): ModerationResult
     {
         if (!isset($response['results'][0])) {
-            throw new \RuntimeException('Unexpected response format from OpenAI API');
+            throw new \RuntimeException('Unexpected response format from OpenAI API', 3511050237);
         }
 
         $result = $response['results'][0];

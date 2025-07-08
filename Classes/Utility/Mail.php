@@ -10,11 +10,16 @@ namespace T3\PwComments\Utility;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use T3\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Fluid\View\FluidViewAdapter;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\View\TemplateView;
 
@@ -31,9 +36,9 @@ class Mail
     protected $settings = [];
 
     /**
-     * @var TemplateView|StandaloneView
+     * @var ViewInterface|FluidViewAdapter
      */
-    protected $fluidTemplate;
+    protected $view;
 
     /**
      * @var string comma separated string of mail addresses
@@ -61,7 +66,7 @@ class Mail
      * @param array $settings settings to set
      * @return void
      */
-    public function setSettings(array $settings)
+    public function setSettings(array $settings): void
     {
         $this->settings = $settings;
     }
@@ -69,15 +74,16 @@ class Mail
     /**
      * Set the fluid template from controller
      *
-     * @param StandaloneView $fluidTemplate the fluid template
+     * @param ViewInterface|FluidViewAdapter|null $view the fluid template
+     *
      * @return void
      */
-    public function setFluidTemplate(StandaloneView $fluidTemplate = null)
+    public function setView(ViewInterface|FluidViewAdapter $view = null): void
     {
-        if (!$fluidTemplate) {
-            $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
+        if (!$view) {
+            $view = GeneralUtility::makeInstance(ViewFactoryInterface::class)->create(new ViewFactoryData());
         }
-        $this->fluidTemplate = $fluidTemplate;
+        $this->view = $view;
     }
 
     /**
@@ -94,14 +100,16 @@ class Mail
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
         $mail->setFrom(
-            $this->settings['senderAddress'] ? $this->settings['senderAddress'] : LocalizationUtility::translate(
+            $this->settings['senderAddress']
+                ?: LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.mail',
                 'PwComments',
-                [$this->settings['sitenameUsedInMails']
-                    ? $this->settings['sitenameUsedInMails']
-                    : GeneralUtility::getIndpEnv('HTTP_HOST')]
+                [
+                    $this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')
+                ]
             ),
-            $this->settings['senderName'] ? $this->settings['senderName'] : LocalizationUtility::translate(
+            $this->settings['senderName']
+                ?: LocalizationUtility::translate(
                 'tx_pwcomments.notificationMail.from.name',
                 'PwComments'
             )
@@ -113,9 +121,7 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                [$this->settings['sitenameUsedInMails']
-                    ? $this->settings['sitenameUsedInMails']
-                    : GeneralUtility::getIndpEnv('HTTP_HOST')]
+                [$this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')]
             )
         );
         if (isset($this->settings['sendMailMimeType']) && $this->settings['sendMailMimeType'] === 'text/plain') {
@@ -136,22 +142,23 @@ class Mail
      *
      * @throws Exception
      */
-    protected function getMailMessage(Comment $comment, $hash)
+    protected function getMailMessage(Comment $comment, $hash): string
     {
         $mailTemplate = GeneralUtility::getFileAbsFileName($this->getTemplatePath());
         if (!file_exists($mailTemplate)) {
-            throw new Exception('Mail template (' . $mailTemplate . ') not found. ');
+            throw new Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
         }
 
-        $this->fluidTemplate->setTemplatePathAndFilename($mailTemplate);
-        $this->fluidTemplate->assignMultiple(
+        $templatePaths = $this->view->getRenderingContext()->getTemplatePaths();
+        $templatePaths->setTemplatePathAndFilename($this->getTemplatePath());
+        $this->view->assignMultiple(
             [
                 'hash' => $hash,
                 'comment' => $comment,
                 'settings' => $this->settings
             ]
         );
-        return $this->fluidTemplate->render();
+        return $this->view->render();
     }
 
     /**
@@ -170,7 +177,7 @@ class Mail
      * @param string $receivers
      * @return void
      */
-    public function setReceivers($receivers)
+    public function setReceivers($receivers): void
     {
         $this->receivers = $receivers;
     }
@@ -191,7 +198,7 @@ class Mail
      * @param string $templatePath
      * @return void
      */
-    public function setTemplatePath($templatePath)
+    public function setTemplatePath($templatePath): void
     {
         $this->templatePath = $templatePath;
     }
@@ -212,7 +219,7 @@ class Mail
      * @param string $subjectLocallangKey
      * @return void
      */
-    public function setSubjectLocallangKey($subjectLocallangKey)
+    public function setSubjectLocallangKey($subjectLocallangKey): void
     {
         $this->subjectLocallangKey = $subjectLocallangKey;
     }
@@ -233,7 +240,7 @@ class Mail
      * @param bool $addQueryStringToLinks
      * @return void
      */
-    public function setAddQueryStringToLinks($addQueryStringToLinks)
+    public function setAddQueryStringToLinks($addQueryStringToLinks): void
     {
         $this->addQueryStringToLinks = $addQueryStringToLinks;
     }

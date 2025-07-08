@@ -25,26 +25,26 @@ class Comment extends AbstractEntity
     /**
      * @var int uid of the page for what the comment is for
      */
-    protected $origPid = 0;
+    protected int $origPid = 0;
 
     /**
      * @var int uid of entry for what the comment is for
      */
-    protected $entryUid = 0;
+    protected int $entryUid = 0;
 
     /**
      * crdate as unix timestamp
      *
      * @var int
      */
-    protected $crdate;
+    protected int $crdate;
 
     /**
      * hidden state
      *
      * @var bool
      */
-    protected $hidden;
+    protected bool $hidden;
 
     /**
      * The author as model or NULL if comment author wasn't logged in
@@ -58,26 +58,26 @@ class Comment extends AbstractEntity
      *
      * @var string
      */
-    protected $authorName = '';
+    protected string $authorName = '';
 
     /**
      * author's mail
      *
      * @var string
      */
-    protected $authorMail = '';
+    protected string $authorMail = '';
 
     /**
      * @var string
      */
-    protected $authorIdent;
+    protected string $authorIdent;
 
     /**
      * the comment's message
      *
      * @var string
      */
-    protected $message;
+    protected string $message;
 
     /**
      * Parent comment (if set this comment is an answer). One comment can just have
@@ -103,22 +103,22 @@ class Comment extends AbstractEntity
     /**
      * @var int
      */
-    protected $upvoteAmount = 0;
+    protected int $upvoteAmount = 0;
 
     /**
      * @var int
      */
-    protected $downvoteAmount = 0;
+    protected int $downvoteAmount = 0;
 
     /**
      * @var bool
      */
-    protected $votesCounted = false;
+    protected bool $votesCounted = false;
 
     /**
      * @var bool
      */
-    protected $termsAccepted = false;
+    protected bool $termsAccepted = false;
 
     protected int $rating = 0;
 
@@ -162,7 +162,7 @@ class Comment extends AbstractEntity
      * @param int $origPid
      * @return void
      */
-    public function setOrigPid($origPid)
+    public function setOrigPid($origPid): void
     {
         $this->origPid = $origPid;
     }
@@ -183,7 +183,7 @@ class Comment extends AbstractEntity
      * @param int $entryUid
      * @return void
      */
-    public function setEntryUid($entryUid)
+    public function setEntryUid($entryUid): void
     {
         $this->entryUid = $entryUid;
     }
@@ -194,7 +194,7 @@ class Comment extends AbstractEntity
      * @param int $crdate crdate
      * @return void
      */
-    public function setCrdate($crdate)
+    public function setCrdate($crdate): void
     {
         $this->crdate = $crdate;
     }
@@ -215,7 +215,7 @@ class Comment extends AbstractEntity
      * @param bool $hidden
      * @return void
      */
-    public function setHidden($hidden)
+    public function setHidden($hidden): void
     {
         $this->hidden = $hidden;
     }
@@ -236,7 +236,7 @@ class Comment extends AbstractEntity
      * @param string $authorName authorName
      * @return void
      */
-    public function setAuthorName($authorName)
+    public function setAuthorName($authorName): void
     {
         $this->authorName = trim($authorName);
     }
@@ -257,7 +257,7 @@ class Comment extends AbstractEntity
      * @param string $authorMail authorMail
      * @return void
      */
-    public function setAuthorMail($authorMail)
+    public function setAuthorMail($authorMail): void
     {
         $this->authorMail = trim($authorMail);
     }
@@ -299,7 +299,7 @@ class Comment extends AbstractEntity
      * @param string $message message
      * @return void
      */
-    public function setMessage($message)
+    public function setMessage($message): void
     {
         $this->message = $message;
     }
@@ -320,7 +320,7 @@ class Comment extends AbstractEntity
      * @param FrontendUser|null $author author
      * @return void
      */
-    public function setAuthor(?FrontendUser $author)
+    public function setAuthor(?FrontendUser $author): void
     {
         $this->author = $author;
     }
@@ -351,7 +351,7 @@ class Comment extends AbstractEntity
      * @param \T3\PwComments\Domain\Model\Comment $parentComment
      * @return void
      */
-    public function setParentComment($parentComment)
+    public function setParentComment($parentComment): void
     {
         $this->parentComment = $parentComment;
     }
@@ -372,7 +372,7 @@ class Comment extends AbstractEntity
      * @param QueryResult $replies Containing comments
      * @return void
      */
-    public function setReplies(QueryResult $replies)
+    public function setReplies(QueryResult $replies): void
     {
         $this->replies = $replies;
     }
@@ -392,7 +392,7 @@ class Comment extends AbstractEntity
      *
      * @return void
      */
-    public function setVotes(ObjectStorage $votes)
+    public function setVotes(ObjectStorage $votes): void
     {
         $this->votes = $votes;
     }
@@ -402,7 +402,7 @@ class Comment extends AbstractEntity
      *
      * @return void
      */
-    public function addVote(Vote $vote)
+    public function addVote(Vote $vote): void
     {
         $this->votes->attach($vote);
     }
@@ -412,7 +412,7 @@ class Comment extends AbstractEntity
      *
      * @return void
      */
-    public function removeVote(Vote $vote)
+    public function removeVote(Vote $vote): void
     {
         $this->votes->detach($vote);
     }
@@ -497,7 +497,7 @@ class Comment extends AbstractEntity
      * @param string $authorIdent
      * @return void
      */
-    public function setAuthorIdent($authorIdent)
+    public function setAuthorIdent($authorIdent): void
     {
         $this->authorIdent = $authorIdent;
     }
@@ -524,7 +524,7 @@ class Comment extends AbstractEntity
      * @param bool $termsAccepted
      * @return void
      */
-    public function setTermsAccepted($termsAccepted)
+    public function setTermsAccepted($termsAccepted): void
     {
         $this->termsAccepted = $termsAccepted;
     }

@@ -22,7 +22,7 @@ class ArrayUniqueViewHelper extends AbstractViewHelper
      *
      * @return array The filtered array
      */
-    public function render()
+    public function render(): array
     {
         $subject = $this->arguments['subject'];
         if ($subject === null) {

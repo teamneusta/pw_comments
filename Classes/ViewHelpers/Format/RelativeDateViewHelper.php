@@ -29,7 +29,7 @@ class RelativeDateViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('timestamp', 'mixed', 'Unix timestamp', true);
@@ -69,7 +69,7 @@ class RelativeDateViewHelper extends AbstractViewHelper
         } elseif ($timestamp instanceof DateTime) {
             $timestamp = $timestamp->format('U');
         } else {
-            throw new InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.');
+            throw new InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.', 5991273415);
         }
         return $timestamp;
     }

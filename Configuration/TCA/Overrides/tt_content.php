@@ -10,15 +10,17 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         $extensionKey,
         'show',
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title.show',
-        null,
-        'Comments'
+        'ext-pwcomments-ext-icon',
+        'Comments',
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:showContentElementWizardDescription'
     );
     ExtensionUtility::registerPlugin(
         $extensionKey,
         'new',
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title.new',
-        null,
-        'Comments'
+        'ext-pwcomments-ext-icon',
+        'Comments',
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription'
     );
 
 

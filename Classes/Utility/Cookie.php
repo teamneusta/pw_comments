@@ -45,7 +45,7 @@ class Cookie
      * @param string $value
      * @return void
      */
-    public function set($key, $value)
+    public function set($key, $value): void
     {
         $cookieExpireDate = time() + self::COOKIE_LIFETIME_DAYS * 24 * 60 * 60;
         setcookie(

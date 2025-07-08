@@ -1,186 +1,188 @@
 plugin.tx_pwcomments {
-	mvc.callDefaultActionIfActionCantBeResolved = 1
+    mvc.callDefaultActionIfActionCantBeResolved = 1
 
-	view {
-		templateRootPaths {
-			0 = EXT:pw_comments/Resources/Private/Templates/
-			1 = {$plugin.tx_pwcomments.view.templateRootPath}
-		}
-		partialRootPaths {
-			0 = EXT:pw_comments/Resources/Private/Partials/
-			1 = {$plugin.tx_pwcomments.view.partialRootPath}
-		}
-		layoutRootPaths {
-			0 = EXT:pw_comments/Resources/Private/Layouts/
-			1 = {$plugin.tx_pwcomments.view.layoutRootPath}
-		}
-	}
+    view {
+        templateRootPaths {
+            0 = EXT:pw_comments/Resources/Private/Templates/
+            1 = {$plugin.tx_pwcomments.view.templateRootPath}
+        }
 
-	settings {
-		storagePid = {$plugin.tx_pwcomments.settings.storagePid}
+        partialRootPaths {
+            0 = EXT:pw_comments/Resources/Private/Partials/
+            1 = {$plugin.tx_pwcomments.view.partialRootPath}
+        }
 
-		commentAnchorPrefix = {$plugin.tx_pwcomments.settings.commentAnchorPrefix}
-		showCommentAnchor = {$plugin.tx_pwcomments.settings.showCommentAnchor}
-		writeCommentAnchor = {$plugin.tx_pwcomments.settings.writeCommentAnchor}
-		successfulAnchor = {$plugin.tx_pwcomments.settings.successfulAnchor}
-		customMessagesAnchor = {$plugin.tx_pwcomments.settings.customMessagesAnchor}
+        layoutRootPaths {
+            0 = EXT:pw_comments/Resources/Private/Layouts/
+            1 = {$plugin.tx_pwcomments.view.layoutRootPath}
+        }
+    }
+
+    settings {
+        storagePid = {$plugin.tx_pwcomments.settings.storagePid}
+
+        commentAnchorPrefix = {$plugin.tx_pwcomments.settings.commentAnchorPrefix}
+        showCommentAnchor = {$plugin.tx_pwcomments.settings.showCommentAnchor}
+        writeCommentAnchor = {$plugin.tx_pwcomments.settings.writeCommentAnchor}
+        successfulAnchor = {$plugin.tx_pwcomments.settings.successfulAnchor}
+        customMessagesAnchor = {$plugin.tx_pwcomments.settings.customMessagesAnchor}
 
         showAvatar = {$plugin.tx_pwcomments.settings.showAvatar}
-		showGravatarImage = {$plugin.tx_pwcomments.settings.showGravatarImage}
-		gravatarSize = {$plugin.tx_pwcomments.settings.gravatarSize}
-		gravatarDefault = {$plugin.tx_pwcomments.settings.gravatarDefault}
+        showGravatarImage = {$plugin.tx_pwcomments.settings.showGravatarImage}
+        gravatarSize = {$plugin.tx_pwcomments.settings.gravatarSize}
+        gravatarDefault = {$plugin.tx_pwcomments.settings.gravatarDefault}
 
-		useEntryUid = {$plugin.tx_pwcomments.settings.useEntryUid}
-		entryUid = TEXT
-		entryUid.data = {$plugin.tx_pwcomments.settings.entryUidData}
+        useEntryUid = {$plugin.tx_pwcomments.settings.useEntryUid}
+        entryUid = TEXT
+        entryUid.data = {$plugin.tx_pwcomments.settings.entryUidData}
 
-		enableRepliesToComments = {$plugin.tx_pwcomments.settings.enableRepliesToComments}
-		showRepliesToComments = {$plugin.tx_pwcomments.settings.showRepliesToComments}
-		countReplies = {$plugin.tx_pwcomments.settings.countReplies}
+        enableRepliesToComments = {$plugin.tx_pwcomments.settings.enableRepliesToComments}
+        showRepliesToComments = {$plugin.tx_pwcomments.settings.showRepliesToComments}
+        countReplies = {$plugin.tx_pwcomments.settings.countReplies}
 
-		invertCommentSorting = {$plugin.tx_pwcomments.settings.invertCommentSorting}
-		invertReplySorting = {$plugin.tx_pwcomments.settings.invertReplySorting}
+        invertCommentSorting = {$plugin.tx_pwcomments.settings.invertCommentSorting}
+        invertReplySorting = {$plugin.tx_pwcomments.settings.invertReplySorting}
 
-		sendMailOnNewCommentsTo = {$plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo}
-		sendMailTemplate = {$plugin.tx_pwcomments.settings.sendMailTemplate}
-		sendMailMimeType = {$plugin.tx_pwcomments.settings.sendMailMimeType}
+        sendMailOnNewCommentsTo = {$plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo}
+        sendMailTemplate = {$plugin.tx_pwcomments.settings.sendMailTemplate}
+        sendMailMimeType = {$plugin.tx_pwcomments.settings.sendMailMimeType}
 
-		enableCommentVotes = {$plugin.tx_pwcomments.settings.enableCommentVotes}
-		enableReplyVotes = {$plugin.tx_pwcomments.settings.enableReplyVotes}
-		enableVoting = {$plugin.tx_pwcomments.settings.enableVoting}
-		hideVoteButtons = {$plugin.tx_pwcomments.settings.hideVoteButtons}
-		ignoreVotingForOwnComments = {$plugin.tx_pwcomments.settings.ignoreVotingForOwnComments}
+        enableCommentVotes = {$plugin.tx_pwcomments.settings.enableCommentVotes}
+        enableReplyVotes = {$plugin.tx_pwcomments.settings.enableReplyVotes}
+        enableVoting = {$plugin.tx_pwcomments.settings.enableVoting}
+        hideVoteButtons = {$plugin.tx_pwcomments.settings.hideVoteButtons}
+        ignoreVotingForOwnComments = {$plugin.tx_pwcomments.settings.ignoreVotingForOwnComments}
 
-		senderAddress = {$plugin.tx_pwcomments.settings.senderAddress}
-		senderName = {$plugin.tx_pwcomments.settings.senderName}
-		sendMailToAuthorAfterSubmit = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit}
-		sendMailToAuthorAfterSubmitTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate}
-		sendMailToAuthorAfterPublish = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish}
-		sendMailToAuthorAfterPublishTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate}
-		sitenameUsedInMails = {$plugin.tx_pwcomments.settings.sitenameUsedInMails}
+        senderAddress = {$plugin.tx_pwcomments.settings.senderAddress}
+        senderName = {$plugin.tx_pwcomments.settings.senderName}
+        sendMailToAuthorAfterSubmit = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit}
+        sendMailToAuthorAfterSubmitTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate}
+        sendMailToAuthorAfterPublish = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish}
+        sendMailToAuthorAfterPublishTemplate = {$plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate}
+        sitenameUsedInMails = {$plugin.tx_pwcomments.settings.sitenameUsedInMails}
 
-		secondsBetweenTwoComments = {$plugin.tx_pwcomments.settings.secondsBetweenTwoComments}
-		linkUrlsInComments = {$plugin.tx_pwcomments.settings.linkUrlsInComments}
+        secondsBetweenTwoComments = {$plugin.tx_pwcomments.settings.secondsBetweenTwoComments}
+        linkUrlsInComments = {$plugin.tx_pwcomments.settings.linkUrlsInComments}
 
-		useBadWordsList = {$plugin.tx_pwcomments.settings.useBadWordsList}
-		useBadWordsListOnUsername = {$plugin.tx_pwcomments.settings.useBadWordsListOnUsername}
-		useBadWordsListOnMailAddress = {$plugin.tx_pwcomments.settings.useBadWordsListOnMailAddress}
-		badWordsList = {$plugin.tx_pwcomments.settings.badWordsList}
+        useBadWordsList = {$plugin.tx_pwcomments.settings.useBadWordsList}
+        useBadWordsListOnUsername = {$plugin.tx_pwcomments.settings.useBadWordsListOnUsername}
+        useBadWordsListOnMailAddress = {$plugin.tx_pwcomments.settings.useBadWordsListOnMailAddress}
+        badWordsList = {$plugin.tx_pwcomments.settings.badWordsList}
 
-		hiddenFieldSpamProtection = {$plugin.tx_pwcomments.settings.hiddenFieldSpamProtection}
-		hiddenFieldName = {$plugin.tx_pwcomments.settings.hiddenFieldName}
-		hiddenFieldClass = {$plugin.tx_pwcomments.settings.hiddenFieldClass}
+        hiddenFieldSpamProtection = {$plugin.tx_pwcomments.settings.hiddenFieldSpamProtection}
+        hiddenFieldName = {$plugin.tx_pwcomments.settings.hiddenFieldName}
+        hiddenFieldClass = {$plugin.tx_pwcomments.settings.hiddenFieldClass}
 
-		replaceUsernameWith >
-		replaceMailWith >
+        replaceUsernameWith >
+        replaceMailWith >
 
-		absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
-		requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
-		termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
-		enableRating = {$plugin.tx_pwcomments.settings.enableRating}
+        absoluteFormatFallback = {$plugin.tx_pwcomments.settings.absoluteFormatFallback}
+        requireAcceptedTerms = {$plugin.tx_pwcomments.settings.requireAcceptedTerms}
+        termsTypolinkParameter = {$plugin.tx_pwcomments.settings.termsTypolinkParameter}
+        enableRating = {$plugin.tx_pwcomments.settings.enableRating}
 
-		moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
-		enableAiModeration = {$plugin.tx_pwcomments.settings.enableAiModeration}
-		aiModerationProvider = {$plugin.tx_pwcomments.settings.aiModerationProvider}
-		aiModerationApiKey = {$plugin.tx_pwcomments.settings.aiModerationApiKey}
-		aiModerationApiEndpoint = {$plugin.tx_pwcomments.settings.aiModerationApiEndpoint}
-		aiModerationThreshold = {$plugin.tx_pwcomments.settings.aiModerationThreshold}
-		aiModerationFallbackToManual = {$plugin.tx_pwcomments.settings.aiModerationFallbackToManual}
-	}
+        moderateNewComments = {$plugin.tx_pwcomments.settings.moderateNewComments}
+        enableAiModeration = {$plugin.tx_pwcomments.settings.enableAiModeration}
+        aiModerationProvider = {$plugin.tx_pwcomments.settings.aiModerationProvider}
+        aiModerationApiKey = {$plugin.tx_pwcomments.settings.aiModerationApiKey}
+        aiModerationApiEndpoint = {$plugin.tx_pwcomments.settings.aiModerationApiEndpoint}
+        aiModerationThreshold = {$plugin.tx_pwcomments.settings.aiModerationThreshold}
+        aiModerationFallbackToManual = {$plugin.tx_pwcomments.settings.aiModerationFallbackToManual}
+    }
 }
 
 
-[loginUser('*')]
-plugin.tx_pwcomments {
-	settings {
-		moderateNewComments = 0
-		secondsBetweenTwoComments = 60
+[frontend.user.isLoggedIn]
+    plugin.tx_pwcomments {
+        settings {
+            moderateNewComments = 0
+            secondsBetweenTwoComments = 60
 
-		replaceUsernameWith = COA_INT
-		replaceUsernameWith {
-			10 = TEXT
-			10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
+            replaceUsernameWith = COA_INT
+            replaceUsernameWith {
+                10 = TEXT
+                10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
 
-			20 = TEXT
-			20.data = TSFE:fe_user|user|username
-			20.noTrimWrap = | <b>|</b>|
+                20 = TEXT
+                20.data = TSFE:fe_user|user|username
+                20.noTrimWrap = | <b>|</b>|
 
-			stdWrap.wrap = <span class="loggedInAs">|</span>
-		}
+                stdWrap.wrap = <span class="loggedInAs">|</span>
+            }
 
-		replaceMailWith = TEXT
-		replaceMailWith.stdWrap.char = 0
-	}
-}
+            replaceMailWith = TEXT
+            replaceMailWith.stdWrap.char = 0
+        }
+    }
 [global]
 
+lib {
+    # Lib for output of comments of current page
+    pwCommentsIndex = USER
+    pwCommentsIndex {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        extensionName = PwComments
+        vendorName = T3
+        pluginName = show
 
-# Lib for output of comments of current page
-lib.pwCommentsIndex = USER
-lib.pwCommentsIndex {
-	userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-	extensionName = PwComments
-	vendorName = T3
-	pluginName = show
+        controllerActions {
+            Comment {
+                1 = index
+                2 = upvote
+                3 = downvote
+            }
+        }
 
-	controllerActions {
-		Comment {
-			1 = index
-			2 = upvote
-			3 = downvote
-		}
-	}
+        view < plugin.tx_pwcomments.view
+        persistence =< plugin.tx_pwcomments.persistence
+        settings =< plugin.tx_pwcomments.settings
+    }
 
-	view < plugin.tx_pwcomments.view
-	persistence =< plugin.tx_pwcomments.persistence
-	settings =< plugin.tx_pwcomments.settings
-}
+    # Lib for form to post new comments
+    pwCommentsNew < .pwCommentsIndex
+    pwCommentsNew {
+        pluginName = new
 
-# Lib for form to post new comments
-lib.pwCommentsNew < lib.pwCommentsIndex
-lib.pwCommentsNew {
-	pluginName = new
+        controllerActions {
+            Comment {
+                1 = new
+                2 = create
+                3 = confirmComment
+            }
+        }
+    }
 
-	controllerActions {
-		Comment {
-			1 = new
-			2 = create
-			3 = confirmComment
-		}
-	}
-}
+    # Number of comments of current/given page
+    pwCommentsGetCount = COA_INT
+    pwCommentsGetCount {
+        10 = CONTENT
+        10 {
+            table = tx_pwcomments_domain_model_comment
+            select.selectFields = count(*)
+            select.pidInList.data = field:uid
+            renderObj = COA
+            renderObj {
+                10 = TEXT
+                10 {
+                    field = count(*)
+                }
+            }
+        }
+    }
 
-# Number of comments of current/given page
-lib.pwCommentsGetCount = COA_INT
-lib.pwCommentsGetCount {
-	10 = CONTENT
-	10 {
-		table = tx_pwcomments_domain_model_comment
-		select.selectFields = count(*)
-		select.pidInList.data = field:uid
-		renderObj = COA
-		renderObj {
-			10 = TEXT
-			10 {
-				field = count(*)
-			}
-		}
-	}
-}
+    # Number of comments of current/given page with singular or plural comment label
+    pwCommentsGetCountWithLabel < .pwCommentsGetCount
+    pwCommentsGetCountWithLabel {
+        20 = TEXT
+        20 {
+            data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comments
+            override.if {
+                value.cObject =< .10
+                equals = 1
+            }
 
-# Number of comments of current/given page with singular or plural comment label
-lib.pwCommentsGetCountWithLabel < lib.pwCommentsGetCount
-lib.pwCommentsGetCountWithLabel {
-	20 = TEXT
-	20 {
-		data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comments
-		override.if {
-			value.cObject =< .10
-			equals = 1
-		}
-		override.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comment
-		noTrimWrap = | ||
-	}
-
-	20.override.if.value.cObject < lib.pwCommentsGetCountWithLabel.10
+            override.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.comment
+            noTrimWrap = | ||
+        }
+    }
 }

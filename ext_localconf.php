@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use T3\PwComments\Hooks\ProcessDatamap;
+use T3\PwComments\UserFunc\TCA\AiModerationControl;
 use TYPO3\CMS\Backend\Controller\PageLayoutController;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
@@ -36,7 +37,8 @@ if (!defined('TYPO3')) {
         ],
         [
             CommentController::class => 'index,upvote,downvote',
-        ]
+        ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
     ExtensionUtility::configurePlugin(
         $extensionKey,
@@ -46,7 +48,8 @@ if (!defined('TYPO3')) {
         ],
         [
             CommentController::class => 'new,create,confirmComment',
-        ]
+        ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
@@ -57,7 +60,8 @@ if (!defined('TYPO3')) {
         ],
         [
             CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
-        ]
+        ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']
@@ -119,6 +123,6 @@ if (!defined('TYPO3')) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1671899200] = [
         'nodeName' => 'aiModerationControl',
         'priority' => 40,
-        'class' => \T3\PwComments\UserFunc\TCA\AiModerationControl::class,
+        'class' => AiModerationControl::class,
     ];
 })('pw_comments');

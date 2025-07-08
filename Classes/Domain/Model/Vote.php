@@ -68,7 +68,7 @@ class Vote extends AbstractEntity
      * @param int $origPid
      * @return void
      */
-    public function setOrigPid($origPid)
+    public function setOrigPid($origPid): void
     {
         $this->origPid = $origPid;
     }
@@ -89,7 +89,7 @@ class Vote extends AbstractEntity
      * @param int $type
      * @return void
      */
-    public function setType($type)
+    public function setType($type): void
     {
         $this->type = $type;
     }
@@ -110,7 +110,7 @@ class Vote extends AbstractEntity
      * @param int $crdate
      * @return void
      */
-    public function setCrdate($crdate)
+    public function setCrdate($crdate): void
     {
         $this->crdate = $crdate;
     }
@@ -130,7 +130,7 @@ class Vote extends AbstractEntity
      *
      * @return void
      */
-    public function setAuthor(FrontendUser $author)
+    public function setAuthor(FrontendUser $author): void
     {
         $this->author = $author;
     }
@@ -151,7 +151,7 @@ class Vote extends AbstractEntity
      * @param string $authorIpAddress
      * @return void
      */
-    public function setAuthorIdent($authorIpAddress)
+    public function setAuthorIdent($authorIpAddress): void
     {
         $this->authorIdent = $authorIpAddress;
     }
@@ -189,7 +189,7 @@ class Vote extends AbstractEntity
      *
      * @return void
      */
-    public function setComment(Comment $comment)
+    public function setComment(Comment $comment): void
     {
         $this->comment = $comment;
     }

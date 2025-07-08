@@ -1,0 +1,21 @@
+paths:
+  - Configuration/
+
+filePatterns:
+  - '*.typoscript'
+
+sniffs:
+  - class: Indentation
+    parameters:
+      indentConditions: true
+  - class: DeadCode
+  - class: OperatorWhitespace
+  - class: RepeatingRValue
+    disabled: true
+  - class: DuplicateAssignment
+  - class: EmptySection
+  - class: ConfigNoCache
+    disabled: true
+  - class: NestingConsistency
+    parameters:
+      commonPathPrefixThreshold: 2

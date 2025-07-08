@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
          bootstrap="../vendor/autoload.php"
-         cacheDirectory="../.phpunit.cache"
-         executionOrder="depends,defects"
+         cacheDirectory="./log/.phpunit.cache"
+         executionOrder="random"
          requireCoverageMetadata="false"
          beStrictAboutCoverageMetadata="false"
          beStrictAboutOutputDuringTests="true"
@@ -29,13 +29,13 @@
 
     <coverage>
         <report>
-            <html outputDirectory="../coverage-html" lowUpperBound="50" highLowerBound="80"/>
+            <html outputDirectory="./log/coverage-html" lowUpperBound="50" highLowerBound="80"/>
             <text outputFile="php://stdout" showUncoveredFiles="false"/>
         </report>
     </coverage>
 
     <logging>
-        <junit outputFile="../.phpunit.result.cache/junit.xml"/>
+        <junit outputFile="./log/junit.xml"/>
     </logging>
 
     <php>

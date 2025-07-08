@@ -156,7 +156,7 @@ class CommentRepository extends Repository
      * @param bool $invertCommentSorting
      * @return void
      */
-    public function setInvertCommentSorting($invertCommentSorting)
+    public function setInvertCommentSorting($invertCommentSorting): void
     {
         $this->invertCommentSorting = $invertCommentSorting;
     }
@@ -190,7 +190,7 @@ class CommentRepository extends Repository
      * @param bool $invertReplySorting
      * @return void
      */
-    public function setInvertReplySorting($invertReplySorting)
+    public function setInvertReplySorting($invertReplySorting): void
     {
         $this->invertReplySorting = $invertReplySorting;
     }

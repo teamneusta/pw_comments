@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "navigation to target folder"
+cd /var/www/pw_comments
+./tools/typoscript-lint -c Build/.typoscript-lint.dist.yml

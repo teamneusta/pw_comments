@@ -1,6 +1,6 @@
 {namespace pw=T3\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterPublish.salutation" />
 <f:translate key="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished"/>
-<f:render partial="PageLink" arguments="{comment:comment}" />
+<f:render partial="PageLink" arguments="{commentUrl:commentUrl}" />
 ---------------------------------------------------
 
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}

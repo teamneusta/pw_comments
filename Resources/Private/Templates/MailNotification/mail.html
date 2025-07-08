@@ -2,7 +2,7 @@
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" /></f:then><f:else><f:translate key="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" /></f:else></f:if>
 
 <f:translate key="tx_pwcomments.notificationMail.linkToArticle" />
-<f:render partial="PageLink" arguments="{comment:comment}" />
+<f:render partial="PageLink" arguments="{commentUrl:commentUrl}" />
 <f:if condition="{settings.moderateNewComments}">
 <f:translate key="tx_pwcomments.notificationMail.linkToApproval" />
 <f:format.raw><f:uri.action action="confirmComment" controller="Comment" arguments="{comment:'{comment}', hash:'{hash}'}"

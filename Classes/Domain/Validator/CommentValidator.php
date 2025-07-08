@@ -85,7 +85,7 @@ class CommentValidator extends AbstractValidator
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($GLOBALS['TSFE']->fe_user->user['uid'] ?? false) ||
+        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false) ||
                ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
@@ -97,7 +97,7 @@ class CommentValidator extends AbstractValidator
      */
     protected function mailIsValid(Comment $comment)
     {
-        return $GLOBALS['TSFE']->fe_user->user['uid'] ?? false
+        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false)
             || (is_string($comment->getAuthorMail()) && GeneralUtility::validEmail($comment->getAuthorMail()));
     }
 
@@ -119,10 +119,11 @@ class CommentValidator extends AbstractValidator
      */
     protected function lastCommentRespectsTimer()
     {
-        if (!$GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment')) {
+        $feUser = $this->getRequest()?->getAttribute('frontend.user');
+        if (!$feUser || !$feUser->getKey('ses', 'tx_pwcomments_lastComment')) {
             return true;
         }
-        $difference = time() - $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_pwcomments_lastComment');
+        $difference = time() - $feUser->getKey('ses', 'tx_pwcomments_lastComment');
 
         return $difference > (int)($this->settings['secondsBetweenTwoComments'] ?? 300);
     }

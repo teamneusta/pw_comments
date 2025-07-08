@@ -6,3 +6,5 @@
 vendor
 .phpunit.cache
 .phpunit.result.cache
+tools
+Build/log/*

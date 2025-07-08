@@ -55,7 +55,7 @@ class MailNotificationController
         $pid = (int) $params['pid'];
 
         if (!$action || !$uid || !$pid || !$hash) {
-            throw new InvalidArgumentException('Invalid arguments given.');
+            throw new InvalidArgumentException('Invalid arguments given.', 5066963646);
         }
 
         // Get comment row
@@ -64,14 +64,14 @@ class MailNotificationController
             ->select('*')
             ->from('tx_pwcomments_domain_model_comment')->where($this->queryBuilder->expr()->eq(
             'uid',
-            $this->queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
+            $this->queryBuilder->createNamedParameter($uid, \TYPO3\CMS\Core\Database\Connection::PARAM_INT)
         ))->executeQuery()->fetchAssociative();
 
 
         // Check hash
         $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
         if (!$valid) {
-            throw new RuntimeException('Given hash not valid!');
+            throw new RuntimeException('Given hash not valid!', 9298443636);
         }
         // Send mail and respond
         if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -61,9 +62,7 @@ final class ModerationProviderFactoryTest extends TestCase
         yield 'unknown provider name' => ['unknown-provider'];
     }
 
-    /**
-     * @dataProvider invalidProviderDataProvider
-     */
+    #[DataProvider('invalidProviderDataProvider')]
     public function testThrowsExceptionForUnknownProvider(string $provider): void
     {
         $this->expectException(\InvalidArgumentException::class);

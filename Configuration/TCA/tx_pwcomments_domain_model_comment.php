@@ -238,8 +238,8 @@ return [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_comment.ai_moderation_confidence',
             'config' => [
-                'type' => 'input',
-                'eval' => 'double2',
+                'type' => 'number',
+                'format' => 'decimal',
                 'range' => [
                     'lower' => 0,
                     'upper' => 1

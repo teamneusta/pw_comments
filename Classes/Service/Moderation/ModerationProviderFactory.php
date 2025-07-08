@@ -33,7 +33,7 @@ class ModerationProviderFactory implements SingletonInterface
                 $settings['aiModerationApiEndpoint'] ?? 'https://api.openai.com/v1/moderations',
                 (float)($settings['aiModerationThreshold'] ?? 0.7)
             ),
-            default => throw new \InvalidArgumentException('Unknown moderation provider: ' . $provider),
+            default => throw new \InvalidArgumentException('Unknown moderation provider: ' . $provider, 7207721257),
         };
     }
 }

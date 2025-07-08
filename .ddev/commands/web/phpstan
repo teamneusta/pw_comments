@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "running phpstan"
+cd /var/www/pw_comments
+./tools/phpstan analyze -c Build/phpstan.neon
