@@ -17,27 +17,34 @@ use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use function htmlspecialchars;
 
 /**
  * ProcessDatamap Hook
  *
  * @package T3\PwComments
  */
-class ProcessDatamap
+final readonly class ProcessDatamap
 {
-    protected string $enabledTable = 'tx_pwcomments_domain_model_comment';
-    protected string $enabledStatus = 'update';
+    protected string $enabledTable;
+    protected string $enabledStatus;
 
     public function __construct(
-        private readonly CommentRepository $commentRepository,
-        private readonly ContentObjectRenderer $contentObjectRenderer,
-        private readonly FlashMessageService $flashMessageService,
+        private CommentRepository $commentRepository,
+        private ContentObjectRenderer $contentObjectRenderer,
+        private FlashMessageService $flashMessageService,
+        private BackendConfigurationManager $backendConfigurationManager,
     ) {
+        $this->enabledTable = 'tx_pwcomments_domain_model_comment';
+        $this->enabledStatus = 'update';
     }
 
     /**
@@ -64,8 +71,8 @@ class ProcessDatamap
 
         $comment = $this->commentRepository->findByCommentUid($id);
         $settings = $this->getTypoScriptSetup($request)['plugin.']['tx_pwcomments.']['settings.'] ?? [];
-        $moderateNewComments = $settings['moderateNewComments'] ?? false;
-        $sendMailToAuthorAfterPublish = $settings['sendMailToAuthorAfterPublish'] ?? false;
+        $moderateNewComments = (bool)($settings['moderateNewComments'] ?? false);
+        $sendMailToAuthorAfterPublish = (bool)($settings['sendMailToAuthorAfterPublish'] ?? false);
         if ($comment === null || (!$moderateNewComments || !$sendMailToAuthorAfterPublish)) {
             return;
         }
@@ -89,12 +96,13 @@ class ProcessDatamap
         $content = GeneralUtility::getUrl($url);
         if ($content && $content === '200') {
             // Add flash message
-            $messageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
-            $messageQueue->addMessage(new FlashMessage(LocalizationUtility::translate(
+            $messageQueue = $this->flashMessageService->getMessageQueueByIdentifier(FlashMessageQueue::NOTIFICATION_QUEUE);
+            $messageToDisplay = LocalizationUtility::translate(
                 'mailSentToAuthorAfterPublish',
                 'PwComments',
                 [$comment->getCommentAuthorMailAddress()]
-            ) ?? '', '', ContextualFeedbackSeverity::OK, true));
+            );
+            $messageQueue->enqueue(new FlashMessage($messageToDisplay ?? '', '', ContextualFeedbackSeverity::OK, true));
         } else {
             throw new RuntimeException('Error while calling the following url: ' . $url, 4620589602);
         }
@@ -108,7 +116,7 @@ class ProcessDatamap
      */
     protected function getTypoScriptSetup(ServerRequestInterface $request): array
     {
-        return $request->getAttribute('frontend.typoscript')?->getSetupArray() ?? [];
+        return $this->backendConfigurationManager->getTypoScriptSetup($request);
     }
 }
 // phpcs:enable

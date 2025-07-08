@@ -332,7 +332,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $this->commentRepository->persistAll();
 
         if (isset($this->settings['sendMailOnNewCommentsTo']) && $this->settings['sendMailOnNewCommentsTo']) {
-            $this->mailUtility->setView($this->makeFluidTemplateObject());
+            $view = $this->makeFluidTemplateObject();
+            $view->assign('commentUrl', $this->makeCommentUrl($newComment));
+            $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
             $this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
@@ -342,7 +344,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->settings['sendMailToAuthorAfterSubmit'] &&
             $newComment->hasCommentAuthorMailAddress()
         ) {
-            $this->mailUtility->setView($this->makeFluidTemplateObject());
+            $view = $this->makeFluidTemplateObject();
+            $view->assign('commentUrl', $this->makeCommentUrl($newComment));
+            $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
             $this->mailUtility->sendMail($newComment);
@@ -546,7 +550,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     protected function createAuthorIdent()
     {
         if ($this->currentAuthorIdent === null) {
-            $this->currentAuthorIdent = uniqid(more_entropy: true) . uniqid(more_entropy: true);
+            $this->currentAuthorIdent = uniqid('', true) . uniqid('', true);
             $this->cookieUtility->set('ahash', $this->currentAuthorIdent);
         }
     }
@@ -564,7 +568,10 @@ class CommentController extends ActionController implements LoggerAwareInterface
         if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
             isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
-            $this->mailUtility->setView($this->makeFluidTemplateObject());
+            $commentUrl = $this->makeCommentUrl($comment);
+            $view = $this->makeFluidTemplateObject();
+            $view->assign('commentUrl', $commentUrl);
+            $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($comment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
@@ -622,8 +629,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     protected function makeFluidTemplateObject(): ViewInterface
     {
         $fluidTemplate = $this->viewFactory->create(new ViewFactoryData(request: $this->request));
-//        $fluidTemplate->getRenderingContext()->setAttribute(\Psr\Http\Message\ServerRequestInterface::class, $this->request);
-//        $fluidTemplate->getRenderingContext()->getTemplatePaths()->setPartialRootPaths($this->view->getRenderingContext()->getTemplatePaths()->getPartialRootPaths());
+        $fluidTemplate->getRenderingContext()->getTemplatePaths()->setPartialRootPaths($this->view->getRenderingContext()->getTemplatePaths()->getPartialRootPaths());
 
         return $fluidTemplate;
     }
@@ -674,5 +680,15 @@ class CommentController extends ActionController implements LoggerAwareInterface
     private function gpFromRequest(string $param): mixed
     {
         return $this->request->getParsedBody()[$param] ?? $this->request->getQueryParams()[$param] ?? null;
+    }
+
+    private function makeCommentUrl(Comment $comment): string
+    {
+        return $this->buildUriByUid(
+                $comment->getOrigPid()
+                    ?: $comment->getUid(),
+                false,
+                [],
+            ) . '#comment' . $comment->getUid();
     }
 }

@@ -18,6 +18,7 @@ services:
             - TYPO3_INSTALL_SITE_SETUP_TYPE=site
             - TYPO3_INSTALL_WEB_SERVER_CONFIG=apache
             - TYPO3_CONTEXT=Development
+            - TYPO3_PATH_WEB=/var/www/html/public
         volumes:
             - type: bind
               source: ../

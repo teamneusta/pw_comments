@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use T3\PwComments\Service\Moderation\ModerationResult;
 
@@ -63,9 +64,7 @@ final class ModerationResultTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider formattedReasonDataProvider
-     */
+    #[DataProvider('formattedReasonDataProvider')]
     public function testGetFormattedReason(string $reason, array $categories, string $expected): void
     {
         $result = new ModerationResult(true, $categories, [], $reason);

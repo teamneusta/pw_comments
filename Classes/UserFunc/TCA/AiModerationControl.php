@@ -28,6 +28,8 @@ class AiModerationControl extends AbstractNode
         private readonly CommentRepository $commentRepository,
         private readonly ModerationProviderFactory $moderationProviderFactory,
         private readonly PersistenceManager $persistenceManager,
+        private readonly IconFactory $iconFactory,
+        private readonly PageRenderer $pageRenderer,
     ) {
     }
 
@@ -51,14 +53,9 @@ class AiModerationControl extends AbstractNode
 
     private function renderControl(int $commentUid): string
     {
-
-        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-        $recheckIcon = $iconFactory->getIcon('actions-refresh', IconSize::SMALL);
-
-        /** @var PageRenderer $pageRenderer */
-        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadJavaScriptModule('@t3/pw-comments/ai-moderation-control.js');
-        $pageRenderer->addInlineLanguageLabelFile('EXT:pw_comments/Resources/Private/Language/locallang_be.xlf');
+        $recheckIcon = $this->iconFactory->getIcon('actions-refresh', IconSize::SMALL);
+        $this->pageRenderer->loadJavaScriptModule('@t3/pw-comments/ai-moderation-control.js');
+        $this->pageRenderer->addInlineLanguageLabelFile('EXT:pw_comments/Resources/Private/Language/locallang_be.xlf');
 
         $html = '<div class="btn-group" role="group">';
         

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "navigation to target folder"
+cd /var/www/pw_comments
+
+echo "disabling xdebug"
+disable_xdebug
+
+echo "running unit tests"
+XDEBUG_MODE=coverage ./tools/phpunit -c Build/phpunit.xml --do-not-cache

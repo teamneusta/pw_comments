@@ -1,6 +1,6 @@
 {namespace pw=T3\PwComments\ViewHelpers}<f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.salutation" />
 <f:if condition="{settings.moderateNewComments}"><f:then><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted"/></f:then><f:else><f:translate key="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted"/></f:else></f:if>
-<f:render partial="PageLink" arguments="{comment:comment}" />
+<f:render partial="PageLink" arguments="{commentUrl:commentUrl}" />
 ---------------------------------------------------
 
 <f:translate key="tx_pwcomments.notificationMail.name" />{f:if(condition: '{comment.author}', then: '{comment.author.username} {f:translate(key:\'tx_pwcomments.notificationMail.registred\')}', else: '{comment.authorName}')}

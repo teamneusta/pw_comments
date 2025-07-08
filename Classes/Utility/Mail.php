@@ -10,6 +10,7 @@ namespace T3\PwComments\Utility;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -148,7 +149,8 @@ class Mail
             throw new Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
         }
 
-        $this->view->getRenderingContext()->getTemplatePaths()->setTemplatePathAndFilename($mailTemplate);
+        $templatePaths = $this->view->getRenderingContext()->getTemplatePaths();
+        $templatePaths->setTemplatePathAndFilename($this->getTemplatePath());
         $this->view->assignMultiple(
             [
                 'hash' => $hash,

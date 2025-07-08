@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=${1:-12}
+VERSION=${1:-13}
 
 shopt -s extglob
 rm -rf /var/www/html/* -- !(vendor)
@@ -10,24 +10,49 @@ composer config extra.typo3/cms.web-dir public -d /var/www/html/
 composer config repositories.$EXTENSION_KEY path /var/www/$EXTENSION_KEY -d /var/www/html/
 composer config --no-plugins allow-plugins.typo3/cms-composer-installers true -d /var/www/html/
 composer config --no-plugins allow-plugins.typo3/class-alias-loader true -d /var/www/html/
-composer req t3/cms:"^$VERSION" $PACKAGE_NAME:'*@dev' --no-progress -n -d /var/www/html/
+composer req typo3/cms-core:"^$VERSION" \
+             typo3/cms-backend:"^$VERSION" \
+             typo3/cms-frontend:"^$VERSION" \
+             typo3/cms-install:"^$VERSION" \
+             typo3/cms-extbase:"^$VERSION" \
+             typo3/cms-fluid:"^$VERSION" \
+             typo3/cms-recordlist:"^$VERSION" \
+             typo3/cms-scheduler:"^$VERSION" \
+             typo3/cms-setup:"^$VERSION" \
+             typo3/cms-tstemplate:"^$VERSION" \
+             typo3/cms-extensionmanager:"^$VERSION" \
+             typo3/cms-filelist:"^$VERSION" \
+             typo3/cms-lowlevel:"^$VERSION" \
+             typo3/cms-info:"^$VERSION" \
+             typo3/cms-viewpage:"^$VERSION" \
+             typo3/cms-belog:"^$VERSION" \
+             typo3/cms-beuser:"^$VERSION" \
+             typo3/cms-dashboard:"^$VERSION" \
+             typo3/cms-felogin:"^$VERSION" \
+             typo3/cms-fluid-styled-content:"^$VERSION" \
+             typo3/cms-form:"^$VERSION" \
+             typo3/cms-impexp:"^$VERSION" \
+             typo3/cms-seo:"^$VERSION" \
+             typo3/cms-sys-note:"^$VERSION" \
+             helhum/typo3-console:"*" \
+             $PACKAGE_NAME:'*@dev' \
+             --no-progress -n -d /var/www/html/
+
 composer req --dev --no-progress -n -W -d /var/www/html/ \
-  typo3/cms-lowlevel:"^$VERSION" \
   friendsofphp/php-cs-fixer:'^3' \
   helmich/typo3-typoscript-lint:'^3' \
-  michielroos/typo3scan:'^1.7' \
-  ssch/typo3-rector:'^1.3' \
-  phpunit/phpunit:'^10.5'
+  ssch/typo3-rector:'^3.5' \
+  phpunit/phpunit:'^11'
 
 cd /var/www/html/
 
 mysql \
   --host=db \
-  --user=db \
-  --password=db \
+  --user=root \
+  --password=root \
   --execute="DROP DATABASE IF EXISTS test; CREATE DATABASE test; GRANT ALL PRIVILEGES ON test.* TO 'db'@'%'; FLUSH PRIVILEGES;"
 
-vendor/bin/typo3 install:setup --database-user-name=db --database-user-password=db --database-host-name=db --database-name=test --use-existing-database --force --site-base-url "/"
+vendor/bin/typo3 install:setup --database-user-name=root --database-user-password=root --database-host-name=db --database-name=test --use-existing-database --force --site-base-url "/"
 vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
 vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
@@ -37,7 +62,6 @@ vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3 configuration:set 'GFX/processor' 'ImageMagick'
 vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
-vendor/bin/typo3 backend:createadmin admin admin123
 
 sed -i -e "s/base: ht\//base: \//g" /var/www/html/config/sites/main/config.yaml
 sed -i -e 's/base: \/en\//base: \//g' /var/www/html/config/sites/main/config.yaml

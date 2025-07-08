@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
@@ -188,9 +189,7 @@ final class OpenAiModerationServiceTest extends TestCase
         yield 'generic error' => [400, 'Bad Request Error'];
     }
 
-    /**
-     * @dataProvider apiErrorDataProvider
-     */
+    #[DataProvider('apiErrorDataProvider')]
     public function testHandlesApiErrors(int $statusCode, string $expectedErrorText): void
     {
         $comment = $this->createComment('Test message');
