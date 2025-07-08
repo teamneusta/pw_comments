@@ -1,4 +1,4 @@
-name: pw-comments-fork
+name: pw-comments
 type: php
 docroot: public
 php_version: "8.2"
@@ -14,7 +14,7 @@ database:
     type: mariadb
     version: "10.4"
 performance_mode: none
-host_db_port: "32683"
+host_db_port: "32682"
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
