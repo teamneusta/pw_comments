@@ -242,6 +242,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $newComment->setOrigPid($this->pageUid);
         $newComment->setEntryUid($this->entryUid);
         $newComment->setAuthorIdent($this->currentAuthorIdent);
+        $newComment->setCrdate(time());
 
         $author = null;
         if (isset($this->currentUser['uid'])) {
