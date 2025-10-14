@@ -72,7 +72,7 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
 
             $listType = 'pwcomments_' . $plugin;
 
-            $this->queryBuilder->resetQueryParts();
+            $this->queryBuilder->resetWhere();
             $this->queryBuilder
                 ->update('tt_content')
                 ->set('pi_flexform', null)
