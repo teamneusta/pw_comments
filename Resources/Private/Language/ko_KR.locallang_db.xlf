@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments" target-language="ko">
+    <header/>
+    <body>
+      <trans-unit id="newContentElementWizardTitle" xml:space="preserve">
+				<source>Comments new</source>
+			<target state="needs-translation">Comments new</target></trans-unit>
+      <trans-unit id="newContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides creation of new comments.</source>
+			<target state="needs-translation">Plugin of pw_comments which provides creation of new comments.</target></trans-unit>
+      <trans-unit id="showContentElementWizardTitle" xml:space="preserve">
+				<source>Comments show</source>
+			<target state="needs-translation">Comments show</target></trans-unit>
+      <trans-unit id="showContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides display of existing comments.</source>
+			<target state="needs-translation">Plugin of pw_comments which provides display of existing comments.</target></trans-unit>
+      <trans-unit id="general.pid" xml:space="preserve">
+				<source>PID</source>
+			<target state="needs-translation">PID</target></trans-unit>
+      <trans-unit id="general.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			<target state="needs-translation">Creation date</target></trans-unit>
+      <trans-unit id="general.hidden" xml:space="preserve">
+				<source>Hide</source>
+			<target state="needs-translation">Hide</target></trans-unit>
+      <trans-unit id="general.language" xml:space="preserve">
+				<source>Language</source>
+			<target state="needs-translation">Language</target></trans-unit>
+      <trans-unit id="general.l18n_parent" xml:space="preserve">
+				<source>Translated item</source>
+			<target state="needs-translation">Translated item</target></trans-unit>
+      <trans-unit id="general.versionLabel" xml:space="preserve">
+				<source>Version</source>
+			<target state="needs-translation">Version</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment" xml:space="preserve">
+				<source>Comment</source>
+			<target state="needs-translation">Comment</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
+			<target state="needs-translation">Page uid of the commented page</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve">
+				<source>Entry uid</source>
+			<target state="needs-translation">Entry uid</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author" xml:space="preserve">
+				<source>Author</source>
+			<target state="needs-translation">Author</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_name" xml:space="preserve">
+				<source>Name</source>
+			<target state="needs-translation">Name</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_mail" xml:space="preserve">
+				<source>Mail</source>
+			<target state="needs-translation">Mail</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			<target state="needs-translation">Author ident</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.message" xml:space="preserve">
+				<source>Message</source>
+			<target state="needs-translation">Message</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.parent_comment" xml:space="preserve">
+				<source>Related comment (parent)</source>
+			<target state="needs-translation">Related comment (parent)</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.votes" xml:space="preserve">
+				<source>Votes</source>
+			<target state="needs-translation">Votes</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.terms_accepted" xml:space="preserve">
+				<source>Terms accepted</source>
+			<target state="needs-translation">Terms accepted</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve">
+				<source>Vote</source>
+			<target state="needs-translation">Vote</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			<target state="needs-translation">Creation date</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
+			<target state="needs-translation">Page uid of the commented page</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve">
+				<source>Type</source>
+			<target state="needs-translation">Type</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type.0" xml:space="preserve">
+				<source>Downvote</source>
+			<target state="needs-translation">Downvote</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type.1" xml:space="preserve">
+				<source>Upvote</source>
+			<target state="needs-translation">Upvote</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.author" xml:space="preserve">
+				<source>Author</source>
+			<target state="needs-translation">Author</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			<target state="needs-translation">Author ident</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.comment" xml:space="preserve">
+				<source>Comment</source>
+			<target state="needs-translation">Comment</target></trans-unit>
+      <trans-unit id="plugin.title.show" xml:space="preserve">
+				<source>pw_comments show</source>
+			<target state="needs-translation">pw_comments show</target></trans-unit>
+      <trans-unit id="plugin.title.new" xml:space="preserve">
+				<source>pw_comments new</source>
+			<target state="needs-translation">pw_comments new</target></trans-unit>
+      <trans-unit id="plugin.sheet" xml:space="preserve">
+				<source>Settings</source>
+			<target state="needs-translation">Settings</target></trans-unit>
+      <trans-unit id="plugin.mode" xml:space="preserve">
+				<source>Mode</source>
+			<target state="needs-translation">Mode</target></trans-unit>
+      <trans-unit id="plugin.mode.index" xml:space="preserve">
+				<source>Show comments</source>
+			<target state="needs-translation">Show comments</target></trans-unit>
+      <trans-unit id="plugin.mode.new" xml:space="preserve">
+				<source>Show new comment form</source>
+			<target state="needs-translation">Show new comment form</target></trans-unit>
+    </body>
+  </file>
+</xliff>
