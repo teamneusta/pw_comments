@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="de" datatype="plaintext" original="messages" product-name="pw_comments">
+    <header/>
+    <body>
+      <trans-unit id="anchors" xml:space="preserve">
+				<source>Anchors</source>
+			<target state="needs-translation">Anchors</target></trans-unit>
+      <trans-unit id="gravatar" xml:space="preserve">
+				<source>Gravatar</source>
+			<target state="needs-translation">Gravatar</target></trans-unit>
+      <trans-unit id="entryuid" xml:space="preserve">
+				<source>Entry Uid</source>
+			<target state="needs-translation">Entry Uid</target></trans-unit>
+      <trans-unit id="replying" xml:space="preserve">
+				<source>Replying to comments</source>
+			<target state="needs-translation">Replying to comments</target></trans-unit>
+      <trans-unit id="sorting" xml:space="preserve">
+				<source>Sorting</source>
+			<target state="needs-translation">Sorting</target></trans-unit>
+      <trans-unit id="voting" xml:space="preserve">
+				<source>Voting</source>
+			<target state="needs-translation">Voting</target></trans-unit>
+      <trans-unit id="moderation" xml:space="preserve">
+				<source>Moderation</source>
+			<target state="needs-translation">Moderation</target></trans-unit>
+      <trans-unit id="mails" xml:space="preserve">
+				<source>Mails</source>
+			<target state="needs-translation">Mails</target></trans-unit>
+      <trans-unit id="spamprotect" xml:space="preserve">
+				<source>Spam protection</source>
+			<target state="needs-translation">Spam protection</target></trans-unit>
+      <trans-unit id="misc" xml:space="preserve">
+				<source>Miscellaneous</source>
+			<target state="needs-translation">Miscellaneous</target></trans-unit>
+      <trans-unit id="settings.commentAnchorPrefix" xml:space="preserve">
+				<source>Comment anchor prefix: Every comment gets an own anchor which contains the uid of the comment. In the default case the anchor will look something like that: #comment1337.</source>
+			<target state="needs-translation">Comment anchor prefix: Every comment gets an own anchor which contains the uid of the comment. In the default case the anchor will look something like that: #comment1337.</target></trans-unit>
+      <trans-unit id="settings.showCommentAnchor" xml:space="preserve">
+                <source>Show comment anchor name: This anchor will appear in front of the comment numbering.</source>
+			<target state="needs-translation">Show comment anchor name: This anchor will appear in front of the comment numbering.</target></trans-unit>
+      <trans-unit id="settings.writeCommentAnchor" xml:space="preserve">
+                <source>Write comment anchor name: This anchor will appear in front of the comment form.</source>
+			<target state="needs-translation">Write comment anchor name: This anchor will appear in front of the comment form.</target></trans-unit>
+      <trans-unit id="settings.successfulAnchor" xml:space="preserve">
+                <source>Successful anchor name: This is the anchor of the flash message which notifies the user that his comment has been submitted successfully.</source>
+			<target state="needs-translation">Successful anchor name: This is the anchor of the flash message which notifies the user that his comment has been submitted successfully.</target></trans-unit>
+      <trans-unit id="settings.customMessagesAnchor" xml:space="preserve">
+                <source>Custom messages anchor name: This anchor is part of index action and marks the flash message container to show customMessages, like "You can't vote for your own comment."</source>
+			<target state="needs-translation">Custom messages anchor name: This anchor is part of index action and marks the flash message container to show customMessages, like "You can't vote for your own comment."</target></trans-unit>
+      <trans-unit id="settings.showGravatarImage" xml:space="preserve">
+                <source>Show Gravatar image: Enables or disables the usage of gravatar images</source>
+			<target state="needs-translation">Show Gravatar image: Enables or disables the usage of gravatar images</target></trans-unit>
+      <trans-unit id="settings.gravatarSize" xml:space="preserve">
+                <source>Gravatar image size: Size (in pixel) of gravatar images</source>
+			<target state="needs-translation">Gravatar image size: Size (in pixel) of gravatar images</target></trans-unit>
+      <trans-unit id="settings.gravatarDefault" xml:space="preserve">
+                <source>Gravatar Default image: This option specifies the default image for e-mail addresses without a gravatar</source>
+			<target state="needs-translation">Gravatar Default image: This option specifies the default image for e-mail addresses without a gravatar</target></trans-unit>
+      <trans-unit id="settings.useEntryUid" xml:space="preserve">
+                <source>Use entry uid: Enables or disables the usage of entryUid</source>
+			<target state="needs-translation">Use entry uid: Enables or disables the usage of entryUid</target></trans-unit>
+      <trans-unit id="settings.entryUidData" xml:space="preserve">
+                <source>Entry uid: GET Parameter configuration of entry (e.g. news "GP:tx_news_pi1|news")</source>
+			<target state="needs-translation">Entry uid: GET Parameter configuration of entry (e.g. news "GP:tx_news_pi1|news")</target></trans-unit>
+      <trans-unit id="settings.enableRepliesToComments" xml:space="preserve">
+                <source>Enable replies to comments: Enables or disables the reply link and adds a hidden field to new comment form with uid of parent comment. If this option is activated the next one should be activated, too.</source>
+			<target state="needs-translation">Enable replies to comments: Enables or disables the reply link and adds a hidden field to new comment form with uid of parent comment. If this option is activated the next one should be activated, too.</target></trans-unit>
+      <trans-unit id="settings.showRepliesToComments" xml:space="preserve">
+                <source>Show replies to comments: Enables or disables the display of already existing replies to comments.</source>
+			<target state="needs-translation">Show replies to comments: Enables or disables the display of already existing replies to comments.</target></trans-unit>
+      <trans-unit id="settings.countReplies" xml:space="preserve">
+                <source>Count replies: If true, the placeholder {commentCount} will also count replies on comments. Otherwise just comments (no replies) will get counted.</source>
+			<target state="needs-translation">Count replies: If true, the placeholder {commentCount} will also count replies on comments. Otherwise just comments (no replies) will get counted.</target></trans-unit>
+      <trans-unit id="settings.invertCommentSorting" xml:space="preserve">
+                <source>Invert comment sorting: Per default oldest comments are displayed first. If this option is true, the order of comments get inverted (newest comments first).</source>
+			<target state="needs-translation">Invert comment sorting: Per default oldest comments are displayed first. If this option is true, the order of comments get inverted (newest comments first).</target></trans-unit>
+      <trans-unit id="settings.invertReplySorting" xml:space="preserve">
+                <source>Invert reply sorting: See invertCommentSorting. Affects replies of comments instead of comments itself.</source>
+			<target state="needs-translation">Invert reply sorting: See invertCommentSorting. Affects replies of comments instead of comments itself.</target></trans-unit>
+      <trans-unit id="settings.enableCommentVotes" xml:space="preserve">
+                <source>Enable comment votes: Enables or disables the voting controls for comments.</source>
+			<target state="needs-translation">Enable comment votes: Enables or disables the voting controls for comments.</target></trans-unit>
+      <trans-unit id="settings.enableReplyVotes" xml:space="preserve">
+                <source>Enable reply votes: Enables or disables the voting controls for replies.</source>
+			<target state="needs-translation">Enable reply votes: Enables or disables the voting controls for replies.</target></trans-unit>
+      <trans-unit id="settings.enableVoting" xml:space="preserve">
+                <source>Enable voting: If disabled votes are visible but users may not vote for comments/replies. This is useful if you want to restrict possibility to vote for eg. logged in users but show the votings.</source>
+			<target state="needs-translation">Enable voting: If disabled votes are visible but users may not vote for comments/replies. This is useful if you want to restrict possibility to vote for eg. logged in users but show the votings.</target></trans-unit>
+      <trans-unit id="settings.hideVoteButtons" xml:space="preserve">
+                <source>Hide vote buttons: If enabled the voting buttons are not visible. Caution: The voting functionality itself is still enabled.</source>
+			<target state="needs-translation">Hide vote buttons: If enabled the voting buttons are not visible. Caution: The voting functionality itself is still enabled.</target></trans-unit>
+      <trans-unit id="settings.ignoreVotingForOwnComments" xml:space="preserve">
+                <source>Ignore voting for own comments: If enabled users are not allowed to vote for their own comments/replies.</source>
+			<target state="needs-translation">Ignore voting for own comments: If enabled users are not allowed to vote for their own comments/replies.</target></trans-unit>
+      <trans-unit id="settings.moderateNewComments" xml:space="preserve">
+                <source>Moderate new comments: If this option is enabled, comments are not automatically visible. A back end user has to activate them first.</source>
+			<target state="needs-translation">Moderate new comments: If this option is enabled, comments are not automatically visible. A back end user has to activate them first.</target></trans-unit>
+      <trans-unit id="settings.sendMailOnNewCommentsTo" xml:space="preserve">
+                <source>Send mail on new comments to: One or more e-mail addresses who will be informed every time a new comment has been submitted. Separate multiple recipients using a comma or leave empty to disable e-mail notifications.</source>
+			<target state="needs-translation">Send mail on new comments to: One or more e-mail addresses who will be informed every time a new comment has been submitted. Separate multiple recipients using a comma or leave empty to disable e-mail notifications.</target></trans-unit>
+      <trans-unit id="settings.sendMailTemplate" xml:space="preserve">
+                <source>Send mail template: Defines the path to the Fluid template which should be used for notification e-mails</source>
+			<target state="needs-translation">Send mail template: Defines the path to the Fluid template which should be used for notification e-mails</target></trans-unit>
+      <trans-unit id="settings.sendMailMimeType" xml:space="preserve">
+                <source>Send mail mime type: Defines the MIME-type of the e-mail body. Please note that changes made here also need to be regarded in the appropriate template.</source>
+			<target state="needs-translation">Send mail mime type: Defines the MIME-type of the e-mail body. Please note that changes made here also need to be regarded in the appropriate template.</target></trans-unit>
+      <trans-unit id="settings.senderAddress" xml:space="preserve">
+                <source>Sender address: Sender's mail address when pw_comments sends out mails.</source>
+			<target state="needs-translation">Sender address: Sender's mail address when pw_comments sends out mails.</target></trans-unit>
+      <trans-unit id="settings.senderName" xml:space="preserve">
+                <source>Sender name (optional): Name to display in mail clients, instead of mail address.</source>
+			<target state="needs-translation">Sender name (optional): Name to display in mail clients, instead of mail address.</target></trans-unit>
+      <trans-unit id="settings.sendMailToAuthorAfterSubmit" xml:space="preserve">
+                <source>Send mail to author after submit: If this option is enabled, the author receives a mail after each comment he/she has written.</source>
+			<target state="needs-translation">Send mail to author after submit: If this option is enabled, the author receives a mail after each comment he/she has written.</target></trans-unit>
+      <trans-unit id="settings.sendMailToAuthorAfterSubmitTemplate" xml:space="preserve">
+                <source>After submit mail template: Defines the path to the Fluid template which should be used for the e-mail to comment author.</source>
+			<target state="needs-translation">After submit mail template: Defines the path to the Fluid template which should be used for the e-mail to comment author.</target></trans-unit>
+      <trans-unit id="settings.sendMailToAuthorAfterPublish" xml:space="preserve">
+                <source>Send mail to author after publish: If this option is enabled, the author receives a mail after a comment he/she has written has been published. This option requires activated "moderateNewComments".</source>
+			<target state="needs-translation">Send mail to author after publish: If this option is enabled, the author receives a mail after a comment he/she has written has been published. This option requires activated "moderateNewComments".</target></trans-unit>
+      <trans-unit id="settings.sendMailToAuthorAfterPublishTemplate" xml:space="preserve">
+                <source>After publish mail template: Defines the path to the Fluid template which should be used for the e-mail to comment author.</source>
+			<target state="needs-translation">After publish mail template: Defines the path to the Fluid template which should be used for the e-mail to comment author.</target></trans-unit>
+      <trans-unit id="settings.sitenameUsedInMails" xml:space="preserve">
+                <source>Sitename used in mails: When this option is set, it replaces the getHostname() output, used in mail subject.</source>
+			<target state="needs-translation">Sitename used in mails: When this option is set, it replaces the getHostname() output, used in mail subject.</target></trans-unit>
+      <trans-unit id="settings.secondsBetweenTwoComments" xml:space="preserve">
+                <source>Seconds between two comments: Defines the number of seconds an user has to wait before they may post another comment (includes all pages)</source>
+			<target state="needs-translation">Seconds between two comments: Defines the number of seconds an user has to wait before they may post another comment (includes all pages)</target></trans-unit>
+      <trans-unit id="settings.linkUrlsInComments" xml:space="preserve">
+                <source>Link URLs in comments: If activated this option recognises and links domains.</source>
+			<target state="needs-translation">Link URLs in comments: If activated this option recognises and links domains.</target></trans-unit>
+      <trans-unit id="settings.useBadWordsList" xml:space="preserve">
+                <source>Use bad words list: Enables or disables the usage of bad word list. This option just checks the entered comment message.</source>
+			<target state="needs-translation">Use bad words list: Enables or disables the usage of bad word list. This option just checks the entered comment message.</target></trans-unit>
+      <trans-unit id="settings.useBadWordsListOnUsername" xml:space="preserve">
+                <source>Use bad words list on username: If enabled performs bad words check on entered username. This option may be activated seperately from useBadWordsList option.</source>
+			<target state="needs-translation">Use bad words list on username: If enabled performs bad words check on entered username. This option may be activated seperately from useBadWordsList option.</target></trans-unit>
+      <trans-unit id="settings.useBadWordsListOnMailAddress" xml:space="preserve">
+                <source>Use bad words list on mail addresses: Same like option useBadWordsListOnUsername, just for the entered email address.</source>
+			<target state="needs-translation">Use bad words list on mail addresses: Same like option useBadWordsListOnUsername, just for the entered email address.</target></trans-unit>
+      <trans-unit id="settings.badWordsList" xml:space="preserve">
+                <source>Path to bad word list: Defines the path a bad word list containing regular expressions (one in each line).</source>
+			<target state="needs-translation">Path to bad word list: Defines the path a bad word list containing regular expressions (one in each line).</target></trans-unit>
+      <trans-unit id="settings.hiddenFieldSpamProtection" xml:space="preserve">
+                <source>Hidden field - spam protection: If enabled an additional hidden field will be added to the comment form. If this field is filled (for example by a bot) the comment will not be saved.</source>
+			<target state="needs-translation">Hidden field - spam protection: If enabled an additional hidden field will be added to the comment form. If this field is filled (for example by a bot) the comment will not be saved.</target></trans-unit>
+      <trans-unit id="settings.hiddenFieldName" xml:space="preserve">
+                <source>Hidden field name: Field name of the hidden field (type="input")</source>
+			<target state="needs-translation">Hidden field name: Field name of the hidden field (type="input")</target></trans-unit>
+      <trans-unit id="settings.hiddenFieldClass" xml:space="preserve">
+                <source>Hidden field CSS class: CSS class for hiding the field</source>
+			<target state="needs-translation">Hidden field CSS class: CSS class for hiding the field</target></trans-unit>
+      <trans-unit id="settings.absoluteFormatFallback" xml:space="preserve">
+                <source>Absolute format fallback for relative dates: The dates of comments will be shown as relative dates (for example "2 hours ago"). After a longer period of time, the view helper switches to an absolute date. This setting controlls the output of this absolute date.</source>
+			<target state="needs-translation">Absolute format fallback for relative dates: The dates of comments will be shown as relative dates (for example "2 hours ago"). After a longer period of time, the view helper switches to an absolute date. This setting controlls the output of this absolute date.</target></trans-unit>
+      <trans-unit id="settings.showAvatar" xml:space="preserve">
+                <source>Show avatar: If enabled an avatar image is displayed for each comment.</source>
+			<target state="needs-translation">Show avatar: If enabled an avatar image is displayed for each comment.</target></trans-unit>
+      <trans-unit id="settings.requireAcceptedTerms" xml:space="preserve">
+                <source>Require accepted terms (to post a new comment)</source>
+			<target state="needs-translation">Require accepted terms (to post a new comment)</target></trans-unit>
+      <trans-unit id="settings.enableRating" xml:space="preserve">
+                <source>Enable rating for comments</source>
+			<target state="needs-translation">Enable rating for comments</target></trans-unit>
+      <trans-unit id="settings.termsTypolinkParameter" xml:space="preserve">
+                <source>Typolink parameters to terms (in string, next to checkbox to click)</source>
+			<target state="needs-translation">Typolink parameters to terms (in string, next to checkbox to click)</target></trans-unit>
+    </body>
+  </file>
+</xliff>
