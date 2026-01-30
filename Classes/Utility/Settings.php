@@ -30,7 +30,7 @@ class Settings extends AbstractEncryptionUtility
      * @param bool $makeSettingsRenderable If TRUE settings are renderable
      * @return array the configuration array with the rendered typoscript
      */
-    public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false, ServerRequestInterface $request = null)
+    public static function renderConfigurationArray(array $settings, $makeSettingsRenderable = false, ?ServerRequestInterface $request = null)
     {
         /** @var ContentObjectRenderer|null $contentObject */
         $contentObject = $request?->getAttribute('currentContentObject');
