@@ -602,22 +602,23 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $excludeCommentRelatedParameter = false,
         array $arguments = []
     ): string {
+        $namespace = 'tx_pwcomments_' . strtolower($this->request->getPluginName());
         $excludeFromQueryString = [
-            'tx_pwcomments_pi1[action]',
-            'tx_pwcomments_pi1[controller]',
-            'tx_pwcomments_pi1[hash]',
+            $namespace . '[action]',
+            $namespace . '[controller]',
+            $namespace . '[hash]',
             'cHash'
         ];
 
         if ($excludeCommentRelatedParameter === true) {
-            $excludeFromQueryString[] = 'tx_pwcomments_pi1[comment]';
-            $excludeFromQueryString[] = 'tx_pwcomments_pi1[commentToReplyTo]';
+            $excludeFromQueryString[] = $namespace . '[comment]';
+            $excludeFromQueryString[] = $namespace . '[commentToReplyTo]';
         }
 
         $uri = $this->uriBuilder
                 ->reset()
                 ->setTargetPageUid($uid)
-                ->setAddQueryString(true)
+                ->setAddQueryString('untrusted')
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
                 ->setArguments($arguments)
                 ->build();
