@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:38Z" product-name="pw_comments" target-language="de">
+    <header/>
+    <body>
+      <trans-unit id="tx_pwcomments.comment" xml:space="preserve" approved="yes">
+				<source>Comment</source>
+			<target state="final">Kommentar</target></trans-unit>
+      <trans-unit id="tx_pwcomments.comments" xml:space="preserve" approved="yes">
+				<source>Comments</source>
+			<target state="final">Kommentare</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1406644913" xml:space="preserve" approved="yes">
+				<source>Please provide at least a on star rating.</source>
+			<target state="final">Bitte vergebe mindestens einen Stern als Bewertung.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1299628038" xml:space="preserve" approved="yes">
+				<source>Please log in or fill out your name and e-mail address.</source>
+			<target state="final">Bitte melde Dich an oder fülle Name und E-Mail-Adresse aus.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1299628371" xml:space="preserve" approved="yes">
+				<source>The e-mail address you have entered is not valid.</source>
+			<target state="final">Die eingegebene E-Mail-Adresse ist nicht korrekt.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1299628099" xml:space="preserve" approved="yes">
+				<source>The comment message may not be empty.</source>
+			<target state="final">Der Kommentar darf nicht leer sein.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1300280476" xml:space="preserve" approved="yes">
+				<source>Please wait %s seconds between two comments.</source>
+			<target state="final">Zwischen zwei Kommentaren müssen %s Sekunden vergehen.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1315608355" xml:space="preserve" approved="yes">
+				<source>Your comment message contains at least one bad word. These are not allowed.</source>
+			<target state="final">Der Kommentar beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1406644911" xml:space="preserve" approved="yes">
+				<source>Your name contains at least one bad word. These are not allowed.</source>
+			<target state="final">Der angegebene Name beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1406644912" xml:space="preserve" approved="yes">
+				<source>Your mail address contains at least one bad word. These are not allowed.</source>
+			<target state="final">Die angegebene E-Mail-Adresse beinhaltet mindestens ein Wort, welches nicht erlaubt ist.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.validation_error.1528633964" xml:space="preserve" approved="yes">
+				<source>You need to accept the terms before posting a new comment.</source>
+			<target state="final">Die Bedingungen müssen akzeptiert werden, bevor ein neuer Kommentar gepostet werden kann.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.loggedInAs" xml:space="preserve" approved="yes">
+				<source>You are logged in as:</source>
+			<target state="final">Angemeldet als:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.name" xml:space="preserve" approved="yes">
+				<source>Your name:</source>
+			<target state="final">Name:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.mail" xml:space="preserve" approved="yes">
+				<source>Your e-mail address:</source>
+			<target state="final">E-Mail-Adresse:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.hiddenField" xml:space="preserve" approved="yes">
+				<source>Do not fill out!</source>
+			<target state="final">Nicht ausfüllen!</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.comment" xml:space="preserve" approved="yes">
+				<source>Comment:</source>
+			<target state="final">Kommentar:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.termsBefore" xml:space="preserve" approved="yes">
+				<source>I understand and accept the </source>
+			<target state="final">Ich verstehe und akzeptiere die </target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.terms" xml:space="preserve" approved="yes">
+				<source>terms</source>
+			<target state="final">Bedingungen</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.termsAfter" xml:space="preserve" approved="yes">
+				<source>.</source>
+			<target state="final">.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.newComment.submit" xml:space="preserve" approved="yes">
+				<source>Submit</source>
+			<target state="final">Absenden</target></trans-unit>
+      <trans-unit id="tx_pwcomments.reply" xml:space="preserve" approved="yes">
+				<source>Reply</source>
+			<target state="final">Antworten</target></trans-unit>
+      <trans-unit id="tx_pwcomments.noComments" xml:space="preserve" approved="yes">
+				<source>No comments found!</source>
+			<target state="final">Keine Kommentare gefunden!</target></trans-unit>
+      <trans-unit id="tx_pwcomments.writeNewComment" xml:space="preserve" approved="yes">
+				<source>Write new comment</source>
+			<target state="final">Neuen Kommentar schreiben</target></trans-unit>
+      <trans-unit id="tx_pwcomments.writeNewCommentReply" xml:space="preserve" approved="yes">
+				<source>Write new comment reply</source>
+			<target state="final">Neue Antwort auf Kommentar schreiben</target></trans-unit>
+      <trans-unit id="tx_pwcomments.thanks" xml:space="preserve" approved="yes">
+				<source>Thanks for your comment!</source>
+			<target state="final">Vielen Dank für Deinen Kommentar!</target></trans-unit>
+      <trans-unit id="tx_pwcomments.moderationNotice" xml:space="preserve" approved="yes">
+				<source>Your comment has to be checked before publishing. Thank you for your patience!</source>
+			<target state="final">Vielen Dank für Deinen Kommentar! Wir werden ihn vor der Veröffentlichung prüfen. Danke für Deine Geduld!</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.wrap" xml:space="preserve" approved="yes">
+				<source>%s ago</source>
+			<target state="final">vor %s</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.wrapAbsolute" xml:space="preserve" approved="yes">
+				<source>at %s</source>
+			<target state="final">am %s</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.fewSeconds" xml:space="preserve" approved="yes">
+				<source>few seconds</source>
+			<target state="final">wenigen Sekunden</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.minute" xml:space="preserve" approved="yes">
+				<source>minute</source>
+			<target state="final">Minute</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.hour" xml:space="preserve" approved="yes">
+				<source>hour</source>
+			<target state="final">Stunde</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.day" xml:space="preserve" approved="yes">
+				<source>day</source>
+			<target state="final">Tag</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.week" xml:space="preserve" approved="yes">
+				<source>week</source>
+			<target state="final">Woche</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.pluralSuffix" xml:space="preserve" approved="yes">
+				<source>s</source>
+			<target state="final">n</target></trans-unit>
+      <trans-unit id="tx_pwcomments.relativeDate.pluralSuffixForDay" xml:space="preserve" approved="yes">
+				<source>s</source>
+			<target state="final">en</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.from.mail" xml:space="preserve" approved="yes">
+				<source>newComment@%s</source>
+			<target state="final">neuerKommentar@%s</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.from.name" xml:space="preserve" approved="yes">
+				<source>pwComments</source>
+			<target state="final">pwComments</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.subject" xml:space="preserve" approved="yes">
+				<source>New comment on %s</source>
+			<target state="final">Neuer Kommentar auf %s</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.salutation" xml:space="preserve" approved="yes">
+				<source>Hello,</source>
+			<target state="final">Hallo,</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.newCommentWithModerationHasBeenSubmitted" xml:space="preserve" approved="yes">
+				<source>a new comment has been submitted and awaits your approval.</source>
+			<target state="final">ein neuer Kommentar wurde eingesendet und wartet auf Freigabe.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.newCommentHasBeenSubmitted" xml:space="preserve" approved="yes">
+				<source>a new comment has been submitted.</source>
+			<target state="final">ein neuer Kommentar wurde eingesendet.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.linkToArticle" xml:space="preserve" approved="yes">
+				<source>Link to article:</source>
+			<target state="final">Link zum Artikel:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.linkToApproval" xml:space="preserve" approved="yes">
+				<source>Link to approval:</source>
+			<target state="final">Link zur Freigabe:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.name" xml:space="preserve" approved="yes">
+				<source>Name: </source>
+			<target state="final">Name: </target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.registred" xml:space="preserve" approved="yes">
+				<source>(registred)</source>
+			<target state="final">(registriert)</target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.mail" xml:space="preserve" approved="yes">
+				<source>E-mail: </source>
+			<target state="final">E-Mail: </target></trans-unit>
+      <trans-unit id="tx_pwcomments.notificationMail.comment" xml:space="preserve" approved="yes">
+				<source>Comment: </source>
+			<target state="final">Kommentar: </target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.salutation" xml:space="preserve" approved="yes">
+				<source>Hello,</source>
+			<target state="final">Hallo,</target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentWithModerationHasBeenSubmitted" xml:space="preserve" approved="yes">
+				<source>you have posted a new comment which awaits our approval on this page:</source>
+			<target state="final">Sie haben einen neuen Kommentar eingesendet, welcher durch uns freigeschaltet wird, auf der Seite:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterSubmit.newCommentHasBeenSubmitted" xml:space="preserve" approved="yes">
+				<source>you have posted a new comment on this page:</source>
+			<target state="final">Sie haben auf dieser Seite einen neuen Kommentar eingesendet:</target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.subject" xml:space="preserve" approved="yes">
+				<source>Your comment on %s has been published</source>
+			<target state="final">Ihr Kommentar auf %s wurde veröffentlicht</target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.salutation" xml:space="preserve" approved="yes">
+				<source>Hello,</source>
+			<target state="final">Hallo,</target></trans-unit>
+      <trans-unit id="tx_pwcomments.mailToAuthorAfterPublish.newCommentWithModerationHasBeenPublished" xml:space="preserve" approved="yes">
+				<source>your comment has been published, on this page:</source>
+			<target state="final">Ihr Kommentar wurde auf dieser Seite veröffentlicht:</target></trans-unit>
+      <trans-unit id="mailSentToAuthorAfterPublish" xml:space="preserve" approved="yes">
+				<source>The author of this comment (%s) has been notified by mail.</source>
+			<target state="final">Der Autor dieses Kommentars (%s) wurde per E-Mail benachrichtigt.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.votes.upvote" xml:space="preserve" approved="yes">
+				<source>Upvote</source>
+			<target state="final">Gut</target></trans-unit>
+      <trans-unit id="tx_pwcomments.votes.downvote" xml:space="preserve" approved="yes">
+				<source>Downvote</source>
+			<target state="final">Schlecht</target></trans-unit>
+      <trans-unit id="tx_pwcomments.votes.selfVotingError" xml:space="preserve" approved="yes">
+				<source>You may not vote your own comments</source>
+			<target state="final">Der eigene Kommentar darf nicht bewertet werden</target></trans-unit>
+      <trans-unit id="tx_pwcomments.votes.summary" xml:space="preserve" approved="yes">
+				<source>%s vote(s) (%s up, %s down)</source>
+			<target state="final">%s Bewertung(en) (%s positiv, %s negativ)</target></trans-unit>
+      <trans-unit id="tx_pwcomments.custom.doNotVoteForYourself" xml:space="preserve" approved="yes">
+				<source>You can't vote for your own comment.</source>
+			<target state="final">Für den eigenen Kommentar darf nicht abgestimmt werden.</target></trans-unit>
+      <trans-unit id="tx_pwcomments.custom.votingDisabled" xml:space="preserve" approved="yes">
+				<source>To vote for comments, please login.</source>
+			<target state="final">Um Kommentare zu bewerten, bitte anmelden.</target></trans-unit>
+      <trans-unit id="noCommentAvailable" xml:space="preserve" approved="yes">
+				<source>Could not find comment to publish</source>
+			<target state="final">Zu veröffentlichender Kommentar konnte nicht gefunden werden</target></trans-unit>
+      <trans-unit id="commentPublished" xml:space="preserve" approved="yes">
+				<source>The comment has been publish</source>
+			<target state="final">Der Kommentar wurde veröffentlicht</target></trans-unit>
+      <trans-unit id="showComments" xml:space="preserve" approved="yes">
+				<source>Show comments</source>
+			<target state="final">Kommentare anzeigen</target></trans-unit>
+      <trans-unit id="totalCommentsAmount" xml:space="preserve" approved="yes">
+				<source>This page contains %s comments.</source>
+			<target state="final">Diese Seite hat %s Kommentare.</target></trans-unit>
+      <trans-unit id="totalCommentsAmountOne" xml:space="preserve" approved="yes">
+				<source>This page contains one comment.</source>
+			<target state="final">Diese Seite hat einen Kommentar.</target></trans-unit>
+      <trans-unit id="unreleasedCommentsAmount" xml:space="preserve" approved="yes">
+				<source>%s comments remain unreleased!</source>
+			<target state="final">%s von ihnen verweilen unveröffentlicht!</target></trans-unit>
+      <trans-unit id="unreleasedCommentsAmountOne" xml:space="preserve" approved="yes">
+				<source>One comment remains unreleased!</source>
+			<target state="final">Einer von ihnen verweilt unveröffentlicht!</target></trans-unit>
+      <trans-unit id="pageModuleNotice" xml:space="preserve" approved="yes">
+				<source>Page Module Notice: Displays info about comments on current page as notice in page module.</source>
+			<target state="final">Seitenmodul Notiz: Zeigt Informationen über Kommentare auf aktueller Seite als Notiz im Seitenmodul an.</target></trans-unit>
+      <trans-unit id="textRating" xml:space="preserve" approved="yes">
+				<source>%s of 5</source>
+			<target state="final">%s von 5</target></trans-unit>
+      <trans-unit id="rating.title" xml:space="preserve" approved="yes">
+				<source>Rating:</source>
+			<target state="final">Bewertung:</target></trans-unit>
+      <trans-unit id="rating.star" xml:space="preserve" approved="yes">
+				<source>Star</source>
+			<target state="final">Stern</target></trans-unit>
+    </body>
+  </file>
+</xliff>
