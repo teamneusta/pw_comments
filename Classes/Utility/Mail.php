@@ -78,7 +78,7 @@ class Mail
      *
      * @return void
      */
-    public function setView(ViewInterface|FluidViewAdapter $view = null): void
+    public function setView(null|ViewInterface|FluidViewAdapter $view = null): void
     {
         if (!$view) {
             $view = GeneralUtility::makeInstance(ViewFactoryInterface::class)->create(new ViewFactoryData());

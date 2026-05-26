@@ -1,0 +1,4 @@
+pages
+,uid,pid,title,doktype,slug
+,1,0,"Test Page",1,"/test-page"
+,2,0,"News Detail Page",1,"/news-detail"

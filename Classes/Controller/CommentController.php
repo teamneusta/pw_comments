@@ -171,7 +171,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * @return void
      */
     #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function indexAction(Comment $commentToReplyTo = null): ResponseInterface
+    public function indexAction(?Comment $commentToReplyTo = null): ResponseInterface
     {
         if (isset($this->settings['invertCommentSorting']) && $this->settings['invertCommentSorting']) {
             $this->commentRepository->setInvertCommentSorting(true);
@@ -222,7 +222,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * Create action
      */
     #[Validate(['validator' => CommentValidator::class, 'param' => 'newComment'])]
-    public function createAction(Comment $newComment = null): ResponseInterface
+    public function createAction(?Comment $newComment = null): ResponseInterface
     {
         // Hidden field Spam-Protection
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
@@ -272,7 +272,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
                     $this->settings
                 );
                 $moderationResult = $moderationService->moderateComment($newComment);
-                
+
                 if ($moderationResult->isViolation()) {
                     $aiModerationViolation = true;
                     $aiModerationReason = $moderationResult->getFormattedReason();
@@ -290,7 +290,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
                     // Set error status and continue with normal moderation flow
                     $newComment->setAiModerationStatus('error');
                     $newComment->setAiModerationReason('AI moderation failed: ' . $e->getMessage());
-                    
+
                     // Log the error for administrators
                     $this->logger->error('AI moderation service failed', [
                         'exception' => $e,
@@ -309,12 +309,12 @@ class CommentController extends ActionController implements LoggerAwareInterface
 
         // Modify comment if moderation is active or AI flagged content
         $moderationActive = (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']) || $aiModerationViolation;
-        
+
         if ($moderationActive) {
             $newComment->setHidden(true);
             if ($aiModerationViolation) {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason]) ?? 
+                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason]) ??
                     'Your comment has been flagged by our content moderation system: ' . $aiModerationReason
                 );
             } else {
@@ -370,7 +370,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      */
     #[IgnoreValidation(['value' => 'newComment'])]
     #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function newAction(Comment $newComment = null, Comment $commentToReplyTo = null): ResponseInterface
+    public function newAction(?Comment $newComment = null, ?Comment $commentToReplyTo = null): ResponseInterface
     {
         if ($newComment !== null) {
             $this->view->assign('newComment', $newComment);
@@ -602,22 +602,23 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $excludeCommentRelatedParameter = false,
         array $arguments = []
     ): string {
+        $namespace = 'tx_pwcomments_' . strtolower($this->request->getPluginName());
         $excludeFromQueryString = [
-            'tx_pwcomments_pi1[action]',
-            'tx_pwcomments_pi1[controller]',
-            'tx_pwcomments_pi1[hash]',
+            $namespace . '[action]',
+            $namespace . '[controller]',
+            $namespace . '[hash]',
             'cHash'
         ];
 
         if ($excludeCommentRelatedParameter === true) {
-            $excludeFromQueryString[] = 'tx_pwcomments_pi1[comment]';
-            $excludeFromQueryString[] = 'tx_pwcomments_pi1[commentToReplyTo]';
+            $excludeFromQueryString[] = $namespace . '[comment]';
+            $excludeFromQueryString[] = $namespace . '[commentToReplyTo]';
         }
 
         $uri = $this->uriBuilder
                 ->reset()
                 ->setTargetPageUid($uid)
-                ->setAddQueryString(true)
+                ->setAddQueryString('untrusted')
                 ->setArgumentsToBeExcludedFromQueryString($excludeFromQueryString)
                 ->setArguments($arguments)
                 ->build();

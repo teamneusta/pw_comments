@@ -1,7 +1,5 @@
 #!/bin/bash
 
-VERSION=v12
-
-cd /var/www/html/$VERSION || exit
+cd /var/www/html || exit
 
 ./vendor/bin/rector process /var/www/pw_comments -c vendor/teamneusta/pw_comments/Build/rector.php

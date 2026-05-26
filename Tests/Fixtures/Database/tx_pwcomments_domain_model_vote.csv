@@ -1,0 +1,4 @@
+tx_pwcomments_domain_model_vote
+,uid,pid,orig_pid,comment,author_ident,type
+,1,1,1,1,"test-ident-2",1
+,2,1,1,2,"test-ident-1",1
