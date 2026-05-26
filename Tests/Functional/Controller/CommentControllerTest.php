@@ -53,6 +53,20 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString('Test comment 2', $body);
     }
 
+    /**
+     * Issue #41: comments by a registered frontend user render the user's
+     * username (via {comment.author.username}). This only works once the
+     * FrontendUser model exposes the username property, otherwise the author
+     * name stayed blank.
+     */
+    #[Test]
+    public function indexActionRendersRegisteredUserUsername(): void
+    {
+        $body = $this->renderPage();
+
+        self::assertStringContainsString('testuser', $body);
+    }
+
     #[Test]
     public function votingLinksArePresentForComments(): void
     {
