@@ -1,0 +1,3 @@
+fe_users
+,uid,pid,username,password,email,name
+,1,0,"testuser","$1$testhash","test@example.com","Test User"
