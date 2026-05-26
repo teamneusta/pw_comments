@@ -1,0 +1,6 @@
+tx_pwcomments_domain_model_comment
+,uid,pid,orig_pid,entry_uid,message,author_name,author_mail,author_ident,hidden,crdate
+,1,1,1,0,"Test comment 1","John Doe","john@example.com","test-ident-1",0,1609459200
+,2,1,1,0,"Test comment 2","Jane Smith","jane@example.com","test-ident-2",0,1609545600
+,3,1,2,123,"Comment on news article","News Reader","reader@example.com","test-ident-3",0,1609632000
+,4,1,1,0,"Pending comment awaiting confirmation","Pending Author","pending@example.com","test-ident-4",1,1609718400
