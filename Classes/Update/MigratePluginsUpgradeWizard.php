@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace T3\PwComments\Update;
@@ -9,19 +10,14 @@ use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
-use TYPO3\CMS\Install\Updates\RepeatableInterface;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
-use function sprintf;
-use function str_contains;
 
 #[UpgradeWizard('pwCommentsMigratePluginsWizard')]
 class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 {
     private OutputInterface $output;
 
-    public function __construct(private readonly QueryBuilder $queryBuilder, private readonly FlexFormService $flexFormService)
-    {
-    }
+    public function __construct(private readonly QueryBuilder $queryBuilder, private readonly FlexFormService $flexFormService) {}
 
     /**
      * @inheritDoc
@@ -52,7 +48,7 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
                 $this->queryBuilder->expr()->or(
                     $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%index%')),
                     $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%new%')),
-                )
+                ),
             )
             ->executeQuery()
             ->fetchAllAssociative();
@@ -66,7 +62,7 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
             }
 
             $plugin = 'show';
-            if (str_contains($switchableControllerActions, 'new')) {
+            if (\str_contains($switchableControllerActions, 'new')) {
                 $plugin = 'new';
             }
 
@@ -78,13 +74,13 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
                 ->set('pi_flexform', null)
                 ->set('list_type', $listType)
                 ->where(
-                    $this->queryBuilder->expr()->eq('uid', $record['uid'])
+                    $this->queryBuilder->expr()->eq('uid', $record['uid']),
                 )
                 ->executeStatement();
             ++$updatedRecords;
         }
 
-        $this->output->writeln(sprintf('%d records updated', $updatedRecords));
+        $this->output->writeln(\sprintf('%d records updated', $updatedRecords));
 
         return true;
     }
@@ -102,7 +98,7 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
                 $this->queryBuilder->expr()->or(
                     $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%index%')),
                     $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%new%')),
-                )
+                ),
             )
             ->executeQuery()
             ->columnCount();

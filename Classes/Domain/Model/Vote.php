@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -12,15 +15,13 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Vote model (for comments)
- *
- * @package T3\PwComments
  */
 class Vote extends AbstractEntity
 {
     /** Constant for upvote */
-    final const TYPE_UPVOTE = 1;
+    final public const TYPE_UPVOTE = 1;
     /** Constant for downvote */
-    final const TYPE_DOWNVOTE = 0;
+    final public const TYPE_DOWNVOTE = 0;
 
     /**
      * @var int uid of the page for what the comment is for
@@ -66,7 +67,6 @@ class Vote extends AbstractEntity
      * Setter for origPid
      *
      * @param int $origPid
-     * @return void
      */
     public function setOrigPid($origPid): void
     {
@@ -87,7 +87,6 @@ class Vote extends AbstractEntity
      * Set type
      *
      * @param int $type
-     * @return void
      */
     public function setType($type): void
     {
@@ -108,7 +107,6 @@ class Vote extends AbstractEntity
      * Set creation date
      *
      * @param int $crdate
-     * @return void
      */
     public function setCrdate($crdate): void
     {
@@ -127,8 +125,6 @@ class Vote extends AbstractEntity
 
     /**
      * Set author (fe_user)
-     *
-     * @return void
      */
     public function setAuthor(FrontendUser $author): void
     {
@@ -149,7 +145,6 @@ class Vote extends AbstractEntity
      * Set author ident
      *
      * @param string $authorIpAddress
-     * @return void
      */
     public function setAuthorIdent($authorIpAddress): void
     {
@@ -186,8 +181,6 @@ class Vote extends AbstractEntity
 
     /**
      * Set related comment
-     *
-     * @return void
      */
     public function setComment(Comment $comment): void
     {

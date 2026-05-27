@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -15,15 +18,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Cookie Utility
- *
- * @package T3\PwComments
  */
 class Cookie
 {
     /** Cookie Prefix */
-    final const COOKIE_PREFIX = 'tx_pwcomments_';
+    final public const COOKIE_PREFIX = 'tx_pwcomments_';
     /** Lifetime of cookie in days */
-    final const COOKIE_LIFETIME_DAYS = 365;
+    final public const COOKIE_LIFETIME_DAYS = 365;
 
     /**
      * Get cookie value
@@ -43,7 +44,6 @@ class Cookie
      *
      * @param string $key
      * @param string $value
-     * @return void
      */
     public function set($key, $value): void
     {
@@ -55,7 +55,7 @@ class Cookie
             '/',
             $this->getCookieDomain(),
             isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieSecure']) && $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieSecure'] > 0,
-            isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly']) && $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly'] == 1
+            isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly']) && $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieHttpOnly'] == 1,
         );
     }
 
@@ -79,7 +79,7 @@ class Cookie
                 $matchCnt = @preg_match(
                     $cookieDomain,
                     (string) GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
-                    $match
+                    $match,
                 );
                 if ($matchCnt !== false) {
                     $result = $match[0];

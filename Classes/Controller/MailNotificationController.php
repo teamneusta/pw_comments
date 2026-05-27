@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Controller;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -7,13 +10,10 @@ namespace T3\PwComments\Controller;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-
-use InvalidArgumentException;
-use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 use T3\PwComments\Utility\HashEncryptionUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Error\Http\ServiceUnavailableException;
 use TYPO3\CMS\Core\Exception;
@@ -34,13 +34,11 @@ class MailNotificationController
         private readonly QueryBuilder $queryBuilder,
         private readonly TypoScriptService $typoScriptService,
         private readonly array $extConfig,
-    ) {
-    }
+    ) {}
 
     /**
      * Send mail
      *
-     * @return ResponseInterface
      * @throws ServiceUnavailableException
      * @throws Exception
      */
@@ -55,7 +53,7 @@ class MailNotificationController
         $pid = (int) $params['pid'];
 
         if (!$action || !$uid || !$pid || !$hash) {
-            throw new InvalidArgumentException('Invalid arguments given.', 5066963646);
+            throw new \InvalidArgumentException('Invalid arguments given.', 5066963646);
         }
 
         // Get comment row
@@ -63,15 +61,14 @@ class MailNotificationController
         $row = $this->queryBuilder
             ->select('*')
             ->from('tx_pwcomments_domain_model_comment')->where($this->queryBuilder->expr()->eq(
-            'uid',
-            $this->queryBuilder->createNamedParameter($uid, \TYPO3\CMS\Core\Database\Connection::PARAM_INT)
-        ))->executeQuery()->fetchAssociative();
-
+                'uid',
+                $this->queryBuilder->createNamedParameter($uid, Connection::PARAM_INT),
+            ))->executeQuery()->fetchAssociative();
 
         // Check hash
         $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
         if (!$valid) {
-            throw new RuntimeException('Given hash not valid!', 9298443636);
+            throw new \RuntimeException('Given hash not valid!', 9298443636);
         }
         // Send mail and respond
         if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {
@@ -89,7 +86,6 @@ class MailNotificationController
 
         return (new Response())->withStatus($statusCode);
     }
-
 
     /**
      * Initializes and runs an extbase controller
@@ -110,7 +106,7 @@ class MailNotificationController
         $action = 'index',
         $pluginName = 'show',
         $settings = [],
-        $vendorName = 'T3'
+        $vendorName = 'T3',
     ) {
         // Get plugin setup
         $typoScriptSetup = $this->getTypoScriptSetup();
@@ -146,7 +142,7 @@ class MailNotificationController
             'action' => $action,
             'settings' => $pluginSetupSettings,
             'persistence' => $pluginSetupPersistence,
-            '_LOCAL_LANG' => $pluginSetupLocalLang
+            '_LOCAL_LANG' => $pluginSetupLocalLang,
         ];
 
         return $bootstrap->run('', $configuration, $this->request);

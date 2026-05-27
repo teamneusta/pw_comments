@@ -1,20 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
+use T3\PwComments\Controller\CommentController;
 use T3\PwComments\Hooks\ProcessDatamap;
 use T3\PwComments\UserFunc\TCA\AiModerationControl;
-use TYPO3\CMS\Backend\Controller\PageLayoutController;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
-use T3\PwComments\Controller\CommentController;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
-use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\Writer\FileWriter;
-use T3\PwComments\Event\Listener\PageLayoutView;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -38,7 +32,7 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'index,upvote,downvote',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
     ExtensionUtility::configurePlugin(
         $extensionKey,
@@ -49,7 +43,7 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'new,create,confirmComment',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -61,7 +55,7 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']
@@ -105,8 +99,8 @@ if (!defined('TYPO3')) {
             'tx_pwcomments_new[newComment][authorMail]',
             'tx_pwcomments_new[authorWebsite]',
             'tx_pwcomments_new[newComment][message]',
-            'tx_pwcomments_new[newComment][parentComment][__identity]'
-        ]
+            'tx_pwcomments_new[newComment][parentComment][__identity]',
+        ],
     );
 
     // After save hook
@@ -115,7 +109,7 @@ if (!defined('TYPO3')) {
 
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['pw_comments']['writerConfiguration'] = [
         LogLevel::INFO => [
-            FileWriter::class => []
+            FileWriter::class => [],
         ],
     ];
 

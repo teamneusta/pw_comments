@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\UserFunc\TCA;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -8,21 +11,15 @@ namespace T3\PwComments\UserFunc\TCA;
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-
 use T3\PwComments\Utility\Settings;
 
 /**
  * TCA Display Condition UserFunc class
- * 
- * @package T3\PwComments
  */
 class DisplayCondition
 {
     /**
      * Check if rating feature is enabled in extension configuration
-     *
-     * @param array $parameters
-     * @return bool
      */
     public function isRatingEnabled(array $parameters): bool
     {

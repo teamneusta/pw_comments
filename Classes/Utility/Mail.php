@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -9,24 +12,17 @@ namespace T3\PwComments\Utility;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use Exception;
-use Psr\Http\Message\ServerRequestInterface;
+use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Fluid\View\FluidViewAdapter;
-use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * This class provides some methods to build and send mails
- *
- * @package T3\PwComments
  */
 class Mail
 {
@@ -64,7 +60,6 @@ class Mail
      * Sets the settings of controller
      *
      * @param array $settings settings to set
-     * @return void
      */
     public function setSettings(array $settings): void
     {
@@ -75,8 +70,6 @@ class Mail
      * Set the fluid template from controller
      *
      * @param ViewInterface|FluidViewAdapter|null $view the fluid template
-     *
-     * @return void
      */
     public function setView(null|ViewInterface|FluidViewAdapter $view = null): void
     {
@@ -92,7 +85,7 @@ class Mail
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
      * @return bool Returns TRUE if the mail has been sent successfully
-     * @throws Exception
+     * @throws \Exception
      */
     public function sendMail(Comment $comment, $hash = '')
     {
@@ -102,17 +95,17 @@ class Mail
         $mail->setFrom(
             $this->settings['senderAddress']
                 ?: LocalizationUtility::translate(
-                'tx_pwcomments.notificationMail.from.mail',
-                'PwComments',
-                [
-                    $this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')
-                ]
-            ),
+                    'tx_pwcomments.notificationMail.from.mail',
+                    'PwComments',
+                    [
+                        $this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST'),
+                    ],
+                ),
             $this->settings['senderName']
                 ?: LocalizationUtility::translate(
-                'tx_pwcomments.notificationMail.from.name',
-                'PwComments'
-            )
+                    'tx_pwcomments.notificationMail.from.name',
+                    'PwComments',
+                ),
         );
 
         $receivers = GeneralUtility::trimExplode(',', $this->getReceivers(), true);
@@ -121,8 +114,8 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                [$this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')]
-            )
+                [$this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')],
+            ),
         );
         if (isset($this->settings['sendMailMimeType']) && $this->settings['sendMailMimeType'] === 'text/plain') {
             $mail->text($this->getMailMessage($comment, $hash));
@@ -140,13 +133,13 @@ class Mail
      * @param string $hash validation string to add to url if comment must be moderate
      * @return string The rendered fluid template (HTML or plain text)
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function getMailMessage(Comment $comment, $hash): string
     {
         $mailTemplate = GeneralUtility::getFileAbsFileName($this->getTemplatePath());
         if (!file_exists($mailTemplate)) {
-            throw new Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
+            throw new \Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
         }
 
         $templatePaths = $this->view->getRenderingContext()->getTemplatePaths();
@@ -155,8 +148,8 @@ class Mail
             [
                 'hash' => $hash,
                 'comment' => $comment,
-                'settings' => $this->settings
-            ]
+                'settings' => $this->settings,
+            ],
         );
         return $this->view->render();
     }
@@ -175,7 +168,6 @@ class Mail
      * Set receivers
      *
      * @param string $receivers
-     * @return void
      */
     public function setReceivers($receivers): void
     {
@@ -196,7 +188,6 @@ class Mail
      * Set template path
      *
      * @param string $templatePath
-     * @return void
      */
     public function setTemplatePath($templatePath): void
     {
@@ -217,7 +208,6 @@ class Mail
      * Set subject locallang key
      *
      * @param string $subjectLocallangKey
-     * @return void
      */
     public function setSubjectLocallangKey($subjectLocallangKey): void
     {
@@ -238,7 +228,6 @@ class Mail
      * Set add query string to links
      *
      * @param bool $addQueryStringToLinks
-     * @return void
      */
     public function setAddQueryStringToLinks($addQueryStringToLinks): void
     {

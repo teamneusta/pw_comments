@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Controller;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use T3\PwComments\Controller\CommentController;
 use T3\PwComments\Domain\Model\Comment;
-use T3\PwComments\Domain\Model\FrontendUser;
 use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Domain\Repository\FrontendUserRepository;
@@ -22,7 +20,6 @@ use T3\PwComments\Utility\Mail;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Extbase\Mvc\ExtbaseRequestParameters;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
@@ -64,7 +61,7 @@ final class CommentControllerTest extends TestCase
             $this->commentRepository,
             $this->frontendUserRepository,
             $this->voteRepository,
-            $this->viewFactory
+            $this->viewFactory,
         );
 
         // Inject logger
@@ -91,14 +88,14 @@ final class CommentControllerTest extends TestCase
         $pageUid = 42;
         $settings = [
             'entryUid' => '123',
-            'useEntryUid' => true
+            'useEntryUid' => true,
         ];
 
         $serverRequest = $this->createServerRequestWithPageInfo($pageUid);
 
-        $this->request->expects($this->any())
+        $this->request->expects(self::any())
             ->method('getAttribute')
-            ->willReturnCallback(function($attribute) use ($serverRequest) {
+            ->willReturnCallback(function ($attribute) use ($serverRequest) {
                 if ($attribute === 'frontend.page.information') {
                     return $serverRequest->getAttribute('frontend.page.information');
                 }
@@ -108,7 +105,7 @@ final class CommentControllerTest extends TestCase
                 return null;
             });
 
-        $this->cookieUtility->expects($this->once())
+        $this->cookieUtility->expects(self::once())
             ->method('get')
             ->with('ahash')
             ->willReturn(null);
@@ -121,15 +118,15 @@ final class CommentControllerTest extends TestCase
         $comments->method('count')->willReturn(0);
         $comments->method('toArray')->willReturn([]);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('findByPidAndEntryUid')
             ->with(
-                $this->equalTo($pageUid),
-                $this->equalTo(123)
+                self::equalTo($pageUid),
+                self::equalTo(123),
             )
             ->willReturn($comments);
 
-        $this->view->expects($this->exactly(5))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
             ->willReturn($this->view);
 
@@ -145,17 +142,17 @@ final class CommentControllerTest extends TestCase
         $comments->method('count')->willReturn(2);
         $comments->method('toArray')->willReturn([
             $this->createComment(1, 'Test comment 1'),
-            $this->createComment(2, 'Test comment 2')
+            $this->createComment(2, 'Test comment 2'),
         ]);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('findByPid')
             ->with($pageUid)
             ->willReturn($comments);
 
-        $this->view->expects($this->exactly(5))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
-            ->willReturnCallback(function($key, $value) use ($comments) {
+            ->willReturnCallback(function ($key, $value) use ($comments) {
                 if ($key === 'comments') {
                     self::assertSame($comments, $value);
                 } elseif ($key === 'commentCount') {
@@ -185,7 +182,7 @@ final class CommentControllerTest extends TestCase
         $comments->method('count')->willReturn(0);
         $comments->method('toArray')->willReturn([]);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('findByPid')
             ->willReturn($comments);
 
@@ -197,14 +194,14 @@ final class CommentControllerTest extends TestCase
 
         $votes = $this->createQueryResult([$upvote, $downvote]);
 
-        $this->voteRepository->expects($this->once())
+        $this->voteRepository->expects(self::once())
             ->method('findByPidAndAuthorIdent')
             ->with($pageUid, $authorIdent)
             ->willReturn($votes);
 
-        $this->view->expects($this->exactly(5))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
-            ->willReturnCallback(function($key, $value) {
+            ->willReturnCallback(function ($key, $value) {
                 if ($key === 'upvotedCommentUids') {
                     self::assertSame([1], $value);
                 } elseif ($key === 'downvotedCommentUids') {
@@ -225,9 +222,9 @@ final class CommentControllerTest extends TestCase
         $commentToReplyTo = $this->createComment(5, 'Parent comment');
 
         $frontendUserAuth = $this->createFrontendUserAuth([]);
-        $frontendUserAuth->expects($this->any())
+        $frontendUserAuth->expects(self::any())
             ->method('getKey')
-            ->willReturnCallback(function($type, $key) {
+            ->willReturnCallback(function ($type, $key) {
                 if ($key === 'tx_pwcomments_unregistredUserName') {
                     return 'John Doe';
                 }
@@ -239,14 +236,14 @@ final class CommentControllerTest extends TestCase
 
         // Override the request mock for this specific test
         $request = $this->createMock(Request::class);
-        $request->expects($this->any())
+        $request->expects(self::any())
             ->method('getAttribute')
             ->willReturn($frontendUserAuth);
         $this->injectProperty('request', $request);
 
-        $this->view->expects($this->exactly(4))
+        $this->view->expects(self::exactly(4))
             ->method('assign')
-            ->willReturnCallback(function($key, $value) use ($newComment, $commentToReplyTo) {
+            ->willReturnCallback(function ($key, $value) use ($newComment, $commentToReplyTo) {
                 if ($key === 'newComment') {
                     self::assertSame($newComment, $value);
                 } elseif ($key === 'commentToReplyTo') {
@@ -271,16 +268,16 @@ final class CommentControllerTest extends TestCase
 
         $comment = $this->createComment(5, 'Test comment');
 
-        $this->voteRepository->expects($this->once())
+        $this->voteRepository->expects(self::once())
             ->method('findOneByCommentAndAuthorIdent')
             ->with($comment, 'author-123')
             ->willReturn(null);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('update')
             ->with($comment);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('persistAll');
 
         $response = $this->controller->upvoteAction($comment);
@@ -295,16 +292,16 @@ final class CommentControllerTest extends TestCase
 
         $comment = $this->createComment(5, 'Test comment');
 
-        $this->voteRepository->expects($this->once())
+        $this->voteRepository->expects(self::once())
             ->method('findOneByCommentAndAuthorIdent')
             ->with($comment, 'author-123')
             ->willReturn(null);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('update')
             ->with($comment);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('persistAll');
 
         $response = $this->controller->downvoteAction($comment);
@@ -319,7 +316,7 @@ final class CommentControllerTest extends TestCase
 
         $comment = $this->createComment(5, 'Test comment');
 
-        $this->commentRepository->expects($this->never())
+        $this->commentRepository->expects(self::never())
             ->method('update');
 
         $response = $this->controller->upvoteAction($comment);
@@ -337,16 +334,16 @@ final class CommentControllerTest extends TestCase
         $comments->method('toArray')->willReturn([
             $this->createComment(1, 'C1'),
             $this->createComment(2, 'C2'),
-            $this->createComment(3, 'C3')
+            $this->createComment(3, 'C3'),
         ]);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('findByPid')
             ->willReturn($comments);
 
-        $this->view->expects($this->exactly(5))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
-            ->willReturnCallback(function($key, $value) {
+            ->willReturnCallback(function ($key, $value) {
                 if ($key === 'commentCount') {
                     self::assertSame(3, $value);
                 }
@@ -375,13 +372,13 @@ final class CommentControllerTest extends TestCase
         $comments->method('count')->willReturn(2);
         $comments->method('toArray')->willReturn([$comment1, $comment2]);
 
-        $this->commentRepository->expects($this->once())
+        $this->commentRepository->expects(self::once())
             ->method('findByPid')
             ->willReturn($comments);
 
-        $this->view->expects($this->exactly(5))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
-            ->willReturnCallback(function($key, $value) {
+            ->willReturnCallback(function ($key, $value) {
                 // The test shows that with countReplies enabled, we expect
                 // 2 base comments + 2 replies = 4 total
                 // However, the mock doesn't iterate properly so we get just the count
@@ -404,18 +401,18 @@ final class CommentControllerTest extends TestCase
         // plugin's own parameters to exclude are derived from the active plugin name.
         $this->request->method('getPluginName')->willReturn('show');
 
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('reset')
             ->willReturnSelf();
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('setTargetPageUid')
             ->with($pageUid)
             ->willReturnSelf();
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('setAddQueryString')
-            ->with($this->identicalTo('untrusted'))
+            ->with(self::identicalTo('untrusted'))
             ->willReturnSelf();
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('setArgumentsToBeExcludedFromQueryString')
             ->with([
                 'tx_pwcomments_show[action]',
@@ -424,11 +421,11 @@ final class CommentControllerTest extends TestCase
                 'cHash',
             ])
             ->willReturnSelf();
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('setArguments')
             ->with([])
             ->willReturnSelf();
-        $this->uriBuilder->expects($this->once())
+        $this->uriBuilder->expects(self::once())
             ->method('build')
             ->willReturn('/page-10');
 
@@ -459,7 +456,7 @@ final class CommentControllerTest extends TestCase
             'commentAnchorPrefix' => 'c',
             'hideVoteButtons' => false,
             'invertCommentSorting' => false,
-            'invertReplySorting' => false
+            'invertReplySorting' => false,
         ], $additionalSettings);
 
         $this->injectProperty('settings', $settings);
@@ -470,9 +467,9 @@ final class CommentControllerTest extends TestCase
 
         $serverRequest = $this->createServerRequestWithPageInfo($pageUid);
 
-        $this->request->expects($this->any())
+        $this->request->expects(self::any())
             ->method('getAttribute')
-            ->willReturnCallback(function($attribute) use ($serverRequest, $authorIdent) {
+            ->willReturnCallback(function ($attribute) use ($serverRequest, $authorIdent) {
                 if ($attribute === 'frontend.page.information') {
                     return $serverRequest->getAttribute('frontend.page.information');
                 }
@@ -483,7 +480,7 @@ final class CommentControllerTest extends TestCase
             });
 
         if ($authorIdent === null) {
-            $this->cookieUtility->expects($this->any())
+            $this->cookieUtility->expects(self::any())
                 ->method('get')
                 ->with('ahash')
                 ->willReturn(null);

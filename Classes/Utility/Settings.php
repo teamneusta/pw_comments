@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -17,8 +20,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * This class provides some methods to prepare and render given
  * extension settings
- *
- * @package T3\PwComments
  */
 class Settings extends AbstractEncryptionUtility
 {
@@ -45,13 +46,13 @@ class Settings extends AbstractEncryptionUtility
         $result = [];
 
         foreach ($settings as $key => $value) {
-            if (str_ends_with($key, '.')) {
-                $keyWithoutDot = substr($key, 0, -1);
+            if (str_ends_with((string) $key, '.')) {
+                $keyWithoutDot = substr((string) $key, 0, -1);
                 if (array_key_exists($keyWithoutDot, $settings)) {
                     $result[$keyWithoutDot] = $contentObject->cObjGetSingle(
                         is_array($settings[$keyWithoutDot])
                             ? $settings[$keyWithoutDot]['_typoScriptNodeValue'] : $settings[$keyWithoutDot],
-                        $value
+                        $value,
                     );
                 } else {
                     $result[$keyWithoutDot] = self::renderConfigurationArray($value);
@@ -74,7 +75,7 @@ class Settings extends AbstractEncryptionUtility
     {
         $configurationManager = self::getConfigurationManagerInterface();
         $fullTypoScript = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,
         );
         return $fullTypoScript['plugin.']['tx_pwcomments.']['settings.'];
     }

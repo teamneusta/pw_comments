@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\UserFunc\TCA;
 
@@ -12,22 +12,15 @@ if (!defined('LF')) {
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
-use T3\PwComments\Service\Moderation\ModerationResult;
-use T3\PwComments\Service\Moderation\ModerationServiceInterface;
 use T3\PwComments\UserFunc\TCA\AiModerationControl;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 #[CoversClass(AiModerationControl::class)]
@@ -125,12 +118,12 @@ final class AiModerationControlTest extends TestCase
     {
         $icon = $this->createMock(Icon::class);
 
-        $this->iconFactory->expects($this->once())
+        $this->iconFactory->expects(self::once())
             ->method('getIcon')
             ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
             ->willReturn($icon);
 
-        $icon->expects($this->once())
+        $icon->expects(self::once())
             ->method('__toString')
             ->willReturn('<span class="icon">refresh</span>');
 
@@ -164,11 +157,11 @@ final class AiModerationControlTest extends TestCase
     {
         $icon = $this->createMock(Icon::class);
 
-        $this->iconFactory->expects($this->once())
+        $this->iconFactory->expects(self::once())
             ->method('getIcon')
             ->willReturn($icon);
 
-        $icon->expects($this->once())
+        $icon->expects(self::once())
             ->method('__toString')
             ->willReturn('<span class="icon">refresh</span>');
 
@@ -191,18 +184,18 @@ final class AiModerationControlTest extends TestCase
     {
         $icon = $this->createMock(Icon::class);
 
-        $this->iconFactory->expects($this->once())
+        $this->iconFactory->expects(self::once())
             ->method('getIcon')
             ->willReturn($icon);
 
-        $icon->expects($this->once())
+        $icon->expects(self::once())
             ->method('__toString')
             ->willReturn('<span>icon</span>');
 
-        $this->pageRenderer->expects($this->once())
+        $this->pageRenderer->expects(self::once())
             ->method('loadJavaScriptModule')
             ->with('@t3/pw-comments/ai-moderation-control.js');
-        $this->pageRenderer->expects($this->once())
+        $this->pageRenderer->expects(self::once())
             ->method('addInlineLanguageLabelFile')
             ->with('EXT:pw_comments/Resources/Private/Language/locallang_be.xlf');
 
@@ -223,12 +216,12 @@ final class AiModerationControlTest extends TestCase
     {
         $icon = $this->createMock(Icon::class);
 
-        $this->iconFactory->expects($this->once())
+        $this->iconFactory->expects(self::once())
             ->method('getIcon')
             ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
             ->willReturn($icon);
 
-        $icon->expects($this->once())
+        $icon->expects(self::once())
             ->method('__toString')
             ->willReturn('<span class="icon-refresh">refresh</span>');
 
@@ -256,18 +249,18 @@ final class AiModerationControlTest extends TestCase
     {
         $icon = $this->createMock(Icon::class);
 
-        $this->iconFactory->expects($this->once())
+        $this->iconFactory->expects(self::once())
             ->method('getIcon')
             ->willReturn($icon);
 
-        $icon->expects($this->once())
+        $icon->expects(self::once())
             ->method('__toString')
             ->willReturn('<span>icon</span>');
 
-        $this->pageRenderer->expects($this->once())
+        $this->pageRenderer->expects(self::once())
             ->method('loadJavaScriptModule')
             ->with('@t3/pw-comments/ai-moderation-control.js');
-        $this->pageRenderer->expects($this->once())
+        $this->pageRenderer->expects(self::once())
             ->method('addInlineLanguageLabelFile')
             ->with('EXT:pw_comments/Resources/Private/Language/locallang_be.xlf');
 
