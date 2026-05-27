@@ -26,8 +26,8 @@ pw_comments is an extension for TYPO3 CMS which adds the possibility to post com
 
 Requirements of pw_comments
 ---------------------------
-- PHP: ``^8.1``
-- TYPO3 CMS: ``^12.4``
+- PHP: ``^8.2``
+- TYPO3 CMS: ``^13.4``
 
 .. _features:
 

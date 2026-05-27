@@ -440,7 +440,6 @@ final class CommentControllerTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
         $property->setValue($this->controller, $value);
     }
 
@@ -554,7 +553,6 @@ final class CommentControllerTest extends TestCase
         $pageInfo = new PageInformation();
         $pageInfoReflection = new \ReflectionClass($pageInfo);
         $idProperty = $pageInfoReflection->getProperty('id');
-        $idProperty->setAccessible(true);
         $idProperty->setValue($pageInfo, $pageUid);
 
         $serverRequest = new ServerRequest();
