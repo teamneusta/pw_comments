@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -11,8 +14,6 @@ namespace T3\PwComments\Utility;
 
 /**
  * Class StringUtility
- *
- * @package T3\PwComments
  */
 class StringUtility
 {
@@ -27,7 +28,7 @@ class StringUtility
         return preg_replace(
             '/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/',
             '<a href="http$4://$5$6">$1</a>',
-            $value
+            $value,
         );
     }
 

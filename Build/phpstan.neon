@@ -1,16 +1,18 @@
 parameters:
     level: 1
     paths:
-      - ../
+      - ../Classes
+      - ../Configuration
+      - ../Resources
     inferPrivatePropertyTypeFromConstructor: true
     excludePaths:
-        analyse:
-          - '*/*/ext_localconf.php'
-          - '*/*/ext_emconf.php'
-          - '*/*/ext_tables.php'
-          - '*/Configuration/TCA/*'
-          - '*/Configuration/Backend/AjaxRoutes.php'
-          - '*/Configuration/Extbase/Persistence/Classes.php'
-          - '*/Tests/Unit/*'
-          - '*/Build/*'
-          - '*/vendor/*'
+      - '*/*/ext_localconf.php'
+      - '*/*/ext_emconf.php'
+      - '*/*/ext_tables.php'
+      - '*/Configuration/TCA/*'
+      - '*/Configuration/Backend/AjaxRoutes.php'
+      - '*/Configuration/Extbase/Persistence/Classes.php'
+      - '*/Tests/Unit/*'
+      - '*/Build/*'
+      - '*/public/*'
+      - '*/vendor/*'

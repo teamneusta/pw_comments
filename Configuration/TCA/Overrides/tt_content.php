@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 (static function (string $extensionKey): void {
@@ -12,7 +12,7 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title.show',
         'ext-pwcomments-ext-icon',
         'Comments',
-        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:showContentElementWizardDescription'
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:showContentElementWizardDescription',
     );
     ExtensionUtility::registerPlugin(
         $extensionKey,
@@ -20,20 +20,19 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:plugin.title.new',
         'ext-pwcomments-ext-icon',
         'Comments',
-        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription'
+        'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription',
     );
-
 
     // Add typoscript static includes
     ExtensionManagementUtility::addStaticFile(
         $extensionKey,
         'Configuration/TypoScript',
-        'pw_comments Main Static Template (required)'
+        'pw_comments Main Static Template (required)',
     );
     ExtensionManagementUtility::addStaticFile(
         $extensionKey,
         'Configuration/TypoScript/Styling',
-        'pw_comments Optional Styles'
+        'pw_comments Optional Styles',
     );
 
     ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');

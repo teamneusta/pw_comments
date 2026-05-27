@@ -6,7 +6,6 @@ namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
 use T3\PwComments\Service\Moderation\OpenAiModerationService;
@@ -23,14 +22,14 @@ final class ModerationProviderFactoryTest extends TestCase
 
         $this->factory = new ModerationProviderFactory(
             $requestFactory,
-            $logger
+            $logger,
         );
     }
 
     public function testCreatesOpenAiProviderWithDefaultSettings(): void
     {
         $provider = $this->factory->createProvider('openai', [
-            'aiModerationApiKey' => 'test-key'
+            'aiModerationApiKey' => 'test-key',
         ]);
 
         self::assertInstanceOf(OpenAiModerationService::class, $provider);
@@ -41,7 +40,7 @@ final class ModerationProviderFactoryTest extends TestCase
         $settings = [
             'aiModerationApiKey' => 'custom-key',
             'aiModerationApiEndpoint' => 'https://custom.api.endpoint',
-            'aiModerationThreshold' => 0.5
+            'aiModerationThreshold' => 0.5,
         ];
 
         $provider = $this->factory->createProvider('openai', $settings);
@@ -76,7 +75,7 @@ final class ModerationProviderFactoryTest extends TestCase
         $settings = [
             'aiModerationApiKey' => 'test-key-123',
             'aiModerationApiEndpoint' => 'https://example.com/api',
-            'aiModerationThreshold' => 0.9
+            'aiModerationThreshold' => 0.9,
         ];
 
         $provider = $this->factory->createProvider('openai', $settings);
@@ -88,7 +87,7 @@ final class ModerationProviderFactoryTest extends TestCase
     {
         $settings = [
             'aiModerationApiKey' => 'test-key',
-            'aiModerationThreshold' => '0.8'
+            'aiModerationThreshold' => '0.8',
         ];
 
         $provider = $this->factory->createProvider('openai', $settings);

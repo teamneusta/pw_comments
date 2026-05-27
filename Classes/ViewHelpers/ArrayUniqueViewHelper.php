@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -11,12 +15,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 /**
  * ArrayUnique ViewHelper
- *
- * @package T3\PwComments
  */
 class ArrayUniqueViewHelper extends AbstractViewHelper
 {
-
     /**
      * Removes duplicated entries in array
      *

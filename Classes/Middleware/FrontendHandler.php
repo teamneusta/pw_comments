@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
@@ -14,17 +17,12 @@ use TYPO3\CMS\Core\Exception;
  */
 class FrontendHandler implements MiddlewareInterface
 {
-    public function __construct(private readonly MailNotificationController $notificationController)
-    {
-    }
+    public function __construct(private readonly MailNotificationController $notificationController) {}
 
     /**
      * Check tx_pwcomments parameters and solve action
      * - sendAuthorMailWhenCommentHasBeenApproved
      *
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
      * @throws Exception
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -33,7 +31,7 @@ class FrontendHandler implements MiddlewareInterface
         $params = $queryParams['tx_pwcomments'] ?? [];
         if (!empty($params) && isset($params['action']) && $params['action'] === 'sendAuthorMailWhenCommentHasBeenApproved') {
             $mailSendResponse = $this->notificationController->sendMail($request);
-            $mailSendResponse->getBody()->write((string)$mailSendResponse->getStatusCode());
+            $mailSendResponse->getBody()->write((string) $mailSendResponse->getStatusCode());
 
             return $mailSendResponse;
         }

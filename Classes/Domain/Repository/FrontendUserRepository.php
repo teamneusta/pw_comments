@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace T3\PwComments\Domain\Repository;
 
@@ -11,7 +12,4 @@ namespace T3\PwComments\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
-class FrontendUserRepository extends Repository
-{
-
-}
+class FrontendUserRepository extends Repository {}

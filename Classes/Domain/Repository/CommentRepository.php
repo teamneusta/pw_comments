@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Domain\Repository;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -10,17 +13,15 @@ namespace T3\PwComments\Domain\Repository;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use T3\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for \T3\PwComments\Domain\Model\Comment
- *
- * @package T3\PwComments
  */
 class CommentRepository extends Repository
 {
@@ -53,8 +54,8 @@ class CommentRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('pid', $pid),
-                $query->equals('parentComment', 0)
-            )
+                $query->equals('parentComment', 0),
+            ),
         );
         $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
         $comments = $query->execute();
@@ -80,8 +81,8 @@ class CommentRepository extends Repository
             $query->logicalAnd(
                 $query->equals('pid', $pid),
                 $query->equals('entryUid', $entryUid),
-                $query->equals('parentComment', 0)
-            )
+                $query->equals('parentComment', 0),
+            ),
         );
         $query->setOrderings(['crdate' => $this->getCommentSortingDirection()]);
         $comments = $query->execute();
@@ -114,14 +115,12 @@ class CommentRepository extends Repository
 
     /**
      * Find replies by given comment and attaches them to replies attribute.
-     *
-     * @return void
      */
     protected function findAndAttachCommentReplies(Comment $comment)
     {
         $query = $this->createQuery();
         $query->matching(
-            $query->equals('parentComment', $comment->getUid())
+            $query->equals('parentComment', $comment->getUid()),
         );
         $query->setOrderings(['crdate' => $this->getReplySortingDirection()]);
         $comment->setReplies($query->execute());
@@ -154,7 +153,6 @@ class CommentRepository extends Repository
      * Sets invert comment sorting flag
      *
      * @param bool $invertCommentSorting
-     * @return void
      */
     public function setInvertCommentSorting($invertCommentSorting): void
     {
@@ -188,7 +186,6 @@ class CommentRepository extends Repository
      * Sets invert reply sorting flag
      *
      * @param bool $invertReplySorting
-     * @return void
      */
     public function setInvertReplySorting($invertReplySorting): void
     {

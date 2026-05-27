@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -10,14 +13,11 @@ namespace T3\PwComments\Utility;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use T3\PwComments\Domain\Model\Comment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class HashUtility
  *
  * Todo: use \TYPO3\CMS\Extbase\Security\Cryptography\HashService instead?
- *
- * @package T3\PwComments
  */
 class HashEncryptionUtility extends AbstractEncryptionUtility
 {

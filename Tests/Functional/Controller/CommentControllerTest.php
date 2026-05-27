@@ -7,8 +7,8 @@ namespace T3\PwComments\Tests\Functional\Controller;
 use PHPUnit\Framework\Attributes\Test;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Utility\HashEncryptionUtility;
-use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -40,7 +40,7 @@ final class CommentControllerTest extends FunctionalTestCase
 
         $this->setUpFrontendRootPage(
             1,
-            ['EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript']
+            ['EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript'],
         );
     }
 
@@ -90,7 +90,7 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString(
             'tx_news_pi1%5Bnews%5D=99',
             $this->firstUpvoteHref($body),
-            'Foreign GET parameter was dropped from the generated voting link (issue #40).'
+            'Foreign GET parameter was dropped from the generated voting link (issue #40).',
         );
     }
 
@@ -153,13 +153,13 @@ final class CommentControllerTest extends FunctionalTestCase
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($commentUid, Connection::PARAM_INT)
-                )
+                    $queryBuilder->createNamedParameter($commentUid, Connection::PARAM_INT),
+                ),
             )
             ->executeQuery()
             ->fetchOne();
 
-        return (int)$hidden;
+        return (int) $hidden;
     }
 
     /**
@@ -182,7 +182,7 @@ final class CommentControllerTest extends FunctionalTestCase
 
         $response = $this->executeFrontendSubRequest($request);
 
-        return (string)$response->getBody();
+        return (string) $response->getBody();
     }
 
     private function firstUpvoteHref(string $body): string
@@ -190,7 +190,7 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertSame(
             1,
             preg_match('/class="upvote" href="([^"]*)"/', $body, $matches),
-            'No upvote link was rendered.'
+            'No upvote link was rendered.',
         );
 
         return $matches[1];

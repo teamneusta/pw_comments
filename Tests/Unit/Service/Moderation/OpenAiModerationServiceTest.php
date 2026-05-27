@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
@@ -31,7 +31,7 @@ final class OpenAiModerationServiceTest extends TestCase
             $this->logger,
             'test-api-key',
             'https://api.openai.com/v1/moderations',
-            0.7
+            0.7,
         );
     }
 
@@ -42,12 +42,12 @@ final class OpenAiModerationServiceTest extends TestCase
             $this->logger,
             '',
             'https://api.openai.com/v1/moderations',
-            0.7
+            0.7,
         );
 
         $comment = $this->createComment('Test message');
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('warning')
             ->with('OpenAI API key not configured for moderation');
 
@@ -61,7 +61,7 @@ final class OpenAiModerationServiceTest extends TestCase
     {
         $comment = $this->createComment('');
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('info')
             ->with('Empty comment message, skipping AI moderation');
 
@@ -76,7 +76,7 @@ final class OpenAiModerationServiceTest extends TestCase
     {
         $comment = $this->createComment('   ');
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('info')
             ->with('Empty comment message, skipping AI moderation');
 
@@ -96,16 +96,16 @@ final class OpenAiModerationServiceTest extends TestCase
                         'harassment' => false,
                         'violence' => false,
                         'sexual' => false,
-                        'hate' => false
+                        'hate' => false,
                     ],
                     'category_scores' => [
                         'harassment' => 0.1,
                         'violence' => 0.05,
                         'sexual' => 0.02,
-                        'hate' => 0.03
-                    ]
-                ]
-            ]
+                        'hate' => 0.03,
+                    ],
+                ],
+            ],
         ];
 
         $this->mockApiCall($apiResponse);
@@ -130,16 +130,16 @@ final class OpenAiModerationServiceTest extends TestCase
                         'harassment' => true,
                         'violence' => false,
                         'sexual' => false,
-                        'hate' => false
+                        'hate' => false,
                     ],
                     'category_scores' => [
                         'harassment' => 0.8,
                         'violence' => 0.1,
                         'sexual' => 0.05,
-                        'hate' => 0.2
-                    ]
-                ]
-            ]
+                        'hate' => 0.2,
+                    ],
+                ],
+            ],
         ];
 
         $this->mockApiCall($apiResponse);
@@ -160,14 +160,14 @@ final class OpenAiModerationServiceTest extends TestCase
                     'flagged' => false,
                     'categories' => [
                         'harassment' => false,
-                        'violence' => false
+                        'violence' => false,
                     ],
                     'category_scores' => [
                         'harassment' => 0.75,
-                        'violence' => 0.1
-                    ]
-                ]
-            ]
+                        'violence' => 0.1,
+                    ],
+                ],
+            ],
         ];
 
         $this->mockApiCall($apiResponse);
@@ -196,30 +196,30 @@ final class OpenAiModerationServiceTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $stream = $this->createMock(StreamInterface::class);
 
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getStatusCode')
             ->willReturn($statusCode);
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getBody')
             ->willReturn($stream);
-        $stream->expects($this->once())
+        $stream->expects(self::once())
             ->method('getContents')
             ->willReturn('Bad Request Error');
 
-        $this->requestFactory->expects($this->once())
+        $this->requestFactory->expects(self::once())
             ->method('request')
             ->with(
                 'https://api.openai.com/v1/moderations',
                 'POST',
-                $this->anything()
+                self::anything(),
             )
             ->willReturn($response);
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with(
-                $this->stringContains('OpenAI moderation API error'),
-                $this->anything()
+                self::stringContains('OpenAI moderation API error'),
+                self::anything(),
             );
 
         $this->expectException(\RuntimeException::class);
@@ -234,30 +234,30 @@ final class OpenAiModerationServiceTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $stream = $this->createMock(StreamInterface::class);
 
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getStatusCode')
             ->willReturn(200);
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getBody')
             ->willReturn($stream);
-        $stream->expects($this->once())
+        $stream->expects(self::once())
             ->method('getContents')
             ->willReturn('invalid json');
 
-        $this->requestFactory->expects($this->once())
+        $this->requestFactory->expects(self::once())
             ->method('request')
             ->with(
                 'https://api.openai.com/v1/moderations',
                 'POST',
-                $this->anything()
+                self::anything(),
             )
             ->willReturn($response);
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with(
-                $this->stringContains('OpenAI moderation API error'),
-                $this->anything()
+                self::stringContains('OpenAI moderation API error'),
+                self::anything(),
             );
 
         $this->expectException(\RuntimeException::class);
@@ -273,11 +273,11 @@ final class OpenAiModerationServiceTest extends TestCase
 
         $this->mockApiCall($apiResponse);
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with(
-                $this->stringContains('OpenAI moderation API error'),
-                $this->anything()
+                self::stringContains('OpenAI moderation API error'),
+                self::anything(),
             );
 
         $this->expectException(\RuntimeException::class);
@@ -290,20 +290,20 @@ final class OpenAiModerationServiceTest extends TestCase
     {
         $comment = $this->createComment('Test message');
 
-        $this->requestFactory->expects($this->once())
+        $this->requestFactory->expects(self::once())
             ->method('request')
             ->with(
-                $this->anything(),
-                $this->anything(),
-                $this->anything()
+                self::anything(),
+                self::anything(),
+                self::anything(),
             )
             ->willThrowException(new \Exception('Network error'));
 
-        $this->logger->expects($this->once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with(
-                $this->stringContains('Unexpected error during AI moderation'),
-                $this->anything()
+                self::stringContains('Unexpected error during AI moderation'),
+                self::anything(),
             );
 
         $this->expectException(\RuntimeException::class);
@@ -319,38 +319,38 @@ final class OpenAiModerationServiceTest extends TestCase
         $expectedOptions = [
             'headers' => [
                 'Authorization' => 'Bearer test-api-key',
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
             ],
-            'body' => json_encode($expectedRequestData)
+            'body' => json_encode($expectedRequestData),
         ];
 
         $response = $this->createMock(ResponseInterface::class);
         $stream = $this->createMock(StreamInterface::class);
 
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getStatusCode')
             ->willReturn(200);
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getBody')
             ->willReturn($stream);
-        $stream->expects($this->once())
+        $stream->expects(self::once())
             ->method('getContents')
             ->willReturn(json_encode([
                 'results' => [
                     [
                         'flagged' => false,
                         'categories' => [],
-                        'category_scores' => []
-                    ]
-                ]
+                        'category_scores' => [],
+                    ],
+                ],
             ]));
 
-        $this->requestFactory->expects($this->once())
+        $this->requestFactory->expects(self::once())
             ->method('request')
             ->with(
                 'https://api.openai.com/v1/moderations',
                 'POST',
-                $expectedOptions
+                $expectedOptions,
             )
             ->willReturn($response);
 
@@ -360,10 +360,10 @@ final class OpenAiModerationServiceTest extends TestCase
     private function createComment(string $message): Comment
     {
         $comment = $this->createMock(Comment::class);
-        $comment->expects($this->any())
+        $comment->expects(self::any())
             ->method('getMessage')
             ->willReturn($message);
-        $comment->expects($this->any())
+        $comment->expects(self::any())
             ->method('getUid')
             ->willReturn(123);
 
@@ -375,22 +375,22 @@ final class OpenAiModerationServiceTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $stream = $this->createMock(StreamInterface::class);
 
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getStatusCode')
             ->willReturn(200);
-        $response->expects($this->once())
+        $response->expects(self::once())
             ->method('getBody')
             ->willReturn($stream);
-        $stream->expects($this->once())
+        $stream->expects(self::once())
             ->method('getContents')
             ->willReturn(json_encode($responseData));
 
-        $this->requestFactory->expects($this->once())
+        $this->requestFactory->expects(self::once())
             ->method('request')
             ->with(
                 'https://api.openai.com/v1/moderations',
                 'POST',
-                $this->anything()
+                self::anything(),
             )
             ->willReturn($response);
     }
