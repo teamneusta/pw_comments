@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\UserFunc\TCA;
 
+use TYPO3\CMS\Core\Imaging\IconSize;
+use Generator;
+use RuntimeException;
+
 // Define the LF constant if not already defined
 if (!defined('LF')) {
     define('LF', chr(10));
@@ -37,7 +41,6 @@ final class AiModerationControlTest extends TestCase
     private MockObject $moderationProviderFactory;
     private MockObject $persistenceManager;
     private MockObject $logger;
-    private array $singletons;
     private IconFactory|MockObject $iconFactory;
     private PageRenderer|MockObject $pageRenderer;
 
@@ -126,7 +129,7 @@ final class AiModerationControlTest extends TestCase
 
         $this->iconFactory->expects(self::once())
             ->method('getIcon')
-            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
+            ->with('actions-refresh', IconSize::SMALL)
             ->willReturn($icon);
 
         $icon->expects(self::once())
@@ -150,7 +153,7 @@ final class AiModerationControlTest extends TestCase
         self::assertStringContainsString('Re-check AI Moderation', $result['html']);
     }
 
-    public static function commentUidDataProvider(): \Generator
+    public static function commentUidDataProvider(): Generator
     {
         yield 'valid uid as string' => ['123', 123];
         yield 'valid uid as integer' => [456, 456];
@@ -224,7 +227,7 @@ final class AiModerationControlTest extends TestCase
 
         $this->iconFactory->expects(self::once())
             ->method('getIcon')
-            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
+            ->with('actions-refresh', IconSize::SMALL)
             ->willReturn($icon);
 
         $icon->expects(self::once())
@@ -407,12 +410,12 @@ final class AiModerationControlTest extends TestCase
         $this->commentRepository->method('findByCommentUid')->willReturn($this->createMock(Comment::class));
 
         $service = $this->createMock(ModerationServiceInterface::class);
-        $service->method('moderateComment')->willThrowException(new \RuntimeException('upstream down'));
+        $service->method('moderateComment')->willThrowException(new RuntimeException('upstream down'));
         $this->moderationProviderFactory->method('createProvider')->willReturn($service);
 
         $this->logger->expects(self::once())->method('error')
             ->with('Manual AI moderation recheck failed', self::callback(
-                static fn(array $ctx): bool => $ctx['comment_uid'] === 42 && $ctx['exception'] instanceof \RuntimeException,
+                static fn(array $ctx): bool => $ctx['comment_uid'] === 42 && $ctx['exception'] instanceof RuntimeException,
             ));
 
         $subject = $this->buildSubjectWithSettings([

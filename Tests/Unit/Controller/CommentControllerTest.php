@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Controller;
 
+use TYPO3\CMS\Core\Http\ResponseFactory;
+use TYPO3\CMS\Core\Http\StreamFactory;
+use ReflectionClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -72,8 +75,8 @@ final class CommentControllerTest extends TestCase
         $this->uriBuilder = $this->createMock(UriBuilder::class);
 
         // Real PSR-17 factories so htmlResponse()/jsonResponse() can build responses
-        $responseFactory = new \TYPO3\CMS\Core\Http\ResponseFactory();
-        $streamFactory = new \TYPO3\CMS\Core\Http\StreamFactory();
+        $responseFactory = new ResponseFactory();
+        $streamFactory = new StreamFactory();
 
         // Use reflection to inject private properties
         $this->injectProperty('request', $this->request);
@@ -430,7 +433,7 @@ final class CommentControllerTest extends TestCase
             ->willReturn('/page-10');
 
         // Trigger buildUriByUid through createAction with null comment (early return)
-        $this->controller->createAction(null);
+        $this->controller->createAction();
     }
 
     /**
@@ -438,7 +441,7 @@ final class CommentControllerTest extends TestCase
      */
     private function injectProperty(string $propertyName, $value): void
     {
-        $reflection = new \ReflectionClass($this->controller);
+        $reflection = new ReflectionClass($this->controller);
         $property = $reflection->getProperty($propertyName);
         $property->setValue($this->controller, $value);
     }
@@ -468,7 +471,7 @@ final class CommentControllerTest extends TestCase
 
         $this->request->expects(self::any())
             ->method('getAttribute')
-            ->willReturnCallback(function ($attribute) use ($serverRequest, $authorIdent) {
+            ->willReturnCallback(function ($attribute) use ($serverRequest) {
                 if ($attribute === 'frontend.page.information') {
                     return $serverRequest->getAttribute('frontend.page.information');
                 }
@@ -551,7 +554,7 @@ final class CommentControllerTest extends TestCase
     private function createServerRequestWithPageInfo(int $pageUid): ServerRequest
     {
         $pageInfo = new PageInformation();
-        $pageInfoReflection = new \ReflectionClass($pageInfo);
+        $pageInfoReflection = new ReflectionClass($pageInfo);
         $idProperty = $pageInfoReflection->getProperty('id');
         $idProperty->setValue($pageInfo, $pageUid);
 

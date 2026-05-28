@@ -12,6 +12,8 @@ namespace T3\PwComments\ViewHelpers\Format;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use DateTime;
+use InvalidArgumentException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -54,7 +56,7 @@ class RelativeDateViewHelper extends AbstractViewHelper
      *
      * @return int
      */
-    protected function normalizeTimestamp(int|string|\DateTime|null $timestamp)
+    protected function normalizeTimestamp(int|string|DateTime|null $timestamp)
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -62,10 +64,10 @@ class RelativeDateViewHelper extends AbstractViewHelper
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof \DateTime) {
+        } elseif ($timestamp instanceof DateTime) {
             $timestamp = (int) $timestamp->format('U');
         } else {
-            throw new \InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.', 5991273415);
+            throw new InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.', 5991273415);
         }
         return $timestamp;
     }

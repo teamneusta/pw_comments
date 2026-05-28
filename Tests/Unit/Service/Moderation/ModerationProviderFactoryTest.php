@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
+use Generator;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -55,7 +57,7 @@ final class ModerationProviderFactoryTest extends TestCase
         self::assertInstanceOf(OpenAiModerationService::class, $provider);
     }
 
-    public static function invalidProviderDataProvider(): \Generator
+    public static function invalidProviderDataProvider(): Generator
     {
         yield 'empty provider name' => [''];
         yield 'unknown provider name' => ['unknown-provider'];
@@ -64,7 +66,7 @@ final class ModerationProviderFactoryTest extends TestCase
     #[DataProvider('invalidProviderDataProvider')]
     public function testThrowsExceptionForUnknownProvider(string $provider): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown moderation provider: ' . $provider);
 
         $this->factory->createProvider($provider, []);

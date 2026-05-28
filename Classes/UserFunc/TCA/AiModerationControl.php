@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace T3\PwComments\UserFunc\TCA;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -131,7 +132,7 @@ class AiModerationControl extends AbstractNode implements LoggerAwareInterface
                 ],
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Manual AI moderation recheck failed', [
                 'comment_uid' => $commentUid,
                 'exception' => $e,

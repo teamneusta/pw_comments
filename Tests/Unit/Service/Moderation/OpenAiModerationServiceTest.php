@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
+use InvalidArgumentException;
+use Generator;
+use RuntimeException;
+use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +55,7 @@ final class OpenAiModerationServiceTest extends TestCase
             ->method('warning')
             ->with('OpenAI API key not configured for moderation');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('OpenAI API key not configured for moderation');
 
         $service->moderateComment($comment);
@@ -178,7 +182,7 @@ final class OpenAiModerationServiceTest extends TestCase
         self::assertSame('Content flagged for harassment (score: 0.75)', $result->getReason());
     }
 
-    public static function apiErrorDataProvider(): \Generator
+    public static function apiErrorDataProvider(): Generator
     {
         yield 'unauthorized' => [401, 'Invalid API key'];
         yield 'rate limited' => [429, 'Rate limit exceeded'];
@@ -222,7 +226,7 @@ final class OpenAiModerationServiceTest extends TestCase
                 self::anything(),
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($expectedErrorText);
 
         $this->service->moderateComment($comment);
@@ -260,7 +264,7 @@ final class OpenAiModerationServiceTest extends TestCase
                 self::anything(),
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid JSON response from OpenAI API');
 
         $this->service->moderateComment($comment);
@@ -280,7 +284,7 @@ final class OpenAiModerationServiceTest extends TestCase
                 self::anything(),
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unexpected response format from OpenAI API');
 
         $this->service->moderateComment($comment);
@@ -297,7 +301,7 @@ final class OpenAiModerationServiceTest extends TestCase
                 self::anything(),
                 self::anything(),
             )
-            ->willThrowException(new \Exception('Network error'));
+            ->willThrowException(new Exception('Network error'));
 
         $this->logger->expects(self::once())
             ->method('error')
@@ -306,7 +310,7 @@ final class OpenAiModerationServiceTest extends TestCase
                 self::anything(),
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('AI moderation service unavailable');
 
         $this->service->moderateComment($comment);

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Service\Moderation;
 
+use InvalidArgumentException;
+use RuntimeException;
+use Exception;
 use Psr\Log\LoggerInterface;
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Http\RequestFactory;
@@ -36,7 +39,7 @@ class OpenAiModerationService implements ModerationServiceInterface
     {
         if (empty($this->apiKey)) {
             $this->logger->warning('OpenAI API key not configured for moderation');
-            throw new \InvalidArgumentException('OpenAI API key not configured for moderation', 5155747862);
+            throw new InvalidArgumentException('OpenAI API key not configured for moderation', 5155747862);
         }
 
         $message = trim($comment->getMessage());
@@ -48,20 +51,20 @@ class OpenAiModerationService implements ModerationServiceInterface
         try {
             $response = $this->callOpenAiApi($message);
             return $this->parseResponse($response);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->logger->error('OpenAI moderation API error: ' . $e->getMessage(), [
                 'comment_uid' => $comment->getUid(),
                 'comment_preview' => substr($message, 0, 100),
                 'exception' => $e,
             ]);
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Unexpected error during AI moderation: ' . $e->getMessage(), [
                 'comment_uid' => $comment->getUid(),
                 'comment_preview' => substr($message, 0, 100),
                 'exception' => $e,
             ]);
-            throw new \RuntimeException('AI moderation service unavailable', 0, $e);
+            throw new RuntimeException('AI moderation service unavailable', 0, $e);
         }
     }
 
@@ -88,16 +91,16 @@ class OpenAiModerationService implements ModerationServiceInterface
 
             // Handle specific error cases
             throw match ($statusCode) {
-                401 => new \RuntimeException($errorMessage . ': Invalid API key'),
-                429 => new \RuntimeException($errorMessage . ': Rate limit exceeded'),
-                500, 502, 503, 504 => new \RuntimeException($errorMessage . ': OpenAI service temporarily unavailable'),
-                default => new \RuntimeException($errorMessage . ': ' . $responseBody),
+                401 => new RuntimeException($errorMessage . ': Invalid API key'),
+                429 => new RuntimeException($errorMessage . ': Rate limit exceeded'),
+                500, 502, 503, 504 => new RuntimeException($errorMessage . ': OpenAI service temporarily unavailable'),
+                default => new RuntimeException($errorMessage . ': ' . $responseBody),
             };
         }
 
         $responseData = json_decode($responseBody, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Invalid JSON response from OpenAI API: ' . json_last_error_msg(), 7458663901);
+            throw new RuntimeException('Invalid JSON response from OpenAI API: ' . json_last_error_msg(), 7458663901);
         }
 
         return $responseData;
@@ -106,7 +109,7 @@ class OpenAiModerationService implements ModerationServiceInterface
     private function parseResponse(array $response): ModerationResult
     {
         if (!isset($response['results'][0])) {
-            throw new \RuntimeException('Unexpected response format from OpenAI API', 3511050237);
+            throw new RuntimeException('Unexpected response format from OpenAI API', 3511050237);
         }
 
         $result = $response['results'][0];
