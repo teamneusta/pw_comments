@@ -10,10 +10,10 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
-use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
 
 final readonly class ModifyPageLayoutEventListener
 {
@@ -23,7 +23,6 @@ final readonly class ModifyPageLayoutEventListener
         private ViewFactoryInterface $viewFactory,
     ) {}
 
-    // @TODO: check if this still works after upgrade
     public function __invoke(ModifyPageLayoutContentEvent $event): void
     {
         $pageId = (int) ($event->getRequest()->getQueryParams()['id'] ?? 0);
@@ -82,7 +81,7 @@ final readonly class ModifyPageLayoutEventListener
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,
-            'state' => InfoboxViewHelper::STATE_INFO,
+            'state' => ContextualFeedbackSeverity::INFO,
         ]);
 
         $event->setHeaderContent($view->render());
