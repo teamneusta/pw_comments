@@ -12,6 +12,8 @@ namespace T3\PwComments\Utility;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use TYPO3\CMS\Core\Mail\MailerInterface;
+use Exception;
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -55,6 +57,9 @@ class Mail
      * @var bool
      */
     protected $addQueryStringToLinks = true;
+    public function __construct(private readonly MailerInterface $mailer)
+    {
+    }
 
     /**
      * Sets the settings of controller
@@ -85,7 +90,7 @@ class Mail
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
      * @return bool Returns TRUE if the mail has been sent successfully
-     * @throws \Exception
+     * @throws Exception
      */
     public function sendMail(Comment $comment, $hash = '')
     {
@@ -123,7 +128,7 @@ class Mail
             $mail->html($this->getMailMessage($comment, $hash));
         }
 
-        return $mail->send();
+        return $this->mailer->send($mail);
     }
 
     /**
@@ -133,13 +138,13 @@ class Mail
      * @param string $hash validation string to add to url if comment must be moderate
      * @return string The rendered fluid template (HTML or plain text)
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getMailMessage(Comment $comment, $hash): string
     {
         $mailTemplate = GeneralUtility::getFileAbsFileName($this->getTemplatePath());
         if (!file_exists($mailTemplate)) {
-            throw new \Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
+            throw new Exception('Mail template (' . $mailTemplate . ') not found. ', 1394328652);
         }
 
         $templatePaths = $this->view->getRenderingContext()->getTemplatePaths();
