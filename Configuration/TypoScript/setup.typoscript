@@ -104,7 +104,7 @@ plugin.tx_pwcomments {
                 10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
 
                 20 = TEXT
-                20.data = TSFE:fe_user|user|username
+                20.data = frontend.user|user|username
                 20.noTrimWrap = | <b>|</b>|
 
                 stdWrap.wrap = <span class="loggedInAs">|</span>
