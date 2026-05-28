@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace T3\PwComments\UserFunc\TCA;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
 use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Backend\Form\AbstractNode;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Log\Channel;
@@ -16,8 +21,10 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 #[Channel('pw_comments')]
-class AiModerationControl extends AbstractNode
+class AiModerationControl extends AbstractNode implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public function __construct(
         private readonly CommentRepository $commentRepository,
         private readonly ModerationProviderFactory $moderationProviderFactory,
@@ -67,31 +74,26 @@ class AiModerationControl extends AbstractNode
     /**
      * AJAX endpoint for re-checking AI moderation
      */
-    public function recheckModeration(): void
+    public function recheckModeration(ServerRequestInterface $request): ResponseInterface
     {
-        $commentUid = (int) ($GLOBALS['TYPO3_REQUEST']->getParsedBody()['commentUid'] ?? null);
+        $commentUid = (int) ($request->getParsedBody()['commentUid'] ?? null);
 
         if (!$commentUid) {
-            $this->outputJson(['success' => false, 'message' => 'Invalid comment ID']);
-            return;
+            return new JsonResponse(['success' => false, 'message' => 'Invalid comment ID']);
         }
 
         try {
             $comment = $this->commentRepository->findByCommentUid($commentUid);
 
             if (!$comment instanceof Comment) {
-                $this->outputJson(['success' => false, 'message' => 'Comment not found']);
-                return;
+                return new JsonResponse(['success' => false, 'message' => 'Comment not found']);
             }
 
-            // Get AI moderation settings from TYPO3 configuration
             $settings = $this->getAiModerationSettings();
             if (!$settings['enableAiModeration']) {
-                $this->outputJson(['success' => false, 'message' => 'AI moderation is disabled']);
-                return;
+                return new JsonResponse(['success' => false, 'message' => 'AI moderation is disabled']);
             }
 
-            // Run AI moderation
             $moderationService = $this->moderationProviderFactory->createProvider(
                 $settings['aiModerationProvider'] ?? 'openai',
                 $settings,
@@ -99,7 +101,6 @@ class AiModerationControl extends AbstractNode
 
             $moderationResult = $moderationService->moderateComment($comment);
 
-            // Update comment with new moderation results
             if ($moderationResult->isViolation()) {
                 $comment->setAiModerationStatus('flagged');
                 $comment->setAiModerationReason($moderationResult->getReason());
@@ -120,7 +121,7 @@ class AiModerationControl extends AbstractNode
                 'confidence' => $moderationResult->getMaxScore(),
             ]);
 
-            $this->outputJson([
+            return new JsonResponse([
                 'success' => true,
                 'message' => 'AI moderation check completed',
                 'result' => [
@@ -136,23 +137,15 @@ class AiModerationControl extends AbstractNode
                 'exception' => $e,
             ]);
 
-            $this->outputJson([
+            return new JsonResponse([
                 'success' => false,
                 'message' => 'AI moderation check failed: ' . $e->getMessage(),
             ]);
         }
     }
 
-    private function getAiModerationSettings(): array
+    protected function getAiModerationSettings(): array
     {
-        // Get TypoScript settings for AI moderation
         return Settings::getExtensionSettings();
-    }
-
-    private function outputJson(array $data): void
-    {
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit;
     }
 }

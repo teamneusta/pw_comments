@@ -33,7 +33,7 @@ return [
         'iconfile' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_comment.png',
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_website,author_ident,terms_accepted,' .
+        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_ident,terms_accepted,' .
                               'message,parent_comment,votes,rating,' .
                               '--div--;AI Moderation,ai_moderation_status,ai_moderation_reason,ai_moderation_confidence,ai_moderation_control'],
     ],
