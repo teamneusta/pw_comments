@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Service\Moderation;
 
-use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use T3\PwComments\Service\Moderation\ModerationResult;
@@ -44,7 +43,7 @@ final class ModerationResultTest extends TestCase
         self::assertSame($maxScore, $result->getMaxScore());
     }
 
-    public static function formattedReasonDataProvider(): Generator
+    public static function formattedReasonDataProvider(): \Generator
     {
         yield 'returns custom reason when provided' => [
             'reason' => 'Custom violation reason',

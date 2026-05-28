@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Controller;
 
-use TYPO3\CMS\Core\Http\ResponseFactory;
-use TYPO3\CMS\Core\Http\StreamFactory;
-use ReflectionClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -20,7 +17,9 @@ use T3\PwComments\Domain\Repository\VoteRepository;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
 use T3\PwComments\Utility\Cookie;
 use T3\PwComments\Utility\Mail;
+use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Http\StreamFactory;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Request;
@@ -441,7 +440,7 @@ final class CommentControllerTest extends TestCase
      */
     private function injectProperty(string $propertyName, $value): void
     {
-        $reflection = new ReflectionClass($this->controller);
+        $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty($propertyName);
         $property->setValue($this->controller, $value);
     }
@@ -554,7 +553,7 @@ final class CommentControllerTest extends TestCase
     private function createServerRequestWithPageInfo(int $pageUid): ServerRequest
     {
         $pageInfo = new PageInformation();
-        $pageInfoReflection = new ReflectionClass($pageInfo);
+        $pageInfoReflection = new \ReflectionClass($pageInfo);
         $idProperty = $pageInfoReflection->getProperty('id');
         $idProperty->setValue($pageInfo, $pageUid);
 

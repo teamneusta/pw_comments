@@ -12,7 +12,6 @@ namespace T3\PwComments\Controller;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use RuntimeException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -128,7 +127,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     public function initializeAction(): void
     {
         if (!is_array($this->settings)) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
                 1501862644,
             );
@@ -214,9 +213,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * Create action
      */
     public function createAction(
-        #[Validate(validator: CommentValidator::class)] ?Comment $newComment = null,
-    ): ResponseInterface
-    {
+        #[Validate(validator: CommentValidator::class)]
+        ?Comment $newComment = null,
+    ): ResponseInterface {
         // Hidden field Spam-Protection
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
             && $this->request->hasArgument($this->settings['hiddenFieldName'])
@@ -277,7 +276,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
                     $newComment->setAiModerationStatus('approved');
                     $newComment->setAiModerationConfidence($moderationResult->getMaxScore());
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // Log error and fall back to manual moderation if configured
                 if (isset($this->settings['aiModerationFallbackToManual']) && $this->settings['aiModerationFallbackToManual']) {
                     // Set error status and continue with normal moderation flow
@@ -361,10 +360,11 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * @param Comment $commentToReplyTo Comment to reply to
      */
     public function newAction(
-        #[IgnoreValidation] ?Comment $newComment = null,
-        #[IgnoreValidation] ?Comment $commentToReplyTo = null,
-    ): ResponseInterface
-    {
+        #[IgnoreValidation]
+        ?Comment $newComment = null,
+        #[IgnoreValidation]
+        ?Comment $commentToReplyTo = null,
+    ): ResponseInterface {
         if ($newComment !== null) {
             $this->view->assign('newComment', $newComment);
         }

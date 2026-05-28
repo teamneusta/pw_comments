@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace T3\PwComments\ViewHelpers\Format;
 
-use InvalidArgumentException;
 use DateTime;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -98,16 +97,16 @@ class DateViewHelper extends AbstractViewHelper
         $format = preg_replace('/([a-zA-Z])/is', '%$1', (string) $this->arguments['format']);
         $format = str_replace('%%', '%', $format);
 
-        return (new DateTime())->setTimestamp($timestamp)->format($format);
+        return (new \DateTime())->setTimestamp($timestamp)->format($format);
     }
 
     /**
      * Handle all the different input formats and return a real timestamp
      *
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
-    protected function normalizeTimestamp(int|string|null|DateTime $timestamp): int|bool
+    protected function normalizeTimestamp(int|string|null|\DateTime $timestamp): int|bool
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -115,10 +114,10 @@ class DateViewHelper extends AbstractViewHelper
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof DateTime) {
+        } elseif ($timestamp instanceof \DateTime) {
             $timestamp = (int) $timestamp->format('U');
         } else {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'),
                 3328256120,
             );

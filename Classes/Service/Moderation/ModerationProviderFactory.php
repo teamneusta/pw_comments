@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Service\Moderation;
 
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Log\Channel;
@@ -34,7 +33,7 @@ class ModerationProviderFactory implements SingletonInterface
                 $settings['aiModerationApiEndpoint'] ?? 'https://api.openai.com/v1/moderations',
                 (float) ($settings['aiModerationThreshold'] ?? 0.7),
             ),
-            default => throw new InvalidArgumentException('Unknown moderation provider: ' . $provider, 7207721257),
+            default => throw new \InvalidArgumentException('Unknown moderation provider: ' . $provider, 7207721257),
         };
     }
 }

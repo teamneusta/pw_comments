@@ -10,8 +10,6 @@ namespace T3\PwComments\Controller;
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use InvalidArgumentException;
-use RuntimeException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Utility\HashEncryptionUtility;
@@ -55,7 +53,7 @@ class MailNotificationController
         $pid = (int) $params['pid'];
 
         if (!$action || !$uid || !$pid || !$hash) {
-            throw new InvalidArgumentException('Invalid arguments given.', 5066963646);
+            throw new \InvalidArgumentException('Invalid arguments given.', 5066963646);
         }
 
         // Get comment row
@@ -70,7 +68,7 @@ class MailNotificationController
         // Check hash
         $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
         if (!$valid) {
-            throw new RuntimeException('Given hash not valid!', 9298443636);
+            throw new \RuntimeException('Given hash not valid!', 9298443636);
         }
         // Send mail and respond
         if ($action === 'sendAuthorMailWhenCommentHasBeenApproved' && $row['hidden']) {

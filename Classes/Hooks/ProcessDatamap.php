@@ -13,7 +13,6 @@ namespace T3\PwComments\Hooks;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use RuntimeException;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Utility\HashEncryptionUtility;
@@ -96,7 +95,7 @@ final readonly class ProcessDatamap
             );
             $messageQueue->enqueue(new FlashMessage($messageToDisplay ?? '', '', ContextualFeedbackSeverity::OK, true));
         } else {
-            throw new RuntimeException('Error while calling the following url: ' . $url, 4620589602);
+            throw new \RuntimeException('Error while calling the following url: ' . $url, 4620589602);
         }
     }
 
