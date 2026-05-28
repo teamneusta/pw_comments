@@ -144,7 +144,7 @@ class AiModerationControl extends AbstractNode implements LoggerAwareInterface
         }
     }
 
-    private function getAiModerationSettings(): array
+    protected function getAiModerationSettings(): array
     {
         return Settings::getExtensionSettings();
     }
