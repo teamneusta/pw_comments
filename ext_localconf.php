@@ -32,7 +32,6 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'index,upvote,downvote',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
     ExtensionUtility::configurePlugin(
         $extensionKey,
@@ -43,7 +42,6 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'new,create,confirmComment',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -55,7 +53,6 @@ if (!defined('TYPO3')) {
         [
             CommentController::class => 'sendAuthorMailWhenCommentHasBeenApproved',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['PwComments']['modules']
