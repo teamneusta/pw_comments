@@ -50,7 +50,20 @@ mysql \
   --password=root \
   --execute="DROP DATABASE IF EXISTS test; CREATE DATABASE test; GRANT ALL PRIVILEGES ON test.* TO 'db'@'%'; FLUSH PRIVILEGES;"
 
-vendor/bin/typo3 install:setup --database-user-name=root --database-user-password=root --database-host-name=db --database-name=test --use-existing-database --force --site-base-url "/"
+vendor/bin/typo3 setup \
+  --driver=mysqli \
+  --host=db \
+  --username=root \
+  --password=root \
+  --dbname=test \
+  --admin-username=admin \
+  --admin-user-password='Admin123!' \
+  --admin-email='admin@example.com' \
+  --create-site="$DDEV_PRIMARY_URL_WITHOUT_PORT/" \
+  --project-name='EXT:pw_comments Dev Environment' \
+  --server-type=apache \
+  --force \
+  -n
 vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
 vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
@@ -60,8 +73,5 @@ vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3 configuration:set 'GFX/processor' 'ImageMagick'
 vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
-
-sed -i -e "s/base: ht\//base: \//g" /var/www/html/config/sites/main/config.yaml
-sed -i -e 's/base: \/en\//base: \//g' /var/www/html/config/sites/main/config.yaml
 
 vendor/bin/typo3 cache:flush
