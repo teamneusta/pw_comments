@@ -12,6 +12,7 @@ namespace T3\PwComments\Controller;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use RuntimeException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -35,8 +36,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
-use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
+use TYPO3\CMS\Extbase\Attribute\Validate;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
@@ -127,7 +128,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     public function initializeAction(): void
     {
         if (!is_array($this->settings)) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
                 1501862644,
             );
@@ -162,8 +163,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     /**
      * Displays all comments by pid
      */
-    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function indexAction(?Comment $commentToReplyTo = null): ResponseInterface
+    public function indexAction(#[IgnoreValidation] ?Comment $commentToReplyTo = null): ResponseInterface
     {
         if (isset($this->settings['invertCommentSorting']) && $this->settings['invertCommentSorting']) {
             $this->commentRepository->setInvertCommentSorting(true);
@@ -213,8 +213,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
     /**
      * Create action
      */
-    #[Validate(['validator' => CommentValidator::class, 'param' => 'newComment'])]
-    public function createAction(?Comment $newComment = null): ResponseInterface
+    public function createAction(
+        #[Validate(validator: CommentValidator::class)] ?Comment $newComment = null,
+    ): ResponseInterface
     {
         // Hidden field Spam-Protection
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
@@ -276,7 +277,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
                     $newComment->setAiModerationStatus('approved');
                     $newComment->setAiModerationConfidence($moderationResult->getMaxScore());
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Log error and fall back to manual moderation if configured
                 if (isset($this->settings['aiModerationFallbackToManual']) && $this->settings['aiModerationFallbackToManual']) {
                     // Set error status and continue with normal moderation flow
@@ -359,9 +360,10 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * @param Comment $newComment New Comment
      * @param Comment $commentToReplyTo Comment to reply to
      */
-    #[IgnoreValidation(['value' => 'newComment'])]
-    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function newAction(?Comment $newComment = null, ?Comment $commentToReplyTo = null): ResponseInterface
+    public function newAction(
+        #[IgnoreValidation] ?Comment $newComment = null,
+        #[IgnoreValidation] ?Comment $commentToReplyTo = null,
+    ): ResponseInterface
     {
         if ($newComment !== null) {
             $this->view->assign('newComment', $newComment);
@@ -393,8 +395,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      *
      * @return string Empty string. This action will perform a redirect
      */
-    #[IgnoreValidation(['value' => 'comment'])]
-    public function upvoteAction(Comment $comment): ResponseInterface
+    public function upvoteAction(#[IgnoreValidation] Comment $comment): ResponseInterface
     {
         return $this->performVoting($comment, Vote::TYPE_UPVOTE);
     }
@@ -404,8 +405,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      *
      * @return string Empty string. This action will perform a redirect
      */
-    #[IgnoreValidation(['value' => 'comment'])]
-    public function downvoteAction(Comment $comment): ResponseInterface
+    public function downvoteAction(#[IgnoreValidation] Comment $comment): ResponseInterface
     {
         return $this->performVoting($comment, Vote::TYPE_DOWNVOTE);
     }
