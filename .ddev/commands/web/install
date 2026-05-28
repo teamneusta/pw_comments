@@ -16,7 +16,6 @@ composer req typo3/cms-core:"^$VERSION" \
              typo3/cms-install:"^$VERSION" \
              typo3/cms-extbase:"^$VERSION" \
              typo3/cms-fluid:"^$VERSION" \
-             typo3/cms-recordlist:"^$VERSION" \
              typo3/cms-scheduler:"^$VERSION" \
              typo3/cms-setup:"^$VERSION" \
              typo3/cms-tstemplate:"^$VERSION" \
@@ -34,7 +33,6 @@ composer req typo3/cms-core:"^$VERSION" \
              typo3/cms-impexp:"^$VERSION" \
              typo3/cms-seo:"^$VERSION" \
              typo3/cms-sys-note:"^$VERSION" \
-             helhum/typo3-console:"*" \
              $PACKAGE_NAME:'*@dev' \
              --no-progress -n -d /var/www/html/
 
