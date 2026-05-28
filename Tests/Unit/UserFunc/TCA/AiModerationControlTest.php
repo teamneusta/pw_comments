@@ -14,10 +14,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
+use T3\PwComments\Service\Moderation\ModerationResult;
+use T3\PwComments\Service\Moderation\ModerationServiceInterface;
 use T3\PwComments\UserFunc\TCA\AiModerationControl;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -274,5 +280,184 @@ final class AiModerationControlTest extends TestCase
         $this->subject->setData(['databaseRow' => ['uid' => 789]]);
 
         $this->subject->render();
+    }
+
+    #[Test]
+    public function recheckModerationReturnsErrorWhenCommentUidIsZero(): void
+    {
+        $payload = $this->decodePayload(
+            $this->subject->recheckModeration($this->buildRequest(['commentUid' => 0])),
+        );
+
+        self::assertFalse($payload['success']);
+        self::assertSame('Invalid comment ID', $payload['message']);
+    }
+
+    #[Test]
+    public function recheckModerationReturnsErrorWhenCommentUidIsMissing(): void
+    {
+        $payload = $this->decodePayload(
+            $this->subject->recheckModeration($this->buildRequest([])),
+        );
+
+        self::assertFalse($payload['success']);
+        self::assertSame('Invalid comment ID', $payload['message']);
+    }
+
+    #[Test]
+    public function recheckModerationReturnsErrorWhenCommentNotFound(): void
+    {
+        $this->commentRepository->method('findByCommentUid')->with(42)->willReturn(null);
+
+        $payload = $this->decodePayload(
+            $this->subject->recheckModeration($this->buildRequest(['commentUid' => 42])),
+        );
+
+        self::assertFalse($payload['success']);
+        self::assertSame('Comment not found', $payload['message']);
+    }
+
+    #[Test]
+    public function recheckModerationReturnsErrorWhenAiModerationDisabled(): void
+    {
+        $this->commentRepository->method('findByCommentUid')->willReturn($this->createMock(Comment::class));
+        $subject = $this->buildSubjectWithSettings(['enableAiModeration' => false]);
+
+        $payload = $this->decodePayload(
+            $subject->recheckModeration($this->buildRequest(['commentUid' => 42])),
+        );
+
+        self::assertFalse($payload['success']);
+        self::assertSame('AI moderation is disabled', $payload['message']);
+    }
+
+    #[Test]
+    public function recheckModerationApprovesNonViolatingComment(): void
+    {
+        $comment = $this->createMock(Comment::class);
+        $comment->method('getAiModerationStatus')->willReturn('approved');
+        $comment->method('getAiModerationReason')->willReturn('');
+        $comment->method('getAiModerationConfidence')->willReturn(0.1);
+        $comment->expects(self::once())->method('setAiModerationStatus')->with('approved');
+        $comment->expects(self::once())->method('setAiModerationReason')->with('');
+        $comment->expects(self::never())->method('setHidden');
+
+        $this->commentRepository->method('findByCommentUid')->willReturn($comment);
+        $this->commentRepository->expects(self::once())->method('update')->with($comment);
+        $this->persistenceManager->expects(self::once())->method('persistAll');
+        $this->logger->expects(self::once())->method('info')
+            ->with('Manual AI moderation recheck completed', self::callback(
+                static fn(array $ctx): bool => $ctx['comment_uid'] === 42 && $ctx['result'] === 'approved',
+            ));
+
+        $service = $this->createMock(ModerationServiceInterface::class);
+        $service->method('moderateComment')->willReturn(new ModerationResult(false, [], [], '', 0.1));
+        $this->moderationProviderFactory->method('createProvider')->willReturn($service);
+
+        $subject = $this->buildSubjectWithSettings([
+            'enableAiModeration' => true,
+            'aiModerationProvider' => 'openai',
+        ]);
+
+        $payload = $this->decodePayload(
+            $subject->recheckModeration($this->buildRequest(['commentUid' => 42])),
+        );
+
+        self::assertTrue($payload['success']);
+        self::assertSame('AI moderation check completed', $payload['message']);
+        self::assertSame('approved', $payload['result']['status']);
+    }
+
+    #[Test]
+    public function recheckModerationFlagsViolatingComment(): void
+    {
+        $comment = $this->createMock(Comment::class);
+        $comment->method('getAiModerationStatus')->willReturn('flagged');
+        $comment->method('getAiModerationReason')->willReturn('harassment');
+        $comment->method('getAiModerationConfidence')->willReturn(0.92);
+        $comment->expects(self::once())->method('setAiModerationStatus')->with('flagged');
+        $comment->expects(self::once())->method('setAiModerationReason')->with('harassment');
+        $comment->expects(self::once())->method('setHidden')->with(true);
+
+        $this->commentRepository->method('findByCommentUid')->willReturn($comment);
+
+        $service = $this->createMock(ModerationServiceInterface::class);
+        $service->method('moderateComment')->willReturn(
+            new ModerationResult(true, ['harassment'], ['harassment' => 0.92], 'harassment', 0.92),
+        );
+        $this->moderationProviderFactory->method('createProvider')->willReturn($service);
+
+        $subject = $this->buildSubjectWithSettings([
+            'enableAiModeration' => true,
+            'aiModerationProvider' => 'openai',
+        ]);
+
+        $payload = $this->decodePayload(
+            $subject->recheckModeration($this->buildRequest(['commentUid' => 42])),
+        );
+
+        self::assertTrue($payload['success']);
+        self::assertSame('flagged', $payload['result']['status']);
+        self::assertSame('harassment', $payload['result']['reason']);
+    }
+
+    #[Test]
+    public function recheckModerationReturnsErrorAndLogsOnProviderException(): void
+    {
+        $this->commentRepository->method('findByCommentUid')->willReturn($this->createMock(Comment::class));
+
+        $service = $this->createMock(ModerationServiceInterface::class);
+        $service->method('moderateComment')->willThrowException(new \RuntimeException('upstream down'));
+        $this->moderationProviderFactory->method('createProvider')->willReturn($service);
+
+        $this->logger->expects(self::once())->method('error')
+            ->with('Manual AI moderation recheck failed', self::callback(
+                static fn(array $ctx): bool => $ctx['comment_uid'] === 42 && $ctx['exception'] instanceof \RuntimeException,
+            ));
+
+        $subject = $this->buildSubjectWithSettings([
+            'enableAiModeration' => true,
+            'aiModerationProvider' => 'openai',
+        ]);
+
+        $response = $subject->recheckModeration($this->buildRequest(['commentUid' => 42]));
+        $payload = $this->decodePayload($response);
+
+        self::assertInstanceOf(ResponseInterface::class, $response);
+        self::assertFalse($payload['success']);
+        self::assertStringContainsString('upstream down', $payload['message']);
+    }
+
+    private function buildRequest(array $parsedBody): ServerRequestInterface
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->method('getParsedBody')->willReturn($parsedBody);
+        return $request;
+    }
+
+    private function decodePayload(ResponseInterface $response): array
+    {
+        self::assertInstanceOf(JsonResponse::class, $response);
+        self::assertSame(200, $response->getStatusCode());
+        $decoded = json_decode((string) $response->getBody(), true);
+        self::assertIsArray($decoded);
+        return $decoded;
+    }
+
+    private function buildSubjectWithSettings(array $settings): AiModerationControl
+    {
+        $subject = $this->getMockBuilder(AiModerationControl::class)
+            ->setConstructorArgs([
+                $this->commentRepository,
+                $this->moderationProviderFactory,
+                $this->persistenceManager,
+                $this->iconFactory,
+                $this->pageRenderer,
+            ])
+            ->onlyMethods(['getAiModerationSettings'])
+            ->getMock();
+        $subject->method('getAiModerationSettings')->willReturn($settings);
+        $subject->setLogger($this->logger);
+        return $subject;
     }
 }
