@@ -88,7 +88,7 @@ class DateViewHelper extends AbstractViewHelper
      *
      * @return string Formatted date
      */
-    public function render()
+    public function render(): string
     {
         $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
         if ($this->arguments['get']) {
