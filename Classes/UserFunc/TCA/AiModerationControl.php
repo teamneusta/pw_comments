@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace T3\PwComments\UserFunc\TCA;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Service\Moderation\ModerationProviderFactory;
@@ -16,8 +18,10 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 #[Channel('pw_comments')]
-class AiModerationControl extends AbstractNode
+class AiModerationControl extends AbstractNode implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public function __construct(
         private readonly CommentRepository $commentRepository,
         private readonly ModerationProviderFactory $moderationProviderFactory,
