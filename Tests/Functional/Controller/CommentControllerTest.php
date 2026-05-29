@@ -743,6 +743,131 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertSame(0, $this->countVotesFor(5, '1'));
     }
 
+    /**
+     * Baseline render for `newAction`: no rehydrated `newComment`, no
+     * `commentToReplyTo`. The form renders with empty author fields, the
+     * "Write new comment" heading, and no `parentComment` hidden field.
+     */
+    #[Test]
+    public function newActionRendersEmptyFormByDefault(): void
+    {
+        $body = (string) $this->requestNewAction()->getBody();
+
+        self::assertStringContainsString('Write new comment', $body);
+        self::assertStringNotContainsString('Write new comment reply', $body);
+
+        self::assertStringContainsString(
+            'name="tx_pwcomments_new[newComment][authorName]"',
+            $body,
+        );
+        self::assertStringContainsString(
+            'name="tx_pwcomments_new[newComment][authorMail]"',
+            $body,
+        );
+        self::assertStringContainsString(
+            'name="tx_pwcomments_new[newComment][message]"',
+            $body,
+        );
+        self::assertStringNotContainsString(
+            'name="tx_pwcomments_new[newComment][parentComment]"',
+            $body,
+        );
+    }
+
+    /**
+     * `?tx_pwcomments_new[commentToReplyTo]=N` switches the heading to the
+     * reply variant and adds a hidden `parentComment` field carrying the
+     * parent's uid (rendered by New.html only when commentToReplyTo is set).
+     */
+    #[Test]
+    public function newActionWithCommentToReplyToRendersReplyHeadingAndParentField(): void
+    {
+        $body = (string) $this->requestNewAction([
+            'tx_pwcomments_new[commentToReplyTo]' => 1,
+        ])->getBody();
+
+        self::assertStringContainsString('Write new comment reply', $body);
+        self::assertMatchesRegularExpression(
+            '/<input type="hidden"[^>]*name="tx_pwcomments_new\[newComment\]\[parentComment\]\[__identity\]"[^>]*value="1"/',
+            $body,
+        );
+    }
+
+    /**
+     * Simulates the post-validation-failure forward: equivalent to the
+     * request Extbase rebuilds on errorAction → newAction. With a rehydrated
+     * `newComment` in the request, the form fields render the submitted
+     * values (Extbase form binding via `<f:form object="{newComment}">`).
+     */
+    #[Test]
+    public function newActionPrefillsFormFieldsFromRehydratedNewComment(): void
+    {
+        $trustedProperties = $this->get(MvcPropertyMappingConfigurationService::class)
+            ->generateTrustedPropertiesToken(
+                [
+                    'tx_pwcomments_new[newComment][authorName]',
+                    'tx_pwcomments_new[newComment][authorMail]',
+                    'tx_pwcomments_new[newComment][message]',
+                ],
+                'tx_pwcomments_new',
+            );
+
+        $body = (string) $this->requestNewAction([
+            'tx_pwcomments_new[newComment][authorName]' => 'Carol',
+            'tx_pwcomments_new[newComment][authorMail]' => 'carol@example.com',
+            'tx_pwcomments_new[newComment][message]' => 'Hello',
+            'tx_pwcomments_new[__trustedProperties]' => $trustedProperties,
+        ])->getBody();
+
+        self::assertMatchesRegularExpression(
+            '/name="tx_pwcomments_new\[newComment\]\[authorName\]"[^>]*value="Carol"/',
+            $body,
+        );
+        self::assertMatchesRegularExpression(
+            '/name="tx_pwcomments_new\[newComment\]\[authorMail\]"[^>]*value="carol@example\.com"/',
+            $body,
+        );
+        self::assertStringContainsString('>Hello</textarea>', $body);
+    }
+
+    /**
+     * Locks down the independence of the two prefill branches: when the
+     * rehydrated `newComment` carries only `authorName`, the name field is
+     * prefilled and the mail field stays empty (the truthy guard at controller
+     * line 381 fails on the empty mail, so the session fallback is used —
+     * which returns null in tests).
+     */
+    #[Test]
+    public function newActionPrefillsOnlyFieldsSetOnRehydratedNewComment(): void
+    {
+        $trustedProperties = $this->get(MvcPropertyMappingConfigurationService::class)
+            ->generateTrustedPropertiesToken(
+                [
+                    'tx_pwcomments_new[newComment][authorName]',
+                    'tx_pwcomments_new[newComment][authorMail]',
+                    'tx_pwcomments_new[newComment][message]',
+                ],
+                'tx_pwcomments_new',
+            );
+
+        $body = (string) $this->requestNewAction([
+            'tx_pwcomments_new[newComment][authorName]' => 'Carol',
+            'tx_pwcomments_new[newComment][authorMail]' => '',
+            'tx_pwcomments_new[newComment][message]' => 'Hello',
+            'tx_pwcomments_new[__trustedProperties]' => $trustedProperties,
+        ])->getBody();
+
+        self::assertMatchesRegularExpression(
+            '/name="tx_pwcomments_new\[newComment\]\[authorName\]"[^>]*value="Carol"/',
+            $body,
+        );
+        self::assertDoesNotMatchRegularExpression(
+            '/name="tx_pwcomments_new\[newComment\]\[authorMail\]"[^>]*value="[^"]+"/',
+            $body,
+            'authorMail must stay empty when not provided on the rehydrated comment.',
+        );
+    }
+
     private function capturedMail(): string
     {
         self::assertFileExists(self::MBOX_FILE, 'Mbox file was never written - no mail was sent.');
@@ -891,6 +1016,27 @@ final class CommentControllerTest extends FunctionalTestCase
 
         self::assertIsArray($row, 'Expected at least one comment row.');
         return $row;
+    }
+
+    /**
+     * @param array<string, int|string> $queryParameters
+     */
+    private function requestNewAction(
+        array $queryParameters = [],
+        ?InternalRequestContext $context = null,
+    ): \Psr\Http\Message\ResponseInterface {
+        // All tx_pwcomments_new arguments are cacheHash-excluded
+        // (see ext_localconf.php), so no cHash is required here.
+        $request = (new InternalRequest('https://example.com/'))
+            ->withPageId(1)
+            ->withQueryParameter('tx_pwcomments_new[controller]', 'Comment')
+            ->withQueryParameter('tx_pwcomments_new[action]', 'new');
+
+        foreach ($queryParameters as $name => $value) {
+            $request = $request->withQueryParameter($name, $value);
+        }
+
+        return $this->executeFrontendSubRequest($request, $context);
     }
 
     private function requestVote(
