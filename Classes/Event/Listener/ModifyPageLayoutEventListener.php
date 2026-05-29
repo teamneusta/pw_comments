@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace T3\PwComments\Event\Listener;
 
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
-use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -51,7 +49,7 @@ final readonly class ModifyPageLayoutEventListener
         $view = $this->viewFactory->create(
             new ViewFactoryData(
                 templatePathAndFilename: GeneralUtility::getFileAbsFileName(
-                    'EXT:backend/Resources/Private/Templates/InfoBox.html',
+                    'EXT:backend/Resources/Private/Templates/InfoBox.fluid.html',
                 ),
             ),
         );
@@ -69,14 +67,17 @@ final readonly class ModifyPageLayoutEventListener
             $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
 
-        $path = self::getModuleUrl('web_list', [
-            'id' => $pageId,
-            'table' => 'tx_pwcomments_domain_model_comment',
-            'imagemode' => 1,
-        ]);
+        $dispatchArgs = sprintf(
+            'records,id=%d&table=%s&imagemode=1',
+            $pageId,
+            'tx_pwcomments_domain_model_comment',
+        );
 
-        $message = '<a class="btn btn-warning float-end" href="' . $path . '">' .
-            $this->translate('showComments') . '</a><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
+        $message = '<button type="button" class="btn btn-warning float-end"'
+            . ' data-dispatch-action="TYPO3.ModuleMenu.showModule"'
+            . ' data-dispatch-args-list="' . htmlspecialchars($dispatchArgs) . '">'
+            . htmlspecialchars($this->translate('showComments'))
+            . '</button><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
         $view->assignMultiple([
             'title' => $title,
@@ -102,24 +103,5 @@ final readonly class ModifyPageLayoutEventListener
             return \vsprintf($translation, $arguments);
         }
         return $translation;
-    }
-
-    /**
-     * Returns the URL to a given module
-     *
-     * @param string $moduleName Name of the module
-     * @param array $urlParameters URL parameters that should be added as key value pairs
-     * @return string Calculated URL
-     * @throws RouteNotFoundException
-     */
-    protected static function getModuleUrl($moduleName, $urlParameters = []): string
-    {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        try {
-            $uri = $uriBuilder->buildUriFromRoute($moduleName, $urlParameters);
-        } catch (RouteNotFoundException $e) {
-            $uri = $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters);
-        }
-        return (string) $uri;
     }
 }
