@@ -7,6 +7,7 @@ namespace T3\PwComments\Tests\Functional\Controller;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Database\Connection;
@@ -601,6 +602,147 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString('From: pw_comments Tests <no-reply@example.com>', $mbox);
     }
 
+    /**
+     * Happy path for upvoting: a logged-in FE user clicks upvote on a comment
+     * they have not voted on yet. The controller inserts a Vote row, forwards
+     * to indexAction, and the re-rendered list marks the comment as voted.
+     */
+    #[Test]
+    public function upvoteActionInsertsNewVoteAndMarksCommentAsVoted(): void
+    {
+        self::assertSame(0, $this->countVotesFor(3, '1'));
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $response = $this->requestVote('upvote', 3, $context);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(1, $this->countVotesFor(3, '1', Vote::TYPE_UPVOTE));
+
+        $commentThree = $this->commentSection((string) $response->getBody(), 3);
+        self::assertStringContainsString('class="upvote voted"', $commentThree);
+    }
+
+    /**
+     * Mirror of the upvote case for `downvoteAction` — the inserted row must
+     * carry `type=0` (Vote::TYPE_DOWNVOTE).
+     */
+    #[Test]
+    public function downvoteActionInsertsNewVoteWithDownvoteType(): void
+    {
+        self::assertSame(0, $this->countVotesFor(3, '1'));
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $this->requestVote('downvote', 3, $context);
+
+        self::assertSame(1, $this->countVotesFor(3, '1', Vote::TYPE_DOWNVOTE));
+    }
+
+    /**
+     * Voting again with the same type on a comment the user already voted on
+     * removes the existing row (toggle off). Fixture row uid 3 carries
+     * `(comment=1, author_ident="1", type=1)`.
+     */
+    #[Test]
+    public function votingSameTypeAgainRemovesTheExistingVote(): void
+    {
+        self::assertSame(1, $this->countVotesFor(1, '1', Vote::TYPE_UPVOTE));
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $this->requestVote('upvote', 1, $context);
+
+        self::assertSame(0, $this->countVotesFor(1, '1'));
+    }
+
+    /**
+     * Voting with the opposite type triggers the recursive `performVoting` at
+     * controller line 500: the original row is removed and a brand-new row is
+     * inserted with the flipped type. The new row's uid must therefore be
+     * higher than the original uid 3 — a no-op would leave uid 3 in place.
+     * The outer call's `ForwardResponse('index')` must still re-render index
+     * so a future refactor that propagates the inner return value cannot
+     * silently change the response shape.
+     */
+    #[Test]
+    public function votingOppositeTypeFlipsTheVoteViaRecursiveCall(): void
+    {
+        $original = $this->findSingleVote(1, '1');
+        self::assertSame(3, (int) $original['uid']);
+        self::assertSame(Vote::TYPE_UPVOTE, (int) $original['type']);
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $response = $this->requestVote('downvote', 1, $context);
+
+        $survivor = $this->findSingleVote(1, '1');
+        self::assertSame(Vote::TYPE_DOWNVOTE, (int) $survivor['type']);
+        self::assertGreaterThan(
+            3,
+            (int) $survivor['uid'],
+            'Recursive performVoting must remove uid 3 and insert a fresh row.',
+        );
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringContainsString('<ul class="comments-list', (string) $response->getBody());
+    }
+
+    /**
+     * With `enableVoting=0` `performVoting` returns `new ForwardResponse('index')`
+     * before any DB write. The DB must stay untouched and the response must
+     * carry the index template (not a redirect — that would be a different
+     * branch).
+     */
+    #[Test]
+    public function votingIsShortCircuitedWhenEnableVotingIsOff(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/VotingDisabled.typoscript',
+            ],
+        );
+
+        self::assertSame(0, $this->countVotesFor(3, '1'));
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $response = $this->requestVote('upvote', 3, $context);
+
+        self::assertSame(0, $this->countVotesFor(3, '1'));
+        self::assertSame(200, $response->getStatusCode());
+        self::assertStringContainsString(
+            '<ul class="comments-list',
+            (string) $response->getBody(),
+            'Disabled voting must forward to indexAction, not redirect.',
+        );
+    }
+
+    /**
+     * With `ignoreVotingForOwnComments=1`, voting on a comment whose
+     * `authorIdent` matches the current user is rejected with a redirect that
+     * carries `doNotVoteForYourself=1` so `handleCustomMessages()` can surface
+     * the flash message on the next render. Fixture comment 5 has
+     * `author_ident="1"`, matching FE user 1.
+     */
+    #[Test]
+    public function votingOnOwnCommentRedirectsWhenIgnoreVotingForOwnCommentsEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/IgnoreOwnVotes.typoscript',
+            ],
+        );
+
+        self::assertSame(0, $this->countVotesFor(5, '1'));
+
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+        $response = $this->requestVote('upvote', 5, $context);
+
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringContainsString('doNotVoteForYourself=1', $response->getHeaderLine('location'));
+        self::assertSame(0, $this->countVotesFor(5, '1'));
+    }
+
     private function capturedMail(): string
     {
         self::assertFileExists(self::MBOX_FILE, 'Mbox file was never written - no mail was sent.');
@@ -749,6 +891,67 @@ final class CommentControllerTest extends FunctionalTestCase
 
         self::assertIsArray($row, 'Expected at least one comment row.');
         return $row;
+    }
+
+    private function requestVote(
+        string $action,
+        int $commentUid,
+        ?InternalRequestContext $context = null,
+    ): \Psr\Http\Message\ResponseInterface {
+        // All tx_pwcomments_show vote arguments are cacheHash-excluded
+        // (see ext_localconf.php), so no cHash is required here.
+        $request = (new InternalRequest('https://example.com/'))
+            ->withPageId(1)
+            ->withQueryParameter('tx_pwcomments_show[controller]', 'Comment')
+            ->withQueryParameter('tx_pwcomments_show[action]', $action)
+            ->withQueryParameter('tx_pwcomments_show[comment]', $commentUid);
+
+        return $this->executeFrontendSubRequest($request, $context);
+    }
+
+    private function countVotesFor(int $commentUid, string $authorIdent, ?int $type = null): int
+    {
+        $qb = $this->getConnectionPool()
+            ->getQueryBuilderForTable('tx_pwcomments_domain_model_vote');
+        $qb->getRestrictions()->removeAll();
+
+        $predicates = [
+            $qb->expr()->eq('comment', $qb->createNamedParameter($commentUid, Connection::PARAM_INT)),
+            $qb->expr()->eq('author_ident', $qb->createNamedParameter($authorIdent)),
+        ];
+        if ($type !== null) {
+            $predicates[] = $qb->expr()->eq('type', $qb->createNamedParameter($type, Connection::PARAM_INT));
+        }
+
+        return (int) $qb
+            ->count('uid')
+            ->from('tx_pwcomments_domain_model_vote')
+            ->where(...$predicates)
+            ->executeQuery()
+            ->fetchOne();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function findSingleVote(int $commentUid, string $authorIdent): array
+    {
+        $qb = $this->getConnectionPool()
+            ->getQueryBuilderForTable('tx_pwcomments_domain_model_vote');
+        $qb->getRestrictions()->removeAll();
+
+        $rows = $qb
+            ->select('*')
+            ->from('tx_pwcomments_domain_model_vote')
+            ->where(
+                $qb->expr()->eq('comment', $qb->createNamedParameter($commentUid, Connection::PARAM_INT)),
+                $qb->expr()->eq('author_ident', $qb->createNamedParameter($authorIdent)),
+            )
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        self::assertCount(1, $rows, 'Expected exactly one vote for comment ' . $commentUid . '.');
+        return $rows[0];
     }
 
     /**
