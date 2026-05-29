@@ -48,7 +48,10 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "pw_comments"
+            "extension-key": "pw_comments",
+            "Package": {
+                "providesPackages": {}
+            }
         }
     },
     "config": {

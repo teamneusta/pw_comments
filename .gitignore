@@ -9,3 +9,5 @@ vendor
 .php-cs-fixer.cache
 tools
 Build/log/*
+var
+public

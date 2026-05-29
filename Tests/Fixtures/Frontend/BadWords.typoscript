@@ -1,0 +1,2 @@
+plugin.tx_pwcomments.settings.useBadWordsList = 1
+plugin.tx_pwcomments.settings.badWordsList = EXT:pw_comments/Tests/Fixtures/bad-words.txt
