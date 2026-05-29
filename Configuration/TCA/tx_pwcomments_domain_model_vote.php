@@ -24,6 +24,7 @@ return [
         'crdate' => 'crdate',
         'origUid' => 't3_origuid',
         'readOnly' => true,
+        'versioningWS' => true,
         'typeicon_column' => 'type',
         'typeicon_classes' => [
             '0' => 'ext-pwcomments-type-vote_down',

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace T3\PwComments\Update;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Service\FlexFormService;
-use TYPO3\CMS\Core\Upgrades\ChattyInterface;
-use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
+use TYPO3\CMS\Install\Updates\ChattyInterface;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 #[UpgradeWizard('pwCommentsMigratePluginsWizard')]
 class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
