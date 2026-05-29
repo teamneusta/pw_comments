@@ -6,11 +6,15 @@ namespace T3\PwComments\Tests\Functional\Controller;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Psr\Log\LogLevel;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Domain\Model\Vote;
+use T3\PwComments\Service\Moderation\ModerationResult;
 use T3\PwComments\Utility\HashEncryptionUtility;
+use T3\PwCommentsModerationDouble\FakeModerationProviderFactory;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Log\Writer\FileWriter;
 use TYPO3\CMS\Extbase\Mvc\Controller\MvcPropertyMappingConfigurationService;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
@@ -28,6 +32,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 final class CommentControllerTest extends FunctionalTestCase
 {
     private const MBOX_FILE = '/tmp/pw_comments_test_mail.mbox';
+    private const AI_LOG_FILE = '/tmp/pw_comments_test_ai.log';
 
     protected array $coreExtensionsToLoad = [
         'install',
@@ -35,12 +40,28 @@ final class CommentControllerTest extends FunctionalTestCase
 
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/pw_comments',
+        'typo3conf/ext/pw_comments/Tests/Fixtures/Extensions/pw_comments_moderation_double',
     ];
 
     protected array $configurationToUseInTestInstance = [
         'MAIL' => [
             'transport' => 'mbox',
             'transport_mbox_file' => self::MBOX_FILE,
+        ],
+        'LOG' => [
+            // LogManager::getLogger() rewrites underscores in channel names to
+            // dots, so #[Channel('pw_comments')] resolves to 'pw.comments'.
+            'pw' => [
+                'comments' => [
+                    'writerConfiguration' => [
+                        LogLevel::WARNING => [
+                            FileWriter::class => [
+                                'logFile' => self::AI_LOG_FILE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -49,6 +70,8 @@ final class CommentControllerTest extends FunctionalTestCase
         parent::setUp();
 
         @unlink(self::MBOX_FILE);
+        @unlink(self::AI_LOG_FILE);
+        FakeModerationProviderFactory::reset();
 
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/Database/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/Database/fe_users.csv');
@@ -66,6 +89,8 @@ final class CommentControllerTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         @unlink(self::MBOX_FILE);
+        @unlink(self::AI_LOG_FILE);
+        FakeModerationProviderFactory::reset();
         parent::tearDown();
     }
 
@@ -741,6 +766,215 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertSame(303, $response->getStatusCode());
         self::assertStringContainsString('doNotVoteForYourself=1', $response->getHeaderLine('location'));
         self::assertSame(0, $this->countVotesFor(5, '1'));
+    }
+
+    /**
+     * Case C: AI moderation enabled, the provider throws, and
+     * `aiModerationFallbackToManual=1`. The controller swallows the
+     * exception, persists the comment with `ai_moderation_status='error'`,
+     * logs an error to the `pw_comments` channel, and falls through to the
+     * no-moderation branch — comment stays visible and the user is
+     * redirected to its anchor.
+     */
+    #[Test]
+    public function createActionFallsBackToManualWhenAiModerationProviderThrows(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModeration.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModerationFallback.typoscript',
+            ],
+        );
+
+        FakeModerationProviderFactory::$nextException = new \InvalidArgumentException('API key missing');
+
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment([
+            'authorName' => 'Grace',
+            'authorMail' => 'grace@example.com',
+            'message'    => 'A comment that the moderation provider cannot reach.',
+        ]);
+
+        self::assertSame($before + 1, $this->countComments());
+
+        $latest = $this->latestComment();
+        self::assertSame(0, (int) $latest['hidden']);
+        self::assertSame('error', $latest['ai_moderation_status']);
+        self::assertStringStartsWith('AI moderation failed: ', (string) $latest['ai_moderation_reason']);
+
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#comment-' . $latest['uid'], $response->getHeaderLine('location'));
+
+        self::assertFileExists(self::AI_LOG_FILE, 'Provider failure must be logged on the pw_comments channel.');
+        self::assertStringContainsString('AI moderation service failed', (string) file_get_contents(self::AI_LOG_FILE));
+    }
+
+    /**
+     * Case D: AI moderation enabled, provider throws, no fallback configured.
+     * The exception escapes `createAction`; `executeFrontendSubRequest` in v14
+     * re-throws it to the test rather than rendering a 5xx page. The contract
+     * we pin is therefore: the exception bubbles up unchanged, and no comment
+     * is persisted (controller never reaches `persistAll`).
+     */
+    #[Test]
+    public function createActionRethrowsWhenAiModerationFailsWithoutFallback(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModeration.typoscript',
+            ],
+        );
+
+        FakeModerationProviderFactory::$nextException = new \InvalidArgumentException('API key missing');
+
+        $before = $this->countComments();
+
+        try {
+            $this->postCreateComment([
+                'authorName' => 'Henry',
+                'authorMail' => 'henry@example.com',
+                'message'    => 'A comment with no fallback configured.',
+            ]);
+            self::fail('createAction must re-throw the moderation exception when fallback is disabled.');
+        } catch (\InvalidArgumentException $e) {
+            self::assertSame('API key missing', $e->getMessage());
+        }
+
+        self::assertSame($before, $this->countComments(), 'No comment must be persisted when the AI provider crashes without fallback.');
+    }
+
+    /**
+     * Case A: AI moderation marks the comment as a violation. The comment is
+     * persisted hidden with `ai_moderation_status='flagged'`, the provider's
+     * reason and confidence are stored verbatim, the user is redirected to
+     * `successfulAnchor`, and the flash message uses the hardcoded English
+     * fallback (the `tx_pwcomments.aiModerationNotice` xlf key is missing —
+     * separate bug, not in scope for these tests).
+     */
+    #[Test]
+    public function createActionHidesCommentAndStoresReasonWhenAiModerationFlagsViolation(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModeration.typoscript',
+            ],
+        );
+
+        FakeModerationProviderFactory::$nextResult = new ModerationResult(
+            true,
+            ['hate'],
+            ['hate' => 0.95],
+            'hate',
+            0.95,
+        );
+
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment([
+            'authorName' => 'Ivy',
+            'authorMail' => 'ivy@example.com',
+            'message'    => 'A comment the AI flagged.',
+        ]);
+
+        self::assertSame($before + 1, $this->countComments());
+
+        $latest = $this->latestComment();
+        self::assertSame(1, (int) $latest['hidden']);
+        self::assertSame('flagged', $latest['ai_moderation_status']);
+        self::assertSame('hate', $latest['ai_moderation_reason']);
+        self::assertEqualsWithDelta(0.95, (float) $latest['ai_moderation_confidence'], 0.001);
+
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#success', $response->getHeaderLine('location'));
+        // Flash message assertion deliberately omitted: FE flash storage is
+        // session-scoped, and `executeFrontendSubRequest` does not propagate
+        // the session cookie from the POST to a follow-up GET, so the next
+        // render cannot see the flash a real browser would.
+    }
+
+    /**
+     * Case B: AI moderation approves the comment. Status is set to
+     * 'approved', the comment is visible, and the user is redirected to the
+     * comment's anchor with the thanks flash message.
+     */
+    #[Test]
+    public function createActionStoresApprovedCommentVisibleWhenAiModerationDoesNotFlag(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModeration.typoscript',
+            ],
+        );
+
+        FakeModerationProviderFactory::$nextResult = new ModerationResult(
+            false,
+            [],
+            [],
+            '',
+            0.05,
+        );
+
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment([
+            'authorName' => 'Jack',
+            'authorMail' => 'jack@example.com',
+            'message'    => 'A perfectly fine comment.',
+        ]);
+
+        self::assertSame($before + 1, $this->countComments());
+
+        $latest = $this->latestComment();
+        self::assertSame(0, (int) $latest['hidden']);
+        self::assertSame('approved', $latest['ai_moderation_status']);
+        self::assertEqualsWithDelta(0.05, (float) $latest['ai_moderation_confidence'], 0.001);
+
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#comment-' . $latest['uid'], $response->getHeaderLine('location'));
+    }
+
+    /**
+     * Case B': AI approves but manual moderation is still active. Manual
+     * moderation wins on the hidden flag (`moderateNewComments=1` forces it),
+     * but the AI's verdict still persists as `approved`. This locks down the
+     * precedence between the two moderation systems against accidental
+     * "simplifications" of the moderation block.
+     */
+    #[Test]
+    public function createActionKeepsHiddenWhenAiApprovesButManualModerationIsActive(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AiModeration.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Moderation.typoscript',
+            ],
+        );
+
+        FakeModerationProviderFactory::$nextResult = new ModerationResult(false, [], [], '', 0.05);
+
+        $response = $this->postCreateComment([
+            'authorName' => 'Kim',
+            'authorMail' => 'kim@example.com',
+            'message'    => 'A comment under double moderation.',
+        ]);
+
+        $latest = $this->latestComment();
+        self::assertSame(1, (int) $latest['hidden'], 'Manual moderation must still force hidden when AI approves.');
+        self::assertSame('approved', $latest['ai_moderation_status'], 'AI verdict must be preserved even when manual moderation overrides visibility.');
+
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#success', $response->getHeaderLine('location'));
     }
 
     /**

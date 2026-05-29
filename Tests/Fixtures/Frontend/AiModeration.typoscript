@@ -1,0 +1,2 @@
+plugin.tx_pwcomments.settings.enableAiModeration = 1
+plugin.tx_pwcomments.settings.aiModerationProvider = openai
