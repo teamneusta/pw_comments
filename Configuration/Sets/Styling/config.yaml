@@ -1,0 +1,4 @@
+name: pwcomments/styling
+label: 'pw_comments - Default Styles (optional)'
+dependencies:
+  - pwcomments/comments

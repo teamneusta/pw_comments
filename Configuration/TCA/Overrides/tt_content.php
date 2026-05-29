@@ -23,17 +23,5 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription',
     );
 
-    // Add typoscript static includes
-    ExtensionManagementUtility::addStaticFile(
-        $extensionKey,
-        'Configuration/TypoScript',
-        'pw_comments Main Static Template (required)',
-    );
-    ExtensionManagementUtility::addStaticFile(
-        $extensionKey,
-        'Configuration/TypoScript/Styling',
-        'pw_comments Optional Styles',
-    );
-
     ExtensionManagementUtility::addToInsertRecords('tx_pwcomments_domain_model_comment');
 })('pw_comments');
