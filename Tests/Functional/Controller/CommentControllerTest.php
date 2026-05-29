@@ -404,6 +404,129 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * The other two branches of the `!$resolvedComment || !validHash || !hidden`
+     * guard in `confirmCommentAction` (line 422):
+     *
+     * - Replay protection: the confirm hash is stable (derived from message +
+     *   encryption key), so a valid link can be re-clicked indefinitely. The
+     *   `!$resolvedComment->getHidden()` guard is the only thing preventing a
+     *   replayed click from re-firing the unhide write (and any downstream
+     *   side effects) after an admin manually re-hid the comment.
+     * - Unknown uid: `findByCommentUid()` returning null must short-circuit to
+     *   the same redirect, not throw and bubble up.
+     */
+    #[Test]
+    public function confirmCommentActionRejectsReplayAndUnknownUidWithoutDbWrite(): void
+    {
+        // Scenario A: already-visible comment, valid hash.
+        $beforeHidden = $this->hiddenFlagForComment(1);
+        self::assertSame(0, $beforeHidden, 'Fixture invariant: comment 1 starts visible.');
+
+        $this->requestConfirmComment(1, $this->validHashForComment('Test comment 1'));
+
+        self::assertSame(0, $this->hiddenFlagForComment(1), 'Replayed confirm on an already visible comment must be a no-op.');
+
+        // Scenario B: uid that does not exist.
+        $beforeRows = $this->countComments();
+
+        $this->requestConfirmComment(99999, 'any-hash-here');
+
+        self::assertSame($beforeRows, $this->countComments(), 'Unknown uid must not insert or otherwise mutate any row.');
+    }
+
+    /**
+     * With `moderateNewComments=1` and `sendMailToAuthorAfterPublish=1`, a
+     * successful confirm unhides the comment AND dispatches a mail to the
+     * comment author. Fixture comment 4 has `author_mail=pending@example.com`.
+     *
+     * Flash messages (`mailSentToAuthorAfterPublish`, `commentPublished`) are
+     * not asserted here: they live in the FE session, and
+     * `executeFrontendSubRequest` does not propagate the session cookie from
+     * the confirm GET to a follow-up render — the mbox and the hidden flag
+     * are the observable contract.
+     */
+    #[Test]
+    public function confirmCommentActionDispatchesAuthorMailWhenConfigured(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Moderation.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Mail.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AuthorMailAfterPublish.typoscript',
+            ],
+        );
+
+        self::assertSame(1, $this->hiddenFlagForComment(4));
+
+        $this->requestConfirmComment(4, $this->validHashForComment('Pending comment awaiting confirmation'));
+
+        self::assertSame(0, $this->hiddenFlagForComment(4));
+
+        $mbox = $this->capturedMail();
+        self::assertStringContainsString('To: pending@example.com', $mbox, 'Author notification mail must be sent on successful confirm.');
+    }
+
+    /**
+     * End-to-end test of `sendAuthorMailWhenCommentHasBeenApprovedAction`,
+     * covering the full chain: the BE-driven GET → `FrontendHandler`
+     * middleware → `MailNotificationController::sendMail` → Extbase Bootstrap
+     * → `CommentController::sendAuthorMailWhenCommentHasBeenApprovedAction`.
+     *
+     * Two sub-requests guard a contract the controller method itself does
+     * NOT enforce: the action sends mail unconditionally when the moderation
+     * settings line up, trusting its caller (the middleware) to gate on the
+     * `row.hidden` flag. Without the second assertion, a refactor that moves
+     * the hidden-check out of `MailNotificationController` would silently
+     * turn this action into "send unlimited author mails to anyone whose
+     * hash you can guess."
+     */
+    #[Test]
+    public function sendAuthorMailWhenCommentHasBeenApprovedActionDispatchesMailOnlyWhileCommentIsHidden(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Moderation.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Mail.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/AuthorMailAfterPublish.typoscript',
+            ],
+        );
+
+        $messageHash = $this->validHashForComment('Pending comment awaiting confirmation');
+
+        // First call: comment 4 is still hidden — middleware passes the guard,
+        // bootstrap runs the action, the author mail is dispatched.
+        self::assertSame(1, $this->hiddenFlagForComment(4));
+
+        $okResponse = $this->requestSendAuthorMailAfterApproved(4, $messageHash);
+
+        self::assertSame(200, $okResponse->getStatusCode(), 'Hidden comment must take the OK path through MailNotificationController.');
+        self::assertStringContainsString(
+            'To: pending@example.com',
+            $this->capturedMail(),
+            'Author mail must be sent when the comment is still hidden and approval settings match.',
+        );
+
+        // Pin the load-bearing pre-condition: when the comment is no longer
+        // hidden, the middleware short-circuits to the bad-request branch and
+        // no further mail is dispatched.
+        $this->setHiddenFlagForComment(4, false);
+        $mboxBefore = (string) file_get_contents(self::MBOX_FILE);
+
+        $rejectedResponse = $this->requestSendAuthorMailAfterApproved(4, $messageHash);
+
+        self::assertSame(400, $rejectedResponse->getStatusCode(), 'Visible comment must take the bad-request path through MailNotificationController.');
+        self::assertSame(
+            $mboxBefore,
+            (string) file_get_contents(self::MBOX_FILE),
+            'No additional mail may be dispatched once the hidden guard has flipped.',
+        );
+    }
+
+    /**
      * Happy path: a valid anonymous submission is stored as a visible comment
      * and the controller redirects to the new comment's anchor.
      */
@@ -1106,6 +1229,38 @@ final class CommentControllerTest extends FunctionalTestCase
     {
         self::assertFileExists(self::MBOX_FILE, 'Mbox file was never written - no mail was sent.');
         return (string) file_get_contents(self::MBOX_FILE);
+    }
+
+    private function requestSendAuthorMailAfterApproved(int $commentUid, string $messageHash): \Psr\Http\Message\ResponseInterface
+    {
+        // `tx_pwcomments[*]` is the namespace the FrontendHandler middleware
+        // listens on. These params are *not* in the cacheHash exclude list
+        // (see ext_localconf.php), and the middleware is registered after
+        // `PageArgumentValidator` in the v14 chain, so a missing cHash 404s
+        // before the handler even runs — we have to compute a valid one.
+        $request = (new InternalRequest('https://example.com/'))
+            ->withPageId(1)
+            ->withQueryParameter('tx_pwcomments[action]', 'sendAuthorMailWhenCommentHasBeenApproved')
+            ->withQueryParameter('tx_pwcomments[uid]', $commentUid)
+            ->withQueryParameter('tx_pwcomments[pid]', 1)
+            ->withQueryParameter('tx_pwcomments[hash]', $messageHash);
+
+        $cHash = $this->get(CacheHashCalculator::class)
+            ->generateForParameters($request->getUri()->getQuery());
+        $request = $request->withQueryParameter('cHash', $cHash);
+
+        return $this->executeFrontendSubRequest($request);
+    }
+
+    private function setHiddenFlagForComment(int $commentUid, bool $hidden): void
+    {
+        $this->getConnectionPool()
+            ->getConnectionForTable('tx_pwcomments_domain_model_comment')
+            ->update(
+                'tx_pwcomments_domain_model_comment',
+                ['hidden' => $hidden ? 1 : 0],
+                ['uid' => $commentUid],
+            );
     }
 
     private function requestConfirmComment(int $commentUid, string $hash): void
