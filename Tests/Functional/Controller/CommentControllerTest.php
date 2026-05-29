@@ -303,6 +303,58 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * `invertReplySorting=1` flips replies of a parent comment from ascending
+     * `crdate` to descending. Replies of comment 1 are "First reply..." (uid 6,
+     * older) and "Second reply..." (uid 7, newer); with inverted sorting the
+     * newer one must render before the older one.
+     */
+    #[Test]
+    public function indexActionInvertsReplyOrderWhenInvertReplySortingEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/InvertReplySorting.typoscript',
+            ],
+        );
+
+        $body = $this->renderPage();
+
+        $posFirst = strpos($body, 'First reply to comment 1');
+        $posSecond = strpos($body, 'Second reply to comment 1');
+
+        self::assertNotFalse($posFirst);
+        self::assertNotFalse($posSecond);
+        self::assertGreaterThan($posSecond, $posFirst, 'Reply 6 must render after reply 7 when reply sorting is inverted.');
+    }
+
+    /**
+     * For a logged-in frontend user the controller queries votes for
+     * `authorIdent = (string) userUid` and populates `upvotedCommentUids` /
+     * `downvotedCommentUids`. The Voting partial then appends a ` voted` class
+     * to the matching link. Fixture votes 3 and 4 give FE user 1 an upvote on
+     * comment 1 and a downvote on comment 2.
+     */
+    #[Test]
+    public function indexActionMarksUpvotedAndDownvotedCommentsForLoggedInUser(): void
+    {
+        $context = (new InternalRequestContext())->withFrontendUserId(1);
+
+        $request = (new InternalRequest('https://example.com/'))->withPageId(1);
+        $body = (string) $this->executeFrontendSubRequest($request, $context)->getBody();
+
+        $commentOne = $this->commentSection($body, 1);
+        $commentTwo = $this->commentSection($body, 2);
+
+        self::assertStringContainsString('class="upvote voted"', $commentOne);
+        self::assertStringNotContainsString('class="downvote voted"', $commentOne);
+
+        self::assertStringContainsString('class="downvote voted"', $commentTwo);
+        self::assertStringNotContainsString('class="upvote voted"', $commentTwo);
+    }
+
+    /**
      * confirmCommentAction unhides a moderated comment when the supplied hash
      * matches the one derived from the comment's message (+ encryption key).
      */
@@ -697,6 +749,21 @@ final class CommentControllerTest extends FunctionalTestCase
 
         self::assertIsArray($row, 'Expected at least one comment row.');
         return $row;
+    }
+
+    /**
+     * Returns the rendered markup of a single comment, bounded by its
+     * `id="comment-N"` marker up to the next comment marker. Lets per-comment
+     * assertions stay scoped to that comment instead of leaking across the
+     * whole list.
+     */
+    private function commentSection(string $body, int $uid): string
+    {
+        $start = strpos($body, 'id="comment-' . $uid . '"');
+        self::assertNotFalse($start, 'Could not find rendered comment ' . $uid . '.');
+
+        $next = strpos($body, 'id="comment-', $start + 1);
+        return $next === false ? substr($body, $start) : substr($body, $start, $next - $start);
     }
 
     private function firstUpvoteHref(string $body): string

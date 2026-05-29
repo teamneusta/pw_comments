@@ -23,6 +23,7 @@ class InArrayViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('subject', 'array', 'The subject');
         $this->registerArgument('needle', 'string', '', true);
+        $this->registerArgument('strict', 'bool', 'Use strict type comparison', false, false);
     }
 
     /**
@@ -36,6 +37,6 @@ class InArrayViewHelper extends AbstractViewHelper
         if ($subject === null) {
             $subject = $this->renderChildren();
         }
-        return \in_array($this->arguments['needle'], $subject, true);
+        return \in_array($this->arguments['needle'], $subject, (bool) $this->arguments['strict']);
     }
 }
