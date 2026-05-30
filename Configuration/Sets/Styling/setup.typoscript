@@ -1,3 +1,1 @@
-page.includeCSS {
-    pwCommentDefaultStyles = EXT:pw_comments/Resources/Public/CSS/default.css
-}
+@import 'EXT:pw_comments/Configuration/TypoScript/Styling/setup.typoscript'
