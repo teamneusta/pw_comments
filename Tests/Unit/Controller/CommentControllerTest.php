@@ -135,6 +135,74 @@ final class CommentControllerTest extends TestCase
         $this->controller->indexAction();
     }
 
+    /**
+     * Security guard: a numeric `ahash` cookie on an anonymous request must
+     * be wiped so it cannot impersonate a registered FE user (whose
+     * `currentAuthorIdent` is the numeric uid). The functional layer can't
+     * exercise this — `Cookie::get()` reads `$_COOKIE`, which the testing
+     * framework does not propagate into sub-requests.
+     */
+    public function testInitializeActionClearsNumericCookieAhashWhenUserIsNotLoggedIn(): void
+    {
+        $pageUid = 1;
+        $serverRequest = $this->createServerRequestWithPageInfo($pageUid);
+
+        $this->request->expects(self::any())
+            ->method('getAttribute')
+            ->willReturnCallback(function ($attribute) use ($serverRequest) {
+                if ($attribute === 'frontend.page.information') {
+                    return $serverRequest->getAttribute('frontend.page.information');
+                }
+                if ($attribute === 'frontend.user') {
+                    return $this->createFrontendUserAuth([]);
+                }
+                return null;
+            });
+
+        $this->cookieUtility->expects(self::once())
+            ->method('get')
+            ->with('ahash')
+            ->willReturn('42');
+
+        $this->injectProperty('settings', ['_skipMakingSettingsRenderable' => true]);
+        $this->controller->initializeAction();
+
+        self::assertNull($this->readProperty('currentAuthorIdent'));
+    }
+
+    /**
+     * Positive twin of the numeric-clearing guard: a non-numeric (hashed)
+     * cookie value must survive `initializeAction` untouched so anonymous
+     * voting and reply-tracking continue to work across requests.
+     */
+    public function testInitializeActionPreservesNonNumericCookieAhash(): void
+    {
+        $pageUid = 1;
+        $serverRequest = $this->createServerRequestWithPageInfo($pageUid);
+
+        $this->request->expects(self::any())
+            ->method('getAttribute')
+            ->willReturnCallback(function ($attribute) use ($serverRequest) {
+                if ($attribute === 'frontend.page.information') {
+                    return $serverRequest->getAttribute('frontend.page.information');
+                }
+                if ($attribute === 'frontend.user') {
+                    return $this->createFrontendUserAuth([]);
+                }
+                return null;
+            });
+
+        $this->cookieUtility->expects(self::once())
+            ->method('get')
+            ->with('ahash')
+            ->willReturn('abc123hashvalue');
+
+        $this->injectProperty('settings', ['_skipMakingSettingsRenderable' => true]);
+        $this->controller->initializeAction();
+
+        self::assertSame('abc123hashvalue', $this->readProperty('currentAuthorIdent'));
+    }
+
     public function testIndexActionReturnsCommentsForCurrentPage(): void
     {
         $pageUid = 10;
@@ -443,6 +511,12 @@ final class CommentControllerTest extends TestCase
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty($propertyName);
         $property->setValue($this->controller, $value);
+    }
+
+    private function readProperty(string $propertyName): mixed
+    {
+        $reflection = new \ReflectionClass($this->controller);
+        return $reflection->getProperty($propertyName)->getValue($this->controller);
     }
 
     /**

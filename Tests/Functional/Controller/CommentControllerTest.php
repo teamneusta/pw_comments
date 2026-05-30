@@ -751,6 +751,124 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * Guard against half-built comments hitting persistence: a POST that does
+     * not carry a `newComment` payload (and therefore property-maps to null)
+     * must redirect to the page without the `writeCommentAnchor` fragment —
+     * that anchor is the spam-trap path on line 223, not the no-payload path.
+     */
+    #[Test]
+    public function createActionRedirectsWithoutWritingWhenNewCommentIsMissing(): void
+    {
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment([]);
+
+        self::assertSame($before, $this->countComments(), 'No row may be inserted when newComment is null.');
+        self::assertSame(303, $response->getStatusCode());
+
+        $location = $response->getHeaderLine('location');
+        self::assertStringNotContainsString('#write-comment', $location, 'Null-payload must use the plain page URL, not the spam-trap anchor.');
+        self::assertStringNotContainsString('#success', $location);
+        self::assertStringNotContainsString('#comment-', $location);
+    }
+
+    /**
+     * `linkUrlsInComments=1` routes the message through
+     * `StringUtility::prepareCommentMessage` with `allowLinks=true`, which
+     * wraps bare URLs in anchor elements. The exact transformer output is
+     * the unit-tested surface of `StringUtility`; the controller test only
+     * pins that the setting actually flows into the call.
+     */
+    #[Test]
+    public function createActionWrapsUrlsInAnchorTagsWhenLinkUrlsInCommentsEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/LinkUrls.typoscript',
+            ],
+        );
+
+        $this->postCreateComment([
+            'authorName' => 'Liam',
+            'authorMail' => 'liam@example.com',
+            'message'    => 'Visit https://example.com today.',
+        ]);
+
+        $stored = (string) $this->latestComment()['message'];
+        self::assertMatchesRegularExpression(
+            '/<a [^>]*href="https:\/\/example\.com[^"]*"[^>]*>/',
+            $stored,
+            'URL must be wrapped in an anchor element when linkUrlsInComments is enabled.',
+        );
+    }
+
+    /**
+     * Negative twin of the linkUrls test: with `linkUrlsInComments` unset
+     * (default 0 in `BasicSetup.typoscript`), the message stores the URL as
+     * plain text — no anchor element is emitted. Together with the on-path
+     * test this pins the *branch*, not the transformer.
+     */
+    #[Test]
+    public function createActionStoresUrlAsPlainTextWhenLinkUrlsInCommentsDisabled(): void
+    {
+        $this->postCreateComment([
+            'authorName' => 'Mia',
+            'authorMail' => 'mia@example.com',
+            'message'    => 'Visit https://example.com today.',
+        ]);
+
+        $stored = (string) $this->latestComment()['message'];
+        self::assertStringContainsString('https://example.com', $stored);
+        self::assertStringNotContainsString('<a ', $stored, 'No anchor element may be emitted when linkUrlsInComments is disabled.');
+    }
+
+    /**
+     * `useEntryUid=1` plus `entryUid=123` makes `initializeAction` populate
+     * `$this->entryUid`, which `createAction` then writes onto the new row.
+     * The matching index-filter side is covered by
+     * `indexActionFiltersByEntryUidWhenUseEntryUidEnabled`; this pins the
+     * write side.
+     */
+    #[Test]
+    public function createActionPersistsEntryUidWhenUseEntryUidEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/UseEntryUid.typoscript',
+            ],
+        );
+
+        $this->postCreateComment([
+            'authorName' => 'Nora',
+            'authorMail' => 'nora@example.com',
+            'message'    => 'A comment scoped to entry 123.',
+        ]);
+
+        self::assertSame(123, (int) $this->latestComment()['entry_uid']);
+    }
+
+    /**
+     * Default (no `useEntryUid`) must persist `entry_uid=0`. Pins the default
+     * so a future refactor that always reads `$settings['entryUid']` cannot
+     * silently set every comment to the same scope.
+     */
+    #[Test]
+    public function createActionPersistsZeroEntryUidByDefault(): void
+    {
+        $this->postCreateComment([
+            'authorName' => 'Owen',
+            'authorMail' => 'owen@example.com',
+            'message'    => 'An unscoped comment.',
+        ]);
+
+        self::assertSame(0, (int) $this->latestComment()['entry_uid']);
+    }
+
+    /**
      * Happy path for upvoting: a logged-in FE user clicks upvote on a comment
      * they have not voted on yet. The controller inserts a Vote row, forwards
      * to indexAction, and the re-rendered list marks the comment as voted.
