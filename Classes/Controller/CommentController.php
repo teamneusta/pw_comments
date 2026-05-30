@@ -126,12 +126,6 @@ class CommentController extends ActionController implements LoggerAwareInterface
      */
     public function initializeAction(): void
     {
-        if (!is_array($this->settings)) {
-            throw new \RuntimeException(
-                'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
-                1501862644,
-            );
-        }
         $this->settings = Settings::renderConfigurationArray(
             settings: $this->settings,
             request: $this->request,
