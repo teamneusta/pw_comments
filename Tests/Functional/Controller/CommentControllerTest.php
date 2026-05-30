@@ -71,6 +71,7 @@ final class CommentControllerTest extends FunctionalTestCase
 
         @unlink(self::MBOX_FILE);
         @unlink(self::AI_LOG_FILE);
+        $this->resetFileWriterHandleCache(self::AI_LOG_FILE);
         FakeModerationProviderFactory::reset();
 
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/Database/pages.csv');
@@ -92,6 +93,26 @@ final class CommentControllerTest extends FunctionalTestCase
         @unlink(self::AI_LOG_FILE);
         FakeModerationProviderFactory::reset();
         parent::tearDown();
+    }
+
+    /**
+     * FileWriter caches `fopen()` handles in a static array keyed by log file
+     * path. Between tests, GC of the previous FileWriter is non-deterministic,
+     * so the next test's lazily-constructed writer may reuse a stale handle
+     * pointing to the now-unlinked inode — writes succeed into the deleted
+     * inode and `assertFileExists` fails. We only touch the handle entry; the
+     * sibling counter is left alone so the previous writer's destructor can
+     * still decrement it without tripping an "Undefined array key" warning.
+     */
+    private function resetFileWriterHandleCache(string $logFile): void
+    {
+        $handles = (new \ReflectionClass(FileWriter::class))->getProperty('logFileHandles');
+        $cache = $handles->getValue();
+        if (isset($cache[$logFile]) && is_resource($cache[$logFile])) {
+            @fclose($cache[$logFile]);
+        }
+        unset($cache[$logFile]);
+        $handles->setValue(null, $cache);
     }
 
     #[Test]
