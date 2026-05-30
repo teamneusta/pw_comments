@@ -36,7 +36,7 @@ final class FakeModerationProviderFactory extends ModerationProviderFactory
 
         $result = self::$nextResult ?? new ModerationResult(false);
 
-        return new class($result) implements ModerationServiceInterface {
+        return new class ($result) implements ModerationServiceInterface {
             public function __construct(private readonly ModerationResult $result) {}
 
             public function moderateComment(Comment $comment): ModerationResult

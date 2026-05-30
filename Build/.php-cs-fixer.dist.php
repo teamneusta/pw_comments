@@ -10,6 +10,7 @@ $finder = (new PhpCsFixer\Finder())
         'Documentation-GENERATED-temp',
         'public',
         'vendor',
+        'var',
         '.Build',
     ])
     ->notPath('ext_emconf.php');
