@@ -490,6 +490,36 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * Negative twin of `confirmCommentActionDispatchesAuthorMailWhenConfigured`:
+     * `moderateNewComments` is on but `sendMailToAuthorAfterPublish` is off, so
+     * the confirm must still unhide the comment but must NOT dispatch any mail.
+     * Pins the second half of the `if (... && ...)` gate around the mail block.
+     */
+    #[Test]
+    public function confirmCommentActionDoesNotDispatchMailWhenAfterPublishFlagOff(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Moderation.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Mail.typoscript',
+                // AuthorMailAfterPublish.typoscript intentionally omitted.
+            ],
+        );
+
+        self::assertSame(1, $this->hiddenFlagForComment(4));
+
+        $this->requestConfirmComment(4, $this->validHashForComment('Pending comment awaiting confirmation'));
+
+        self::assertSame(0, $this->hiddenFlagForComment(4), 'Confirm must still unhide the comment.');
+        self::assertFileDoesNotExist(
+            self::MBOX_FILE,
+            'No author mail may be dispatched when sendMailToAuthorAfterPublish is off.',
+        );
+    }
+
+    /**
      * End-to-end test of `sendAuthorMailWhenCommentHasBeenApprovedAction`,
      * covering the full chain: the BE-driven GET → `FrontendHandler`
      * middleware → `MailNotificationController::sendMail` → Extbase Bootstrap

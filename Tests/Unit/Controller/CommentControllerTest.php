@@ -1012,6 +1012,113 @@ final class CommentControllerTest extends TestCase
         $this->controller->createAction();
     }
 
+    #[Test]
+    public function sendAuthorMailWhenCommentHasBeenApprovedActionIsNoOpWhenAfterPublishFlagOff(): void
+    {
+        $pageUid = 10;
+        $this->setupControllerWithSettings($pageUid, [
+            'moderateNewComments' => true,
+            'sendMailToAuthorAfterPublish' => false,
+            '_commentUid' => 7,
+        ]);
+
+        $this->commentRepository->expects(self::once())
+            ->method('findByCommentUid')
+            ->with(7)
+            ->willReturn(new Comment());
+
+        $this->mailUtility->expects(self::never())->method('sendMail');
+
+        $response = $this->controller->sendAuthorMailWhenCommentHasBeenApprovedAction();
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('', (string) $response->getBody());
+    }
+
+    #[Test]
+    public function createNewVoteSetsAuthorFromRepositoryWhenFrontendUserPresent(): void
+    {
+        $pageUid = 10;
+        $this->setupControllerWithSettings($pageUid, [], 'ident-x');
+        $this->injectProperty('currentUser', ['uid' => 42]);
+
+        $author = $this->createMock(FrontendUser::class);
+        $this->frontendUserRepository->expects(self::once())
+            ->method('findByUid')
+            ->with(42)
+            ->willReturn($author);
+
+        GeneralUtility::addInstance(Vote::class, new Vote());
+        $comment = new Comment();
+
+        $method = new \ReflectionMethod($this->controller, 'createNewVote');
+        /** @var Vote $vote */
+        $vote = $method->invoke($this->controller, Vote::TYPE_UPVOTE, $comment);
+
+        self::assertSame($author, $vote->getAuthor());
+        self::assertSame('ident-x', $vote->getAuthorIdent());
+        self::assertSame(Vote::TYPE_UPVOTE, $vote->getType());
+        self::assertSame($comment, $vote->getComment());
+    }
+
+    #[Test]
+    public function createNewVoteLeavesAuthorUnsetWhenNoFrontendUser(): void
+    {
+        $pageUid = 10;
+        $this->setupControllerWithSettings($pageUid, [], 'ident-x');
+        $this->injectProperty('currentUser', []);
+
+        $this->frontendUserRepository->expects(self::never())->method('findByUid');
+
+        GeneralUtility::addInstance(Vote::class, new Vote());
+
+        $method = new \ReflectionMethod($this->controller, 'createNewVote');
+        /** @var Vote $vote */
+        $vote = $method->invoke($this->controller, Vote::TYPE_DOWNVOTE, new Comment());
+
+        self::assertNull($vote->getAuthor());
+        self::assertSame(Vote::TYPE_DOWNVOTE, $vote->getType());
+    }
+
+    #[Test]
+    public function handleCustomMessagesFlashesDoNotVoteForYourselfWhenSettingAndParamMatch(): void
+    {
+        $pageUid = 10;
+        $this->setupControllerWithSettings($pageUid, [
+            'ignoreVotingForOwnComments' => true,
+        ]);
+        $this->registerLanguageServiceFactoryStub();
+
+        $this->request->method('getParsedBody')->willReturn(['doNotVoteForYourself' => 1]);
+        $this->request->method('getQueryParams')->willReturn([]);
+
+        $this->view->expects(self::once())
+            ->method('assign')
+            ->with('hasCustomMessages', true);
+
+        $method = new \ReflectionMethod($this->controller, 'handleCustomMessages');
+        $method->invoke($this->controller);
+    }
+
+    #[Test]
+    public function handleCustomMessagesFlashesVotingDisabledWhenSettingAndParamMatch(): void
+    {
+        $pageUid = 10;
+        $this->setupControllerWithSettings($pageUid, [
+            'enableVoting' => false,
+        ]);
+        $this->registerLanguageServiceFactoryStub();
+
+        $this->request->method('getParsedBody')->willReturn([]);
+        $this->request->method('getQueryParams')->willReturn(['votingDisabled' => 1]);
+
+        $this->view->expects(self::once())
+            ->method('assign')
+            ->with('hasCustomMessages', true);
+
+        $method = new \ReflectionMethod($this->controller, 'handleCustomMessages');
+        $method->invoke($this->controller);
+    }
+
     /**
      * Helper method to inject private/protected properties. Walks the class
      * hierarchy so it can set parent-class private properties (e.g.
