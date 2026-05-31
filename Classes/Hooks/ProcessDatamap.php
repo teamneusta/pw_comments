@@ -16,6 +16,7 @@ namespace T3\PwComments\Hooks;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Utility\HashEncryptionUtility;
+use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -38,6 +39,7 @@ final readonly class ProcessDatamap
         private ContentObjectRenderer $contentObjectRenderer,
         private FlashMessageService $flashMessageService,
         private BackendConfigurationManager $backendConfigurationManager,
+        private RequestFactory $requestFactory,
     ) {
         $this->enabledTable = 'tx_pwcomments_domain_model_comment';
         $this->enabledStatus = 'update';
@@ -82,10 +84,12 @@ final readonly class ProcessDatamap
             'additionalParams' => GeneralUtility::implodeArrayForUrl('tx_pwcomments', $typoLinkAdditionalParams),
             'forceAbsoluteUrl' => true,
         ];
+        $this->contentObjectRenderer->setRequest($request);
         $url = $this->contentObjectRenderer->typoLink_URL($typoLinkConfiguration);
         // Call url - fetches by middleware request
-        $content = GeneralUtility::getUrl($url);
-        if ($content && $content === '200') {
+        $response = $this->requestFactory->request($url, 'GET');
+        $content = (string) $response->getBody();
+        if ($response->getStatusCode() === 200 && $content === '200') {
             // Add flash message
             $messageQueue = $this->flashMessageService->getMessageQueueByIdentifier(FlashMessageQueue::NOTIFICATION_QUEUE);
             $messageToDisplay = LocalizationUtility::translate(
