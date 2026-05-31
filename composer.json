@@ -41,7 +41,8 @@
     "autoload-dev": {
         "psr-4": {
             "T3\\PwComments\\Tests\\": "Tests/",
-            "T3\\PwCommentsModerationDouble\\": "Tests/Fixtures/Extensions/pw_comments_moderation_double/Classes/"
+            "T3\\PwCommentsModerationDouble\\": "Tests/Fixtures/Extensions/pw_comments_moderation_double/Classes/",
+            "T3\\PwCommentsRequestFactoryDouble\\": "Tests/Fixtures/Extensions/pw_comments_request_factory_double/Classes/"
         }
     },
     "replace": {

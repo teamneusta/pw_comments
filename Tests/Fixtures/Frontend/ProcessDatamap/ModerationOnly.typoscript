@@ -1,0 +1,4 @@
+plugin.tx_pwcomments.settings {
+    moderateNewComments = 1
+    sendMailToAuthorAfterPublish = 0
+}

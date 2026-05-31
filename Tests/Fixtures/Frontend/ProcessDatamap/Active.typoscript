@@ -1,0 +1,6 @@
+# BackendConfigurationManager reads `plugin.tx_pwcomments.settings` for the
+# ProcessDatamap hook; both flags must be on for the active code path.
+plugin.tx_pwcomments.settings {
+    moderateNewComments = 1
+    sendMailToAuthorAfterPublish = 1
+}

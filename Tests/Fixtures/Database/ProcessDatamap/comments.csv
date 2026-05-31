@@ -1,0 +1,6 @@
+tx_pwcomments_domain_model_comment
+,uid,pid,orig_pid,entry_uid,parent_comment,author,message,author_name,author_mail,author_ident,hidden,crdate
+,10,1,1,0,0,0,"Visible comment for hook tests","Alice","alice@example.com","ident-10",0,1700000000
+,11,1,2,0,0,0,"Comment with orig_pid different from pid","Bob","bob@example.com","ident-11",0,1700000100
+,13,1,1,0,10,0,"Reply to comment 10","Reply Dave","dave@example.com","ident-13",0,1700000300
+,14,1,1,0,0,0,"Hidden comment for DataHandler smoke","Eve","eve@example.com","ident-14",1,1700000400
