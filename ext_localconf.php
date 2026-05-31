@@ -101,8 +101,8 @@ if (!defined('TYPO3')) {
     );
 
     // After save hook
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
-        ProcessDatamap::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
+        = ProcessDatamap::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['pw_comments']['writerConfiguration'] = [
         LogLevel::INFO => [

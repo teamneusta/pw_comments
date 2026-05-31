@@ -54,10 +54,10 @@ final readonly class ProcessDatamap
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (
-            $request === null ||
-            (int) ($fieldArray['hidden'] ?? 1) === 1 ||
-            $table !== $this->enabledTable ||
-            $status !== $this->enabledStatus
+            $request === null
+            || (int) ($fieldArray['hidden'] ?? 1) === 1
+            || $table !== $this->enabledTable
+            || $status !== $this->enabledStatus
         ) {
             return;
         }

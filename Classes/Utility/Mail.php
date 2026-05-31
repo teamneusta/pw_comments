@@ -73,7 +73,7 @@ class Mail
      *
      * @param ViewInterface|FluidViewAdapter|null $view the fluid template
      */
-    public function setView(null|ViewInterface|FluidViewAdapter $view = null): void
+    public function setView(ViewInterface|FluidViewAdapter|null $view = null): void
     {
         if (!$view) {
             $view = GeneralUtility::makeInstance(ViewFactoryInterface::class)->create(new ViewFactoryData());

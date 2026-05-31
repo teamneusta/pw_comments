@@ -300,8 +300,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $newComment->setHidden(true);
             if ($aiModerationViolation) {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason]) ??
-                    'Your comment has been flagged by our content moderation system: ' . $aiModerationReason,
+                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason])
+                    ?? 'Your comment has been flagged by our content moderation system: ' . $aiModerationReason,
                 );
             } else {
                 $this->addFlashMessage(
@@ -326,9 +326,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
         }
 
-        if (isset($this->settings['sendMailToAuthorAfterSubmit']) &&
-            $this->settings['sendMailToAuthorAfterSubmit'] &&
-            $newComment->hasCommentAuthorMailAddress()
+        if (isset($this->settings['sendMailToAuthorAfterSubmit'])
+            && $this->settings['sendMailToAuthorAfterSubmit']
+            && $newComment->hasCommentAuthorMailAddress()
         ) {
             $view = $this->makeFluidTemplateObject();
             $view->assign('commentUrl', $this->makeCommentUrl($newComment));
@@ -426,8 +426,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $this->commentRepository->update($resolvedComment);
         $this->commentRepository->persistAll();
 
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
-            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']
+            && isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $this->mailUtility->setView($this->makeFluidTemplateObject());
             $this->mailUtility->setReceivers($resolvedComment->getAuthorMail());
@@ -471,8 +471,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
 
         $vote = null;
         if ($this->currentAuthorIdent !== null) {
-            if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments'] &&
-                $this->currentAuthorIdent === $comment->getAuthorIdent()
+            if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments']
+                && $this->currentAuthorIdent === $comment->getAuthorIdent()
             ) {
                 // TODO: use flash messages here?
                 return $this->redirectToUri(
@@ -543,8 +543,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
         /** @var Comment $comment */
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
-            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']
+            && isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $commentUrl = $this->makeCommentUrl($comment);
             $view = $this->makeFluidTemplateObject();

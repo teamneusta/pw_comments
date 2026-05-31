@@ -86,8 +86,8 @@ class CommentValidator extends AbstractValidator
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false) ||
-               ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
+        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false)
+               || ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
     /**

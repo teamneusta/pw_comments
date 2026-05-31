@@ -106,7 +106,7 @@ class DateViewHelper extends AbstractViewHelper
      *
      * @throws \InvalidArgumentException
      */
-    protected function normalizeTimestamp(int|string|null|\DateTime $timestamp): int|bool
+    protected function normalizeTimestamp(int|string|\DateTime|null $timestamp): int|bool
     {
         if ($timestamp === null) {
             $timestamp = time();
