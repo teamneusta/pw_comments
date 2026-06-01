@@ -7,4 +7,4 @@ echo "disabling xdebug"
 disable_xdebug
 
 echo "running functional tests"
-XDEBUG_MODE=debug ./tools/phpunit -c Build/phpunit.functional.xml --testsuite "Functional Tests"
+XDEBUG_MODE=debug ./tools/phpunit -c Build/phpunit.functional.xml --testsuite "Functional Tests" --no-coverage
