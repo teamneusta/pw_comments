@@ -8,10 +8,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Domain\Model\Comment;
 use T3\PwComments\Utility\Mail;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Localization\Locale;
@@ -33,7 +36,6 @@ final class MailTest extends TestCase
     private const FALLBACK_FROM_NAME = 'Fallback Sender';
 
     private string $templateAbs = '';
-    private ?string $httpHostBackup = null;
 
     public static function setUpBeforeClass(): void
     {
@@ -55,9 +57,6 @@ final class MailTest extends TestCase
     {
         $this->templateAbs = Environment::getPublicPath() . '/' . self::TEMPLATE_REL;
         file_put_contents($this->templateAbs, self::TEMPLATE_BODY);
-
-        $this->httpHostBackup = $_SERVER['HTTP_HOST'] ?? null;
-        $_SERVER['HTTP_HOST'] = self::HTTP_HOST;
 
         $languageService = $this->createMock(LanguageService::class);
         $languageService
@@ -102,11 +101,6 @@ final class MailTest extends TestCase
     {
         if (file_exists($this->templateAbs)) {
             unlink($this->templateAbs);
-        }
-        if ($this->httpHostBackup === null) {
-            unset($_SERVER['HTTP_HOST']);
-        } else {
-            $_SERVER['HTTP_HOST'] = $this->httpHostBackup;
         }
         GeneralUtility::purgeInstances();
         GeneralUtility::resetSingletonInstances([]);
@@ -308,6 +302,28 @@ final class MailTest extends TestCase
     }
 
     #[Test]
+    public function sendMailDegradesGracefullyWhenRequestLacksNormalizedParamsAttribute(): void
+    {
+        $mailMessage = new MailMessage();
+        GeneralUtility::addInstance(MailMessage::class, $mailMessage);
+
+        // Request without the normalizedParams attribute: host cannot be derived.
+        // sitenameUsedInMails is also empty, so the vsprintf-style sitename arg
+        // is rendered as an empty string in the subject. No warnings/notices.
+        $mail = $this->buildMailForSending(
+            ['senderAddress' => 'sender@example.com', 'senderName' => 'X'],
+            request: new ServerRequest(),
+        );
+
+        $mail->sendMail($this->newComment(), 'h');
+
+        self::assertSame(
+            'tx_pwcomments.notificationMail.subject:',
+            $mailMessage->getSubject(),
+        );
+    }
+
+    #[Test]
     public function sendMailThrowsWhenTemplateFileDoesNotExist(): void
     {
         $mailMessage = new MailMessage();
@@ -330,13 +346,23 @@ final class MailTest extends TestCase
         ?MailerInterface $mailer = null,
         ?FluidViewAdapter $view = null,
         ?string $templatePath = null,
+        ?ServerRequestInterface $request = null,
     ): Mail {
         $mail = new Mail($mailer ?? $this->createMock(MailerInterface::class));
         $mail->setSettings($settings);
         $mail->setReceivers($receivers);
         $mail->setTemplatePath($templatePath ?? self::TEMPLATE_REL);
         $mail->setView($view ?? $this->createDefaultView());
+        $mail->setRequest($request ?? $this->buildRequestWithHost(self::HTTP_HOST));
         return $mail;
+    }
+
+    private function buildRequestWithHost(string $host): ServerRequestInterface
+    {
+        return (new ServerRequest())->withAttribute(
+            'normalizedParams',
+            NormalizedParams::createFromServerParams(['HTTP_HOST' => $host], []),
+        );
     }
 
     private function createDefaultView(): FluidViewAdapter

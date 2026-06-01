@@ -323,6 +323,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
             $this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
         }
 
@@ -335,6 +336,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($newComment);
         }
 
@@ -434,6 +436,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($resolvedComment);
             $this->addFlashMessage(
                 LocalizationUtility::translate(
@@ -554,6 +557,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($comment);
             $this->addFlashMessage(
                 LocalizationUtility::translate(

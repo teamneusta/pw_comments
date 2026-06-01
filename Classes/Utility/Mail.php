@@ -12,6 +12,7 @@ namespace T3\PwComments\Utility;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Domain\Model\Comment;
 use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
@@ -56,7 +57,15 @@ class Mail
      * @var bool
      */
     protected $addQueryStringToLinks = true;
+
+    protected ?ServerRequestInterface $request = null;
+
     public function __construct(private readonly MailerInterface $mailer) {}
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
 
     /**
      * Sets the settings of controller
@@ -93,7 +102,8 @@ class Mail
         /** @var MailMessage $mail */
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
-        $sitename = ($this->settings['sitenameUsedInMails'] ?? '') ?: GeneralUtility::getIndpEnv('HTTP_HOST');
+        $sitename = ($this->settings['sitenameUsedInMails'] ?? '')
+            ?: ($this->request?->getAttribute('normalizedParams')?->getHttpHost() ?? '');
         $mail->setFrom(
             ($this->settings['senderAddress'] ?? '')
                 ?: LocalizationUtility::translate(
