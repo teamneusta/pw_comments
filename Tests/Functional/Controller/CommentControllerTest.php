@@ -608,6 +608,33 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * Regression: when `settings.storagePid` is left at the site-set default of
+     * `0` (the "use current page" sentinel) the controller must save new
+     * comments at the integration page UID, not at pid=0 — otherwise the row
+     * is invisible in the page-tree backend list module and is excluded from
+     * the frontend list query.
+     */
+    #[Test]
+    public function createActionStoresCommentAtIntegrationPageWhenStoragePidIsZero(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            ['EXT:pw_comments/Tests/Fixtures/Frontend/StoragePidFallback.typoscript'],
+        );
+
+        $before = $this->countComments();
+
+        $this->postCreateComment([
+            'authorName' => 'Carol',
+            'authorMail' => 'carol@example.com',
+            'message'    => 'Stored at integration page even with storagePid=0.',
+        ]);
+
+        self::assertSame($before + 1, $this->countComments());
+        self::assertSame(1, (int) $this->latestComment()['pid']);
+    }
+
+    /**
      * When `moderateNewComments` is enabled the new comment is stored hidden
      * and the user is redirected to the `successfulAnchor` instead of the
      * comment anchor (the comment is not yet visible).

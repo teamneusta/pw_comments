@@ -136,9 +136,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
         }
         $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $this->request->getAttribute('frontend.page.information')->getId();
-        $this->commentStorageUid = is_numeric($this->settings['storagePid'] ?? null)
-            ? (int) $this->settings['storagePid']
-            : $this->pageUid;
+        $configuredStoragePid = (int) ($this->settings['storagePid'] ?? 0);
+        $this->commentStorageUid = $configuredStoragePid > 0 ? $configuredStoragePid : $this->pageUid;
         $this->currentUser = isset($this->request->getAttribute('frontend.user')->user['uid']) ? $this->request->getAttribute('frontend.user')->user : [];
         $this->currentAuthorIdent = isset($this->currentUser['uid'])
             ? (string) $this->currentUser['uid']
