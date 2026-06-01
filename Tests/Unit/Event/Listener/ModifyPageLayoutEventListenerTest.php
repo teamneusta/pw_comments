@@ -145,6 +145,7 @@ final class ModifyPageLayoutEventListenerTest extends TestCase
             'missing id' => [[]],
             'string id' => [['id' => 'abc']],
             'null id' => [['id' => null]],
+            'negative integer id' => [['id' => -5]],
         ];
     }
 

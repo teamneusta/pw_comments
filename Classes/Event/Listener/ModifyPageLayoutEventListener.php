@@ -23,7 +23,7 @@ final readonly class ModifyPageLayoutEventListener
 
     public function __invoke(ModifyPageLayoutContentEvent $event): void
     {
-        $pageId = (int) ($event->getRequest()->getQueryParams()['id'] ?? 0);
+        $pageId = max(0, (int) ($event->getRequest()->getQueryParams()['id'] ?? 0));
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
         $total = (int) ($queryBuilder
@@ -44,7 +44,8 @@ final readonly class ModifyPageLayoutEventListener
             ->where('pid = :pageUid')->setParameter('pageUid', $pageId)->executeQuery()
             ->fetchOne() ?: 0);
 
-        $unreleased = $total - $released;
+        // Tolerate DB race: a row's hidden flag can flip between the two count queries.
+        $unreleased = max(0, $total - $released);
 
         $view = $this->viewFactory->create(
             new ViewFactoryData(
