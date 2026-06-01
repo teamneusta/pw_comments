@@ -11,6 +11,7 @@ use T3\PwComments\ViewHelpers\Format\DateViewHelper;
 final class DateViewHelperTest extends TestCase
 {
     private const FIXED_TIMESTAMP = 1234567890; // 2009-02-13 23:31:30 UTC
+    private const UNPARSEABLE_GET_EXCEPTION_CODE = 1780358400;
 
     private ?string $previousTimezone = null;
 
@@ -26,11 +27,8 @@ final class DateViewHelperTest extends TestCase
     }
 
     #[Test]
-    public function renderEmitsBrokenStrftimeStyleOutputForDefaultArguments(): void
+    public function renderFormatsTimestampWithStrftimeStyleDefault(): void
     {
-        // KNOWN BUG: render() preg_replaces `%` in front of every letter and then collapses
-        // `%%` back to `%`, which is a no-op for already-prefixed strftime input. The result
-        // is fed to DateTime::format, which treats `%` literally. Pinned until repaired.
         $viewHelper = new DateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => self::FIXED_TIMESTAMP,
@@ -38,7 +36,7 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertSame('%2009-%02-%13', $viewHelper->render());
+        self::assertSame('2009-02-13', $viewHelper->render());
     }
 
     #[Test]
@@ -51,7 +49,7 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertMatchesRegularExpression('/^%\d{4}-%\d{2}-%\d{2}$/', $viewHelper->render());
+        self::assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}$/', $viewHelper->render());
     }
 
     #[Test]
@@ -64,7 +62,7 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertSame('%2009-%02-%13', $viewHelper->render());
+        self::assertSame('2009-02-13', $viewHelper->render());
     }
 
     #[Test]
@@ -77,7 +75,7 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertSame('%2009-%02-%13', $viewHelper->render());
+        self::assertSame('2009-02-13', $viewHelper->render());
     }
 
     #[Test]
@@ -90,16 +88,12 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertSame('%2009-%02-%13', $viewHelper->render());
+        self::assertSame('2009-02-13', $viewHelper->render());
     }
 
     #[Test]
-    public function renderRejectsDateTimeImmutableWithTypeError(): void
+    public function renderAcceptsDateTimeImmutable(): void
     {
-        // DateTimeImmutable is not an instance of DateTime and the parameter signature
-        // (DateTime|string|int|null) rejects it via TypeError before the else-branch
-        // InvalidArgumentException can fire. Pinned until the signature widens to
-        // DateTimeInterface.
         $viewHelper = new DateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => new \DateTimeImmutable('@' . self::FIXED_TIMESTAMP),
@@ -107,17 +101,15 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        $this->expectException(\TypeError::class);
-
-        $viewHelper->render();
+        self::assertSame('2009-02-13', $viewHelper->render());
     }
 
     #[Test]
     public function renderRejectsUnsupportedTimestampTypeWithTypeError(): void
     {
-        // The typed signature also catches bools etc. before the else-branch
-        // InvalidArgumentException(3328256120) can fire — that branch is unreachable
-        // through the public API today.
+        // Bool still TypeErrors at the union-type boundary; the dead else-branch
+        // InvalidArgumentException(3328256120) remains unreachable and is left in place
+        // as defense-in-depth for a future signature loosening.
         $viewHelper = new DateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => true,
@@ -140,7 +132,7 @@ final class DateViewHelperTest extends TestCase
             'get' => '+1 day',
         ]);
 
-        self::assertSame('%2009-%02-%14', $viewHelper->render());
+        self::assertSame('2009-02-14', $viewHelper->render());
     }
 
     #[Test]
@@ -153,14 +145,12 @@ final class DateViewHelperTest extends TestCase
             'get' => '',
         ]);
 
-        self::assertSame('%1970-%01-%01', $viewHelper->render());
+        self::assertSame('1970-01-01', $viewHelper->render());
     }
 
     #[Test]
-    public function renderThrowsWhenGetCannotBeParsed(): void
+    public function renderThrowsInvalidArgumentExceptionWhenGetCannotBeParsed(): void
     {
-        // KNOWN BUG: strtotime returns false on unparseable input, which is then passed to
-        // DateTime::setTimestamp(int) and TypeErrors. Pinned until guarded.
         $viewHelper = new DateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => self::FIXED_TIMESTAMP,
@@ -168,8 +158,45 @@ final class DateViewHelperTest extends TestCase
             'get' => 'not-a-recognizable-relative-date',
         ]);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionCode(self::UNPARSEABLE_GET_EXCEPTION_CODE);
 
         $viewHelper->render();
+    }
+
+    #[Test]
+    public function renderProducesSameOutputForStrftimeAndPhpDateStyleFormats(): void
+    {
+        $strftimeStyle = new DateViewHelper();
+        $strftimeStyle->setArguments([
+            'timestamp' => self::FIXED_TIMESTAMP,
+            'format' => '%Y-%m-%d',
+            'get' => '',
+        ]);
+
+        $phpDateStyle = new DateViewHelper();
+        $phpDateStyle->setArguments([
+            'timestamp' => self::FIXED_TIMESTAMP,
+            'format' => 'Y-m-d',
+            'get' => '',
+        ]);
+
+        self::assertSame('2009-02-13', $strftimeStyle->render());
+        self::assertSame('2009-02-13', $phpDateStyle->render());
+    }
+
+    #[Test]
+    public function renderProducesExpectedOutputForCommentPartialFormatString(): void
+    {
+        // Regression pin: Resources/Private/Partials/Comment.html:20 passes 'd.m.Y T'
+        // for the title attribute on comment dates.
+        $viewHelper = new DateViewHelper();
+        $viewHelper->setArguments([
+            'timestamp' => self::FIXED_TIMESTAMP,
+            'format' => 'd.m.Y T',
+            'get' => '',
+        ]);
+
+        self::assertSame('13.02.2009 UTC', $viewHelper->render());
     }
 }
