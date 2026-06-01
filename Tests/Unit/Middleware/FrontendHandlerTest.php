@@ -78,10 +78,6 @@ final class FrontendHandlerTest extends TestCase
         $response = $middleware->process($request, $handler);
 
         self::assertSame($controllerResponse, $response);
-        // KNOWN BUG: the middleware appends the status code to the response body.
-        // Pinned here as current behavior; flag in maintenance — see FrontendHandler::process()
-        // line 34 — this clobbers JSON/redirect payloads.
-        $response->getBody()->rewind();
-        self::assertSame('418', $response->getBody()->getContents());
+        self::assertSame('', (string) $response->getBody());
     }
 }
