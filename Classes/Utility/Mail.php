@@ -86,24 +86,22 @@ class Mail
      *
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
-     * @return bool Returns TRUE if the mail has been sent successfully
      * @throws \Exception
      */
-    public function sendMail(Comment $comment, $hash = '')
+    public function sendMail(Comment $comment, $hash = ''): void
     {
         /** @var MailMessage $mail */
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
+        $sitename = ($this->settings['sitenameUsedInMails'] ?? '') ?: GeneralUtility::getIndpEnv('HTTP_HOST');
         $mail->setFrom(
-            $this->settings['senderAddress']
+            ($this->settings['senderAddress'] ?? '')
                 ?: LocalizationUtility::translate(
                     'tx_pwcomments.notificationMail.from.mail',
                     'PwComments',
-                    [
-                        $this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST'),
-                    ],
+                    [$sitename],
                 ),
-            $this->settings['senderName']
+            ($this->settings['senderName'] ?? '')
                 ?: LocalizationUtility::translate(
                     'tx_pwcomments.notificationMail.from.name',
                     'PwComments',
@@ -116,7 +114,7 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                [$this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')],
+                [$sitename],
             ),
         );
         if (isset($this->settings['sendMailMimeType']) && $this->settings['sendMailMimeType'] === 'text/plain') {
@@ -125,7 +123,7 @@ class Mail
             $mail->html($this->getMailMessage($comment, $hash));
         }
 
-        return $this->mailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
