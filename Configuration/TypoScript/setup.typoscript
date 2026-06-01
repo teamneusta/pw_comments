@@ -93,29 +93,29 @@ plugin.tx_pwcomments {
 
 
 [frontend.user.isLoggedIn]
-plugin.tx_pwcomments {
-    settings {
-        moderateNewComments = 0
-        secondsBetweenTwoComments = 60
+    plugin.tx_pwcomments {
+        settings {
+            moderateNewComments = 0
+            secondsBetweenTwoComments = 60
 
-        replaceUsernameWith = COA_INT
-        replaceUsernameWith {
-            10 = TEXT
-            10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
+            replaceUsernameWith = COA_INT
+            replaceUsernameWith {
+                10 = TEXT
+                10.data = LLL:EXT:pw_comments/Resources/Private/Language/locallang.xlf:tx_pwcomments.newComment.loggedInAs
 
-            20 = TEXT
-            20 {
-                data = frontend.user|user|username
-                noTrimWrap = | <b>|</b>|
+                20 = TEXT
+                20 {
+                    data = frontend.user|user|username
+                    noTrimWrap = | <b>|</b>|
+                }
+
+                stdWrap.wrap = <span class="loggedInAs">|</span>
             }
 
-            stdWrap.wrap = <span class="loggedInAs">|</span>
+            replaceMailWith = TEXT
+            replaceMailWith.stdWrap.char = 0
         }
-
-        replaceMailWith = TEXT
-        replaceMailWith.stdWrap.char = 0
     }
-}
 [global]
 
 lib {
