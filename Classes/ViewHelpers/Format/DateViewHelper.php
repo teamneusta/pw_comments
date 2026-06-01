@@ -82,9 +82,6 @@ class DateViewHelper extends AbstractViewHelper
 
     /**
      * Handle all the different input formats and return a real timestamp
-     *
-     *
-     * @throws \InvalidArgumentException
      */
     protected function normalizeTimestamp(int|string|\DateTimeInterface|null $timestamp): int|bool
     {
@@ -96,11 +93,6 @@ class DateViewHelper extends AbstractViewHelper
             $timestamp = strtotime($timestamp);
         } elseif ($timestamp instanceof \DateTimeInterface) {
             $timestamp = (int) $timestamp->format('U');
-        } else {
-            throw new \InvalidArgumentException(
-                sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'),
-                3328256120,
-            );
         }
         return $timestamp;
     }

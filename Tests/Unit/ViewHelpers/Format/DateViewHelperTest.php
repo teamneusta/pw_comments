@@ -107,9 +107,7 @@ final class DateViewHelperTest extends TestCase
     #[Test]
     public function renderRejectsUnsupportedTimestampTypeWithTypeError(): void
     {
-        // Bool still TypeErrors at the union-type boundary; the dead else-branch
-        // InvalidArgumentException(3328256120) remains unreachable and is left in place
-        // as defense-in-depth for a future signature loosening.
+        // Passing an unsupported type triggers a TypeError from the union-type signature.
         $viewHelper = new DateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => true,
