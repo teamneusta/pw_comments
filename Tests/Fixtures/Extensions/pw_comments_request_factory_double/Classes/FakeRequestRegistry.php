@@ -14,7 +14,7 @@ final class FakeRequestRegistry
     public static array $calls = [];
 
     public static int $nextStatus = 200;
-    public static string $nextBody = '200';
+    public static string $nextBody = '';
     public static ?\Throwable $nextException = null;
 
     public static function reset(): void

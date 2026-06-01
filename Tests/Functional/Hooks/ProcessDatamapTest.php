@@ -307,19 +307,20 @@ final class ProcessDatamapTest extends FunctionalTestCase
     }
 
     /**
-     * Same exception when the middleware returned 200 but the body is empty
-     * - the hook treats only the literal '200' body as success.
+     * Middleware success is signalled by HTTP 200 alone. Empty body is now
+     * the real middleware contract — the hook must accept it as success.
      */
     #[Test]
-    public function hookThrowsRuntimeExceptionWhenResponseBodyIsEmpty(): void
+    public function hookSucceedsOnStatus200WithEmptyBody(): void
     {
         FakeRequestRegistry::$nextStatus = 200;
         FakeRequestRegistry::$nextBody = '';
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionCode(4620589602);
-
         $this->invokeHook(self::STATUS_UPDATE, self::COMMENTS_TABLE, 10, ['hidden' => 0]);
+
+        $messages = $this->flashQueue()->getAllMessages();
+        self::assertCount(1, $messages);
+        self::assertSame(ContextualFeedbackSeverity::OK, $messages[0]->getSeverity());
     }
 
     /**

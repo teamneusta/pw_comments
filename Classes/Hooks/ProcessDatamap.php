@@ -88,8 +88,7 @@ final readonly class ProcessDatamap
         $url = $this->contentObjectRenderer->typoLink_URL($typoLinkConfiguration);
         // Call url - fetches by middleware request
         $response = $this->requestFactory->request($url, 'GET');
-        $content = (string) $response->getBody();
-        if ($response->getStatusCode() === 200 && $content === '200') {
+        if ($response->getStatusCode() === 200) {
             // Add flash message
             $messageQueue = $this->flashMessageService->getMessageQueueByIdentifier(FlashMessageQueue::NOTIFICATION_QUEUE);
             $messageToDisplay = LocalizationUtility::translate(
