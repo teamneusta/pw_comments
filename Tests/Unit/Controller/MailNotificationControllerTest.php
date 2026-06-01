@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Controller\MailNotificationController;
 use T3\PwComments\Utility\HashEncryptionUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Expression\ExpressionBuilder;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\QueryRestrictionContainerInterface;
@@ -242,7 +243,12 @@ final class MailNotificationControllerTest extends TestCase
 
     private function buildController(QueryBuilder $queryBuilder): MailNotificationController
     {
-        return new class ($queryBuilder, $this->createMock(TypoScriptService::class), []) extends MailNotificationController {
+        $connectionPool = $this->createMock(ConnectionPool::class);
+        $connectionPool->method('getQueryBuilderForTable')
+            ->with('tx_pwcomments_domain_model_comment')
+            ->willReturn($queryBuilder);
+
+        return new class ($connectionPool, $this->createMock(TypoScriptService::class), []) extends MailNotificationController {
             public array $extbaseInvocations = [];
 
             protected function runExtbaseController(
