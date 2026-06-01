@@ -157,10 +157,23 @@ final class RelativeDateViewHelperTest extends TestCase
     }
 
     #[Test]
+    public function renderAcceptsDateTimeImmutable(): void
+    {
+        $viewHelper = new RelativeDateViewHelper();
+        $viewHelper->setArguments([
+            'timestamp' => new \DateTimeImmutable('@' . (time() - 5)),
+            'format' => 'Y-m-d',
+            'wrap' => '%s',
+            'wrapAbsolute' => '%s',
+        ]);
+
+        self::assertSame('fewSeconds', $viewHelper->render());
+    }
+
+    #[Test]
     public function renderRejectsUnsupportedTimestampTypeWithTypeError(): void
     {
-        // The else-branch InvalidArgumentException(5991273415) is unreachable: the typed
-        // signature DateTime|string|int|null catches everything else as a TypeError first.
+        // Passing an unsupported type triggers a TypeError from the union-type signature.
         $viewHelper = new RelativeDateViewHelper();
         $viewHelper->setArguments([
             'timestamp' => true,
