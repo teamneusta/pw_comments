@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Utility\HashEncryptionUtility;
 use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Error\Http\ServiceUnavailableException;
 use TYPO3\CMS\Core\Exception;
@@ -28,10 +29,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class MailNotificationController
 {
+    private const TABLE = 'tx_pwcomments_domain_model_comment';
+
     private ServerRequestInterface $request;
 
     public function __construct(
-        private readonly QueryBuilder $queryBuilder,
+        private readonly ConnectionPool $connectionPool,
         private readonly TypoScriptService $typoScriptService,
         private readonly array $extConfig,
     ) {}
@@ -57,13 +60,16 @@ class MailNotificationController
         }
 
         // Get comment row
-        $this->queryBuilder->getRestrictions()->removeAll();
-        $row = $this->queryBuilder
+        $queryBuilder = $this->getQueryBuilder();
+        $row = $queryBuilder
             ->select('*')
-            ->from('tx_pwcomments_domain_model_comment')->where($this->queryBuilder->expr()->eq(
+            ->from(self::TABLE)
+            ->where($queryBuilder->expr()->eq(
                 'uid',
-                $this->queryBuilder->createNamedParameter($uid, Connection::PARAM_INT),
-            ))->executeQuery()->fetchAssociative();
+                $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT),
+            ))
+            ->executeQuery()
+            ->fetchAssociative();
 
         // Check hash
         $valid = HashEncryptionUtility::validCommentMessageHash($hash, $row['message']);
@@ -157,5 +163,17 @@ class MailNotificationController
     protected function getTypoScriptSetup(): array
     {
         return $this->request->getAttribute('frontend.typoscript')->getSetupArray();
+    }
+
+    /**
+     * Per-call QueryBuilder with no enable-field restrictions. This endpoint
+     * approves *hidden* comments for moderators, so it must always see them.
+     */
+    private function getQueryBuilder(): QueryBuilder
+    {
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+
+        return $queryBuilder;
     }
 }
