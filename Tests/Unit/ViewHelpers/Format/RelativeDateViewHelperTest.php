@@ -6,6 +6,7 @@ namespace T3\PwComments\Tests\Unit\ViewHelpers\Format;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use T3\PwComments\ViewHelpers\Format\RelativeDateViewHelper;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
@@ -26,11 +27,21 @@ final class RelativeDateViewHelperTest extends TestCase
         $factory->method('create')->willReturn($languageService);
         $factory->method('createFromUserPreferences')->willReturn($languageService);
         $factory->method('createFromSiteLanguage')->willReturn($languageService);
-        GeneralUtility::addInstance(LanguageServiceFactory::class, $factory);
-        // Re-add for tests that call render() implicitly twice (one per LocalizationUtility::translate call chain);
-        // makeDateRelative invokes getLabel up to twice per render (label + plural suffix).
-        GeneralUtility::addInstance(LanguageServiceFactory::class, $factory);
-        GeneralUtility::addInstance(LanguageServiceFactory::class, $factory);
+
+        $container = new class ($factory) implements ContainerInterface {
+            public function __construct(private readonly LanguageServiceFactory $factory) {}
+
+            public function has(string $id): bool
+            {
+                return $id === LanguageServiceFactory::class;
+            }
+
+            public function get(string $id): object
+            {
+                return $this->factory;
+            }
+        };
+        GeneralUtility::setContainer($container);
 
         $locales = $this->createMock(Locales::class);
         $locales->method('createLocaleFromRequest')->willReturn(new Locale('en'));
