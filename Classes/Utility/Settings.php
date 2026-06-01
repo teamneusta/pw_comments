@@ -71,13 +71,13 @@ class Settings extends AbstractEncryptionUtility
      *
      * @return array not rendered typoscript settings
      */
-    public static function getExtensionSettings()
+    public static function getExtensionSettings(): array
     {
         $configurationManager = self::getConfigurationManagerInterface();
         $fullTypoScript = $configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,
         );
-        return $fullTypoScript['plugin.']['tx_pwcomments.']['settings.'];
+        return $fullTypoScript['plugin.']['tx_pwcomments.']['settings.'] ?? [];
     }
 
     /**

@@ -8,10 +8,17 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Utility\Settings;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 final class SettingsTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        GeneralUtility::resetSingletonInstances([]);
+    }
+
     #[Test]
     public function renderConfigurationArrayReturnsSettingsUnchangedWhenRequestIsNullAndNotRenderable(): void
     {
@@ -253,6 +260,61 @@ final class SettingsTest extends TestCase
             ],
             $result,
         );
+    }
+
+    #[Test]
+    public function getExtensionSettingsReturnsSettingsArrayWhenFullChainIsIntact(): void
+    {
+        $expected = ['enableRating' => '1', 'someOther' => 'value'];
+        $this->registerConfigurationManager([
+            'plugin.' => [
+                'tx_pwcomments.' => [
+                    'settings.' => $expected,
+                ],
+            ],
+        ]);
+
+        self::assertSame($expected, Settings::getExtensionSettings());
+    }
+
+    #[Test]
+    public function getExtensionSettingsReturnsEmptyArrayWhenLeafSettingsSegmentIsMissing(): void
+    {
+        $this->registerConfigurationManager([
+            'plugin.' => [
+                'tx_pwcomments.' => [],
+            ],
+        ]);
+
+        self::assertSame([], Settings::getExtensionSettings());
+    }
+
+    #[Test]
+    public function getExtensionSettingsReturnsEmptyArrayWhenMidChainSegmentIsMissing(): void
+    {
+        $this->registerConfigurationManager([
+            'plugin.' => [],
+        ]);
+
+        self::assertSame([], Settings::getExtensionSettings());
+    }
+
+    #[Test]
+    public function getExtensionSettingsReturnsEmptyArrayWhenFullTypoScriptIsEmpty(): void
+    {
+        $this->registerConfigurationManager([]);
+
+        self::assertSame([], Settings::getExtensionSettings());
+    }
+
+    private function registerConfigurationManager(array $fullTypoScript): void
+    {
+        $manager = $this->createMock(ConfigurationManagerInterface::class);
+        $manager
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            ->willReturn($fullTypoScript);
+        GeneralUtility::setSingletonInstance(ConfigurationManagerInterface::class, $manager);
     }
 
     private function buildRequestWithCObj(ContentObjectRenderer $cObj): ServerRequestInterface
