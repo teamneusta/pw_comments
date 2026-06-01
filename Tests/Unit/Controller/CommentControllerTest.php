@@ -29,10 +29,8 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Localization\Locale;
 use TYPO3\CMS\Core\Localization\Locales;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
@@ -521,7 +519,7 @@ final class CommentControllerTest extends TestCase
         );
         $this->moderationProviderFactory->expects(self::once())
             ->method('createProvider')
-            ->with('openai', self::isType('array'))
+            ->with('openai', self::isArray())
             ->willReturn($service);
 
         $newComment = new Comment();
@@ -586,7 +584,7 @@ final class CommentControllerTest extends TestCase
         $this->logger->expects(self::once())
             ->method('error')
             ->with('AI moderation service failed', self::callback(
-                static fn(array $ctx): bool => $ctx['exception'] instanceof \RuntimeException
+                static fn(array $ctx): bool => $ctx['exception'] instanceof \RuntimeException,
             ));
 
         $this->commentRepository->expects(self::once())->method('add');
