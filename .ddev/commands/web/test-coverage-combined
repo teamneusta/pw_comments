@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Generates a merged unit + functional coverage report.
+#
+# Uses Composer-installed phpunit (./vendor/bin/phpunit) + phpcov
+# (./vendor/bin/phpcov) instead of the phive ./tools/* binaries, because the
+# phive phpunit phar namespaces its bundled CodeCoverage classes as
+# `PHPUnitPHAR\…`, which phpcov can't unserialize. The Composer install uses
+# vanilla `SebastianBergmann\CodeCoverage\…` namespaces that phpcov merges
+# directly.
+#
+# TODO: once we drop PHP 8.2 from the CI matrix and bump phpunit/phpcov to
+# ^13.0, switch this command back to ./tools/phpunit + ./tools/phpcov — the
+# v13 pair fixed the phar-vs-vendor namespace mismatch. The per-suite
+# `test-coverage` and `test-coverage-functional` commands stay on phive.
+
+echo "navigation to target folder"
+cd /var/www/pw_comments
+
+echo "enabling xdebug"
+enable_xdebug
+
+mkdir -p Build/log/coverage-cov
+
+echo "running unit tests with coverage"
+XDEBUG_MODE=coverage ./vendor/bin/phpunit -c Build/phpunit.xml --do-not-cache --testsuite "Unit Tests" --coverage-php Build/log/coverage-cov/unit.cov
+
+echo "running functional tests with coverage"
+XDEBUG_MODE=coverage ./vendor/bin/phpunit -c Build/phpunit.functional.xml --do-not-cache --testsuite "Functional Tests" --coverage-php Build/log/coverage-cov/functional.cov
+
+echo "merging unit + functional coverage"
+./vendor/bin/phpcov merge --html Build/log/coverage-html-combined --text php://stdout Build/log/coverage-cov/
+
+echo "disabling xdebug"
+disable_xdebug
