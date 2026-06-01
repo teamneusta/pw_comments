@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "navigation to target folder"
+cd /var/www/pw_comments
+
+echo "enabling xdebug"
+enable_xdebug
+
+echo "running functional tests with coverage"
+XDEBUG_MODE=coverage ./tools/phpunit -c Build/phpunit.functional.xml --do-not-cache --testsuite "Functional Tests"
+
+echo "disabling xdebug"
+disable_xdebug
