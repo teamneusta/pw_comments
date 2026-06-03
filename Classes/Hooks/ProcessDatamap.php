@@ -80,7 +80,7 @@ final readonly class ProcessDatamap
             'hash' => $hash,
         ];
         $typoLinkConfiguration = [
-            'parameter' => $comment->getOrigPid(),
+            'parameter' => $comment->getOrigPid() ?: $comment->getPid(),
             'additionalParams' => GeneralUtility::implodeArrayForUrl('tx_pwcomments', $typoLinkAdditionalParams),
             'forceAbsoluteUrl' => true,
         ];

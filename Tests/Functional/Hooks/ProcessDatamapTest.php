@@ -234,11 +234,6 @@ final class ProcessDatamapTest extends FunctionalTestCase
      * pid=1 (root), so the link must route via orig_pid (where the comment
      * was created) rather than the current pid (where it now lives after a
      * move).
-     *
-     * Edge case orig_pid=0 is deliberately not covered: typoLink_URL with
-     * `parameter=0` returns an empty string regardless of the fallback in
-     * tx_pwcomments[pid], so that combination produces an unusable URL. This
-     * is a latent bug not in scope for these tests.
      */
     #[Test]
     public function hookUsesOrigPidForLinkWhenItDiffersFromPid(): void
@@ -250,6 +245,31 @@ final class ProcessDatamapTest extends FunctionalTestCase
 
         self::assertSame('2', $query['tx_pwcomments']['pid'], 'Link must carry orig_pid in tx_pwcomments[pid].');
         self::assertStringContainsString('/comments', FakeRequestRegistry::$calls[0]['url'], 'Link must route to the orig_pid page.');
+    }
+
+    /**
+     * Regression for #60: comment 12 has orig_pid=0 (legacy import / raw
+     * insert). typoLink with `parameter=0` would resolve to an empty URL and
+     * the middleware call would throw 4620589602, aborting the BE save. The
+     * `getOrigPid() ?: getPid()` fallback must route via the storage pid
+     * instead. Routing is page-id agnostic - the middleware looks the comment
+     * up by uid+hash - so landing on pid still mails the correct author.
+     */
+    #[Test]
+    public function hookFallsBackToPidWhenOrigPidIsZero(): void
+    {
+        $this->invokeHook(self::STATUS_UPDATE, self::COMMENTS_TABLE, 12, ['hidden' => 0]);
+
+        self::assertCount(1, FakeRequestRegistry::$calls, 'Exactly one middleware call expected.');
+        self::assertNotSame('', FakeRequestRegistry::$calls[0]['url'], 'URL must not be empty when orig_pid=0.');
+
+        $query = $this->parseQueryString(FakeRequestRegistry::$calls[0]['url']);
+        self::assertSame('1', $query['tx_pwcomments']['pid'], 'Link must fall back to pid when orig_pid=0.');
+
+        $messages = $this->flashQueue()->getAllMessages();
+        self::assertCount(1, $messages);
+        self::assertSame(ContextualFeedbackSeverity::OK, $messages[0]->getSeverity());
+        self::assertStringContainsString('carol@example.com', $messages[0]->getMessage());
     }
 
     /**
