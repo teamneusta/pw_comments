@@ -148,6 +148,30 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * A site-set boolean `false` reaches Fluid as the empty string '' (not
+     * '0'). The vote buttons must still render in that case. Guards against the
+     * `{settings.hideVoteButtons} == 0` comparison in Voting.html, which is
+     * false for '' and so hid the buttons whenever the setting came from a site
+     * set rather than legacy TypoScript constants.
+     */
+    #[Test]
+    public function votingButtonsRenderWhenHideVoteButtonsIsEmptyString(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/HideVoteButtonsEmptyString.typoscript',
+            ],
+        );
+
+        $body = $this->renderPage();
+
+        self::assertStringContainsString('tx_pwcomments_show%5Baction%5D=upvote', $body);
+        self::assertStringContainsString('tx_pwcomments_show%5Baction%5D=downvote', $body);
+    }
+
+    /**
      * Issue #40: foreign GET parameters from the host record (here the news
      * article id) must survive in the generated voting link. Before the fix
      * (addQueryString="true") TYPO3 v12+ only kept the route arguments and
