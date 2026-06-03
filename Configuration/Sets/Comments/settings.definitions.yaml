@@ -14,7 +14,7 @@ categories:
   moderation:
     label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:moderation'
   aimoderation:
-    label: 'AI Moderation'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:aimoderation'
   mails:
     label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:mails'
   spamprotect:
@@ -159,27 +159,27 @@ settings:
     type: bool
     default: false
     category: aimoderation
-    label: 'Enable AI moderation'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableAiModeration'
   plugin.tx_pwcomments.settings.aiModerationProvider:
     type: string
     default: 'openai'
     category: aimoderation
-    label: 'AI moderation provider'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationProvider'
   plugin.tx_pwcomments.settings.aiModerationApiKey:
     type: string
     default: ''
     category: aimoderation
-    label: 'AI moderation API key'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiKey'
   plugin.tx_pwcomments.settings.aiModerationApiEndpoint:
     type: string
     default: 'https://api.openai.com/v1/moderations'
     category: aimoderation
-    label: 'AI moderation API endpoint'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiEndpoint'
   plugin.tx_pwcomments.settings.aiModerationThreshold:
     type: string
     default: '0.7'
     category: aimoderation
-    label: 'AI moderation threshold'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationThreshold'
     enum:
       - '0.1'
       - '0.2'
@@ -195,7 +195,7 @@ settings:
     type: bool
     default: true
     category: aimoderation
-    label: 'AI moderation: fall back to manual moderation on API failure'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationFallbackToManual'
 
   plugin.tx_pwcomments.settings.senderAddress:
     type: string
@@ -278,7 +278,7 @@ settings:
     type: int
     default: 0
     category: misc
-    label: 'Storage PID (page where comments are saved; 0 = current page)'
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.storagePid'
   plugin.tx_pwcomments.settings.linkUrlsInComments:
     type: bool
     default: true

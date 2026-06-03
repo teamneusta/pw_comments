@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.2"  xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="de" datatype="plaintext" original="messages" product-name="pw_comments">
+    <file source-language="en" datatype="plaintext" original="messages" product-name="pw_comments">
 		<header/>
 		<body>
 			<trans-unit id="anchors" xml:space="preserve">
@@ -178,6 +178,30 @@
 			</trans-unit>
             <trans-unit id="settings.termsTypolinkParameter" xml:space="preserve">
                 <source>Typolink parameters to terms (in string, next to checkbox to click)</source>
+			</trans-unit>
+            <trans-unit id="aimoderation" xml:space="preserve">
+                <source>AI Moderation</source>
+			</trans-unit>
+            <trans-unit id="settings.enableAiModeration" xml:space="preserve">
+                <source>Enable AI moderation</source>
+			</trans-unit>
+            <trans-unit id="settings.aiModerationProvider" xml:space="preserve">
+                <source>AI moderation provider</source>
+			</trans-unit>
+            <trans-unit id="settings.aiModerationApiKey" xml:space="preserve">
+                <source>AI moderation API key</source>
+			</trans-unit>
+            <trans-unit id="settings.aiModerationApiEndpoint" xml:space="preserve">
+                <source>AI moderation API endpoint</source>
+			</trans-unit>
+            <trans-unit id="settings.aiModerationThreshold" xml:space="preserve">
+                <source>AI moderation threshold</source>
+			</trans-unit>
+            <trans-unit id="settings.aiModerationFallbackToManual" xml:space="preserve">
+                <source>AI moderation: fall back to manual moderation on API failure</source>
+			</trans-unit>
+            <trans-unit id="settings.storagePid" xml:space="preserve">
+                <source>Storage PID (page where comments are saved; 0 = current page)</source>
 			</trans-unit>
 		</body>
 	</file>
