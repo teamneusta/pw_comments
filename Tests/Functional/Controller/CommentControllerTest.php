@@ -172,6 +172,103 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * Counterpart to votingLinksArePresentForComments: with
+     * `enableCommentVotes=0` the Voting partial is not rendered for top-level
+     * comments at all (Comment.html line 34). BasicSetup hard-codes
+     * `enableCommentVotes=1` and `enableReplyVotes=0`, so with votes disabled no
+     * voting links may appear anywhere in the list.
+     */
+    #[Test]
+    public function votingLinksAreAbsentWhenEnableCommentVotesIsOff(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/EnableCommentVotesOff.typoscript',
+            ],
+        );
+
+        $commentOne = $this->commentSection($this->renderPage(), 1);
+
+        self::assertStringNotContainsString('tx_pwcomments_show%5Baction%5D=upvote', $commentOne);
+        self::assertStringNotContainsString('tx_pwcomments_show%5Baction%5D=downvote', $commentOne);
+    }
+
+    /**
+     * `enableReplyVotes=1` renders the Voting partial for replies — the
+     * `{settings.enableReplyVotes}` + `{comment.parentComment}` branch in
+     * Comment.html (lines 42-46) that is dead under the BasicSetup default of
+     * `enableReplyVotes=0`. Fixture comment 6 is a reply to comment 1, so its
+     * scoped section must carry an upvote link pointing at uid 6.
+     */
+    #[Test]
+    public function votingLinksRenderForRepliesWhenEnableReplyVotesIsOn(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/EnableReplyVotes.typoscript',
+            ],
+        );
+
+        $replySix = $this->commentSection($this->renderPage(), 6);
+
+        self::assertStringContainsString('tx_pwcomments_show%5Baction%5D=upvote', $replySix);
+        self::assertStringContainsString('tx_pwcomments_show%5Bcomment%5D=6', $replySix);
+    }
+
+    /**
+     * Counterpart to indexActionRendersRepliesNestedUnderParent: with
+     * `enableRepliesToComments=0` the "reply" action link (Comment.html line 48,
+     * guarded by the `== 1` idiom) is not rendered for any comment, so users
+     * cannot start a reply. The replies themselves still render — that is
+     * governed by `showRepliesToComments`, exercised separately.
+     */
+    #[Test]
+    public function replyLinkIsAbsentWhenEnableRepliesToCommentsIsOff(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/DisableRepliesToComments.typoscript',
+            ],
+        );
+
+        $body = $this->renderPage();
+
+        self::assertStringContainsString('Test comment 1', $body, 'Comments must still render.');
+        self::assertStringNotContainsString('class="reply"', $body, 'No reply action link may render when enableRepliesToComments is off.');
+    }
+
+    /**
+     * Counterpart to indexActionRendersRepliesNestedUnderParent: with
+     * `showRepliesToComments=0` the nested reply list (Index.html line 19,
+     * guarded by the `== 1` idiom) is suppressed even though the fixture replies
+     * exist. The parent comments must still render.
+     */
+    #[Test]
+    public function nestedRepliesAreSuppressedWhenShowRepliesToCommentsIsOff(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/HideRepliesToComments.typoscript',
+            ],
+        );
+
+        $body = $this->renderPage();
+
+        self::assertStringContainsString('Test comment 1', $body, 'Top-level comments must still render.');
+        self::assertStringNotContainsString('class="comments-list reply-list"', $body, 'The reply list must not render when showRepliesToComments is off.');
+        self::assertStringNotContainsString('First reply to comment 1', $body);
+        self::assertStringNotContainsString('Second reply to comment 1', $body);
+    }
+
+    /**
      * Issue #40: foreign GET parameters from the host record (here the news
      * article id) must survive in the generated voting link. Before the fix
      * (addQueryString="true") TYPO3 v12+ only kept the route arguments and
@@ -244,6 +341,21 @@ final class CommentControllerTest extends FunctionalTestCase
 
         // 4 visible top-level comments (uids 1, 2, 3, 5) + 2 replies (uids 6, 7).
         self::assertMatchesRegularExpression('/Comments\s*\(6\)/', $body);
+    }
+
+    /**
+     * Default branch of `calculateCommentCount`: with `countReplies` left at the
+     * BasicSetup default of `0`, the `<h1>Comments (N)</h1>` count covers only
+     * the visible top-level comments and excludes replies. Counterpart to
+     * indexActionShowsCommentCountIncludingRepliesWhenCountRepliesEnabled.
+     */
+    #[Test]
+    public function indexActionCommentCountExcludesRepliesByDefault(): void
+    {
+        $body = $this->renderPage();
+
+        // 4 visible top-level comments (uids 1, 2, 3, 5); replies (6, 7) excluded.
+        self::assertMatchesRegularExpression('/Comments\s*\(4\)/', $body);
     }
 
     /**
@@ -720,6 +832,35 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertSame($before, $this->countComments(), 'No comment may be stored when the honeypot was triggered.');
         self::assertSame(303, $response->getStatusCode());
         self::assertStringEndsWith('#write-comment', $response->getHeaderLine('location'));
+    }
+
+    /**
+     * Negative twin of createActionRejectsSubmissionWhenHoneypotFieldIsFilled:
+     * with `hiddenFieldSpamProtection=0` (the BasicSetup default) a filled
+     * honeypot field is ignored — the guard at controller line 213 is skipped
+     * and the comment is stored normally. Pins that the honeypot is opt-in and
+     * does not silently drop legitimate submissions when disabled.
+     */
+    #[Test]
+    public function createActionStoresSubmissionWhenHoneypotProtectionIsDisabled(): void
+    {
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment(
+            [
+                'authorName' => 'Peggy',
+                'authorMail' => 'peggy@example.com',
+                'message'    => 'A legitimate comment despite a filled hidden field.',
+            ],
+            ['authorWebsite' => 'http://example.org'],
+        );
+
+        self::assertSame($before + 1, $this->countComments(), 'Comment must be stored when honeypot protection is disabled.');
+
+        $latest = $this->latestComment();
+        self::assertSame('Peggy', $latest['author_name']);
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#comment-' . $latest['uid'], $response->getHeaderLine('location'));
     }
 
     /**
