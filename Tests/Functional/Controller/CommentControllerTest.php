@@ -383,6 +383,33 @@ final class CommentControllerTest extends FunctionalTestCase
     }
 
     /**
+     * Twin of indexActionFiltersByEntryUidWhenUseEntryUidEnabled that drives the
+     * entry uid through the real resolution path: `entryUidData` makes
+     * `Settings::renderConfigurationArray` run `cObjGetSingle` on a `TEXT` cObj
+     * with `data = GP:tx_news_pi1|news`, so the entry uid comes from the request
+     * rather than a literal `entryUid = 123`. Fixture comment uid 3 carries
+     * entry_uid=123; uids 1/2/5 have entry_uid=0 and must be excluded.
+     */
+    #[Test]
+    public function indexActionResolvesEntryUidFromGetParameterViaEntryUidData(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/EntryUidData.typoscript',
+            ],
+        );
+
+        $body = $this->renderPage(['tx_news_pi1[news]' => 123]);
+
+        self::assertStringContainsString('Comment on news article', $body);
+        self::assertStringNotContainsString('Test comment 1', $body);
+        self::assertStringNotContainsString('Test comment 2', $body);
+        self::assertStringNotContainsString('Comment by registered user', $body);
+    }
+
+    /**
      * Empty result renders the `tx_pwcomments.noComments` translation. Driven
      * here via `useEntryUid` pointing at an entry that has no comments — same
      * code path as a generally empty list.
@@ -991,6 +1018,62 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString('To: admin@example.com', $mbox, 'Admin notification mail not captured.');
         self::assertStringContainsString('To: frank@example.com', $mbox, 'Author notification mail not captured.');
         self::assertStringContainsString('From: pw_comments Tests <no-reply@example.com>', $mbox);
+    }
+
+    /**
+     * `sendMailMimeType=text/plain` makes Mail::sendMail use `$mail->text()`
+     * (Mail.php line 130), so the captured notification carries a
+     * `Content-Type: text/plain` part and no HTML part.
+     */
+    #[Test]
+    public function notificationMailUsesPlainTextWhenMimeTypeIsTextPlain(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Mail.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/MailPlainText.typoscript',
+            ],
+        );
+
+        $this->postCreateComment([
+            'authorName' => 'Quinn',
+            'authorMail' => 'quinn@example.com',
+            'message'    => 'Plain text please.',
+        ]);
+
+        $mbox = $this->capturedMail();
+        self::assertStringContainsString('Content-Type: text/plain', $mbox);
+        self::assertStringNotContainsString('Content-Type: text/html', $mbox, 'A plain-text mail must not carry an HTML part.');
+    }
+
+    /**
+     * Negative twin: any other `sendMailMimeType` (here `text/html`) takes the
+     * `else` branch and uses `$mail->html()`, so the captured notification
+     * carries a `Content-Type: text/html` part. Pins both sides of the
+     * `=== 'text/plain'` branch in Mail::sendMail.
+     */
+    #[Test]
+    public function notificationMailUsesHtmlWhenMimeTypeIsNotTextPlain(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/Mail.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/MailHtml.typoscript',
+            ],
+        );
+
+        $this->postCreateComment([
+            'authorName' => 'Rita',
+            'authorMail' => 'rita@example.com',
+            'message'    => 'HTML please.',
+        ]);
+
+        $mbox = $this->capturedMail();
+        self::assertStringContainsString('Content-Type: text/html', $mbox);
     }
 
     /**
