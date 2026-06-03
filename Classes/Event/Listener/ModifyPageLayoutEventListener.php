@@ -37,6 +37,10 @@ final readonly class ModifyPageLayoutEventListener
             return;
         }
 
+        // Deliberately keep the default restrictions here: DefaultRestrictionContainer
+        // includes HiddenRestriction, so this counts only released (visible) comments.
+        // The difference to $total above (which removed HiddenRestriction) is the
+        // number of hidden, still-unreleased comments.
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $released = (int) ($queryBuilder
             ->count('uid')
