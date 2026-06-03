@@ -1,0 +1,27 @@
+tt_content
+,uid,pid,CType,list_type,pi_flexform
+,10,1,list,pwcomments_pi1,"<?xml version=""1.0"" encoding=""utf-8"" standalone=""yes"" ?>
+<T3FlexForms>
+    <data>
+        <sheet index=""sDEF"">
+            <language index=""lDEF"">
+                <field index=""switchableControllerActions"">
+                    <value index=""vDEF"">Comment-&gt;index;Comment-&gt;upvote;Comment-&gt;downvote</value>
+                </field>
+            </language>
+        </sheet>
+    </data>
+</T3FlexForms>"
+,11,1,list,pwcomments_pi1,"<?xml version=""1.0"" encoding=""utf-8"" standalone=""yes"" ?>
+<T3FlexForms>
+    <data>
+        <sheet index=""sDEF"">
+            <language index=""lDEF"">
+                <field index=""switchableControllerActions"">
+                    <value index=""vDEF"">Comment-&gt;new;Comment-&gt;create;Comment-&gt;confirmComment</value>
+                </field>
+            </language>
+        </sheet>
+    </data>
+</T3FlexForms>"
+,12,1,text,,
