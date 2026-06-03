@@ -23,6 +23,8 @@ final class CommentValidatorTest extends TestCase
 {
     private static string $badWordsFile;
 
+    private ConfigurationManagerInterface $configurationManager;
+
     public static function setUpBeforeClass(): void
     {
         self::$badWordsFile = tempnam(sys_get_temp_dir(), 'pw_comments_bad_words_');
@@ -235,7 +237,7 @@ final class CommentValidatorTest extends TestCase
 
     private function buildValidator(): CommentValidator
     {
-        return new CommentValidator();
+        return new CommentValidator($this->configurationManager);
     }
 
     private function buildComment(array $attributes): Comment
@@ -251,12 +253,14 @@ final class CommentValidatorTest extends TestCase
 
     private function stubSettings(array $settings): void
     {
+        // The validator reads CONFIGURATION_TYPE_SETTINGS (plain plugin settings)
+        // from its injected ConfigurationManager.
         $configurationManager = $this->createMock(ConfigurationManagerInterface::class);
         $configurationManager
             ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
-            ->willReturn(['plugin.' => ['tx_pwcomments.' => ['settings.' => $settings]]]);
-        GeneralUtility::setSingletonInstance(ConfigurationManagerInterface::class, $configurationManager);
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
+            ->willReturn($settings);
+        $this->configurationManager = $configurationManager;
 
         $languageService = $this->createMock(LanguageService::class);
         $languageService->method('translate')->willReturn('');

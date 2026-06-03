@@ -81,16 +81,6 @@ class Settings extends AbstractEncryptionUtility
     }
 
     /**
-     * Returns the rendered settings of this extension
-     *
-     * @return array rendered typoscript settings
-     */
-    public static function getRenderedExtensionSettings()
-    {
-        return self::renderConfigurationArray(self::getExtensionSettings());
-    }
-
-    /**
      * Formats a given array with typoscript syntax, recursively. After the
      * transformation it can be rendered with cObjGetSingle.
      *
