@@ -138,6 +138,33 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString('testuser', $body);
     }
 
+    /**
+     * With `showAvatar=1` and `showGravatarImage=1` each comment renders a
+     * Gravatar `<img class="comment-author-image">` (Comment.html lines 5-9).
+     * The src is built offline from the author mail by GravatarViewHelper and
+     * must honor `gravatarSize` (`?s=65`) and `gravatarDefault` (`&d=mm`).
+     * BasicSetup forces both flags to 0, so this branch is otherwise dead.
+     * Asserted on URL shape only — never the exact MD5 or a live fetch.
+     */
+    #[Test]
+    public function indexActionRendersGravatarImageWhenEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/GravatarImage.typoscript',
+            ],
+        );
+
+        $commentOne = $this->commentSection($this->renderPage(), 1);
+
+        self::assertStringContainsString('class="comment-author-image"', $commentOne);
+        self::assertStringContainsString('https://www.gravatar.com/avatar/', $commentOne);
+        self::assertStringContainsString('?s=65', $commentOne);
+        self::assertStringContainsString('&amp;d=mm', $commentOne);
+    }
+
     #[Test]
     public function votingLinksArePresentForComments(): void
     {
@@ -1018,6 +1045,9 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertStringContainsString('To: admin@example.com', $mbox, 'Admin notification mail not captured.');
         self::assertStringContainsString('To: frank@example.com', $mbox, 'Author notification mail not captured.');
         self::assertStringContainsString('From: pw_comments Tests <no-reply@example.com>', $mbox);
+        // `sitenameUsedInMails` is interpolated into the subject ("New comment
+        // on %s"); the full phrase is distinct from the senderName collision.
+        self::assertStringContainsString('Subject: New comment on pw_comments Tests', $mbox, 'sitenameUsedInMails must interpolate into the notification subject.');
     }
 
     /**
@@ -1192,6 +1222,42 @@ final class CommentControllerTest extends FunctionalTestCase
         ]);
 
         self::assertSame(0, (int) $this->latestComment()['entry_uid']);
+    }
+
+    /**
+     * With `enableRating=1` the New form renders a rating radio group
+     * (`<f:form.radio property="rating">`) and the validator requires a rating
+     * greater than zero. A submission carrying `rating=5` therefore passes
+     * validation, is stored, and persists the rating onto the row. The
+     * rejection side (`rating=0`) is covered by the CommentValidator unit test.
+     */
+    #[Test]
+    public function createActionPersistsRatingWhenEnableRatingEnabled(): void
+    {
+        $this->setUpFrontendRootPage(
+            1,
+            [
+                'EXT:pw_comments/Tests/Fixtures/Frontend/BasicSetup.typoscript',
+                'EXT:pw_comments/Tests/Fixtures/Frontend/EnableRating.typoscript',
+            ],
+        );
+
+        $before = $this->countComments();
+
+        $response = $this->postCreateComment([
+            'authorName' => 'Sam',
+            'authorMail' => 'sam@example.com',
+            'message'    => 'A rated comment.',
+            'rating'     => '5',
+        ]);
+
+        self::assertSame($before + 1, $this->countComments());
+
+        $latest = $this->latestComment();
+        self::assertSame(5, (int) $latest['rating'], 'The submitted rating must be persisted.');
+        self::assertSame(0, (int) $latest['hidden']);
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringEndsWith('#comment-' . $latest['uid'], $response->getHeaderLine('location'));
     }
 
     /**
