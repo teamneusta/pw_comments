@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" target-language="nl" datatype="plaintext" original="messages" product-name="pw_comments">
+  <file source-language="en" datatype="plaintext" original="messages" product-name="pw_comments" target-language="nl">
     <header/>
     <body>
       <trans-unit id="anchors" xml:space="preserve">
@@ -168,6 +168,30 @@
       <trans-unit id="settings.termsTypolinkParameter" xml:space="preserve">
                 <source>Typolink parameters to terms (in string, next to checkbox to click)</source>
 			<target state="needs-translation">Typolink parameters to terms (in string, next to checkbox to click)</target></trans-unit>
+      <trans-unit id="aimoderation" xml:space="preserve">
+                <source>AI Moderation</source>
+			<target state="needs-translation">AI Moderation</target></trans-unit>
+      <trans-unit id="settings.enableAiModeration" xml:space="preserve">
+                <source>Enable AI moderation</source>
+			<target state="needs-translation">Enable AI moderation</target></trans-unit>
+      <trans-unit id="settings.aiModerationProvider" xml:space="preserve">
+                <source>AI moderation provider</source>
+			<target state="needs-translation">AI moderation provider</target></trans-unit>
+      <trans-unit id="settings.aiModerationApiKey" xml:space="preserve">
+                <source>AI moderation API key</source>
+			<target state="needs-translation">AI moderation API key</target></trans-unit>
+      <trans-unit id="settings.aiModerationApiEndpoint" xml:space="preserve">
+                <source>AI moderation API endpoint</source>
+			<target state="needs-translation">AI moderation API endpoint</target></trans-unit>
+      <trans-unit id="settings.aiModerationThreshold" xml:space="preserve">
+                <source>AI moderation threshold</source>
+			<target state="needs-translation">AI moderation threshold</target></trans-unit>
+      <trans-unit id="settings.aiModerationFallbackToManual" xml:space="preserve">
+                <source>AI moderation: fall back to manual moderation on API failure</source>
+			<target state="needs-translation">AI moderation: fall back to manual moderation on API failure</target></trans-unit>
+      <trans-unit id="settings.storagePid" xml:space="preserve">
+                <source>Storage PID (page where comments are saved; 0 = current page)</source>
+			<target state="needs-translation">Storage PID (page where comments are saved; 0 = current page)</target></trans-unit>
     </body>
   </file>
 </xliff>
