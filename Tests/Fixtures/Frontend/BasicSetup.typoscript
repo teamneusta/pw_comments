@@ -39,6 +39,17 @@ plugin.tx_pwcomments {
         showRepliesToComments = 1
 
         absoluteFormatFallback = d.m.Y
+
+        linkUrlsInComments = 0
+        moderateNewComments = 0
+        sendMailOnNewCommentsTo =
+        sendMailToAuthorAfterSubmit = 0
+        hiddenFieldSpamProtection = 0
+        hiddenFieldName = authorWebsite
+        secondsBetweenTwoComments = 0
+        useBadWordsList = 0
+        requireAcceptedTerms = 0
+        enableRating = 0
     }
 }
 

@@ -23,7 +23,11 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'LLL:EXT:pw_comments/Resources/Private/Language/locallang_db.xlf:newContentElementWizardDescription',
     );
 
-    // Add typoscript static includes
+    // Legacy static-template includes. Kept for backwards compatibility with
+    // installations that wire pw_comments via "Include static (from extensions)"
+    // in the root sys_template. The modern equivalent is adding the
+    // `pwcomments/comments` (and optionally `pwcomments/styling`) site set to
+    // the site configuration.
     ExtensionManagementUtility::addStaticFile(
         $extensionKey,
         'Configuration/TypoScript',

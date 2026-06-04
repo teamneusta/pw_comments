@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  T3\PwCommentsRequestFactoryDouble\:
+    resource: '../Classes/*'
+
+  T3\PwCommentsRequestFactoryDouble\FakeRequestFactory:
+    public: true
+
+  T3\PwComments\Hooks\ProcessDatamap:
+    public: true
+    arguments:
+      $requestFactory: '@T3\PwCommentsRequestFactoryDouble\FakeRequestFactory'

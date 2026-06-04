@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace T3\PwComments\Event\Listener;
 
 use TYPO3\CMS\Backend\Controller\Event\ModifyPageLayoutContentEvent;
-use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
-use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
 
 final readonly class ModifyPageLayoutEventListener
 {
@@ -23,10 +21,9 @@ final readonly class ModifyPageLayoutEventListener
         private ViewFactoryInterface $viewFactory,
     ) {}
 
-    // @TODO: check if this still works after upgrade
     public function __invoke(ModifyPageLayoutContentEvent $event): void
     {
-        $pageId = (int) ($event->getRequest()->getQueryParams()['id'] ?? 0);
+        $pageId = max(0, (int) ($event->getRequest()->getQueryParams()['id'] ?? 0));
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
         $total = (int) ($queryBuilder
@@ -40,6 +37,10 @@ final readonly class ModifyPageLayoutEventListener
             return;
         }
 
+        // Deliberately keep the default restrictions here: DefaultRestrictionContainer
+        // includes HiddenRestriction, so this counts only released (visible) comments.
+        // The difference to $total above (which removed HiddenRestriction) is the
+        // number of hidden, still-unreleased comments.
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_pwcomments_domain_model_comment');
         $released = (int) ($queryBuilder
             ->count('uid')
@@ -47,12 +48,13 @@ final readonly class ModifyPageLayoutEventListener
             ->where('pid = :pageUid')->setParameter('pageUid', $pageId)->executeQuery()
             ->fetchOne() ?: 0);
 
-        $unreleased = $total - $released;
+        // Tolerate DB race: a row's hidden flag can flip between the two count queries.
+        $unreleased = max(0, $total - $released);
 
         $view = $this->viewFactory->create(
             new ViewFactoryData(
                 templatePathAndFilename: GeneralUtility::getFileAbsFileName(
-                    'EXT:backend/Resources/Private/Templates/InfoBox.html',
+                    'EXT:backend/Resources/Private/Templates/InfoBox.fluid.html',
                 ),
             ),
         );
@@ -70,19 +72,22 @@ final readonly class ModifyPageLayoutEventListener
             $textUnreleased = '<br><b>' . $textUnreleased . '</b>';
         }
 
-        $path = self::getModuleUrl('web_list', [
-            'id' => $pageId,
-            'table' => 'tx_pwcomments_domain_model_comment',
-            'imagemode' => 1,
-        ]);
+        $dispatchArgs = sprintf(
+            'records,id=%d&table=%s&imagemode=1',
+            $pageId,
+            'tx_pwcomments_domain_model_comment',
+        );
 
-        $message = '<a class="btn btn-warning float-end" href="' . $path . '">' .
-            $this->translate('showComments') . '</a><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
+        $message = '<button type="button" class="btn btn-warning float-end"'
+            . ' data-dispatch-action="TYPO3.ModuleMenu.showModule"'
+            . ' data-dispatch-args-list="' . htmlspecialchars($dispatchArgs) . '">'
+            . htmlspecialchars($this->translate('showComments'))
+            . '</button><p>' . $textTotal . ' ' . $textUnreleased . '</p>';
 
         $view->assignMultiple([
             'title' => $title,
             'message' => $message,
-            'state' => InfoboxViewHelper::STATE_INFO,
+            'state' => ContextualFeedbackSeverity::INFO,
         ]);
 
         $event->setHeaderContent($view->render());
@@ -103,24 +108,5 @@ final readonly class ModifyPageLayoutEventListener
             return \vsprintf($translation, $arguments);
         }
         return $translation;
-    }
-
-    /**
-     * Returns the URL to a given module
-     *
-     * @param string $moduleName Name of the module
-     * @param array $urlParameters URL parameters that should be added as key value pairs
-     * @return string Calculated URL
-     * @throws RouteNotFoundException
-     */
-    protected static function getModuleUrl($moduleName, $urlParameters = []): string
-    {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        try {
-            $uri = $uriBuilder->buildUriFromRoute($moduleName, $urlParameters);
-        } catch (RouteNotFoundException $e) {
-            $uri = $uriBuilder->buildUriFromRoutePath($moduleName, $urlParameters);
-        }
-        return (string) $uri;
     }
 }

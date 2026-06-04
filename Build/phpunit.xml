@@ -19,15 +19,15 @@
         <testsuite name="Unit Tests">
             <directory>../Tests/Unit</directory>
         </testsuite>
-        <testsuite name="Functional Tests">
-            <directory>../Tests/Functional</directory>
-        </testsuite>
     </testsuites>
 
     <source>
         <include>
             <directory>../Classes</directory>
         </include>
+        <exclude>
+            <directory>../Classes/Domain/Model</directory>
+        </exclude>
     </source>
 
     <coverage>

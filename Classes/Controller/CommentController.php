@@ -35,8 +35,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
-use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
+use TYPO3\CMS\Extbase\Attribute\Validate;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
@@ -126,12 +126,6 @@ class CommentController extends ActionController implements LoggerAwareInterface
      */
     public function initializeAction(): void
     {
-        if (!is_array($this->settings)) {
-            throw new \RuntimeException(
-                'It seems no pw_comments configuration has been added to TypoScript Template (Include Static)!',
-                1501862644,
-            );
-        }
         $this->settings = Settings::renderConfigurationArray(
             settings: $this->settings,
             request: $this->request,
@@ -142,12 +136,11 @@ class CommentController extends ActionController implements LoggerAwareInterface
         }
         $this->mailUtility->setSettings($this->settings);
         $this->pageUid = $this->request->getAttribute('frontend.page.information')->getId();
-        $this->commentStorageUid = is_numeric($this->settings['storagePid'] ?? null)
-            ? $this->settings['storagePid']
-            : $this->pageUid;
+        $configuredStoragePid = (int) ($this->settings['storagePid'] ?? 0);
+        $this->commentStorageUid = $configuredStoragePid > 0 ? $configuredStoragePid : $this->pageUid;
         $this->currentUser = isset($this->request->getAttribute('frontend.user')->user['uid']) ? $this->request->getAttribute('frontend.user')->user : [];
         $this->currentAuthorIdent = isset($this->currentUser['uid'])
-            ? $this->currentUser['uid']
+            ? (string) $this->currentUser['uid']
             : $this->cookieUtility->get('ahash');
 
         if (is_numeric($this->currentAuthorIdent) && !isset($this->currentUser['uid'])) {
@@ -162,8 +155,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
     /**
      * Displays all comments by pid
      */
-    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function indexAction(?Comment $commentToReplyTo = null): ResponseInterface
+    public function indexAction(#[IgnoreValidation] ?Comment $commentToReplyTo = null): ResponseInterface
     {
         if (isset($this->settings['invertCommentSorting']) && $this->settings['invertCommentSorting']) {
             $this->commentRepository->setInvertCommentSorting(true);
@@ -213,9 +205,10 @@ class CommentController extends ActionController implements LoggerAwareInterface
     /**
      * Create action
      */
-    #[Validate(['validator' => CommentValidator::class, 'param' => 'newComment'])]
-    public function createAction(?Comment $newComment = null): ResponseInterface
-    {
+    public function createAction(
+        #[Validate(validator: CommentValidator::class)]
+        ?Comment $newComment = null,
+    ): ResponseInterface {
         // Hidden field Spam-Protection
         if (isset($this->settings['hiddenFieldSpamProtection']) && $this->settings['hiddenFieldSpamProtection']
             && $this->request->hasArgument($this->settings['hiddenFieldName'])
@@ -306,8 +299,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $newComment->setHidden(true);
             if ($aiModerationViolation) {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason]) ??
-                    'Your comment has been flagged by our content moderation system: ' . $aiModerationReason,
+                    LocalizationUtility::translate('tx_pwcomments.aiModerationNotice', 'PwComments', [$aiModerationReason])
+                    ?? 'Your comment has been flagged by our content moderation system: ' . $aiModerationReason,
                 );
             } else {
                 $this->addFlashMessage(
@@ -329,18 +322,20 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($this->settings['sendMailOnNewCommentsTo']);
             $this->mailUtility->setTemplatePath($this->settings['sendMailTemplate']);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($newComment, HashEncryptionUtility::createHashForComment($newComment));
         }
 
-        if (isset($this->settings['sendMailToAuthorAfterSubmit']) &&
-            $this->settings['sendMailToAuthorAfterSubmit'] &&
-            $newComment->hasCommentAuthorMailAddress()
+        if (isset($this->settings['sendMailToAuthorAfterSubmit'])
+            && $this->settings['sendMailToAuthorAfterSubmit']
+            && $newComment->hasCommentAuthorMailAddress()
         ) {
             $view = $this->makeFluidTemplateObject();
             $view->assign('commentUrl', $this->makeCommentUrl($newComment));
             $this->mailUtility->setView($view);
             $this->mailUtility->setReceivers($newComment->getCommentAuthorMailAddress());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterSubmitTemplate']);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($newComment);
         }
 
@@ -359,10 +354,12 @@ class CommentController extends ActionController implements LoggerAwareInterface
      * @param Comment $newComment New Comment
      * @param Comment $commentToReplyTo Comment to reply to
      */
-    #[IgnoreValidation(['value' => 'newComment'])]
-    #[IgnoreValidation(['value' => 'commentToReplyTo'])]
-    public function newAction(?Comment $newComment = null, ?Comment $commentToReplyTo = null): ResponseInterface
-    {
+    public function newAction(
+        #[IgnoreValidation]
+        ?Comment $newComment = null,
+        #[IgnoreValidation]
+        ?Comment $commentToReplyTo = null,
+    ): ResponseInterface {
         if ($newComment !== null) {
             $this->view->assign('newComment', $newComment);
         }
@@ -393,8 +390,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      *
      * @return string Empty string. This action will perform a redirect
      */
-    #[IgnoreValidation(['value' => 'comment'])]
-    public function upvoteAction(Comment $comment): ResponseInterface
+    public function upvoteAction(#[IgnoreValidation] Comment $comment): ResponseInterface
     {
         return $this->performVoting($comment, Vote::TYPE_UPVOTE);
     }
@@ -404,8 +400,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
      *
      * @return string Empty string. This action will perform a redirect
      */
-    #[IgnoreValidation(['value' => 'comment'])]
-    public function downvoteAction(Comment $comment): ResponseInterface
+    public function downvoteAction(#[IgnoreValidation] Comment $comment): ResponseInterface
     {
         return $this->performVoting($comment, Vote::TYPE_DOWNVOTE);
     }
@@ -432,14 +427,15 @@ class CommentController extends ActionController implements LoggerAwareInterface
         $this->commentRepository->update($resolvedComment);
         $this->commentRepository->persistAll();
 
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
-            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']
+            && isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $this->mailUtility->setView($this->makeFluidTemplateObject());
             $this->mailUtility->setReceivers($resolvedComment->getAuthorMail());
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($resolvedComment);
             $this->addFlashMessage(
                 LocalizationUtility::translate(
@@ -477,8 +473,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
 
         $vote = null;
         if ($this->currentAuthorIdent !== null) {
-            if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments'] &&
-                $this->currentAuthorIdent === $comment->getAuthorIdent()
+            if (isset($this->settings['ignoreVotingForOwnComments']) && $this->settings['ignoreVotingForOwnComments']
+                && $this->currentAuthorIdent === $comment->getAuthorIdent()
             ) {
                 // TODO: use flash messages here?
                 return $this->redirectToUri(
@@ -549,8 +545,8 @@ class CommentController extends ActionController implements LoggerAwareInterface
         /** @var Comment $comment */
         $comment = $this->commentRepository->findByCommentUid($this->settings['_commentUid']);
 
-        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments'] &&
-            isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
+        if (isset($this->settings['moderateNewComments']) && $this->settings['moderateNewComments']
+            && isset($this->settings['sendMailToAuthorAfterPublish']) && $this->settings['sendMailToAuthorAfterPublish']
         ) {
             $commentUrl = $this->makeCommentUrl($comment);
             $view = $this->makeFluidTemplateObject();
@@ -560,6 +556,7 @@ class CommentController extends ActionController implements LoggerAwareInterface
             $this->mailUtility->setTemplatePath($this->settings['sendMailToAuthorAfterPublishTemplate']);
             $this->mailUtility->setSubjectLocallangKey('tx_pwcomments.mailToAuthorAfterPublish.subject');
             $this->mailUtility->setAddQueryStringToLinks(false);
+            $this->mailUtility->setRequest($this->request);
             $this->mailUtility->sendMail($comment);
             $this->addFlashMessage(
                 LocalizationUtility::translate(

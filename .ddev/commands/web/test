@@ -8,3 +8,6 @@ disable_xdebug
 
 echo "running unit tests"
 ./tools/phpunit -c Build/phpunit.xml --do-not-cache --no-coverage --testsuite "Unit Tests" --display-skipped
+
+echo "running functional tests"
+./tools/phpunit -c Build/phpunit.functional.xml --do-not-cache --no-coverage --testsuite "Functional Tests" --display-skipped

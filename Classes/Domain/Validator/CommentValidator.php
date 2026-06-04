@@ -13,8 +13,8 @@ namespace T3\PwComments\Domain\Validator;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 use T3\PwComments\Domain\Model\Comment;
-use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
@@ -30,6 +30,10 @@ class CommentValidator extends AbstractValidator
      */
     protected $settings = [];
 
+    public function __construct(
+        private readonly ConfigurationManagerInterface $configurationManager,
+    ) {}
+
     /**
      * Initial function to validate
      *
@@ -37,8 +41,13 @@ class CommentValidator extends AbstractValidator
      */
     public function isValid(mixed $comment): void
     {
-        // @todo: pass request with TYPO3 v13. See https://github.com/teamneusta/pw_comments/issues/19
-        $this->settings = Settings::getRenderedExtensionSettings();
+        // Read the current plugin's settings (flexform-aware), matching what the
+        // controller uses - rather than the global plugin.tx_pwcomments TypoScript.
+        // No extension name is passed on purpose: that would re-resolve the global
+        // extension TypoScript and ignore per-instance (flexform) overrides.
+        $this->settings = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+        );
 
         $errorNumber = null;
         $errorArguments = null;
@@ -86,8 +95,8 @@ class CommentValidator extends AbstractValidator
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false) ||
-               ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
+        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false)
+               || ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
     /**

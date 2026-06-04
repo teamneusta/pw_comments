@@ -69,7 +69,7 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string html image tag with the gravatar image uri
      */
-    public function render()
+    public function render(): string
     {
         $uriParts = [
             md5(strtolower(trim((string) $this->arguments['email']))),

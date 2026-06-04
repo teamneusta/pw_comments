@@ -1,0 +1,19 @@
+paths:
+  - Configuration
+
+filePatterns:
+  - "*.typoscript"
+
+sniffs:
+  - class: RepeatingRValue
+    parameters:
+      allowedRightValues:
+        # carried over from typoscript-lint.dist.yml so merging does not drop it
+        - "TYPO3\\CMS\\Frontend\\DataProcessing\\DatabaseQueryProcessor"
+        # constants file defines the canonical paths; the same strings appear
+        # as the index-0 fallbacks in setup.typoscript's *RootPaths blocks, so
+        # the sniff (which accumulates known values across files in one run)
+        # reports the second occurrence even though it is the documented idiom.
+        - "EXT:pw_comments/Resources/Private/Templates/"
+        - "EXT:pw_comments/Resources/Private/Partials/"
+        - "EXT:pw_comments/Resources/Private/Layouts/"

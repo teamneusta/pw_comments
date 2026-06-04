@@ -33,9 +33,9 @@ return [
         'iconfile' => 'EXT:pw_comments/Resources/Public/Icons/tx_pwcomments_domain_model_comment.png',
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_ident,terms_accepted,' .
-                              'message,parent_comment,votes,rating,' .
-                              '--div--;AI Moderation,ai_moderation_status,ai_moderation_reason,ai_moderation_confidence,ai_moderation_control'],
+        '1' => ['showitem' => 'hidden,author,author_name,author_mail,author_ident,terms_accepted,'
+                              . 'message,parent_comment,votes,rating,'
+                              . '--div--;AI Moderation,ai_moderation_status,ai_moderation_reason,ai_moderation_confidence,ai_moderation_control'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -56,8 +56,8 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_pwcomments_domain_model_comment',
-                'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent###' .
-                    ' AND tx_pwcomments_domain_model_comment.sys_language_uid IN (-1,0)',
+                'foreign_table_where' => 'AND tx_pwcomments_domain_model_comment.uid=###REC_FIELD_l18n_parent###'
+                    . ' AND tx_pwcomments_domain_model_comment.sys_language_uid IN (-1,0)',
             ],
         ],
         'l18n_diffsource' => [

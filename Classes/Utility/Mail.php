@@ -12,7 +12,9 @@ namespace T3\PwComments\Utility;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Domain\Model\Comment;
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -56,6 +58,15 @@ class Mail
      */
     protected $addQueryStringToLinks = true;
 
+    protected ?ServerRequestInterface $request = null;
+
+    public function __construct(private readonly MailerInterface $mailer) {}
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
     /**
      * Sets the settings of controller
      *
@@ -71,7 +82,7 @@ class Mail
      *
      * @param ViewInterface|FluidViewAdapter|null $view the fluid template
      */
-    public function setView(null|ViewInterface|FluidViewAdapter $view = null): void
+    public function setView(ViewInterface|FluidViewAdapter|null $view = null): void
     {
         if (!$view) {
             $view = GeneralUtility::makeInstance(ViewFactoryInterface::class)->create(new ViewFactoryData());
@@ -84,24 +95,23 @@ class Mail
      *
      * @param Comment $comment comment
      * @param string $hash validation string to add to url if comment must be moderate
-     * @return bool Returns TRUE if the mail has been sent successfully
      * @throws \Exception
      */
-    public function sendMail(Comment $comment, $hash = '')
+    public function sendMail(Comment $comment, $hash = ''): void
     {
         /** @var MailMessage $mail */
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
+        $sitename = ($this->settings['sitenameUsedInMails'] ?? '')
+            ?: ($this->request?->getAttribute('normalizedParams')?->getHttpHost() ?? '');
         $mail->setFrom(
-            $this->settings['senderAddress']
+            ($this->settings['senderAddress'] ?? '')
                 ?: LocalizationUtility::translate(
                     'tx_pwcomments.notificationMail.from.mail',
                     'PwComments',
-                    [
-                        $this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST'),
-                    ],
+                    [$sitename],
                 ),
-            $this->settings['senderName']
+            ($this->settings['senderName'] ?? '')
                 ?: LocalizationUtility::translate(
                     'tx_pwcomments.notificationMail.from.name',
                     'PwComments',
@@ -114,7 +124,7 @@ class Mail
             LocalizationUtility::translate(
                 $this->getSubjectLocallangKey(),
                 'PwComments',
-                [$this->settings['sitenameUsedInMails'] ?: GeneralUtility::getIndpEnv('HTTP_HOST')],
+                [$sitename],
             ),
         );
         if (isset($this->settings['sendMailMimeType']) && $this->settings['sendMailMimeType'] === 'text/plain') {
@@ -123,7 +133,7 @@ class Mail
             $mail->html($this->getMailMessage($comment, $hash));
         }
 
-        return $mail->send();
+        $this->mailer->send($mail);
     }
 
     /**

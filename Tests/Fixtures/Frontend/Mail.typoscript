@@ -1,0 +1,9 @@
+plugin.tx_pwcomments.settings {
+    sendMailOnNewCommentsTo = admin@example.com
+    sendMailToAuthorAfterSubmit = 1
+    sendMailTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html
+    sendMailToAuthorAfterSubmitTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html
+    senderAddress = no-reply@example.com
+    senderName = pw_comments Tests
+    sitenameUsedInMails = pw_comments Tests
+}

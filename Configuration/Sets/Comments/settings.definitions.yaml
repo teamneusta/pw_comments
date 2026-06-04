@@ -1,0 +1,306 @@
+categories:
+  anchors:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:anchors'
+  gravatar:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:gravatar'
+  entryuid:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:entryuid'
+  replying:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:replying'
+  sorting:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:sorting'
+  voting:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:voting'
+  moderation:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:moderation'
+  aimoderation:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:aimoderation'
+  mails:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:mails'
+  spamprotect:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:spamprotect'
+  misc:
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:misc'
+
+settings:
+  plugin.tx_pwcomments.settings.commentAnchorPrefix:
+    type: string
+    default: 'comment'
+    category: anchors
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.commentAnchorPrefix'
+  plugin.tx_pwcomments.settings.showCommentAnchor:
+    type: string
+    default: 'comments'
+    category: anchors
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showCommentAnchor'
+  plugin.tx_pwcomments.settings.writeCommentAnchor:
+    type: string
+    default: 'writeComment'
+    category: anchors
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.writeCommentAnchor'
+  plugin.tx_pwcomments.settings.successfulAnchor:
+    type: string
+    default: 'thanksForYourComment'
+    category: anchors
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.successfulAnchor'
+  plugin.tx_pwcomments.settings.customMessagesAnchor:
+    type: string
+    default: 'customMessages'
+    category: anchors
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.customMessagesAnchor'
+
+  plugin.tx_pwcomments.settings.showAvatar:
+    type: bool
+    default: true
+    category: gravatar
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showAvatar'
+  plugin.tx_pwcomments.settings.showGravatarImage:
+    type: bool
+    default: true
+    category: gravatar
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showGravatarImage'
+  plugin.tx_pwcomments.settings.gravatarSize:
+    type: int
+    default: 65
+    category: gravatar
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarSize'
+  plugin.tx_pwcomments.settings.gravatarDefault:
+    type: string
+    default: 'mm'
+    category: gravatar
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.gravatarDefault'
+
+  plugin.tx_pwcomments.settings.useEntryUid:
+    type: bool
+    default: false
+    category: entryuid
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useEntryUid'
+  plugin.tx_pwcomments.settings.entryUidData:
+    type: string
+    default: 'GP:tx_extension|uid'
+    category: entryuid
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.entryUidData'
+
+  plugin.tx_pwcomments.settings.enableRepliesToComments:
+    type: bool
+    default: true
+    category: replying
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRepliesToComments'
+  plugin.tx_pwcomments.settings.showRepliesToComments:
+    type: bool
+    default: true
+    category: replying
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.showRepliesToComments'
+  plugin.tx_pwcomments.settings.countReplies:
+    type: bool
+    default: true
+    category: replying
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.countReplies'
+
+  plugin.tx_pwcomments.settings.invertCommentSorting:
+    type: bool
+    default: false
+    category: sorting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.invertCommentSorting'
+  plugin.tx_pwcomments.settings.invertReplySorting:
+    type: bool
+    default: false
+    category: sorting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.invertReplySorting'
+
+  plugin.tx_pwcomments.settings.enableCommentVotes:
+    type: bool
+    default: true
+    category: voting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableCommentVotes'
+  plugin.tx_pwcomments.settings.enableReplyVotes:
+    type: bool
+    default: true
+    category: voting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableReplyVotes'
+  plugin.tx_pwcomments.settings.enableVoting:
+    type: bool
+    default: true
+    category: voting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableVoting'
+  plugin.tx_pwcomments.settings.hideVoteButtons:
+    type: bool
+    default: false
+    category: voting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hideVoteButtons'
+  plugin.tx_pwcomments.settings.ignoreVotingForOwnComments:
+    type: bool
+    default: true
+    category: voting
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.ignoreVotingForOwnComments'
+
+  plugin.tx_pwcomments.settings.moderateNewComments:
+    type: bool
+    default: true
+    category: moderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.moderateNewComments'
+  plugin.tx_pwcomments.settings.sendMailOnNewCommentsTo:
+    type: string
+    default: ''
+    category: moderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailOnNewCommentsTo'
+  plugin.tx_pwcomments.settings.sendMailTemplate:
+    type: string
+    default: 'EXT:pw_comments/Resources/Private/Templates/MailNotification/mail.html'
+    category: moderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailTemplate'
+  plugin.tx_pwcomments.settings.sendMailMimeType:
+    type: string
+    default: 'text/plain'
+    category: moderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailMimeType'
+
+  plugin.tx_pwcomments.settings.enableAiModeration:
+    type: bool
+    default: false
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableAiModeration'
+  plugin.tx_pwcomments.settings.aiModerationProvider:
+    type: string
+    default: 'openai'
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationProvider'
+  plugin.tx_pwcomments.settings.aiModerationApiKey:
+    type: string
+    default: ''
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiKey'
+  plugin.tx_pwcomments.settings.aiModerationApiEndpoint:
+    type: string
+    default: 'https://api.openai.com/v1/moderations'
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationApiEndpoint'
+  plugin.tx_pwcomments.settings.aiModerationThreshold:
+    type: string
+    default: '0.7'
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationThreshold'
+    enum:
+      - '0.1'
+      - '0.2'
+      - '0.3'
+      - '0.4'
+      - '0.5'
+      - '0.6'
+      - '0.7'
+      - '0.8'
+      - '0.9'
+      - '1.0'
+  plugin.tx_pwcomments.settings.aiModerationFallbackToManual:
+    type: bool
+    default: true
+    category: aimoderation
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.aiModerationFallbackToManual'
+
+  plugin.tx_pwcomments.settings.senderAddress:
+    type: string
+    default: ''
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderAddress'
+  plugin.tx_pwcomments.settings.senderName:
+    type: string
+    default: ''
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.senderName'
+  plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmit:
+    type: bool
+    default: false
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmit'
+  plugin.tx_pwcomments.settings.sendMailToAuthorAfterSubmitTemplate:
+    type: string
+    default: 'EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterSubmit.html'
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterSubmitTemplate'
+  plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublish:
+    type: bool
+    default: false
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublish'
+  plugin.tx_pwcomments.settings.sendMailToAuthorAfterPublishTemplate:
+    type: string
+    default: 'EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html'
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sendMailToAuthorAfterPublishTemplate'
+  plugin.tx_pwcomments.settings.sitenameUsedInMails:
+    type: string
+    default: ''
+    category: mails
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.sitenameUsedInMails'
+
+  plugin.tx_pwcomments.settings.secondsBetweenTwoComments:
+    type: int
+    default: 0
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.secondsBetweenTwoComments'
+  plugin.tx_pwcomments.settings.useBadWordsList:
+    type: bool
+    default: true
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsList'
+  plugin.tx_pwcomments.settings.useBadWordsListOnUsername:
+    type: bool
+    default: true
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnUsername'
+  plugin.tx_pwcomments.settings.useBadWordsListOnMailAddress:
+    type: bool
+    default: false
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.useBadWordsListOnMailAddress'
+  plugin.tx_pwcomments.settings.badWordsList:
+    type: string
+    default: 'EXT:pw_comments/Resources/Private/Language/badwords.txt'
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.badWordsList'
+  plugin.tx_pwcomments.settings.hiddenFieldSpamProtection:
+    type: bool
+    default: true
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldSpamProtection'
+  plugin.tx_pwcomments.settings.hiddenFieldName:
+    type: string
+    default: 'authorWebsite'
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldName'
+  plugin.tx_pwcomments.settings.hiddenFieldClass:
+    type: string
+    default: 'hide_initally'
+    category: spamprotect
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.hiddenFieldClass'
+
+  plugin.tx_pwcomments.settings.storagePid:
+    type: int
+    default: 0
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.storagePid'
+  plugin.tx_pwcomments.settings.linkUrlsInComments:
+    type: bool
+    default: true
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.linkUrlsInComments'
+  plugin.tx_pwcomments.settings.absoluteFormatFallback:
+    type: string
+    default: 'd.m.Y'
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.absoluteFormatFallback'
+  plugin.tx_pwcomments.settings.requireAcceptedTerms:
+    type: bool
+    default: true
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.requireAcceptedTerms'
+  plugin.tx_pwcomments.settings.termsTypolinkParameter:
+    type: string
+    default: 't3://page?uid=1'
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.termsTypolinkParameter'
+  plugin.tx_pwcomments.settings.enableRating:
+    type: bool
+    default: false
+    category: misc
+    label: 'LLL:EXT:pw_comments/Resources/Private/Language/locallang_constants.xlf:settings.enableRating'

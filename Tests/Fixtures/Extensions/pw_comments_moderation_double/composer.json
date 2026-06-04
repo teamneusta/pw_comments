@@ -1,0 +1,21 @@
+{
+    "name": "t3/pw-comments-moderation-double",
+    "type": "typo3-cms-extension",
+    "description": "Functional test double for pw_comments ModerationProviderFactory",
+    "license": "GPL-2.0-or-later",
+    "version": "1.0.0",
+    "require": {
+        "typo3/cms-core": "^14.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "T3\\PwCommentsModerationDouble\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "pw_comments_moderation_double",
+            "providesPackages": ["pw_comments_moderation_double"]
+        }
+    }
+}

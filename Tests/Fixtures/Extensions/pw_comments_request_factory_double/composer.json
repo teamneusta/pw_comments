@@ -1,0 +1,21 @@
+{
+    "name": "t3/pw-comments-request-factory-double",
+    "type": "typo3-cms-extension",
+    "description": "Functional test double for TYPO3 RequestFactory used by pw_comments hooks",
+    "license": "GPL-2.0-or-later",
+    "version": "1.0.0",
+    "require": {
+        "typo3/cms-core": "^14.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "T3\\PwCommentsRequestFactoryDouble\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "pw_comments_request_factory_double",
+            "providesPackages": ["pw_comments_request_factory_double"]
+        }
+    }
+}

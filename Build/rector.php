@@ -32,8 +32,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]
     );
     $rectorConfig->sets([
-        Typo3LevelSetList::UP_TO_TYPO3_13,
-        SetList::PHP_81,
+        Typo3LevelSetList::UP_TO_TYPO3_14,
+        SetList::PHP_82,
         SetList::DEAD_CODE,
     ]);
 
@@ -45,7 +45,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importShortClasses();
 
     // Define your target version which you want to support
-    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->phpVersion(PhpVersion::PHP_82);
     // If you use the option --config change __DIR__ to getcwd()
     $rectorConfig->skip([
         // @see https://github.com/sabbelasichon/typo3-rector/issues/2536

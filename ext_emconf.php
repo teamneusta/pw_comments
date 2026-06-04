@@ -6,7 +6,7 @@
  *  | (c) 2011-2022 Armin Vieweg <armin@v.ieweg.de>
  *  |     2015 Dennis Roemmich <dennis@roemmich.eu>
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
- *  |     2023-2024 Malek Olabi <m.olabi@neusta.de>
+ *  |     2023-2026 Malek Olabi <m.olabi@neusta.de>
  */
 
 $EM_CONF[$_EXTKEY] = [
@@ -17,11 +17,11 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'm.olabi@neusta.de',
     'author_company' => '',
     'state' => 'stable',
-    'version' => '7.1.0',
+    'version' => '8.0.0',
     'constraints' => [
         'depends' => [
             'php' => '8.2.0-8.5.99',
-            'typo3' => '13.4.0-13.4.99'
+            'typo3' => '14.3.0-14.3.99'
         ],
         'conflicts' => [
         ],

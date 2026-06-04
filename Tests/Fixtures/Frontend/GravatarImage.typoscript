@@ -1,0 +1,6 @@
+plugin.tx_pwcomments.settings {
+    showAvatar = 1
+    showGravatarImage = 1
+    gravatarSize = 65
+    gravatarDefault = mm
+}

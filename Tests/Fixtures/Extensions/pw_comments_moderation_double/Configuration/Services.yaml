@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  T3\PwCommentsModerationDouble\:
+    resource: '../Classes/*'
+
+  T3\PwComments\Service\Moderation\ModerationProviderFactory:
+    class: T3\PwCommentsModerationDouble\FakeModerationProviderFactory
+    public: true

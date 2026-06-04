@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\UserFunc\TCA;
 
+use TYPO3\CMS\Core\Imaging\IconSize;
+
 // Define the LF constant if not already defined
 if (!defined('LF')) {
     define('LF', chr(10));
@@ -27,6 +29,8 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 #[CoversClass(AiModerationControl::class)]
@@ -37,7 +41,6 @@ final class AiModerationControlTest extends TestCase
     private MockObject $moderationProviderFactory;
     private MockObject $persistenceManager;
     private MockObject $logger;
-    private array $singletons;
     private IconFactory|MockObject $iconFactory;
     private PageRenderer|MockObject $pageRenderer;
 
@@ -126,7 +129,7 @@ final class AiModerationControlTest extends TestCase
 
         $this->iconFactory->expects(self::once())
             ->method('getIcon')
-            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
+            ->with('actions-refresh', IconSize::SMALL)
             ->willReturn($icon);
 
         $icon->expects(self::once())
@@ -224,7 +227,7 @@ final class AiModerationControlTest extends TestCase
 
         $this->iconFactory->expects(self::once())
             ->method('getIcon')
-            ->with('actions-refresh', \TYPO3\CMS\Core\Imaging\IconSize::SMALL)
+            ->with('actions-refresh', IconSize::SMALL)
             ->willReturn($icon);
 
         $icon->expects(self::once())
@@ -426,6 +429,28 @@ final class AiModerationControlTest extends TestCase
         self::assertInstanceOf(ResponseInterface::class, $response);
         self::assertFalse($payload['success']);
         self::assertStringContainsString('upstream down', $payload['message']);
+    }
+
+    #[Test]
+    public function getAiModerationSettingsReturnsPwCommentsTypoScriptBranch(): void
+    {
+        $expectedSettings = ['enableAiModeration' => '1', 'aiModerationProvider' => 'openai'];
+
+        $configurationManager = $this->createMock(ConfigurationManagerInterface::class);
+        $configurationManager->expects(self::once())
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            ->willReturn(['plugin.' => ['tx_pwcomments.' => ['settings.' => $expectedSettings]]]);
+
+        $singletonBackup = GeneralUtility::getSingletonInstances();
+        GeneralUtility::setSingletonInstance(ConfigurationManagerInterface::class, $configurationManager);
+
+        try {
+            $method = new \ReflectionMethod($this->subject, 'getAiModerationSettings');
+            self::assertSame($expectedSettings, $method->invoke($this->subject));
+        } finally {
+            GeneralUtility::resetSingletonInstances($singletonBackup);
+        }
     }
 
     private function buildRequest(array $parsedBody): ServerRequestInterface
