@@ -1,0 +1,9 @@
+# Resolves settings.entryUid from a GET parameter via the cObj `data` lookup,
+# mirroring the shipped setup.typoscript (entryUid = TEXT / entryUid.data).
+# Exercises Settings::renderConfigurationArray's cObjGetSingle path, which the
+# literal `entryUid = 123` fixtures bypass.
+plugin.tx_pwcomments.settings {
+    useEntryUid = 1
+    entryUid = TEXT
+    entryUid.data = GP:tx_news_pi1|news
+}

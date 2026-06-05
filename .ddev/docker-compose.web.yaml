@@ -24,6 +24,11 @@ services:
               source: ../
               target: /var/www/pw_comments
               consistency: cached
+            - type: volume
+              source: v13-data
+              target: /var/www/html
+              volume:
+                nocopy: true
 volumes:
-    v12-data:
-        name: "${DDEV_SITENAME}-v12-data"
+    v13-data:
+        name: "${DDEV_SITENAME}-v13-data"

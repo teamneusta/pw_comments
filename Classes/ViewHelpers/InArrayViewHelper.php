@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -14,14 +18,12 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class InArrayViewHelper extends AbstractViewHelper
 {
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('subject', 'array', 'The subject');
         $this->registerArgument('needle', 'string', '', true);
+        $this->registerArgument('strict', 'bool', 'Use strict type comparison', false, false);
     }
 
     /**
@@ -35,6 +37,6 @@ class InArrayViewHelper extends AbstractViewHelper
         if ($subject === null) {
             $subject = $this->renderChildren();
         }
-        return \in_array($this->arguments['needle'], $subject, true);
+        return \in_array($this->arguments['needle'], $subject, (bool) $this->arguments['strict']);
     }
 }

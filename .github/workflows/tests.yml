@@ -1,0 +1,85 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # GPG keys for the phars pinned in .phive/phars.xml, so `phive install`
+  # runs non-interactively. php-cs-fixer (Dariusz Ruminski),
+  # phpstan (PHPStan Bot), phpunit (Sebastian Bergmann),
+  # typoscript-lint (Martin Helmich).
+  PHIVE_TRUST_GPG_KEYS: 0xE82B2FB314E9906E,0x51C67305FFC2E5C0,0x4AA394086372C20A,0x09489BB6F6B64258
+
+jobs:
+  unit:
+    name: Unit tests (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: intl, mbstring, xml, zip
+          coverage: none
+          tools: phive
+
+      - name: Install PHP tools (versions pinned in .phive/phars.xml)
+        run: phive install --trust-gpg-keys "$PHIVE_TRUST_GPG_KEYS"
+
+      - name: Install dependencies
+        run: composer update --no-progress --prefer-dist
+
+      - name: Run unit tests
+        run: ./tools/phpunit -c Build/phpunit.xml --testsuite "Unit Tests" --no-coverage
+
+  functional:
+    name: Functional tests (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: intl, mbstring, xml, zip, pdo_sqlite, sqlite3
+          coverage: none
+          tools: phive
+
+      - name: Install PHP tools (versions pinned in .phive/phars.xml)
+        run: phive install --trust-gpg-keys "$PHIVE_TRUST_GPG_KEYS"
+
+      - name: Install dependencies
+        run: composer update --no-progress --prefer-dist
+
+      - name: Run functional tests
+        run: ./tools/phpunit -c Build/phpunit.functional.xml --testsuite "Functional Tests" --no-coverage

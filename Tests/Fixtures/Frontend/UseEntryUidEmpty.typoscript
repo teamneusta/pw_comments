@@ -1,0 +1,2 @@
+plugin.tx_pwcomments.settings.useEntryUid = 1
+plugin.tx_pwcomments.settings.entryUid = 999

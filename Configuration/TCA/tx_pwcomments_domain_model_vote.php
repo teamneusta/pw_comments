@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -22,32 +24,33 @@ return [
         'crdate' => 'crdate',
         'origUid' => 't3_origuid',
         'readOnly' => true,
+        'versioningWS' => true,
         'typeicon_column' => 'type',
         'typeicon_classes' => [
             '0' => 'ext-pwcomments-type-vote_down',
-            '1' => 'ext-pwcomments-type-vote_up'
+            '1' => 'ext-pwcomments-type-vote_up',
         ],
     ],
     'types' => [
-        '1' => ['showitem' => 'type,crdate,author,author_ident']
+        '1' => ['showitem' => 'type,crdate,author,author_ident'],
     ],
     'palettes' => [
-        '1' => ['showitem' => '']
+        '1' => ['showitem' => ''],
     ],
     'columns' => [
         'pid' => [
             'exclude' => 0,
             'label' => $ll . 'general.pid',
             'config' => [
-                'type' => 'input'
-            ]
+                'type' => 'input',
+            ],
         ],
         'orig_pid' => [
             'exclude' => 0,
             'label' => $ll . 'tx_pwcomments_domain_model_vote.orig_pid',
             'config' => [
-                'type' => 'input'
-            ]
+                'type' => 'input',
+            ],
         ],
         'crdate' => [
             'exclude' => 0,
@@ -55,7 +58,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'readOnly' => true,
-            ]
+            ],
         ],
         'type' => [
             'exclude' => 0,
@@ -65,10 +68,10 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     ['label' => $ll . 'tx_pwcomments_domain_model_vote.type.0', 'value' => 0],
-                    ['label' => $ll . 'tx_pwcomments_domain_model_vote.type.1', 'value' => 1]
+                    ['label' => $ll . 'tx_pwcomments_domain_model_vote.type.1', 'value' => 1],
                 ],
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'author' => [
             'exclude' => 0,
@@ -79,10 +82,10 @@ return [
                 'foreign_table' => 'fe_users',
                 'maxitems' => 1,
                 'items' => [
-                    ['label' => '', 'value' => 0]
+                    ['label' => '', 'value' => 0],
                 ],
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'author_ident' => [
             'exclude' => 0,
@@ -91,8 +94,8 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'comment' => [
             'exclude' => 0,
@@ -103,8 +106,8 @@ return [
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
-                'readOnly' => true
-            ]
-        ]
-    ]
+                'readOnly' => true,
+            ],
+        ],
+    ],
 ];

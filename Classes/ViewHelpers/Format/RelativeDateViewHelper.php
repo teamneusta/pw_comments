@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\ViewHelpers\Format;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -9,15 +12,11 @@ namespace T3\PwComments\ViewHelpers\Format;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use DateTime;
-use InvalidArgumentException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Formats a unix timestamp to a human-readable, relative string
- *
- * @package T3\PwComments
  */
 class RelativeDateViewHelper extends AbstractViewHelper
 {
@@ -26,9 +25,6 @@ class RelativeDateViewHelper extends AbstractViewHelper
      */
     protected $dateIsAbsolute = false;
 
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -43,7 +39,7 @@ class RelativeDateViewHelper extends AbstractViewHelper
      *
      * @return string Formatted date
      */
-    public function render()
+    public function render(): string
     {
         $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
         $relativeDate = $this->makeDateRelative($timestamp, $this->arguments['format'] ?? '');
@@ -58,7 +54,7 @@ class RelativeDateViewHelper extends AbstractViewHelper
      *
      * @return int
      */
-    protected function normalizeTimestamp(int|string|DateTime|null $timestamp)
+    protected function normalizeTimestamp(int|string|\DateTimeInterface|null $timestamp)
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -66,10 +62,8 @@ class RelativeDateViewHelper extends AbstractViewHelper
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof DateTime) {
-            $timestamp = $timestamp->format('U');
-        } else {
-            throw new InvalidArgumentException('Timestamp might be an integer, a string or a DateTimeObject only.', 5991273415);
+        } elseif ($timestamp instanceof \DateTimeInterface) {
+            $timestamp = (int) $timestamp->format('U');
         }
         return $timestamp;
     }

@@ -1,9 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\ViewHelpers\Format;
 
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use DateTime;
-use InvalidArgumentException;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -13,7 +16,13 @@ use InvalidArgumentException;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 /**
- * Formats a unix timestamp to a human-readable, localized string
+ * Formats a unix timestamp to a human-readable string.
+ *
+ * The `format` argument follows PHP's date()/DateTime::format() syntax. Legacy
+ * strftime-style inputs with a leading `%` on each format letter are tolerated:
+ * the helper strips `%` before formatting, so both `Y-m-d` and `%Y-%m-%d`
+ * produce the same output. Literal `%` characters in the format are not
+ * supported.
  *
  * = Examples =
  * with namespace: pw
@@ -26,29 +35,12 @@ use InvalidArgumentException;
  * 2009-02-13
  *
  *
- * <code title="Defaults with string">
- * <pw:format.date timestamp="2009-02-13 20:31:30GMT" />
+ * <code title="PHP date()-style format">
+ * <pw:format.date format="d.m.Y" timestamp="1234567890" />
  * </code>
  *
  * Output:
- * 2009-02-13
- *
- *
- * <code title="Defaults with DateTime object">
- * <pw:format.date timestamp="dateTimeObject" />
- * </code>
- *
- * Output:
- * 2009-02-13
- *
- *
- * <code title="Custom date format">
- * <pw:format.date format="%a, %e. %B %G" timestamp="1234567890" />
- * </code>
- *
- * Output:
- * Fre, 13. Februar 2009
- * (for german localization)
+ * 13.02.2009
  *
  *
  * <code title="relative date">
@@ -58,31 +50,17 @@ use InvalidArgumentException;
  * Output:
  * 2009-02-14
  *
- *
- * <code title="relative date">
- * <pw:format.date timestamp="1234567890" get="first of this month"/>
- * </code>
- *
- * Output:
- * 2009-02-01
- *
- * @see http://www.php.net/manual/en/function.strftime.php
- * @see http://www.php.net/manual/en/function.strtotime.php
- * @see http://www.php.net/manual/en/datetime.formats.relative.php
- *
- * @package T3\PwComments
+ * @see https://www.php.net/manual/en/datetime.format.php
+ * @see https://www.php.net/manual/en/function.strtotime.php
+ * @see https://www.php.net/manual/en/datetime.formats.relative.php
  */
 class DateViewHelper extends AbstractViewHelper
 {
-
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('timestamp', 'mixed', 'unix timestamp', false);
-        $this->registerArgument('format', 'string', 'Format String to be parsed by strftime', false, '%Y-%m-%d');
+        $this->registerArgument('format', 'string', 'Format string (PHP date()-style; legacy strftime %-prefixed inputs are tolerated)', false, '%Y-%m-%d');
         $this->registerArgument('get', 'string', 'get some related date (see class doc)', false, '');
     }
 
@@ -91,25 +69,21 @@ class DateViewHelper extends AbstractViewHelper
      *
      * @return string Formatted date
      */
-    public function render()
+    public function render(): string
     {
         $timestamp = $this->normalizeTimestamp($this->arguments['timestamp']);
         if ($this->arguments['get']) {
             $timestamp = $this->modifyDate($timestamp, $this->arguments['get']);
         }
-        $format = preg_replace('/([a-zA-Z])/is', '%$1', (string) $this->arguments['format']);
-        $format = str_replace('%%', '%', $format);
+        $format = str_replace('%', '', (string) $this->arguments['format']);
 
-        return (new DateTime())->setTimestamp($timestamp)->format($format);
+        return (new \DateTime())->setTimestamp($timestamp)->format($format);
     }
 
     /**
      * Handle all the different input formats and return a real timestamp
-     *
-     *
-     * @throws InvalidArgumentException
      */
-    protected function normalizeTimestamp(int|string|null|DateTime $timestamp): int|bool
+    protected function normalizeTimestamp(int|string|\DateTimeInterface|null $timestamp): int|bool
     {
         if ($timestamp === null) {
             $timestamp = time();
@@ -117,24 +91,24 @@ class DateViewHelper extends AbstractViewHelper
             $timestamp = (int) $timestamp;
         } elseif (\is_string($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif ($timestamp instanceof DateTime) {
+        } elseif ($timestamp instanceof \DateTimeInterface) {
             $timestamp = (int) $timestamp->format('U');
-        } else {
-            throw new InvalidArgumentException(
-                sprintf('Timestamp might be an integer, a string or a DateTimeObject only.'), 3328256120
-            );
         }
         return $timestamp;
     }
 
     /**
-     * Do the modification do a relative date
-     *
-     * @param int $timestamp
-     * @param string $timeString
+     * Apply a strtotime modifier (e.g. "+1 day") relative to the given timestamp.
      */
-    protected function modifyDate($timestamp, $timeString): int|bool
+    protected function modifyDate(int $timestamp, string $timeString): int
     {
-        return strtotime($timeString, $timestamp);
+        $modified = strtotime($timeString, $timestamp);
+        if ($modified === false) {
+            throw new \InvalidArgumentException(
+                sprintf('Could not parse relative date string "%s".', $timeString),
+                1780358400,
+            );
+        }
+        return $modified;
     }
 }

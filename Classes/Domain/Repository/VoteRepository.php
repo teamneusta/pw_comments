@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Domain\Repository;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -10,10 +13,9 @@ namespace T3\PwComments\Domain\Repository;
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
-use T3\PwComments\Domain\Model\Vote;
 use T3\PwComments\Domain\Model\Comment;
+use T3\PwComments\Domain\Model\Vote;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -22,7 +24,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 /**
  * Repository for votes
  *
- * @package T3\PwComments
  * @extends Repository<Vote>
  */
 class VoteRepository extends Repository
@@ -30,7 +31,6 @@ class VoteRepository extends Repository
     /**
      * Initializes the repository.
      *
-     * @return void
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::initializeObject()
      */
     public function initializeObject(): void
@@ -55,8 +55,8 @@ class VoteRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('pid', $pid),
-                $query->equals('authorIdent', $authorIdent)
-            )
+                $query->equals('authorIdent', $authorIdent),
+            ),
         );
         return $query->execute();
     }
@@ -72,8 +72,8 @@ class VoteRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('comment', $comment),
-                $query->equals('authorIdent', $authorIdent)
-            )
+                $query->equals('authorIdent', $authorIdent),
+            ),
         );
         return $query->execute()->getFirst();
     }

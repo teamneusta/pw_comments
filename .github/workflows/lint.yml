@@ -1,0 +1,90 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # GPG keys for the phars pinned in .phive/phars.xml, so `phive install`
+  # runs non-interactively. php-cs-fixer (Dariusz Ruminski),
+  # phpstan (PHPStan Bot), phpunit (Sebastian Bergmann),
+  # typoscript-lint (Martin Helmich).
+  PHIVE_TRUST_GPG_KEYS: 0xE82B2FB314E9906E,0x51C67305FFC2E5C0,0x4AA394086372C20A,0x09489BB6F6B64258
+
+jobs:
+  cs-fixer:
+    name: PHP CS Fixer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, xml, zip
+          coverage: none
+          tools: phive
+
+      - name: Install PHP tools (versions pinned in .phive/phars.xml)
+        run: phive install --trust-gpg-keys "$PHIVE_TRUST_GPG_KEYS"
+
+      - name: Run PHP CS Fixer
+        run: ./tools/php-cs-fixer fix --config Build/.php-cs-fixer.dist.php --dry-run --diff
+        env:
+          PHP_CS_FIXER_IGNORE_ENV: 1
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, xml, zip
+          coverage: none
+          tools: phive
+
+      - name: Install PHP tools (versions pinned in .phive/phars.xml)
+        run: phive install --trust-gpg-keys "$PHIVE_TRUST_GPG_KEYS"
+
+      - name: Install dependencies
+        run: composer update --no-progress --prefer-dist
+
+      - name: Run PHPStan
+        run: ./tools/phpstan analyse -c Build/phpstan.neon
+
+  typoscript-lint:
+    name: TypoScript Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, xml, zip
+          coverage: none
+          tools: phive
+
+      - name: Install PHP tools (versions pinned in .phive/phars.xml)
+        run: phive install --trust-gpg-keys "$PHIVE_TRUST_GPG_KEYS"
+
+      - name: Run TypoScript Lint
+        run: ./tools/typoscript-lint -c Build/.typoscript-lint.dist.yml

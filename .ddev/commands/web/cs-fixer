@@ -1,0 +1,9 @@
+#!/bin/bash
+
+## Description: Run PHP CS Fixer (pass --dry-run --diff to only check)
+## Usage: cs-fixer [flags]
+## Example: "ddev cs-fixer" to fix, "ddev cs-fixer --dry-run --diff" to check
+
+echo "running php-cs-fixer"
+cd "$DDEV_APPROOT/vendor/$PACKAGE_NAME"
+./tools/php-cs-fixer fix --config Build/.php-cs-fixer.dist.php "$@"

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Domain\Validator;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -9,18 +12,16 @@ namespace T3\PwComments\Domain\Validator;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use T3\PwComments\Domain\Model\Comment;
-use T3\PwComments\Utility\Settings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
  * This class is a domain validator of comment model for attribute
  * comprehensive validation. It checks that at least one of the required fields
  * has been filled.
- *
- * @package T3\PwComments
  */
 class CommentValidator extends AbstractValidator
 {
@@ -29,6 +30,10 @@ class CommentValidator extends AbstractValidator
      */
     protected $settings = [];
 
+    public function __construct(
+        private readonly ConfigurationManagerInterface $configurationManager,
+    ) {}
+
     /**
      * Initial function to validate
      *
@@ -36,8 +41,13 @@ class CommentValidator extends AbstractValidator
      */
     public function isValid(mixed $comment): void
     {
-        // @todo: pass request with TYPO3 v13. See https://github.com/teamneusta/pw_comments/issues/19
-        $this->settings = Settings::getRenderedExtensionSettings();
+        // Read the current plugin's settings (flexform-aware), matching what the
+        // controller uses - rather than the global plugin.tx_pwcomments TypoScript.
+        // No extension name is passed on purpose: that would re-resolve the global
+        // extension TypoScript and ignore per-instance (flexform) overrides.
+        $this->settings = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+        );
 
         $errorNumber = null;
         $errorArguments = null;
@@ -71,7 +81,7 @@ class CommentValidator extends AbstractValidator
             $errorMessage = LocalizationUtility::translate(
                 'tx_pwcomments.validation_error.' . $errorNumber,
                 'PwComments',
-                $errorArguments
+                $errorArguments,
             );
             $this->addError($errorMessage, $errorNumber);
         }
@@ -85,8 +95,8 @@ class CommentValidator extends AbstractValidator
      */
     protected function anyPropertyIsSet(Comment $comment)
     {
-        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false) ||
-               ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
+        return ($this->getRequest()?->getAttribute('frontend.user')->user['uid'] ?? false)
+               || ($comment->getAuthorName() !== '' && $comment->getAuthorMail() !== '');
     }
 
     /**
@@ -125,7 +135,7 @@ class CommentValidator extends AbstractValidator
         }
         $difference = time() - $feUser->getKey('ses', 'tx_pwcomments_lastComment');
 
-        return $difference > (int)($this->settings['secondsBetweenTwoComments'] ?? 300);
+        return $difference > (int) ($this->settings['secondsBetweenTwoComments'] ?? 300);
     }
 
     /**
@@ -144,7 +154,7 @@ class CommentValidator extends AbstractValidator
 
         $badWordsRegExp = '';
         foreach (file($badWordsListPath) as $badWord) {
-            $badWordsRegExp .= trim((string) $badWord) . '|';
+            $badWordsRegExp .= trim($badWord) . '|';
         }
         $badWordsRegExp = '/' . substr($badWordsRegExp, 0, -1) . '/i';
         $commentMessage = '-> ' . $textToCheck . ' <-';

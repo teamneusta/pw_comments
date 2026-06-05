@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Hooks;
 
 // phpcs:disable
@@ -10,27 +13,21 @@ namespace T3\PwComments\Hooks;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 use T3\PwComments\Domain\Repository\CommentRepository;
 use T3\PwComments\Utility\HashEncryptionUtility;
-use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use function htmlspecialchars;
 
 /**
  * ProcessDatamap Hook
- *
- * @package T3\PwComments
  */
 final readonly class ProcessDatamap
 {
@@ -42,6 +39,7 @@ final readonly class ProcessDatamap
         private ContentObjectRenderer $contentObjectRenderer,
         private FlashMessageService $flashMessageService,
         private BackendConfigurationManager $backendConfigurationManager,
+        private RequestFactory $requestFactory,
     ) {
         $this->enabledTable = 'tx_pwcomments_domain_model_comment';
         $this->enabledStatus = 'update';
@@ -50,29 +48,24 @@ final readonly class ProcessDatamap
     /**
      * After Save hook
      *
-     * @param string $status
-     * @param string $table
      * @param string|int $id
-     * @param array $fieldArray
-     * @param DataHandler $pObj
-     * @return void
      */
-    public function processDatamap_postProcessFieldArray(string $status, string $table, $id, array $fieldArray, DataHandler $pObj): void
+    public function processDatamap_postProcessFieldArray(string $status, string $table, $id, array $fieldArray): void
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (
-            $request === null ||
-            (int)($fieldArray['hidden'] ?? 1) === 1 ||
-            $table !== $this->enabledTable ||
-            $status !== $this->enabledStatus
+            $request === null
+            || (int) ($fieldArray['hidden'] ?? 1) === 1
+            || $table !== $this->enabledTable
+            || $status !== $this->enabledStatus
         ) {
             return;
         }
 
         $comment = $this->commentRepository->findByCommentUid($id);
         $settings = $this->getTypoScriptSetup($request)['plugin.']['tx_pwcomments.']['settings.'] ?? [];
-        $moderateNewComments = (bool)($settings['moderateNewComments'] ?? false);
-        $sendMailToAuthorAfterPublish = (bool)($settings['sendMailToAuthorAfterPublish'] ?? false);
+        $moderateNewComments = (bool) ($settings['moderateNewComments'] ?? false);
+        $sendMailToAuthorAfterPublish = (bool) ($settings['sendMailToAuthorAfterPublish'] ?? false);
         if ($comment === null || (!$moderateNewComments || !$sendMailToAuthorAfterPublish)) {
             return;
         }
@@ -84,27 +77,28 @@ final readonly class ProcessDatamap
             'action' => 'sendAuthorMailWhenCommentHasBeenApproved',
             'uid' => (int) $comment->getUid(),
             'pid' => $comment->getOrigPid() ?: $comment->getPid(),
-            'hash' => $hash
+            'hash' => $hash,
         ];
         $typoLinkConfiguration = [
-            'parameter' => $comment->getOrigPid(),
+            'parameter' => $comment->getOrigPid() ?: $comment->getPid(),
             'additionalParams' => GeneralUtility::implodeArrayForUrl('tx_pwcomments', $typoLinkAdditionalParams),
             'forceAbsoluteUrl' => true,
         ];
+        $this->contentObjectRenderer->setRequest($request);
         $url = $this->contentObjectRenderer->typoLink_URL($typoLinkConfiguration);
         // Call url - fetches by middleware request
-        $content = GeneralUtility::getUrl($url);
-        if ($content && $content === '200') {
+        $response = $this->requestFactory->request($url, 'GET');
+        if ($response->getStatusCode() === 200) {
             // Add flash message
             $messageQueue = $this->flashMessageService->getMessageQueueByIdentifier(FlashMessageQueue::NOTIFICATION_QUEUE);
             $messageToDisplay = LocalizationUtility::translate(
                 'mailSentToAuthorAfterPublish',
                 'PwComments',
-                [$comment->getCommentAuthorMailAddress()]
+                [$comment->getCommentAuthorMailAddress()],
             );
             $messageQueue->enqueue(new FlashMessage($messageToDisplay ?? '', '', ContextualFeedbackSeverity::OK, true));
         } else {
-            throw new RuntimeException('Error while calling the following url: ' . $url, 4620589602);
+            throw new \RuntimeException('Error while calling the following url: ' . $url, 4620589602);
         }
     }
 

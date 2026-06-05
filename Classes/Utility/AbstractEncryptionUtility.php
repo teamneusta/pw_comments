@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Utility;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -9,15 +12,11 @@ namespace T3\PwComments\Utility;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
-use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class AbstractUtility
- *
- * @package T3\PwComments
  */
 abstract class AbstractEncryptionUtility
 {
@@ -25,13 +24,13 @@ abstract class AbstractEncryptionUtility
      * Get TYPO3 encryption key
      *
      * @return string
-     * @throws Exception
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected static function getEncryptionKey()
     {
         if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'])) {
-            throw new Exception('No encryption key found in this TYPO3 installation', 6508770623);
+            throw new \Exception('No encryption key found in this TYPO3 installation', 6508770623);
         }
         return $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
     }

@@ -1,0 +1,5 @@
+# A site-set boolean `false` reaches the Extbase settings array as an empty
+# string (''), not '0'. Reproduce that coercion here to guard vote-button
+# visibility against the `hideVoteButtons == 0` comparison pitfall in
+# Resources/Private/Partials/Comment/Voting.html.
+plugin.tx_pwcomments.settings.hideVoteButtons =

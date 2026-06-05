@@ -1,0 +1,98 @@
+# TypoScript setup for functional tests: renders the pw_comments "show" plugin
+# (comment list incl. voting links) so generated links can be inspected.
+config {
+    no_cache = 1
+    debug = 0
+    admPanel = 0
+    disablePrefixComment = 1
+    absRefPrefix = /
+}
+
+plugin.tx_pwcomments {
+    view {
+        templateRootPaths.0 = EXT:pw_comments/Resources/Private/Templates/
+        partialRootPaths.0 = EXT:pw_comments/Resources/Private/Partials/
+        layoutRootPaths.0 = EXT:pw_comments/Resources/Private/Layouts/
+    }
+    persistence {
+        storagePid = 1
+    }
+    settings {
+        storagePid = 1
+        useEntryUid = 0
+
+        showCommentAnchor = comments
+        commentAnchorPrefix = comment-
+        writeCommentAnchor = write-comment
+        successfulAnchor = success
+        customMessagesAnchor = custom-messages
+
+        showAvatar = 0
+        showGravatarImage = 0
+
+        enableCommentVotes = 1
+        enableReplyVotes = 0
+        enableVoting = 1
+        hideVoteButtons = 0
+
+        enableRepliesToComments = 1
+        showRepliesToComments = 1
+
+        absoluteFormatFallback = d.m.Y
+
+        linkUrlsInComments = 0
+        moderateNewComments = 0
+        sendMailOnNewCommentsTo =
+        sendMailToAuthorAfterSubmit = 0
+        hiddenFieldSpamProtection = 0
+        hiddenFieldName = authorWebsite
+        secondsBetweenTwoComments = 0
+        useBadWordsList = 0
+        requireAcceptedTerms = 0
+        enableRating = 0
+    }
+}
+
+lib.pwCommentsIndex = USER
+lib.pwCommentsIndex {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = PwComments
+    vendorName = T3
+    pluginName = show
+
+    controllerActions {
+        Comment {
+            1 = index
+            2 = upvote
+            3 = downvote
+        }
+    }
+
+    view =< plugin.tx_pwcomments.view
+    persistence =< plugin.tx_pwcomments.persistence
+    settings =< plugin.tx_pwcomments.settings
+}
+
+lib.pwCommentsNew = USER
+lib.pwCommentsNew {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = PwComments
+    vendorName = T3
+    pluginName = new
+
+    controllerActions {
+        Comment {
+            1 = new
+            2 = create
+            3 = confirmComment
+        }
+    }
+
+    view =< plugin.tx_pwcomments.view
+    persistence =< plugin.tx_pwcomments.persistence
+    settings =< plugin.tx_pwcomments.settings
+}
+
+page = PAGE
+page.10 < lib.pwCommentsIndex
+page.20 < lib.pwCommentsNew

@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+
 /*  | This extension is made for TYPO3 CMS and is licensed
  *  | under GNU General Public License.
  *  |
@@ -34,8 +38,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
  * <output>
  * <img src="https://www.gravatar.com/avatar/19acb70929e62bf326957428f65331f3?s=20&d=mm" />
  * </output>
- *
- * @package T3\PwComments
  */
 class GravatarViewHelper extends AbstractTagBasedViewHelper
 {
@@ -49,12 +51,10 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @var string
      */
-    final const GRAVATARURI = 'https://www.gravatar.com/avatar/';
+    final public const GRAVATARURI = 'https://www.gravatar.com/avatar/';
 
     /**
      * Initialize arguments
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
@@ -69,12 +69,12 @@ class GravatarViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string html image tag with the gravatar image uri
      */
-    public function render()
+    public function render(): string
     {
         $uriParts = [
             md5(strtolower(trim((string) $this->arguments['email']))),
             '?s=' . $this->arguments['size'],
-            '&d=' . $this->arguments['default']
+            '&d=' . $this->arguments['default'],
         ];
 
         $this->tag->addAttribute('src', $this->getGravatarSrc($uriParts));

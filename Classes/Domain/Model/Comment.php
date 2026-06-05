@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace T3\PwComments\Domain\Model;
 
 /*  | This extension is made for TYPO3 CMS and is licensed
@@ -9,19 +12,16 @@ namespace T3\PwComments\Domain\Model;
  *  |     2016-2017 Christian Wolfram <c.wolfram@chriwo.de>
  *  |     2023 Malek Olabi <m.olabi@neusta.de>
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The comment model
- *
- * @package T3\PwComments
  */
 class Comment extends AbstractEntity
 {
-
     /**
      * @var int uid of the page for what the comment is for
      */
@@ -34,17 +34,13 @@ class Comment extends AbstractEntity
 
     /**
      * crdate as unix timestamp
-     *
-     * @var int
      */
-    protected int $crdate;
+    protected int $crdate = 0;
 
     /**
      * hidden state
-     *
-     * @var bool
      */
-    protected bool $hidden;
+    protected bool $hidden = false;
 
     /**
      * The author as model or NULL if comment author wasn't logged in
@@ -55,27 +51,18 @@ class Comment extends AbstractEntity
 
     /**
      * author name
-     *
-     * @var string
      */
     protected string $authorName = '';
 
     /**
      * author's mail
-     *
-     * @var string
      */
     protected string $authorMail = '';
 
-    /**
-     * @var string
-     */
     protected string $authorIdent;
 
     /**
      * the comment's message
-     *
-     * @var string
      */
     protected string $message;
 
@@ -83,7 +70,7 @@ class Comment extends AbstractEntity
      * Parent comment (if set this comment is an answer). One comment can just have
      * child comments or parent comment - not unlimited nested!
      *
-     * @var \T3\PwComments\Domain\Model\Comment
+     * @var Comment
      */
     protected $parentComment;
 
@@ -100,24 +87,12 @@ class Comment extends AbstractEntity
      */
     protected $votes;
 
-    /**
-     * @var int
-     */
     protected int $upvoteAmount = 0;
 
-    /**
-     * @var int
-     */
     protected int $downvoteAmount = 0;
 
-    /**
-     * @var bool
-     */
     protected bool $votesCounted = false;
 
-    /**
-     * @var bool
-     */
     protected bool $termsAccepted = false;
 
     protected int $rating = 0;
@@ -160,7 +135,6 @@ class Comment extends AbstractEntity
      * Setter for origPid
      *
      * @param int $origPid
-     * @return void
      */
     public function setOrigPid($origPid): void
     {
@@ -181,7 +155,6 @@ class Comment extends AbstractEntity
      * Setter for entryUid
      *
      * @param int $entryUid
-     * @return void
      */
     public function setEntryUid($entryUid): void
     {
@@ -192,7 +165,6 @@ class Comment extends AbstractEntity
      * Setter for crdate
      *
      * @param int $crdate crdate
-     * @return void
      */
     public function setCrdate($crdate): void
     {
@@ -213,7 +185,6 @@ class Comment extends AbstractEntity
      * Setter for hidden state
      *
      * @param bool $hidden
-     * @return void
      */
     public function setHidden($hidden): void
     {
@@ -234,7 +205,6 @@ class Comment extends AbstractEntity
      * Setter for authorName
      *
      * @param string $authorName authorName
-     * @return void
      */
     public function setAuthorName($authorName): void
     {
@@ -255,7 +225,6 @@ class Comment extends AbstractEntity
      * Setter for authorMail
      *
      * @param string $authorMail authorMail
-     * @return void
      */
     public function setAuthorMail($authorMail): void
     {
@@ -274,8 +243,6 @@ class Comment extends AbstractEntity
 
     /**
      * Get email address of comment author (respecting fe_users or anonymous users)
-     *
-     * @return string
      */
     public function getCommentAuthorMailAddress(): string
     {
@@ -297,7 +264,6 @@ class Comment extends AbstractEntity
      * Setter for message
      *
      * @param string $message message
-     * @return void
      */
     public function setMessage($message): void
     {
@@ -318,7 +284,6 @@ class Comment extends AbstractEntity
      * Setter for author
      *
      * @param FrontendUser|null $author author
-     * @return void
      */
     public function setAuthor(?FrontendUser $author): void
     {
@@ -338,7 +303,7 @@ class Comment extends AbstractEntity
     /**
      * Get parent comment
      *
-     * @return \T3\PwComments\Domain\Model\Comment
+     * @return Comment
      */
     public function getParentComment()
     {
@@ -348,8 +313,7 @@ class Comment extends AbstractEntity
     /**
      * Set parent comment
      *
-     * @param \T3\PwComments\Domain\Model\Comment $parentComment
-     * @return void
+     * @param Comment $parentComment
      */
     public function setParentComment($parentComment): void
     {
@@ -370,7 +334,6 @@ class Comment extends AbstractEntity
      * Set comment replies
      *
      * @param QueryResult $replies Containing comments
-     * @return void
      */
     public function setReplies(QueryResult $replies): void
     {
@@ -389,8 +352,6 @@ class Comment extends AbstractEntity
 
     /**
      * Set votes
-     *
-     * @return void
      */
     public function setVotes(ObjectStorage $votes): void
     {
@@ -399,8 +360,6 @@ class Comment extends AbstractEntity
 
     /**
      * Add single vote
-     *
-     * @return void
      */
     public function addVote(Vote $vote): void
     {
@@ -409,8 +368,6 @@ class Comment extends AbstractEntity
 
     /**
      * Remove single vote
-     *
-     * @return void
      */
     public function removeVote(Vote $vote): void
     {
@@ -465,8 +422,6 @@ class Comment extends AbstractEntity
 
     /**
      * Count up- and downvotes
-     *
-     * @return void
      */
     protected function countVotes()
     {
@@ -495,7 +450,6 @@ class Comment extends AbstractEntity
      * Set author ident
      *
      * @param string $authorIdent
-     * @return void
      */
     public function setAuthorIdent($authorIdent): void
     {
@@ -522,7 +476,6 @@ class Comment extends AbstractEntity
 
     /**
      * @param bool $termsAccepted
-     * @return void
      */
     public function setTermsAccepted($termsAccepted): void
     {
@@ -531,8 +484,6 @@ class Comment extends AbstractEntity
 
     /**
      * Get AI moderation status
-     *
-     * @return string|null
      */
     public function getAiModerationStatus(): ?string
     {
@@ -541,9 +492,6 @@ class Comment extends AbstractEntity
 
     /**
      * Set AI moderation status
-     *
-     * @param string|null $aiModerationStatus
-     * @return void
      */
     public function setAiModerationStatus(?string $aiModerationStatus): void
     {
@@ -552,8 +500,6 @@ class Comment extends AbstractEntity
 
     /**
      * Get AI moderation reason
-     *
-     * @return string|null
      */
     public function getAiModerationReason(): ?string
     {
@@ -562,9 +508,6 @@ class Comment extends AbstractEntity
 
     /**
      * Set AI moderation reason
-     *
-     * @param string|null $aiModerationReason
-     * @return void
      */
     public function setAiModerationReason(?string $aiModerationReason): void
     {
@@ -573,8 +516,6 @@ class Comment extends AbstractEntity
 
     /**
      * Get AI moderation confidence score
-     *
-     * @return float|null
      */
     public function getAiModerationConfidence(): ?float
     {
@@ -583,9 +524,6 @@ class Comment extends AbstractEntity
 
     /**
      * Set AI moderation confidence score
-     *
-     * @param float|null $aiModerationConfidence
-     * @return void
      */
     public function setAiModerationConfidence(?float $aiModerationConfidence): void
     {

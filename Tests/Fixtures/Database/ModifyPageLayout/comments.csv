@@ -1,0 +1,6 @@
+tx_pwcomments_domain_model_comment
+,uid,pid,orig_pid,entry_uid,parent_comment,author,message,author_name,author_mail,author_ident,hidden,deleted,crdate
+,1,1,1,0,0,0,"Visible comment one","Alice","alice@example.com","ident-1",0,0,1700000000
+,2,1,1,0,0,0,"Visible comment two","Bob","bob@example.com","ident-2",0,0,1700000100
+,3,1,1,0,0,0,"Hidden comment awaiting moderation","Carol","carol@example.com","ident-3",1,0,1700000200
+,4,2,2,0,0,0,"Visible comment on another page","Dave","dave@example.com","ident-4",0,0,1700000300

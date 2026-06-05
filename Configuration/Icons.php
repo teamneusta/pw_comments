@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
@@ -16,5 +17,5 @@ return [
     'ext-pwcomments-ext-icon' => [
         'provider' => SvgIconProvider::class,
         'source' => 'EXT:pw_comments/Resources/Public/Icons/Extension.svg',
-    ]
+    ],
 ];

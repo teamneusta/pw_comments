@@ -1,27 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
 namespace T3\PwComments\Update;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
-use TYPO3\CMS\Install\Updates\RepeatableInterface;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
-use function sprintf;
-use function str_contains;
 
 #[UpgradeWizard('pwCommentsMigratePluginsWizard')]
 class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 {
+    private const TABLE = 'tt_content';
+
     private OutputInterface $output;
 
-    public function __construct(private readonly QueryBuilder $queryBuilder, private readonly FlexFormService $flexFormService)
-    {
-    }
+    public function __construct(private readonly ConnectionPool $connectionPool) {}
 
     /**
      * @inheritDoc
@@ -44,15 +43,16 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
      */
     public function executeUpdate(): bool
     {
-        $records = $this->queryBuilder
+        $queryBuilder = $this->getQueryBuilder();
+        $records = $queryBuilder
             ->select('uid', 'list_type', 'pi_flexform')
-            ->from('tt_content')
+            ->from(self::TABLE)
             ->where(
-                $this->queryBuilder->expr()->eq('list_type', $this->queryBuilder->createNamedParameter('pwcomments_pi1')),
-                $this->queryBuilder->expr()->or(
-                    $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%index%')),
-                    $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%new%')),
-                )
+                $queryBuilder->expr()->eq('list_type', $queryBuilder->createNamedParameter('pwcomments_pi1')),
+                $queryBuilder->expr()->or(
+                    $queryBuilder->expr()->like('pi_flexform', $queryBuilder->createNamedParameter('%index%')),
+                    $queryBuilder->expr()->like('pi_flexform', $queryBuilder->createNamedParameter('%new%')),
+                ),
             )
             ->executeQuery()
             ->fetchAllAssociative();
@@ -66,25 +66,25 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
             }
 
             $plugin = 'show';
-            if (str_contains($switchableControllerActions, 'new')) {
+            if (\str_contains($switchableControllerActions, 'new')) {
                 $plugin = 'new';
             }
 
             $listType = 'pwcomments_' . $plugin;
 
-            $this->queryBuilder->resetWhere();
-            $this->queryBuilder
-                ->update('tt_content')
+            $updateQb = $this->getQueryBuilder();
+            $updateQb
+                ->update(self::TABLE)
                 ->set('pi_flexform', null)
                 ->set('list_type', $listType)
                 ->where(
-                    $this->queryBuilder->expr()->eq('uid', $record['uid'])
+                    $updateQb->expr()->eq('uid', $record['uid']),
                 )
                 ->executeStatement();
             ++$updatedRecords;
         }
 
-        $this->output->writeln(sprintf('%d records updated', $updatedRecords));
+        $this->output->writeln(\sprintf('%d records updated', $updatedRecords));
 
         return true;
     }
@@ -94,20 +94,21 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
      */
     public function updateNecessary(): bool
     {
-        $count = $this->queryBuilder
+        $queryBuilder = $this->getQueryBuilder();
+        $count = $queryBuilder
             ->count('uid')
-            ->from('tt_content')
+            ->from(self::TABLE)
             ->where(
-                $this->queryBuilder->expr()->eq('list_type', $this->queryBuilder->createNamedParameter('pwcomments_pi1')),
-                $this->queryBuilder->expr()->or(
-                    $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%index%')),
-                    $this->queryBuilder->expr()->like('pi_flexform', $this->queryBuilder->createNamedParameter('%new%')),
-                )
+                $queryBuilder->expr()->eq('list_type', $queryBuilder->createNamedParameter('pwcomments_pi1')),
+                $queryBuilder->expr()->or(
+                    $queryBuilder->expr()->like('pi_flexform', $queryBuilder->createNamedParameter('%index%')),
+                    $queryBuilder->expr()->like('pi_flexform', $queryBuilder->createNamedParameter('%new%')),
+                ),
             )
             ->executeQuery()
-            ->columnCount();
+            ->fetchOne();
 
-        return $count > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -121,5 +122,21 @@ class MigratePluginsUpgradeWizard implements UpgradeWizardInterface, ChattyInter
     public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
+    }
+
+    /**
+     * Per-call QueryBuilder with only the deleted-row restriction. An upgrade
+     * wizard must still see hidden/disabled rows (an editor may have hidden
+     * the legacy plugin before migration), but should skip tombstones.
+     */
+    private function getQueryBuilder(): QueryBuilder
+    {
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::TABLE);
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        return $queryBuilder;
     }
 }

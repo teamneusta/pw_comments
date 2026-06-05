@@ -1,0 +1,4 @@
+plugin.tx_pwcomments.settings {
+    sendMailToAuthorAfterPublish = 1
+    sendMailToAuthorAfterPublishTemplate = EXT:pw_comments/Resources/Private/Templates/MailNotification/mailToAuthorAfterPublish.html
+}

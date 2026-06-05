@@ -1,0 +1,3 @@
+be_users
+,uid,pid,tstamp,username,password,admin,disable,starttime,endtime,lang,deleted
+,1,0,1700000000,"hooktest","$argon2i$v=19$m=65536,t=16,p=2$dEZmU0FrQ2VxR05IUTV6Sg$5SJYUSXKMs+xvE3yp+r7Itgs3O2T6djHkjV5sDjxfa4",1,0,0,0,"default",0

@@ -33,7 +33,7 @@ final class ModerationResultTest extends TestCase
             $categories,
             $categoryScores,
             $reason,
-            $maxScore
+            $maxScore,
         );
 
         self::assertTrue($result->isViolation());
@@ -48,19 +48,19 @@ final class ModerationResultTest extends TestCase
         yield 'returns custom reason when provided' => [
             'reason' => 'Custom violation reason',
             'categories' => ['harassment'],
-            'expected' => 'Custom violation reason'
+            'expected' => 'Custom violation reason',
         ];
 
         yield 'formats categories when no custom reason' => [
             'reason' => '',
             'categories' => ['harassment', 'violence'],
-            'expected' => 'Content flagged for: harassment, violence'
+            'expected' => 'Content flagged for: harassment, violence',
         ];
 
         yield 'returns default message when no reason or categories' => [
             'reason' => '',
             'categories' => [],
-            'expected' => 'AI moderation flagged this content'
+            'expected' => 'AI moderation flagged this content',
         ];
     }
 

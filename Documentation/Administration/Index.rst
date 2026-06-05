@@ -22,15 +22,35 @@ Composer to check out the latest version (https://packagist.org/packages/teamneu
 Installation
 ------------
 After loading the extension onto the server, you will have to install it like every other extension. The installation
-will create a new table for storing comments. After the installation you should add the static include to your current
-TYPO3 template:
+will create a new table for storing comments.
+
+You can wire the extension's TypoScript into your site in two ways. Pick one — both produce the same result.
+
+**Option A: Site Set (recommended, TYPO3 v13+)**
+
+Add the site set to your site configuration in ``config/sites/<identifier>/config.yaml``:
+
+.. code-block:: yaml
+
+   dependencies:
+     - pwcomments/comments
+     - pwcomments/styling    # optional, default styles
+
+The ``pwcomments/comments`` set is required; ``pwcomments/styling`` ships the
+optional default CSS. Settings are then editable in the backend module
+**Site Management → Settings**.
+
+**Option B: Static template includes (legacy, still supported)**
+
+Edit your root TYPO3 template and include the static templates:
 
 |comment_static-includes|
 
 The Main Static Template must be included. The Styles are optional, but recommended.
+Settings are then editable via the Constants Editor under the **Template** module.
 
-When the statics have been added you can access several libs to include pw_comments into your page
-(as described in the chapter :ref:`configuration`).
+When the includes are in place (via either option) you can access several libs to include pw_comments
+into your page (as described in the chapter :ref:`configuration`).
 
 .. important::
    When you want to work with mail notifications, you should configure an absolute URL (like ``https://my-domain.com/``) in

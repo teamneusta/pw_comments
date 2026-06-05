@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace T3\PwComments\Service\Moderation;
 
 // TODO: Switch to readonly properties once PHP 8.2+ is required
-final class ModerationResult
+final readonly class ModerationResult
 {
     private bool $isViolation;
     private array $categories;
@@ -18,7 +18,7 @@ final class ModerationResult
         array $categories = [],
         array $categoryScores = [],
         string $reason = '',
-        float $maxScore = 0.0
+        float $maxScore = 0.0,
     ) {
         $this->isViolation = $isViolation;
         $this->categories = $categories;
