@@ -14,7 +14,6 @@ namespace T3\PwComments\Utility;
  */
 
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Cookie Utility
@@ -67,7 +66,8 @@ class Cookie
      */
     protected function getCookieDomain()
     {
-        $typo3Mode = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend() ? 'FE' : 'BE';
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        $typo3Mode = ApplicationType::fromRequest($request)->isFrontend() ? 'FE' : 'BE';
         $result = '';
         $cookieDomain = $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'] ?? null;
         if (!empty($GLOBALS['TYPO3_CONF_VARS'][$typo3Mode]['cookieDomain'])) {
@@ -76,9 +76,11 @@ class Cookie
         if ($cookieDomain) {
             if ($cookieDomain[0] === '/') {
                 $match = [];
+                $normalizedParams = $request->getAttribute('normalizedParams');
+
                 $matchCnt = @preg_match(
                     $cookieDomain,
-                    (string) GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY'),
+                    $normalizedParams->getHttpHost(),
                     $match,
                 );
                 if ($matchCnt !== false) {
