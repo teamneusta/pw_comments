@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace T3\PwComments\Tests\Unit\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -131,6 +132,46 @@ final class CommentControllerTest extends TestCase
             ->willReturn($this->view);
 
         $this->controller->indexAction();
+    }
+
+    /**
+     * Regression test for #64: a logged-in frontend user carries an int uid in
+     * frontend.user['uid']. initializeAction() must expose it as a string so it
+     * can be assigned to Comment::$authorIdent (a typed `string` property under
+     * declare(strict_types=1)). Without the cast this reproduces the reported
+     * "Cannot assign int to property ...::$authorIdent of type string" TypeError.
+     */
+    #[Test]
+    public function initializeActionExposesLoggedInUserIdentAsStringAssignableToComment(): void
+    {
+        $pageUid = 42;
+
+        $serverRequest = $this->createServerRequestWithPageInfo($pageUid);
+
+        $this->request->expects(self::any())
+            ->method('getAttribute')
+            ->willReturnCallback(function ($attribute) use ($serverRequest) {
+                if ($attribute === 'frontend.page.information') {
+                    return $serverRequest->getAttribute('frontend.page.information');
+                }
+                if ($attribute === 'frontend.user') {
+                    return $this->createFrontendUserAuth(['uid' => 7]);
+                }
+                return null;
+            });
+
+        $this->injectProperty('settings', []);
+        $this->controller->initializeAction();
+
+        $reflection = new \ReflectionClass($this->controller);
+        $currentAuthorIdent = $reflection->getProperty('currentAuthorIdent')->getValue($this->controller);
+
+        self::assertIsString($currentAuthorIdent);
+
+        // The actual crash site: assigning the ident to the typed string property.
+        $comment = new Comment();
+        $comment->setAuthorIdent($currentAuthorIdent);
+        self::assertSame('7', $comment->getAuthorIdent());
     }
 
     public function testIndexActionReturnsCommentsForCurrentPage(): void
