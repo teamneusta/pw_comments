@@ -448,10 +448,8 @@ class Comment extends AbstractEntity
 
     /**
      * Set author ident
-     *
-     * @param string $authorIdent
      */
-    public function setAuthorIdent($authorIdent): void
+    public function setAuthorIdent(string $authorIdent): void
     {
         $this->authorIdent = $authorIdent;
     }
