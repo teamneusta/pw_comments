@@ -35,12 +35,12 @@ class Comment extends AbstractEntity
     /**
      * crdate as unix timestamp
      */
-    protected int $crdate;
+    protected int $crdate = 0;
 
     /**
      * hidden state
      */
-    protected bool $hidden;
+    protected bool $hidden = false;
 
     /**
      * The author as model or NULL if comment author wasn't logged in
