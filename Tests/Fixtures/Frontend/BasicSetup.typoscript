@@ -20,6 +20,7 @@ plugin.tx_pwcomments {
     settings {
         storagePid = 1
         useEntryUid = 0
+        linkUrlsInComments = 0
 
         showCommentAnchor = comments
         commentAnchorPrefix = comment-
