@@ -792,6 +792,7 @@ final class CommentControllerTest extends FunctionalTestCase
         self::assertSame(1, (int) $latest['pid']);
         self::assertSame(1, (int) $latest['orig_pid']);
         self::assertNotSame('', (string) $latest['author_ident']);
+        self::assertGreaterThan(0, (int) $latest['crdate'], 'crdate must be framework-stamped on new comments.');
 
         self::assertSame(303, $response->getStatusCode());
         self::assertStringEndsWith('#comment-' . $latest['uid'], $response->getHeaderLine('location'));
