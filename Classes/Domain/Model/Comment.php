@@ -33,9 +33,12 @@ class Comment extends AbstractEntity
     protected int $entryUid = 0;
 
     /**
-     * crdate as unix timestamp
+     * crdate as unix timestamp. Nullable with a null default so a newly created
+     * comment leaves this property "not dirty": Extbase then omits it from the
+     * post-insert UPDATE and the framework's ctrl.crdate stamp (set on INSERT)
+     * survives instead of being clobbered back to 0.
      */
-    protected int $crdate = 0;
+    protected ?int $crdate = null;
 
     /**
      * hidden state

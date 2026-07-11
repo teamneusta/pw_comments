@@ -22,7 +22,7 @@ final class CommentTest extends TestCase
     {
         $comment = new Comment();
 
-        self::assertSame(0, $comment->getCrdate());
+        self::assertNull($comment->getCrdate());
         self::assertFalse($comment->getHidden());
     }
 }
