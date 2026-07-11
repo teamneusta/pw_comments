@@ -84,7 +84,7 @@ return [
             'exclude' => 0,
             'label' => $ll . 'general.crdate',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'passthrough',
             ],
         ],
         'hidden' => [

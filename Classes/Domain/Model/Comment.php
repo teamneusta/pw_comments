@@ -35,7 +35,7 @@ class Comment extends AbstractEntity
     /**
      * crdate as unix timestamp
      */
-    protected int $crdate = 0;
+    protected ?int $crdate = null;
 
     /**
      * hidden state
