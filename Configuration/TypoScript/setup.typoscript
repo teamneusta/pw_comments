@@ -120,9 +120,8 @@ plugin.tx_pwcomments {
 
 lib {
     # Lib for output of comments of current page
-    pwCommentsIndex = USER
+    pwCommentsIndex = EXTBASEPLUGIN
     pwCommentsIndex {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
         extensionName = PwComments
         vendorName = T3
         pluginName = show
