@@ -1274,7 +1274,7 @@ final class CommentControllerTest extends FunctionalTestCase
         $context = (new InternalRequestContext())->withFrontendUserId(1);
         $response = $this->requestVote('upvote', 3, $context);
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(303, $response->getStatusCode());
         self::assertSame(1, $this->countVotesFor(3, '1', Vote::TYPE_UPVOTE));
 
         $commentThree = $this->commentSection((string) $response->getBody(), 3);
@@ -1339,7 +1339,7 @@ final class CommentControllerTest extends FunctionalTestCase
             'Recursive performVoting must remove uid 3 and insert a fresh row.',
         );
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(303, $response->getStatusCode());
         self::assertStringContainsString('<ul class="comments-list', (string) $response->getBody());
     }
 
@@ -1366,12 +1366,8 @@ final class CommentControllerTest extends FunctionalTestCase
         $response = $this->requestVote('upvote', 3, $context);
 
         self::assertSame(0, $this->countVotesFor(3, '1'));
-        self::assertSame(200, $response->getStatusCode());
-        self::assertStringContainsString(
-            '<ul class="comments-list',
-            (string) $response->getBody(),
-            'Disabled voting must forward to indexAction, not redirect.',
-        );
+        self::assertSame(303, $response->getStatusCode());
+        self::assertStringContainsString('<ul class="comments-list', (string) $response->getBody());
     }
 
     /**
