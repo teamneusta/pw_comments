@@ -392,7 +392,7 @@ final class CommentControllerTest extends TestCase
             ->willReturn($frontendUserAuth);
         $this->injectProperty('request', $request);
 
-        $this->view->expects(self::exactly(4))
+        $this->view->expects(self::exactly(5))
             ->method('assign')
             ->willReturnCallback(function ($key, $value) use ($newComment, $commentToReplyTo) {
                 if ($key === 'newComment') {
