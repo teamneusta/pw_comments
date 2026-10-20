@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="messages" date="2016-04-28T05:38:54Z" product-name="pw_comments" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="newContentElementWizardTitle" xml:space="preserve">
+				<source>Comments new</source>
+			<target>crwdns385558:0crwdne385558:0</target></trans-unit>
+      <trans-unit id="newContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides creation of new comments.</source>
+			<target>crwdns385560:0crwdne385560:0</target></trans-unit>
+      <trans-unit id="showContentElementWizardTitle" xml:space="preserve">
+				<source>Comments show</source>
+			<target>crwdns385562:0crwdne385562:0</target></trans-unit>
+      <trans-unit id="showContentElementWizardDescription" xml:space="preserve">
+				<source>Plugin of pw_comments which provides display of existing comments.</source>
+			<target>crwdns385564:0crwdne385564:0</target></trans-unit>
+      <trans-unit id="general.pid" xml:space="preserve">
+				<source>PID</source>
+			<target>crwdns385566:0crwdne385566:0</target></trans-unit>
+      <trans-unit id="general.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			<target>crwdns385568:0crwdne385568:0</target></trans-unit>
+      <trans-unit id="general.hidden" xml:space="preserve">
+				<source>Hide</source>
+			<target>crwdns385570:0crwdne385570:0</target></trans-unit>
+      <trans-unit id="general.language" xml:space="preserve">
+				<source>Language</source>
+			<target>crwdns385572:0crwdne385572:0</target></trans-unit>
+      <trans-unit id="general.l18n_parent" xml:space="preserve">
+				<source>Translated item</source>
+			<target>crwdns385574:0crwdne385574:0</target></trans-unit>
+      <trans-unit id="general.versionLabel" xml:space="preserve">
+				<source>Version</source>
+			<target>crwdns385576:0crwdne385576:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment" xml:space="preserve">
+				<source>Comment</source>
+			<target>crwdns385578:0crwdne385578:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
+			<target>crwdns385580:0crwdne385580:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.entry_uid" xml:space="preserve">
+				<source>Entry uid</source>
+			<target>crwdns385582:0crwdne385582:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author" xml:space="preserve">
+				<source>Author</source>
+			<target>crwdns385584:0crwdne385584:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_name" xml:space="preserve">
+				<source>Name</source>
+			<target>crwdns385586:0crwdne385586:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_mail" xml:space="preserve">
+				<source>Mail</source>
+			<target>crwdns385588:0crwdne385588:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			<target>crwdns385590:0crwdne385590:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.message" xml:space="preserve">
+				<source>Message</source>
+			<target>crwdns385592:0crwdne385592:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.parent_comment" xml:space="preserve">
+				<source>Related comment (parent)</source>
+			<target>crwdns385594:0crwdne385594:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.votes" xml:space="preserve">
+				<source>Votes</source>
+			<target>crwdns385596:0crwdne385596:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_comment.terms_accepted" xml:space="preserve">
+				<source>Terms accepted</source>
+			<target>crwdns385598:0crwdne385598:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote" xml:space="preserve">
+				<source>Vote</source>
+			<target>crwdns385600:0crwdne385600:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.crdate" xml:space="preserve">
+				<source>Creation date</source>
+			<target>crwdns385602:0crwdne385602:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.orig_pid" xml:space="preserve">
+				<source>Page uid of the commented page</source>
+			<target>crwdns385604:0crwdne385604:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type" xml:space="preserve">
+				<source>Type</source>
+			<target>crwdns385606:0crwdne385606:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type.0" xml:space="preserve">
+				<source>Downvote</source>
+			<target>crwdns385608:0crwdne385608:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.type.1" xml:space="preserve">
+				<source>Upvote</source>
+			<target>crwdns385610:0crwdne385610:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.author" xml:space="preserve">
+				<source>Author</source>
+			<target>crwdns385612:0crwdne385612:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.author_ident" xml:space="preserve">
+				<source>Author ident</source>
+			<target>crwdns385614:0crwdne385614:0</target></trans-unit>
+      <trans-unit id="tx_pwcomments_domain_model_vote.comment" xml:space="preserve">
+				<source>Comment</source>
+			<target>crwdns385616:0crwdne385616:0</target></trans-unit>
+      <trans-unit id="plugin.title.show" xml:space="preserve">
+				<source>pw_comments show</source>
+			<target>crwdns385618:0crwdne385618:0</target></trans-unit>
+      <trans-unit id="plugin.title.new" xml:space="preserve">
+				<source>pw_comments new</source>
+			<target>crwdns385620:0crwdne385620:0</target></trans-unit>
+      <trans-unit id="plugin.sheet" xml:space="preserve">
+				<source>Settings</source>
+			<target>crwdns385622:0crwdne385622:0</target></trans-unit>
+      <trans-unit id="plugin.mode" xml:space="preserve">
+				<source>Mode</source>
+			<target>crwdns385624:0crwdne385624:0</target></trans-unit>
+      <trans-unit id="plugin.mode.index" xml:space="preserve">
+				<source>Show comments</source>
+			<target>crwdns385626:0crwdne385626:0</target></trans-unit>
+      <trans-unit id="plugin.mode.new" xml:space="preserve">
+				<source>Show new comment form</source>
+			<target>crwdns385628:0crwdne385628:0</target></trans-unit>
+    </body>
+  </file>
+</xliff>
