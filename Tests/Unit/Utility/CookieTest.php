@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use T3\PwComments\Utility\Cookie;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class CookieTest extends TestCase
@@ -79,7 +80,7 @@ final class CookieTest extends TestCase
     #[Test]
     public function getCookieDomainResolvesRegexMatchAgainstHttpHost(): void
     {
-        $this->stubFrontendRequest();
+        $this->stubFrontendRequest('shop.example.com');
         $_SERVER['HTTP_HOST'] = 'shop.example.com';
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'] = '/example\.com$/';
 
@@ -93,7 +94,7 @@ final class CookieTest extends TestCase
         // a clean miss, so it still reads `$match[0]` and triggers an undefined-key warning.
         // We suppress that incidental warning here and pin the documented contract (empty
         // string) until the guard is corrected.
-        $this->stubFrontendRequest();
+        $this->stubFrontendRequest('shop.other.test');
         $_SERVER['HTTP_HOST'] = 'shop.other.test';
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['cookieDomain'] = '/example\.com$/';
 
@@ -105,13 +106,24 @@ final class CookieTest extends TestCase
         }
     }
 
-    private function stubFrontendRequest(): void
+    private function stubFrontendRequest(string $host = 'example.org'): void
     {
         $request = $this->createMock(ServerRequestInterface::class);
+        $normalizedParams = $this->createMock(NormalizedParams::class);
+
+        $normalizedParams
+            ->method('getHttpHost')
+            ->willReturn($host)
+        ;
+
         $request
             ->method('getAttribute')
-            ->with('applicationType')
-            ->willReturn(SystemEnvironmentBuilder::REQUESTTYPE_FE);
+            ->willReturnMap([
+                ['applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE],
+                ['normalizedParams', $normalizedParams],
+            ])
+        ;
+
         $GLOBALS['TYPO3_REQUEST'] = $request;
     }
 
