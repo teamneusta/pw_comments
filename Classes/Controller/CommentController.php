@@ -37,7 +37,6 @@ use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Attribute\IgnoreValidation;
 use TYPO3\CMS\Extbase\Attribute\Validate;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -466,7 +465,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
     {
         $commentAnchor = '#' . $this->settings['commentAnchorPrefix'] . $comment->getUid();
         if (!$this->settings['enableVoting']) {
-            return new ForwardResponse('index');
+            return $this->redirectToUri(
+                $this->buildUriByUid($this->pageUid, true) . $commentAnchor,
+            );
         }
 
         $this->createAuthorIdent();
@@ -499,7 +500,9 @@ class CommentController extends ActionController implements LoggerAwareInterface
 
         $this->commentRepository->persistAll();
 
-        return new ForwardResponse('index');
+        return $this->redirectToUri(
+            $this->buildUriByUid($this->pageUid, true) . $commentAnchor,
+        );
     }
 
     /**
